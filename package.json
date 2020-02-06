@@ -1,0 +1,23 @@
+{
+  "name": "eq-publisher-v3",
+  "version": "1.0.0",
+  "description": "A NodeJS application for changing Author-compatible schemas into Runner-compatible schemas.",
+  "main": "src/index.js",
+  "repository": "git@github.com:ONSdigital/eq-publisher-v3.git",
+  "author": "Eq Author, Survey Data Collection, Digital Services & Technology, Office for National Statistics",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node index.js",
+    "develop": "nodemon yarn start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "eslint-config-eq-author": "^2.0.2",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.2"
+  }
+}
