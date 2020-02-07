@@ -8,9 +8,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- [NodeJS](#https://nodejs.org/en/)
-- [Yarn](#https://classic.yarnpkg.com/en/)
-- [Node Version Manager](#https://github.com/nvm-sh/nvm)
+- (NodeJS)[#https://nodejs.org/en/]
+- (Yarn[#https://classic.yarnpkg.com/en]
+- (Node Version Manager)[#https://github.com/nvm-sh/nvm]
 
 `eq-author-app` is currently supports NodeJS version 10 and prior, therefore this application does the same. To swap to version 10, run `nvm install 10 && nvm use 10` in the terminal, beneath the `eq-publisher-v3` directory.
 
