@@ -1,5 +1,5 @@
 const status = require(".");
-const { version } = require("../../package.json");
+const { version } = require("../../../package.json");
 const mockResponse = require("../../mocks/response");
 
 describe("Contacting the /status endpoint", () => {
