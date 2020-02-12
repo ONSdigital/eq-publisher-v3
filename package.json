@@ -8,10 +8,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./src",
     "develop": "nodemon yarn start",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "eslint-config-eq-author": "^2.0.2",
