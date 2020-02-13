@@ -4,47 +4,96 @@
       "id": "a346aef5-3216-4367-b9a5-b1ded75e7fd7",
       "title": "LHN",
       "description": null,
-      "surveyId": null,
-      "theme": "default",
-      "navigation": false,
-      "summary": false,
       "type": "Business",
-      "shortTitle": null,
-      "displayName": "LHN",
-      "createdBy": {
-        "id": "f90f6229-f1ee-47ab-8253-ab319ad2c799",
-        "picture": null,
-        "name": null,
-        "email": "thomesmac@gmail.com",
-        "__typename": "User"
+      "theme": "default",
+      "introduction": {
+        "id": "7e23dccd-e3eb-4e5b-84f6-1731fc8b267f",
+        "title": "<p>You are completing this for <span data-piped=\"metadata\" data-id=\"1035ca96-03df-43ae-a820-a4478a70efdc\">trad_as</span> (<span data-piped=\"metadata\" data-id=\"e310c5c0-ef5b-4b0d-a732-c5d4f8a4537a\">ru_name</span>)</p>",
+        "description": "<ul><li>Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. </li><li>You can provide info estimates if actual figures aren’t available.</li><li>We will treat your data securely and confidentially.</li></ul>",
+        "legalBasis": "NOTICE_1",
+        "secondaryTitle": "<p>Information you need</p>",
+        "secondaryDescription": "<p>You can select the dates of the period you are reporting for, if the given dates are not appropriate.</p>",
+        "collapsibles": [],
+        "tertiaryTitle": "<p>How we use your data</p>",
+        "tertiaryDescription": "<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li></ul>"
       },
-      "editors": [],
-      "isPublic": true,
-      "permission": "Write",
-      "__typename": "Questionnaire",
+      "navigation": false,
+      "surveyId": null,
+      "summary": false,
+      "metadata": [
+        {
+          "id": "e310c5c0-ef5b-4b0d-a732-c5d4f8a4537a",
+          "key": "ru_name",
+          "type": "Text"
+        },
+        {
+          "id": "1035ca96-03df-43ae-a820-a4478a70efdc",
+          "key": "trad_as",
+          "type": "Text"
+        },
+        {
+          "id": "962d3e66-4bfe-40ad-aec7-1681e5e530ab",
+          "key": "period_id",
+          "type": "Text"
+        },
+        {
+          "id": "95bfd260-a209-4754-a8eb-d7a6e149501f",
+          "key": "ref_p_start_date",
+          "type": "Date"
+        },
+        {
+          "id": "815e985d-1fbc-47b5-a163-aeae4a1ff665",
+          "key": "ref_p_end_date",
+          "type": "Date"
+        },
+        {
+          "id": "431c9fad-6bf3-4805-b1cf-df08a4089b24",
+          "key": "employmentDate",
+          "type": "Date"
+        }
+      ],
       "sections": [
         {
           "id": "5d640325-638c-41b4-9045-c27cb5041d42",
-          "displayName": "Untitled Section",
-          "position": 0,
+          "title": "",
+          "introductionTitle": null,
+          "introductionContent": null,
           "pages": [
             {
               "id": "8bfcdf73-fd8f-4dfe-810d-d2049cbd65f2",
               "title": "<p>Q</p>",
-              "position": 0,
-              "displayName": "Q",
-              "__typename": "QuestionPage"
+              "pageType": "QuestionPage",
+              "description": "",
+              "descriptionEnabled": false,
+              "guidance": null,
+              "guidanceEnabled": false,
+              "definitionLabel": null,
+              "definitionContent": null,
+              "definitionEnabled": false,
+              "additionalInfoLabel": null,
+              "additionalInfoContent": null,
+              "additionalInfoEnabled": false,
+              "confirmation": null,
+              "answers": [
+                {
+                  "id": "880614a9-9f0f-427b-9d33-d28c5fb9e520",
+                  "type": "TextField",
+                  "label": "A",
+                  "secondaryLabel": null,
+                  "description": "",
+                  "guidance": "",
+                  "properties": {
+                    "required": false
+                  },
+                  "qCode": "",
+                  "secondaryQCode": null,
+                  "validation": null
+                }
+              ],
+              "routing": null,
+              "totalValidation": null
             }
-          ],
-          "questionnaire": {
-            "id": "a346aef5-3216-4367-b9a5-b1ded75e7fd7",
-            "questionnaireInfo": {
-              "totalSectionCount": 1,
-              "__typename": "QuestionnaireInfo"
-            },
-            "__typename": "Questionnaire"
-          },
-          "__typename": "Section"
+          ]
         }
       ]
     }
