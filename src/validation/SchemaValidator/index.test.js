@@ -1,5 +1,5 @@
-const SchemaValidator = require("./SchemaValidator");
-const ValidationError = require("./ValidationError");
+const SchemaValidator = require(".");
+const ValidationError = require("../ValidationError");
 
 describe("SchemaValidator", () => {
   let schemaValidator;

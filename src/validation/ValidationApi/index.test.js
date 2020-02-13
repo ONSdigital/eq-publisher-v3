@@ -1,4 +1,4 @@
-const ValidationApi = require("./ValidationApi");
+const ValidationApi = require(".");
 
 describe("ValidationApi", () => {
   const url = "http://api.url";

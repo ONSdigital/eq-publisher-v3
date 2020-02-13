@@ -1,4 +1,4 @@
-const ValidationError = require("./ValidationError");
+const ValidationError = require(".");
 
 describe("validation error", () => {
   it("should accept message", () => {

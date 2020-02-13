@@ -1,4 +1,4 @@
-const ValidationError = require("./ValidationError");
+const ValidationError = require("../ValidationError");
 const { isNil } = require("lodash");
 
 class SchemaValidator {
