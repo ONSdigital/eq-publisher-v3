@@ -1,4 +1,4 @@
-const NumberRoutingCondition = require("./NumberRoutingCondition");
+const NumberRoutingCondition = require(".");
 
 describe("NumberRoutingCondtion", () => {
   const condition = {

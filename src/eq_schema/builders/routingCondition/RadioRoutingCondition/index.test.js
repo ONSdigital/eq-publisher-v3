@@ -1,5 +1,5 @@
 const { first } = require("lodash/fp");
-const RadioRoutingCondition = require("./RadioRoutingCondition");
+const RadioRoutingCondition = require(".");
 
 const buildOption = (id, label) => ({
   id,
