@@ -1,4 +1,4 @@
-const Summary = require("./Summary");
+const Summary = require(".");
 
 describe("Summary", () => {
   it("should build valid runner Summary", () => {

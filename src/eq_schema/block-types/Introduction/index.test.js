@@ -1,4 +1,4 @@
-const Introduction = require("./Introduction");
+const Introduction = require(".");
 
 const piping = '<span data-piped="metadata" data-id="1">[some_metadata]</span>';
 

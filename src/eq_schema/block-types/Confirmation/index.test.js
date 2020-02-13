@@ -1,4 +1,4 @@
-const Confirmation = require("./Confirmation");
+const Confirmation = require(".");
 
 describe("Confirmation", () => {
   it("should build valid runner Confirmation", () => {
