@@ -1,4 +1,4 @@
-const respondWithData = require("./respondWithData");
+const respondWithData = require(".");
 
 describe("fetchData", () => {
   let res, req;

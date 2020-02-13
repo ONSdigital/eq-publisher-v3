@@ -1,4 +1,4 @@
-const converter = require("./convertRoutingConditions");
+const converter = require(".");
 
 describe("Convert routing conditions", () => {
   it("should convert from the author condition to the runner condition", () => {
