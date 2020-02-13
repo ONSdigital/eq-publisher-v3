@@ -8,7 +8,7 @@ const {
   UNIT,
   CHECKBOX
 } = require("../../../../constants/answerTypes");
-const conditionConverter = require("../../../utils/convertRoutingConditions");
+const conditionConverter = require("../../../../utils/convertRoutingConditions");
 
 const authorConditions = {
   UNANSWERED: "Unanswered"

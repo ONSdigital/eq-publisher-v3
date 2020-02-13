@@ -1,4 +1,4 @@
-const { getInnerHTML, getText, parseContent } = require("./HTMLUtils");
+const { getInnerHTML, getText, parseContent } = require("../HTMLUtils");
 
 describe("HTMLUtils", () => {
   describe("getInnerHTML", () => {

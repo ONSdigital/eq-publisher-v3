@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
-const { unescapePiping } = require("./HTMLUtils");
+const { unescapePiping } = require("../HTMLUtils");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);

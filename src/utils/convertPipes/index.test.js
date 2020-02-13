@@ -1,5 +1,5 @@
-const convertPipes = require("../utils/convertPipes");
-const getAllAnswers = require("../utils/convertPipes").getAllAnswers;
+const convertPipes = require("../../utils/convertPipes");
+const getAllAnswers = require("../../utils/convertPipes").getAllAnswers;
 
 const createPipe = ({ pipeType = "answers", id = 1, text = "foo" } = {}) =>
   `<span data-piped="${pipeType}" data-id="${id}">${text}</span>`;

@@ -1,9 +1,9 @@
 const { flow } = require("lodash");
-const convertPipes = require("../../utils/convertPipes");
+const convertPipes = require("../../../utils/convertPipes");
 const {
   parseContent,
   getInnerHTMLWithPiping
-} = require("../../utils/HTMLUtils");
+} = require("../../../utils/HTMLUtils");
 
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
