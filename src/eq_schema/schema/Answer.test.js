@@ -9,11 +9,11 @@ const {
   UNIT,
   DURATION,
   TEXTAREA
-} = require("../constants/answerTypes");
+} = require("../../constants/answerTypes");
 const Answer = require("./Answer");
 const Question = require("./Question");
 
-const { CENTIMETER, unitConversion } = require("../constants/units");
+const { CENTIMETER, unitConversion } = require("../../constants/units");
 
 describe("Answer", () => {
   const createAnswerJSON = answer =>

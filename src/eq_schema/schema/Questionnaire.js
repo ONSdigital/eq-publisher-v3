@@ -1,15 +1,15 @@
 const { last } = require("lodash");
 
-const { SOCIAL } = require("../constants/questionnaireTypes");
+const { SOCIAL } = require("../../constants/questionnaireTypes");
 const {
   types: { VOLUNTARY },
   contentMap
-} = require("../constants/legalBases");
+} = require("../../constants/legalBases");
 
 const Section = require("./Section");
-const Summary = require("./block-types/Summary");
-const Confirmation = require("./block-types/Confirmation");
-const Introduction = require("./block-types/Introduction");
+const Summary = require("../block-types/Summary");
+const Confirmation = require("../block-types/Confirmation");
+const Introduction = require("../block-types/Introduction");
 
 const DEFAULT_METADATA = [
   {

@@ -3,11 +3,11 @@ const {
   parseContent,
   getInnerHTMLWithPiping,
   unescapePiping
-} = require("../utils/HTMLUtils");
+} = require("../../utils/HTMLUtils");
 const { find, get, flow, isNil, concat, last } = require("lodash/fp");
 const { set } = require("lodash");
-const convertPipes = require("../utils/convertPipes");
-const { DATE, DATE_RANGE } = require("../constants/answerTypes");
+const convertPipes = require("../../utils/convertPipes");
+const { DATE, DATE_RANGE } = require("../../constants/answerTypes");
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
 const findMutuallyExclusive = flow(

@@ -1,4 +1,4 @@
-const Block = require("../../Block");
+const Block = require("../../schema/Block");
 const { CHECKBOX, RADIO } = require("../../../constants/answerTypes");
 
 const buildAuthorConfirmationQuestion = (

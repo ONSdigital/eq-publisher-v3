@@ -8,9 +8,9 @@ const {
   UNIT,
   DURATION,
   TEXTAREA
-} = require("../constants/answerTypes");
+} = require("../../constants/answerTypes");
 
-const { unitConversion } = require("../constants/units");
+const { unitConversion } = require("../../constants/units");
 
 class Answer {
   constructor(answer) {

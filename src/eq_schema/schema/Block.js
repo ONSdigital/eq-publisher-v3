@@ -1,11 +1,11 @@
 const Question = require("./Question");
 
-const translateAuthorRouting = require("./builders/routing2");
+const translateAuthorRouting = require("../builders/routing2");
 const {
   getInnerHTMLWithPiping,
   unescapePiping
-} = require("../utils/HTMLUtils");
-const convertPipes = require("../utils/convertPipes");
+} = require("../../utils/HTMLUtils");
+const convertPipes = require("../../utils/convertPipes");
 const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 

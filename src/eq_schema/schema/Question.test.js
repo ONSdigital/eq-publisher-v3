@@ -1,7 +1,7 @@
 const Question = require("./Question");
 const Answer = require("./Answer");
 const { omit, set, last } = require("lodash/fp");
-const { DATE, DATE_RANGE, NUMBER } = require("../constants/answerTypes");
+const { DATE, DATE_RANGE, NUMBER } = require("../../constants/answerTypes");
 
 describe("Question", () => {
   const createQuestionJSON = options =>

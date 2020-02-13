@@ -1,12 +1,12 @@
 const { last } = require("lodash");
 
-const { BUSINESS, SOCIAL } = require("../constants/questionnaireTypes");
+const { BUSINESS, SOCIAL } = require("../../constants/questionnaireTypes");
 const {
   types: { NOTICE_1, VOLUNTARY }
-} = require("../constants/legalBases");
+} = require("../../constants/legalBases");
 
 const Questionnaire = require("./Questionnaire");
-const Summary = require("./block-types/Summary");
+const Summary = require("../block-types/Summary");
 const Section = require("./Section");
 
 describe("Questionnaire", () => {
