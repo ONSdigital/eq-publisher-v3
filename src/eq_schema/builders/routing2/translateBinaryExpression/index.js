@@ -7,7 +7,7 @@ const {
   PERCENTAGE,
   UNIT,
   CHECKBOX
-} = require("../../../constants/answerTypes");
+} = require("../../../../constants/answerTypes");
 const conditionConverter = require("../../../utils/convertRoutingConditions");
 
 const authorConditions = {

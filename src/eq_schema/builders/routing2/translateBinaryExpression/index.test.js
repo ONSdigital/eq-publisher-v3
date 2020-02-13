@@ -5,9 +5,9 @@ const {
   PERCENTAGE,
   CHECKBOX,
   UNIT
-} = require("../../../constants/answerTypes");
+} = require("../../../../constants/answerTypes");
 
-const translateBinaryExpression = require("./translateBinaryExpression");
+const translateBinaryExpression = require(".");
 
 describe("Should build a runner representation of a binary expression", () => {
   it("should throw on unsupported answer type", () => {
