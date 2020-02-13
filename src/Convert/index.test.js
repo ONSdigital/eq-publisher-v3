@@ -1,32 +1,4 @@
-const ValidationError = require("../validation/ValidationError");
-const Convert = require("./Convert");
-
-const result = {
-  data: {
-    questionnaire: {
-      id: 1,
-      title: "foobar",
-      metadata: [],
-      sections: [
-        {
-          id: 1,
-          pages: [
-            {
-              id: 1,
-              answers: [
-                {
-                  id: 1,
-                  type: "TextField",
-                  properties: { required: true }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  }
-};
+const Convert = require(".");
 
 describe("Convert", () => {
   let convert;
@@ -52,18 +24,6 @@ describe("Convert", () => {
   describe("behaviour", () => {
     beforeEach(async () => {
       mockSchemaValidator.validate.mockReturnValue({ valid: true });
-    });
-
-    it("should pass converted json to the schema validator", async () => {
-      const converted = await convert.convert(result.data.questionnaire);
-      expect(mockSchemaValidator.validate).toHaveBeenCalledWith(converted);
-    });
-
-    it("should error if resulting json is invalid", () => {
-      mockSchemaValidator.validate.mockReturnValue({ valid: false });
-      return expect(convert.convert(result.data.questionnaire)).rejects.toEqual(
-        expect.any(ValidationError)
-      );
     });
   });
 });
