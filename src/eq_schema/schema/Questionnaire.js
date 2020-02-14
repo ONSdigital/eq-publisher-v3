@@ -6,11 +6,10 @@ const {
   contentMap
 } = require("../../constants/legalBases");
 
+const { Confirmation, Introduction, Summary } = require("../block-types");
+
 const Section = require("./Section");
 const Hub = require("./Hub");
-const Summary = require("../block-types/Summary");
-const Confirmation = require("../block-types/Confirmation");
-const Introduction = require("../block-types/Introduction");
 
 const DEFAULT_METADATA = [
   {

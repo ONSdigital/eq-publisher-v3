@@ -1,5 +1,6 @@
-const Group = require("./Group");
 const { getText } = require("../../utils/HTMLUtils");
+
+const Group = require("./Group");
 
 class Section {
   constructor(section, ctx) {

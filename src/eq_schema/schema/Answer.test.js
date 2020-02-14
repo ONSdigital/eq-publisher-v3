@@ -10,10 +10,10 @@ const {
   DURATION,
   TEXTAREA
 } = require("../../constants/answerTypes");
+const { CENTIMETER, unitConversion } = require("../../constants/units");
+
 const Answer = require("./Answer");
 const Question = require("./Question");
-
-const { CENTIMETER, unitConversion } = require("../../constants/units");
 
 describe("Answer", () => {
   const createAnswerJSON = answer =>

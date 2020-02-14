@@ -5,8 +5,9 @@ const {
   types: { NOTICE_1, VOLUNTARY }
 } = require("../../constants/legalBases");
 
-const Questionnaire = require("./Questionnaire");
 const Summary = require("../block-types/Summary");
+
+const Questionnaire = require("./Questionnaire");
 const Section = require("./Section");
 
 describe("Questionnaire", () => {

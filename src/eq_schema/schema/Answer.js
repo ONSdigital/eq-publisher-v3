@@ -9,7 +9,6 @@ const {
   DURATION,
   TEXTAREA
 } = require("../../constants/answerTypes");
-
 const { unitConversion } = require("../../constants/units");
 
 class Answer {
