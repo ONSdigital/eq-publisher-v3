@@ -1,7 +1,7 @@
 class Hub {
-  constructor(hub, ctx) {
+  constructor(hub) {
     this.enabled = true;
-    this.required_completed_sections = hub.requiredCompletedSections;
+    this.requiredCompletedSections = hub.required_completed_sections;
   }
 }
 
