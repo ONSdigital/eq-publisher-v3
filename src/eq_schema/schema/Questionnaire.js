@@ -7,6 +7,7 @@ const {
 } = require("../../constants/legalBases");
 
 const Section = require("./Section");
+const Hub = require("./Hub");
 const Summary = require("../block-types/Summary");
 const Confirmation = require("../block-types/Confirmation");
 const Introduction = require("../block-types/Introduction");
@@ -46,6 +47,8 @@ class Questionnaire {
     this.title = questionnaireJson.title;
 
     const ctx = this.createContext(questionnaireJson);
+    // hub will be called here
+    this.hub = this.buildHub(questionnaireJson.hub, ctx);
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
@@ -73,6 +76,14 @@ class Questionnaire {
       routingGotos: [],
       questionnaireJson
     };
+  }
+
+  buildHub(hub, ctx) {
+    if (hub) {
+      return new Hub(hub, ctx);
+    }
+
+    return false;
   }
 
   buildSections(sections, ctx) {
