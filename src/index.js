@@ -31,10 +31,6 @@ app.use(
 
 const PORT = process.env.PORT || 9000;
 
-// const Hub = require("./eq_schema/schema/Hub");
-// const test = false;
-// const hub = new Hub(test);
-// console.log(hub);
 app.get("/status", status);
 
 app.get(
