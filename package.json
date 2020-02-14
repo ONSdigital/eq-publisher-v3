@@ -15,10 +15,11 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "eslint-config-eq-author": "^2.0.2",
-    "express": "^4.17.1",
     "apollo-fetch": "latest",
     "cheerio": "latest",
+    "dotenv": "^8.2.0",
+    "eslint-config-eq-author": "^2.0.2",
+    "express": "^4.17.1",
     "express-pino-logger": "latest",
     "graphql": "latest",
     "helmet": "latest",
