@@ -1,7 +1,7 @@
-const fetchQuestionnaire = json => async (req, res, next) => {
-  const { questionnaire } = json.data;
-  res.locals.questionnaire = questionnaire;
-  next();
-};
+const fetchData = require("./fetchData");
+const getQuestionnaire = require("./getQuestionnaire");
 
-module.exports = fetchQuestionnaire;
+module.exports = {
+  fetchData,
+  getQuestionnaire
+};
