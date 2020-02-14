@@ -21,6 +21,7 @@ describe("Questionnaire", () => {
         navigation: false,
         surveyId: "0112",
         summary: true,
+        hub: false,
         sections: [
           {
             id: "1",
@@ -323,5 +324,9 @@ describe("Questionnaire", () => {
       "theme",
       "default"
     );
+  });
+
+  it("should not build hub if not selected", () => {
+    expect(questionnaire.hub).toBeFalsy();
   });
 });
