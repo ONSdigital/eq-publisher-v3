@@ -1,8 +1,5 @@
 const express = require("express");
-const app = express();
-
-const questionnaireJSON = require("../authorTest.json");
-
+const helmet = require("helmet");
 const {
   convertSchema,
   fetchQuestionnaire,
@@ -10,8 +7,34 @@ const {
   status
 } = require("./middleware");
 
+const questionnaireJSON = require("../authorTest.json");
+
+const app = express();
+
+app.use(
+  helmet({
+    referrerPolicy: {
+      policy: "no-referrer"
+    },
+    frameguard: {
+      action: "deny"
+    },
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'none'"]
+      }
+    }
+  })
+);
+
 const PORT = process.env.PORT || 9000;
 
+// const Hub = require("./eq_schema/schema/Hub");
+// const test = false;
+// const hub = new Hub(test);
+// console.log(hub);
 app.get("/status", status);
 
 app.get(
