@@ -77,11 +77,10 @@ class Questionnaire {
     };
   }
 
-  buildHub(hub, ctx) {
+  buildHub(hub) {
     if (hub) {
-      return new Hub(hub, ctx);
+      return new Hub(hub);
     }
-
     return false;
   }
 
