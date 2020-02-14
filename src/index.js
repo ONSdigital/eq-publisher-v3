@@ -1,13 +1,17 @@
 const express = require("express");
 const helmet = require("helmet");
+const dotenv = require("dotenv");
+
 const {
   convertSchema,
+  createAuthToken,
   fetchQuestionnaire,
   respondWithData,
   status
 } = require("./middleware");
+const { fetchData, getQuestionnaire } = fetchQuestionnaire;
 
-const questionnaireJSON = require("../authorTest.json");
+dotenv.config();
 
 const app = express();
 
@@ -34,8 +38,9 @@ const PORT = process.env.PORT || 9000;
 app.get("/status", status);
 
 app.get(
-  "/testpoint",
-  fetchQuestionnaire(questionnaireJSON),
+  "/testpoint/:questionnaireId",
+  createAuthToken,
+  fetchData(getQuestionnaire(process.env.EQ_AUTHOR_API_URL)),
   convertSchema,
   respondWithData
 );
