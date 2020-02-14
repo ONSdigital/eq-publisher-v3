@@ -1,156 +1,5 @@
 const Questionnaire = require("./fragments");
 exports.getQuestionnaire = `
-  fragment answerFragment on Answer {
-    id
-    type
-    label
-    secondaryLabel
-    description
-    guidance
-    properties
-    qCode
-    ...BasicAnswer
-  }
-  
-  fragment BasicAnswer on BasicAnswer {
-    secondaryQCode
-    validation {
-      ... on NumberValidation {
-        minValue {
-          ...MinValueValidationRule
-        }
-        maxValue {
-          ...MaxValueValidationRule
-        }
-      }
-      ... on DateValidation {
-        earliestDate {
-          ...EarliestDateValidationRule
-        }
-        latestDate {
-          ...LatestDateValidationRule
-        }
-      }
-      ... on DateRangeValidation {
-        earliestDate {
-          ...EarliestDateValidationRule
-        }
-        latestDate {
-          ...LatestDateValidationRule
-        }
-        minDuration {
-          ...MinDurationValidationRule
-        }
-        maxDuration {
-          ...MaxDurationValidationRule
-        }
-      }
-    }
-  }
-  
-  fragment MinValueValidationRule on MinValueValidationRule {
-    id
-    enabled
-    custom
-    inclusive
-    entityType
-    previousAnswer {
-      id
-    }
-  }
-  
-  fragment MaxValueValidationRule on MaxValueValidationRule {
-    id
-    enabled
-    custom
-    inclusive
-    entityType
-    previousAnswer {
-      id
-    }
-  }
-  
-  fragment EarliestDateValidationRule on EarliestDateValidationRule {
-    id
-    enabled
-    entityType
-    custom
-    offset {
-      value
-      unit
-    }
-    relativePosition
-    previousAnswer {
-      id
-    }
-    metadata {
-      key
-    }
-  }
-  
-  fragment LatestDateValidationRule on LatestDateValidationRule {
-    id
-    enabled
-    entityType
-    custom
-    offset {
-      value
-      unit
-    }
-    relativePosition
-    previousAnswer {
-      id
-    }
-    metadata {
-      key
-    }
-  }
-  
-  fragment MinDurationValidationRule on MinDurationValidationRule {
-    id
-    enabled
-    duration {
-      value
-      unit
-    }
-  }
-  
-  fragment MaxDurationValidationRule on MaxDurationValidationRule {
-    id
-    enabled
-    duration {
-      value
-      unit
-    }
-  }
-  
-  fragment optionFragment on Option {
-    id
-    label
-    description
-    value
-    qCode
-    additionalAnswer {
-      ...answerFragment
-    }
-  }
-  
-  fragment destination2Fragment on Destination2 {
-    section {
-      id
-    }
-    page {
-      id
-    }
-    logical
-  }
-  
-  fragment metadataFragment on Metadata {
-    id
-    key
-    type
-  }
-  
   query GetQuestionnaire($input: QueryInput!) {
     questionnaire(input: $input) {
       id
@@ -290,4 +139,15 @@ exports.getQuestionnaire = `
       }
     }
   }
+  ${Questionnaire.fragments.metadata}
+  ${Questionnaire.fragments.option}
+  ${Questionnaire.fragments.destinationTwo}
+  ${Questionnaire.fragments.maxDurationValidationRule}
+  ${Questionnaire.fragments.minDurationValidationRule}
+  ${Questionnaire.fragments.latestDateValidationRule}
+  ${Questionnaire.fragments.earliestDateValidationRule}
+  ${Questionnaire.fragments.maxValueValidationRule}
+  ${Questionnaire.fragments.minValueValidationRule}
+  ${Questionnaire.fragments.basicAnswer}
+  ${Questionnaire.fragments.answerFragment}
 `;
