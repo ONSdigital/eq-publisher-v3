@@ -10,10 +10,7 @@ class ValidationApi {
   }
 
   async validate(json) {
-    console.log(json);
-    console.log(this.validationApiUrl);
-
-    const test = await this.http
+    return this.http
       .post(this.validationApiUrl, {
         body: json,
         json: true
@@ -21,12 +18,14 @@ class ValidationApi {
       .then(() => ({
         valid: true
       }))
-      .catch(e => ({
-        valid: false,
-        errors: getValidationErrors(e)
-      }));
-    console.log(test);
-    return test;
+      .catch(e => {
+        const errors = {
+          valid: false,
+          errors: getValidationErrors(e)
+        };
+        console.log(errors, "these are my errors");
+        return errors;
+      });
   }
 }
 
