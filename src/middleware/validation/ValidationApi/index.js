@@ -9,8 +9,11 @@ class ValidationApi {
     this.http = http;
   }
 
-  validate(json) {
-    return this.http
+  async validate(json) {
+    console.log(json);
+    console.log(this.validationApiUrl);
+
+    const test = await this.http
       .post(this.validationApiUrl, {
         body: json,
         json: true
@@ -22,6 +25,8 @@ class ValidationApi {
         valid: false,
         errors: getValidationErrors(e)
       }));
+    console.log(test);
+    return test;
   }
 }
 
