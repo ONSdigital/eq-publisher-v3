@@ -1,7 +1,7 @@
 const schemaConverter = require(".");
 
 describe("schemaConverter", () => {
-  let res, req, next, middleware, questionnaire;
+  let res, req, next, questionnaire;
 
   beforeEach(() => {
     questionnaire = require("../../../test.json");
@@ -11,7 +11,7 @@ describe("schemaConverter", () => {
 
     req = jest.fn();
     next = jest.fn();
-    middleware = schemaConverter(req, res, next);
+    schemaConverter(req, res, next);
   });
 
   it("should pass data through", () => {
