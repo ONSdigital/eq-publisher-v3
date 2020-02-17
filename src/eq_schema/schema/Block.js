@@ -54,7 +54,7 @@ class Block {
       page.pageType === "QuestionPage" ||
       page.pageType === "ConfirmationQuestion"
     ) {
-      this.questions = [new Question(page, ctx)];
+      this.question = [new Question(page, ctx)];
     }
     if (page.pageType === "CalculatedSummaryPage") {
       this.titles = [
