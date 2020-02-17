@@ -7,6 +7,7 @@ const {
   createAuthToken,
   fetchQuestionnaire,
   respondWithData,
+  validation,
   status
 } = require("./middleware");
 const { fetchData, getQuestionnaire } = fetchQuestionnaire;
@@ -38,10 +39,18 @@ const PORT = process.env.PORT || 9000;
 app.get("/status", status);
 
 app.get(
-  "/testpoint/:questionnaireId",
+  "/convert/:questionnaireId",
   createAuthToken,
   fetchData(getQuestionnaire(process.env.EQ_AUTHOR_API_URL)),
   convertSchema,
+  respondWithData
+);
+app.get(
+  "/validate/:questionnaireId",
+  createAuthToken,
+  fetchData(getQuestionnaire(process.env.EQ_AUTHOR_API_URL)),
+  convertSchema,
+  validation,
   respondWithData
 );
 
