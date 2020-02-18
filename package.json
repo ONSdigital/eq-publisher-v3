@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "apollo-fetch": "latest",
+    "body-parser": "^1.19.0",
     "cheerio": "latest",
     "dotenv": "^8.2.0",
     "eslint-config-eq-author": "^2.0.2",
