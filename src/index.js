@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 
@@ -15,6 +16,13 @@ const { fetchData, getQuestionnaire } = fetchQuestionnaire;
 dotenv.config();
 
 const app = express();
+
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true
+//   })
+// );
+app.use(bodyParser.json());
 
 app.use(
   helmet({
@@ -37,6 +45,18 @@ app.use(
 const PORT = process.env.PORT || 9000;
 
 app.get("/status", status);
+
+app.post(
+  "/blob",
+  (req, res, next) => {
+    console.log(req.body, "body");
+    res.locals.questionnaire = req.body.data.questionnaire;
+    next();
+    // return res.status(200).send("WAAAAAaaaggggghhh");
+  },
+  convertSchema,
+  respondWithData
+);
 
 app.get(
   "/convert/:questionnaireId",
