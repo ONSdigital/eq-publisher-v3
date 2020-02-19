@@ -1,8 +1,7 @@
 module.exports = (req, res, next) => {
-  if (!req.body.data) {
+  if (!req.body) {
     return res.sendStatus(400);
   }
-  const { questionnaire } = req.body.data;
-  res.locals.questionnaire = questionnaire;
+  res.locals.questionnaire = req.body;
   next();
 };
