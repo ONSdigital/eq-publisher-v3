@@ -42,7 +42,7 @@ app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
 
 // keeping for development purposes
 app.post(
-  "/convert/validate",
+  "/publish/validate",
   postQuestionnaire,
   convertSchema,
   validation,
