@@ -1,5 +1,5 @@
 const Group = require(".");
-const Block = require("./Block");
+const Block = require("../Block");
 
 describe("Group", () => {
   const createCtx = (options = {}) => ({
