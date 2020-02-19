@@ -1,6 +1,6 @@
 const convertSchema = require("./convertSchema");
 const createAuthToken = require("./createAuthToken");
-const fetchQuestionnaire = require("./fetchQuestionnaire");
+const postQuestionnaire = require("./postQuestionnaire");
 const respondWithData = require("./respondWithData");
 const status = require("./status");
 const validation = require("./validation");
@@ -8,7 +8,7 @@ const validation = require("./validation");
 module.exports = {
   convertSchema,
   createAuthToken,
-  fetchQuestionnaire,
+  postQuestionnaire,
   respondWithData,
   status,
   validation
