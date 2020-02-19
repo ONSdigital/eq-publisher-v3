@@ -1,5 +1,5 @@
 const Block = require("./Block");
-const Section = require("./Section");
+const Section = require(".");
 
 describe("Section", () => {
   const createSectionJSON = options =>

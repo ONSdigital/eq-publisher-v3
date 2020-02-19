@@ -1,4 +1,4 @@
-const Group = require("./Group");
+const Group = require(".");
 const Block = require("./Block");
 
 describe("Group", () => {

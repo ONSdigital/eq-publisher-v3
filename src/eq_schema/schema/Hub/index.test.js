@@ -1,4 +1,4 @@
-const Hub = require("./Hub");
+const Hub = require(".");
 
 describe("Hub", () => {
   let hub;

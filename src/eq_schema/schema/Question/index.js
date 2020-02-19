@@ -5,11 +5,11 @@ const {
   parseContent,
   getInnerHTMLWithPiping,
   unescapePiping
-} = require("../../utils/HTMLUtils");
-const convertPipes = require("../../utils/convertPipes");
-const { DATE, DATE_RANGE } = require("../../constants/answerTypes");
+} = require("../../../utils/HTMLUtils");
+const convertPipes = require("../../../utils/convertPipes");
+const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
-const Answer = require("./Answer");
+const Answer = require("../Answer");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 

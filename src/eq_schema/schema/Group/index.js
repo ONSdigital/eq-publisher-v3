@@ -2,9 +2,9 @@ const { isEmpty, reject, flatten } = require("lodash");
 
 const {
   buildAuthorConfirmationQuestion
-} = require("../builders/confirmationPage/ConfirmationPage");
+} = require("../../builders/confirmationPage/ConfirmationPage");
 
-const Block = require("./Block");
+const Block = require("../Block");
 
 class Group {
   constructor(title, section, ctx) {

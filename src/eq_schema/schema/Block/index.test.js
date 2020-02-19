@@ -1,6 +1,6 @@
-const Block = require("./Block");
-const { isLastPageInSection } = require("./Block");
-const Question = require("./Question");
+const Block = require(".");
+const { isLastPageInSection } = require(".");
+const Question = require("../Question");
 const ctx = {};
 
 describe("Block", () => {

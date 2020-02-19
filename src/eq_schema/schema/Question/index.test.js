@@ -1,8 +1,8 @@
 const { omit, set, last } = require("lodash/fp");
 
-const { DATE, DATE_RANGE, NUMBER } = require("../../constants/answerTypes");
+const { DATE, DATE_RANGE, NUMBER } = require("../../../constants/answerTypes");
 
-const Question = require("./Question");
+const Question = require(".");
 const Answer = require("./Answer");
 
 describe("Question", () => {

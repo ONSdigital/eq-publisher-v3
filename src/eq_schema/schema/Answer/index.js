@@ -8,8 +8,8 @@ const {
   UNIT,
   DURATION,
   TEXTAREA
-} = require("../../constants/answerTypes");
-const { unitConversion } = require("../../constants/units");
+} = require("../../../constants/answerTypes");
+const { unitConversion } = require("../../../constants/units");
 
 class Answer {
   constructor(answer) {
