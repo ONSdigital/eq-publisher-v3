@@ -24,9 +24,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 Run `yarn develop` to start the application with Nodemon. Nodemon automatically refreshes the application when source files change, making development easy.
 
+Run `yarn test:watch`
+
 ## Running the tests
 
 Run `yarn test` to kick-start the unit tests. Our unit tests are written in [Jest](https://jestjs.io/), which allows a [variety of flags](https://jestjs.io/docs/en/cli#options) to be passed along with the start command; you may use these at your leisure.
+
+Run `yarn test:watch` to run Jest on file changes.
 
 We do not currently have end-to-end tests.
 
