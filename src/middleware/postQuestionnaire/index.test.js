@@ -2,7 +2,7 @@ const postQuestionnaire = require(".");
 
 describe("PostQuestionnaire", () => {
   let req, res, next, questionnaire;
-  let middleware; // eslint-disable-line
+  let middleware; // eslint-disable-line no-unused-vars
   beforeEach(() => {
     questionnaire = {
       id: "123",
