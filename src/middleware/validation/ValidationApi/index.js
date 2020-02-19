@@ -23,6 +23,7 @@ class ValidationApi {
           valid: false,
           errors: getValidationErrors(e)
         };
+        console.log(errors);
         return errors;
       });
   }
