@@ -41,3 +41,76 @@ Run `yarn lint` to examine the code for any common styling issues. We do this to
 ## Deployment
 
 There are no deployment steps as this application is currently in development.
+
+## API Reference
+
+| Method | Endpoint                       | Description                                      |
+| ------ | ------------------------------ | ------------------------------------------------ |
+| POST   | [`/publish`](#publish)         | Convert author JSON                              |
+| POST   | [`/publish/validate`](#submit) | Validates converted JSON with a schema validator |
+
+### Publish
+
+Converts author JSON to V3 and returns it
+
+- **URL**
+
+  `/publish`
+
+- **Method:**
+
+  `POST`
+
+- **Body Params**
+
+  ```
+  { author questionnaire }
+  ```
+
+- **Success Response:**
+
+  **Code:** 200 <br />
+  **Example:** Runner JSON; examples: https://github.com/ONSdigital/eq-questionnaire-runner/blob/master/test_schemas/en/ecommerce.json
+
+- **Fail Responses:**
+
+  **Code:** 400 <br/>
+
+  ### Validate Publish
+
+Validates converted questionnaire against schema
+
+- **URL**
+
+  `/publish/validate`
+
+- **Method:**
+
+  `POST`
+
+- **Body Params**
+
+  ```
+  { author questionnaire }
+  ```
+
+- **Success Response:**
+
+  **Code:** 200 <br />
+  **Example:** Runner JSON; examples: https://github.com/ONSdigital/eq-questionnaire-runner/blob/master/test_schemas/en/ecommerce.json
+
+- **Fail Responses:**
+
+  **Code:** 400 <br/>
+  **Example:**
+
+  ```
+  {
+    "valid": false,
+    "errors": {
+        "message": "Additional properties are not allowed ('hub' was unexpected)",
+        "path": "deque([])",
+        "predicted_cause": "Additional properties are not allowed ('hub' was unexpected)"
+    }
+  }
+  ```
