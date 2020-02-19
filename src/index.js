@@ -2,26 +2,22 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
+const pino = require("express-pino-logger");
 
 const {
   convertSchema,
-  createAuthToken,
-  fetchQuestionnaire,
+  postQuestionnaire,
   respondWithData,
   validation,
   status
 } = require("./middleware");
-const { fetchData, getQuestionnaire } = fetchQuestionnaire;
 
 dotenv.config();
 
+const logger = pino();
+
 const app = express();
 
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true
-//   })
-// );
 app.use(bodyParser.json());
 
 app.use(
@@ -46,32 +42,14 @@ const PORT = process.env.PORT || 9000;
 
 app.get("/status", status);
 
-app.post(
-  "/blob",
-  (req, res, next) => {
-    console.log(req.body, "body");
-    res.locals.questionnaire = req.body.data.questionnaire;
-    next();
-    // return res.status(200).send("WAAAAAaaaggggghhh");
-  },
-  convertSchema,
-  respondWithData
-);
+app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
 
-app.get(
-  "/convert/:questionnaireId",
-  createAuthToken,
-  fetchData(getQuestionnaire(process.env.EQ_AUTHOR_API_URL)),
+app.post(
+  "/convert/validate",
+  postQuestionnaire,
   convertSchema,
-  respondWithData
-);
-app.get(
-  "/validate/:questionnaireId",
-  createAuthToken,
-  fetchData(getQuestionnaire(process.env.EQ_AUTHOR_API_URL)),
-  convertSchema,
-  validation,
-  respondWithData
+  respondWithData,
+  validation
 );
 
 app.listen(PORT, "0.0.0.0", () => {
