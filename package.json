@@ -11,8 +11,7 @@
     "start": "node ./src",
     "develop": "nodemon yarn start",
     "lint": "eslint .",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --watch"
   },
   "dependencies": {
     "apollo-fetch": "latest",

@@ -1,2 +1,7 @@
-module.exports.SOCIAL = "Social";
-module.exports.BUSINESS = "Business";
+const SOCIAL = "Social";
+const BUSINESS = "Business";
+
+module.exports = {
+  SOCIAL,
+  BUSINESS
+};

@@ -46,12 +46,12 @@ There are no deployment steps as this application is currently in development.
 
 | Method | Endpoint                       | Description                                      |
 | ------ | ------------------------------ | ------------------------------------------------ |
-| POST   | [`/publish`](#publish)         | Convert author JSON                              |
+| POST   | [`/publish`](#publish)         | Convert author JSON into Eq/Runner JSON          |
 | POST   | [`/publish/validate`](#submit) | Validates converted JSON with a schema validator |
 
 ### Publish
 
-Converts author JSON to V3 and returns it
+Converts author JSON to Eq/Runner V3 and returns the result
 
 - **URL**
 
@@ -91,7 +91,7 @@ Validates converted questionnaire against schema
 - **Body Params**
 
   ```
-  { author questionnaire }
+  { questionnaire: author questionnaire }
   ```
 
 - **Success Response:**
