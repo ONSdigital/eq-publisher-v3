@@ -78,9 +78,6 @@ class Questionnaire {
   }
 
   buildHub(hub) {
-    // this needs to be changed to
-    // hub.enabled
-    // Leaving off for until author catches up
     if (hub) {
       return new Hub(hub);
     }
