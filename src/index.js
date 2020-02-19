@@ -40,12 +40,13 @@ app.get("/status", status);
 
 app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
 
+// keeping for development purposes
 app.post(
   "/convert/validate",
   postQuestionnaire,
   convertSchema,
-  respondWithData,
-  validation
+  validation,
+  respondWithData
 );
 
 const PORT = process.env.PORT || 9000;
