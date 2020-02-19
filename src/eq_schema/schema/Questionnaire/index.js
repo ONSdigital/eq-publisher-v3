@@ -14,15 +14,15 @@ const Hub = require("../Hub");
 const DEFAULT_METADATA = [
   {
     name: "user_id",
-    validator: "string"
+    type: "string"
   },
   {
     name: "period_id",
-    validator: "string"
+    type: "string"
   },
   {
     name: "ru_name",
-    validator: "string"
+    type: "string"
   }
 ];
 
@@ -39,7 +39,7 @@ class Questionnaire {
     this.form_type = questionnaireId;
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
-    this.data_version = "0.0.2";
+    this.data_version = "0.0.3";
     this.survey_id =
       questionnaireJson.surveyId ||
       questionnaireJson.title.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -98,7 +98,7 @@ class Questionnaire {
       .filter(({ key }) => !DEFAULT_METADATA_NAMES.includes(key))
       .map(({ key, type }) => ({
         name: key,
-        validator: type === "Date" ? "date" : "string"
+        type: type === "Date" ? "date" : "string"
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
