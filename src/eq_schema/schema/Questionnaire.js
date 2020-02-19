@@ -47,7 +47,7 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
     // hub will be called here
-    // this.hub = this.buildHub(questionnaireJson.hub, ctx);
+    this.hub = this.buildHub(questionnaireJson.hub, ctx);
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
@@ -78,6 +78,9 @@ class Questionnaire {
   }
 
   buildHub(hub) {
+    // this needs to be changed to
+    // hub.enabled
+    // Leaving off for until author catches up
     if (hub) {
       return new Hub(hub);
     }

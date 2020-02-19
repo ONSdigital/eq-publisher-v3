@@ -327,6 +327,6 @@ describe("Questionnaire", () => {
   });
 
   it("should not build hub if not selected", () => {
-    expect(questionnaire.hub).toBeFalsy();
+    expect(questionnaire.hub.enabled).toBeFalsy();
   });
 });
