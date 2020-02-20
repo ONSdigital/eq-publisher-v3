@@ -117,7 +117,6 @@ describe("Introduction", () => {
 
   it("should define the secondary_content from the tertiary settings", () => {
     const introduction = new Introduction(apiData, context);
-    console.log(introduction.secondary_content);
     expect(introduction.secondary_content).toEqual([
       {
         id: "secondary-content",
