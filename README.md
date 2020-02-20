@@ -22,7 +22,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 **Development**
 
+Testing whether a converted schema is returned relies on passing author json to `eq-publisher-v3`.
+
+It may be easier to set up an endpoint collection in Postman to view the converted schema.
+
 If validating a schema during development envrionment variable `EQ_VALIDATOR_URL` is needed.
+
+To validate schema's a little more effectively it is a good idea to run the `eq-questionnaire-validator` locally using the ajv method for validating schemas.
+
+When the validator is running locally it is possible to hit the `/publish/validate` endpoint for more detailed error messages.
 
 Run `yarn develop` to start the application with Nodemon. Nodemon automatically refreshes the application when source files change, making development easy.
 
