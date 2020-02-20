@@ -62,7 +62,7 @@ describe("Introduction", () => {
   it("should define the preview_content from the secondary settings", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content).toMatchObject({
-      contents: [
+      content: [
         {
           description:
             "You can select the dates of the period you are reporting for, if the given dates are not appropriate."
@@ -117,11 +117,12 @@ describe("Introduction", () => {
 
   it("should define the secondary_content from the tertiary settings", () => {
     const introduction = new Introduction(apiData, context);
-    expect(introduction.secondary_content).toMatchObject([
+    console.log(introduction.secondary_content);
+    expect(introduction.secondary_content).toEqual([
       {
         id: "secondary-content",
-        // title: "How we use your data {{ metadata['some_metadata'] }}",
-        contents: [
+        title: "How we use your data {{ metadata['some_metadata'] }}",
+        content: [
           {
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
