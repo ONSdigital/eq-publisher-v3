@@ -465,8 +465,7 @@ describe("Group", () => {
 
       const section = ctx.questionnaireJson.sections[0];
       const resultantJson = new Group(section.title, section, ctx);
-
-      expect(resultantJson.blocks[1].questions[0].description).toEqual(
+      expect(resultantJson.blocks[1].question.description).toEqual(
         `{{ answers['answer${section.pages[0].answers[0].id}']|format_unordered_list }}`
       );
     });
