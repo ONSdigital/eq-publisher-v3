@@ -10,7 +10,6 @@ class ValidationApi {
   }
 
   async validate(json) {
-    console.log(this.validationApiUrl);
     return this.http
       .post(this.validationApiUrl, {
         body: json,
