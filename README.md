@@ -22,7 +22,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 **Development**
 
-If validating a schema during development envrionment variable `EQ_SCHEMA_VALIDATOR_URL` is needed.
+If validating a schema during development envrionment variable `EQ_VALIDATOR_URL` is needed.
 
 Run `yarn develop` to start the application with Nodemon. Nodemon automatically refreshes the application when source files change, making development easy.
 
