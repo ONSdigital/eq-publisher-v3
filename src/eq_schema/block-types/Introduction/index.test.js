@@ -54,8 +54,7 @@ describe("Introduction", () => {
             ]
           }
         ],
-        id: "primary",
-        type: "Basic"
+        id: "primary"
       }
     ]);
   });
@@ -63,7 +62,7 @@ describe("Introduction", () => {
   it("should define the preview_content from the secondary settings", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content).toMatchObject({
-      content: [
+      contents: [
         {
           description:
             "You can select the dates of the period you are reporting for, if the given dates are not appropriate."
@@ -120,7 +119,9 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.secondary_content).toMatchObject([
       {
-        content: [
+        id: "secondary-content",
+        // title: "How we use your data {{ metadata['some_metadata'] }}",
+        contents: [
           {
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
@@ -128,9 +129,7 @@ describe("Introduction", () => {
               "{{ metadata['some_metadata'] }}"
             ]
           }
-        ],
-        id: "secondary-content",
-        title: "How we use your data {{ metadata['some_metadata'] }}"
+        ]
       }
     ]);
   });

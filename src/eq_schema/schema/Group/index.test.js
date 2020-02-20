@@ -289,38 +289,34 @@ describe("Group", () => {
         ctx.questionnaireJson.sections[0],
         ctx
       );
-
       const expectedRunnerBlock = {
         id: "blockconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
         type: "ConfirmationQuestion",
-        questions: [
-          {
-            id:
-              "questionconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-            title: "Are you sure?",
-            type: "General",
-            answers: [
-              {
-                id:
-                  "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                mandatory: true,
-                type: "Radio",
-                options: [
-                  {
-                    label: "Oh yes.",
-                    value: "Oh yes.",
-                    description: "Positive"
-                  },
-                  {
-                    label: "Wait I can get more?",
-                    value: "Wait I can get more?",
-                    description: "Negative"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+        question: {
+          id: "questionconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          title: "Are you sure?",
+          type: "General",
+          answers: [
+            {
+              id:
+                "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              mandatory: true,
+              type: "Radio",
+              options: [
+                {
+                  label: "Oh yes.",
+                  value: "Oh yes.",
+                  description: "Positive"
+                },
+                {
+                  label: "Wait I can get more?",
+                  value: "Wait I can get more?",
+                  description: "Negative"
+                }
+              ]
+            }
+          ]
+        },
         routing_rules: [
           {
             goto: {
