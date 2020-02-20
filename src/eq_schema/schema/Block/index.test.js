@@ -19,8 +19,8 @@ describe("Block", () => {
     const block = new Block(createBlockJSON(), ctx);
 
     expect(block).toMatchObject({
-      id: "block1",
-      questions: [expect.any(Question)]
+      // id: "block1",
+      question: expect.any(Question)
     });
   });
 
@@ -51,7 +51,6 @@ describe("Block", () => {
         createBlockJSON({ pageType: "QuestionPage" }),
         ctx
       );
-
       expect(block.type).toEqual("Question");
     });
 
@@ -166,14 +165,13 @@ describe("Block", () => {
         ]
       };
       const block = new Block(calculatedPageGraphql, ctx);
-
       expect(block).toMatchObject({
         calculation: {
           answers_to_calculate: ["answer1", "answer2", "answer3"],
           calculation_type: "sum",
           titles: [{ value: "Bye" }]
         },
-        id: "block1",
+        // id: "block1",
         titles: [{ value: "Hi is your total %(total)s" }],
         type: "CalculatedSummary"
       });
