@@ -24,8 +24,7 @@ describe("PostQuestionnaire", () => {
   });
 
   it("should move to next if successful", () => {
-    req.body.data = {};
-    req.body.data.questionnaire = questionnaire;
+    req.body = questionnaire;
 
     middleware = postQuestionnaire(req, res, next);
 
