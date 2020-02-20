@@ -36,27 +36,29 @@ module.exports = class Introduction {
     this.primary_content = [
       {
         id: "primary",
-        content: getComplexText(description, ctx)
+        contents: getComplexText(description, ctx)
       }
     ];
 
     this.preview_content = {
       id: "preview",
       title: getSimpleText(secondaryTitle, ctx),
-      content: getComplexText(secondaryDescription, ctx),
+      contents: getComplexText(secondaryDescription, ctx),
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: title,
-          content: getComplexText(description, ctx)
+          contents: getComplexText(description, ctx)
         }))
     };
 
     this.secondary_content = [
       {
         id: "secondary-content",
-        title: getSimpleText(tertiaryTitle, ctx),
-        content: getComplexText(tertiaryDescription, ctx)
+        contents: [{
+          title: getSimpleText(tertiaryTitle, ctx), 
+          ...getComplexText(tertiaryDescription, ctx)[0]
+        }]
       }
     ];
   }
