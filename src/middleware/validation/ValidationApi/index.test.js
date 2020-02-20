@@ -30,10 +30,17 @@ describe("ValidationApi", () => {
     });
 
     it("should return valid response", () => {
-      mockRequest.post.mockImplementation(() => Promise.resolve({}));
-
+      mockRequest.post.mockImplementation(() =>
+        Promise.resolve({
+          response: {
+            body: { success: true }
+          }
+        })
+      );
       expect(validationApi.validate({ test: "json" })).resolves.toEqual({
-        valid: true
+        response: {
+          body: { success: true }
+        }
       });
     });
 
@@ -43,18 +50,26 @@ describe("ValidationApi", () => {
         detail: "Error details"
       };
 
-      it("should handle non-200 reponses", () => {
+      it("should handle error responses", async () => {
+        mockRequest.post.mockImplementation(() =>
+          Promise.resolve({ success: false })
+        );
+        const result = validationApi.validate({ test: "json" });
+        expect(await result).toEqual({ success: false });
+      });
+
+      it("should handle non-200 responses", async () => {
         mockRequest.post.mockImplementation(() =>
           Promise.reject({
             response: {
-              body: { errors }
+              body: {
+                errors
+              }
             }
           })
         );
-
         const result = validationApi.validate({ test: "json" });
-        const expected = { valid: false, errors };
-        return expect(result).resolves.toMatchObject(expected);
+        expect(await result).toEqual({ valid: false, errors });
       });
     });
   });
