@@ -21,13 +21,10 @@ class ValidationApi {
         }
         return res;
       })
-      .catch(e => {
-        const errors = {
-          valid: false,
-          errors: getValidationErrors(e)
-        };
-        return errors;
-      });
+      .catch(e => ({
+        valid: false,
+        errors: getValidationErrors(e)
+      }));
   }
 }
 
