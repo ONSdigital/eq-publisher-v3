@@ -48,7 +48,7 @@ describe("Questionnaire", () => {
     expect(questionnaire).toMatchObject({
       mime_type: "application/json/ons/eq",
       schema_version: "0.0.1",
-      data_version: "0.0.2",
+      data_version: "0.0.3",
       survey_id: "0112",
       title: "Quarterly Business Survey",
       theme: "default",
@@ -210,15 +210,15 @@ describe("Questionnaire", () => {
       metadata: [
         {
           name: "user_id",
-          validator: "string"
+          type: "string"
         },
         {
           name: "period_id",
-          validator: "string"
+          type: "string"
         },
         {
           name: "ru_name",
-          validator: "string"
+          type: "string"
         }
       ]
     });
@@ -249,31 +249,31 @@ describe("Questionnaire", () => {
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
         name: "user_id",
-        validator: "string"
+        type: "string"
       },
       {
         name: "period_id",
-        validator: "string"
+        type: "string"
       },
       {
         name: "ru_name",
-        validator: "string"
+        type: "string"
       },
       {
         name: "example_date",
-        validator: "date"
+        type: "date"
       },
       {
         name: "example_text",
-        validator: "string"
+        type: "string"
       },
       {
         name: "example_region",
-        validator: "string"
+        type: "string"
       },
       {
         name: "example_language",
-        validator: "string"
+        type: "string"
       }
     ]);
   });
@@ -291,15 +291,15 @@ describe("Questionnaire", () => {
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
         name: "user_id",
-        validator: "string"
+        type: "string"
       },
       {
         name: "period_id",
-        validator: "string"
+        type: "string"
       },
       {
         name: "ru_name",
-        validator: "string"
+        type: "string"
       }
     ]);
   });
