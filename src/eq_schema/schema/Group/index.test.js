@@ -497,65 +497,6 @@ describe("Group", () => {
       );
     });
 
-    // it("should build routing rules", () => {
-    //   const routing = {
-    //     rules: [
-    //       {
-    //         expressionGroup: {
-    //           operator: "And",
-    //           expressions: [
-    //             {
-    //               left: {
-    //                 id: "1",
-    //                 type: "Radio",
-    //                 options: [
-    //                   {
-    //                     id: "1"
-    //                   }
-    //                 ]
-    //               },
-    //               condition: "OneOf",
-    //               right: {
-    //                 options: [
-    //                   {
-    //                     id: "1",
-    //                     label: "2.3"
-    //                   }
-    //                 ]
-    //               }
-    //             }
-    //           ]
-    //         },
-    //         destination: {
-    //           section: {
-    //             id: "2"
-    //           },
-    //           page: null,
-    //           logical: null
-    //         }
-    //       }
-    //     ],
-    //     else: {
-    //       section: null,
-    //       page: null,
-    //       logical: "EndOfQuestionnaire"
-    //     }
-    //   };
-    //   const routingRuleSet = {
-    //     routingRules: []
-    //   };
-    //   const ctx = ctxGenerator(routingRuleSet, routing);
-    //   const resultantJson = new Group(
-    //     "Section 1",
-    //     ctx.questionnaireJson.sections[0],
-    //     ctx
-    //   );
-    //   const routingRules = resultantJson.blocks[1].routing_rules;
-
-    //   expect(routingRules.length).toBe(2);
-    //   expect(routingRules[0]).not.toMatchObject(routingRules[0].goto);
-    // });
-
     it("pipes in checkbox values from the previous questions", () => {
       const ctx = ctxGenerator(null);
 
