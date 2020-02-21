@@ -44,7 +44,7 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.primary_content).toMatchObject([
       {
-        content: [
+        contents: [
           {
             list: [
               "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. ",
@@ -62,7 +62,7 @@ describe("Introduction", () => {
   it("should define the preview_content from the secondary settings", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content).toMatchObject({
-      content: [
+      contents: [
         {
           description:
             "You can select the dates of the period you are reporting for, if the given dates are not appropriate."
@@ -78,11 +78,11 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content.questions).toMatchObject([
       {
-        content: [{ description: "World {{ metadata['some_metadata'] }}" }],
+        contents: [{ description: "World {{ metadata['some_metadata'] }}" }],
         question: "<p>Hello</p>"
       },
       {
-        content: [{ description: "Description" }],
+        contents: [{ description: "Description" }],
         question: "<p>Collapsible</p>"
       }
     ]);
@@ -109,7 +109,7 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content.questions).toMatchObject([
       {
-        content: [{ description: "World" }],
+        contents: [{ description: "World" }],
         question: "<p>Hello</p>"
       }
     ]);
@@ -120,9 +120,9 @@ describe("Introduction", () => {
     expect(introduction.secondary_content).toEqual([
       {
         id: "secondary-content",
-        title: "How we use your data {{ metadata['some_metadata'] }}",
-        content: [
+        contents: [
           {
+            title: "How we use your data {{ metadata['some_metadata'] }}",
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
               "The information you provide contributes to Gross Domestic Product (GDP).",

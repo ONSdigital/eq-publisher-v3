@@ -51,13 +51,16 @@ module.exports = class Introduction {
           contents: getComplexText(description, ctx)
         }))
     };
-
+    let tertiaryContent
+    if (tertiaryDescription) {
+      tertiaryContent = getComplexText(tertiaryDescription, ctx)[0]
+    }
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [{
           title: getSimpleText(tertiaryTitle, ctx), 
-          ...getComplexText(tertiaryDescription, ctx)[0]
+          ...tertiaryContent,
         }]
       }
     ];
