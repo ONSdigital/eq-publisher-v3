@@ -345,7 +345,7 @@ describe("Group", () => {
 
     it("should build a confirmation page with qCode", () => {
       const ctx = ctxGenerator(null);
-      ctx.questionnaireJson.sections[0].pages[0].confirmation.qCode = "1";
+      ctx.questionnaireJson.sections[0].pages[0].confirmation.qCode = "123"
       const resultantJson = new Group(
         "Section 1",
         ctx.questionnaireJson.sections[0],
@@ -363,8 +363,8 @@ describe("Group", () => {
               id:
                 "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
               mandatory: true,
-              q_code: "1",
               type: "Radio",
+              q_code: "123",
               options: [
                 {
                   label: "Oh yes.",
@@ -401,8 +401,8 @@ describe("Group", () => {
           }
         ]
       };
-      const qCode = resultantJson.blocks[1].question.answers[0].q_code;
-      expect(qCode).toEqual(expectedRunnerBlock.question.answers[0].q_code);
+
+      expect(resultantJson.blocks[1]).toMatchObject(expectedRunnerBlock);
     });
 
     it("copies a routing from the previous question and converts it to runner format", () => {

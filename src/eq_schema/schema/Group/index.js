@@ -47,7 +47,6 @@ class Group {
             buildAuthorConfirmationQuestion(
               page,
               section.id,
-              page.routingRuleSet,
               page.routing,
               ctx
             )

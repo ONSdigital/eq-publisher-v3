@@ -4,7 +4,6 @@ const { CHECKBOX, RADIO } = require("../../../constants/answerTypes");
 const buildAuthorConfirmationQuestion = (
   page,
   groupId,
-  routingRuleSet,
   routing,
   ctx
 ) => {
@@ -26,28 +25,6 @@ const buildAuthorConfirmationQuestion = (
         label: page.confirmation.negative.label,
         description: page.confirmation.negative.description,
         value: page.confirmation.negative.label
-      }
-    ]
-  };
-
-  const confirmationBackwardsRoutingRuleSet = {
-    id: "negative-confirmation-answered",
-    operation: "Or",
-    goto: {
-      __typename: "AbsoluteDestination",
-      absoluteDestination: {
-        id: page.id,
-        __typename: "QuestionPage"
-      }
-    },
-    conditions: [
-      {
-        id: `confirmation-condition-for-${page.id}`,
-        answer: confirmationAnswerObject,
-        comparator: "equal",
-        routingValue: {
-          value: ["negative-confirmation"]
-        }
       }
     ]
   };
@@ -79,7 +56,7 @@ const buildAuthorConfirmationQuestion = (
     }
   };
 
-  if (!routingRuleSet && !routing) {
+  if (!routing) {
     routing = {
       id: "default-rule-set",
       else: {
@@ -88,11 +65,9 @@ const buildAuthorConfirmationQuestion = (
       rules: []
     };
   }
-  if (routingRuleSet) {
-    routingRuleSet.routingRules.unshift(confirmationBackwardsRoutingRuleSet);
-  } else {
-    routing.rules.unshift(confirmationBackwardsRouting2Rule);
-  }
+
+  routing.rules.unshift(confirmationBackwardsRouting2Rule);
+
 
   const confirmationQuestionObject = {
     id: `confirmation-page-for-${page.id}`,
@@ -103,7 +78,6 @@ const buildAuthorConfirmationQuestion = (
         ? `{{ answers['answer${page.answers[0].id}']|format_unordered_list }}`
         : null,
     pageType: "ConfirmationQuestion",
-    routingRuleSet,
     routing,
     answers: [confirmationAnswerObject]
   };
