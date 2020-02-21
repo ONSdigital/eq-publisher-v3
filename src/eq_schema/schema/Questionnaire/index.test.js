@@ -326,6 +326,14 @@ describe("Questionnaire", () => {
     );
   });
 
+  it("should build hub if selected", () => {
+    const questionnaireJson = createQuestionnaireJSON({
+      hub: {
+        enabled: true
+      }
+    });
+    expect(new Questionnaire(questionnaireJson).hub.enabled).toBeTruthy();
+  });
   it("should not build hub if not selected", () => {
     expect(questionnaire.hub.enabled).toBeFalsy();
   });
