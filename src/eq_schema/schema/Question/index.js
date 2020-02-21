@@ -70,21 +70,19 @@ class Question {
         this.answers[1].maximum = Answer.buildDateValidation(latestDate);
       }
 
-      if (minDuration.enabled || maxDuration.enabled) {
-        if (minDuration.enabled) {
-          set(
-            this,
-            `period_limits.minimum.${minDuration.duration.unit}`.toLowerCase(),
-            minDuration.duration.value
-          );
-        }
-        if (maxDuration.enabled) {
-          set(
-            this,
-            `period_limits.maximum.${maxDuration.duration.unit}`.toLowerCase(),
-            maxDuration.duration.value
-          );
-        }
+      if (minDuration.enabled) {
+        set(
+          this,
+          `period_limits.minimum.${minDuration.duration.unit}`.toLowerCase(),
+          minDuration.duration.value
+        );
+      }
+      if (maxDuration.enabled) {
+        set(
+          this,
+          `period_limits.maximum.${maxDuration.duration.unit}`.toLowerCase(),
+          maxDuration.duration.value
+        );
       }
     } else if (mutuallyExclusive) {
       this.type = "MutuallyExclusive";
@@ -130,21 +128,23 @@ class Question {
       type: DATE,
       mandatory: get("properties.required", answer)
     };
-
-    return [
-      {
-        ...commonAnswerDef,
-        id: `${commonAnswerDef.id}from`,
-        label: answer.label,
-        q_code: answer.qCode
-      },
-      {
-        ...commonAnswerDef,
-        id: `${commonAnswerDef.id}to`,
-        label: answer.secondaryLabel,
-        q_code: answer.secondaryQCode
-      }
-    ];
+    const dateFrom = {
+      ...commonAnswerDef,
+      id: `${commonAnswerDef.id}from`,
+      label: answer.label,
+    };
+    if (answer.qCode) {
+      dateFrom.q_code = answer.qCode;
+    }
+    const dateTo = {
+      ...commonAnswerDef,
+      id: `${commonAnswerDef.id}to`,
+      label: answer.secondaryLabel,
+    };
+    if (answer.secondaryQCode) {
+      dateTo.q_code = answer.secondaryQCode;
+    }
+    return [dateFrom, dateTo];
   }
 
   buildMutuallyExclusiveAnswers(mutuallyExclusive) {

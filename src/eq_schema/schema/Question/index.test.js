@@ -460,6 +460,92 @@ describe("Question", () => {
         })
       );
     });
+
+    it("should not create date validation", () => {
+      const answers = [
+        {
+          type: DATE_RANGE,
+          id: "1",
+          properties: { required: true },
+          validation,
+          childAnswers: [
+            { id: "1from", label: "Period from" },
+            { id: "1to", label: "Period to" }
+          ]
+        }
+      ];
+      answers[0].validation.earliestDate.enabled = false
+      answers[0].validation.latestDate.enabled = false
+      answers[0].validation.minDuration.enabled = false
+      answers[0].validation.maxDuration.enabled = false
+      const question = new Question(createQuestionJSON({ answers }));
+
+      expect(question.answers[0]).toEqual(
+        expect.not.objectContaining({
+          minimum: {
+            value: "2017-02-17",
+            offset_by: {
+              days: -4
+            }
+          }
+        })
+      );
+      expect(question.answers[1]).toEqual(
+        expect.not.objectContaining({
+          maximum: {
+            value: "2018-02-17",
+            offset_by: {
+              years: 10
+            }
+          }
+        })
+      );
+      expect(question.period_limits).toEqual(
+        expect.not.objectContaining({
+          minimum: {
+            days: 13
+          }
+        })
+      );
+      expect(question.period_limits).toEqual(
+        expect.not.objectContaining({
+          maximum: {
+            months: 2
+          }
+        })
+      );
+    });
+
+    it("should create date with qcodes", () => {
+      const answers = [
+        {
+          type: DATE_RANGE,
+          id: "1",
+          properties: { required: true },
+          validation,
+          qCode: "123",
+          secondaryQCode: "456",
+          childAnswers: [
+            { id: "1from", label: "Period from" },
+            { id: "1to", label: "Period to" }
+          ]
+        }
+      ];
+      const question = new Question(createQuestionJSON({ answers }));
+
+      expect(question.answers[0]).toEqual(
+        expect.not.objectContaining({
+          qCode: "123"
+        })
+      );
+      expect(question.answers[1]).toEqual(
+        expect.not.objectContaining({
+          qCode: "456"
+        })
+      );
+    });
+
+
   });
 
   describe("piping", () => {
