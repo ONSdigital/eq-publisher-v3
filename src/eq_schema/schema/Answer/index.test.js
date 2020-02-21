@@ -45,6 +45,16 @@ describe("Answer", () => {
     });
   });
 
+  it("should set a valid parentID when present", () => {
+    const answer = new Answer(createAnswerJSON({ parentAnswerId: "PARENTID" }));
+    expect(answer.parent_answer_id).toBe("answerPARENTID");
+  });
+
+  it("should set a valid qCode when present", () => {
+    const answer = new Answer(createAnswerJSON());
+    expect(answer.q_code).toBe("51");
+  });
+
   it("should set currency to GBP for currency types", () => {
     const answer = new Answer(createAnswerJSON({ type: CURRENCY }));
     expect(answer.currency).toBe("GBP");
@@ -820,6 +830,30 @@ describe("Answer", () => {
         value: "Option two"
       }
     ]);
+  });
+
+  it("should contain a qCode if supplied", () => {
+    const answer = new Answer(
+      createAnswerJSON({
+        type: RADIO,
+        options: [
+          {
+            id: 1,
+            label: "Option one",
+            description: null,
+            qCode: "1"
+          },
+          {
+            id: 2,
+            label: "Option two",
+            description: null,
+            qCode: "2"
+          }
+        ]
+      })
+    );
+    expect(answer.options[0].q_code).toBe("1");
+    expect(answer.options[1].q_code).toBe("2");
   });
 
   describe("creating checkbox/radio answers with additionalAnswers", () => {
