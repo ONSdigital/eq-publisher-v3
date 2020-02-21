@@ -284,6 +284,7 @@ describe("Group", () => {
 
     it("should build a confirmation page", () => {
       const ctx = ctxGenerator(null);
+
       const resultantJson = new Group(
         "Section 1",
         ctx.questionnaireJson.sections[0],
@@ -340,6 +341,68 @@ describe("Group", () => {
       };
 
       expect(resultantJson.blocks[1]).toMatchObject(expectedRunnerBlock);
+    });
+
+    it("should build a confirmation page with qCode", () => {
+      const ctx = ctxGenerator(null);
+      ctx.questionnaireJson.sections[0].pages[0].confirmation.qCode = "1";
+      const resultantJson = new Group(
+        "Section 1",
+        ctx.questionnaireJson.sections[0],
+        ctx
+      );
+      const expectedRunnerBlock = {
+        id: "blockconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+        type: "ConfirmationQuestion",
+        question: {
+          id: "questionconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          title: "Are you sure?",
+          type: "General",
+          answers: [
+            {
+              id:
+                "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              mandatory: true,
+              q_code: "1",
+              type: "Radio",
+              options: [
+                {
+                  label: "Oh yes.",
+                  value: "Oh yes.",
+                  description: "Positive"
+                },
+                {
+                  label: "Wait I can get more?",
+                  value: "Wait I can get more?",
+                  description: "Negative"
+                }
+              ]
+            }
+          ]
+        },
+        routing_rules: [
+          {
+            goto: {
+              block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              when: [
+                {
+                  id:
+                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  condition: "contains any",
+                  values: ["Wait I can get more?"]
+                }
+              ]
+            }
+          },
+          {
+            goto: {
+              group: "confirmation-group"
+            }
+          }
+        ]
+      };
+      const qCode = resultantJson.blocks[1].question.answers[0].q_code;
+      expect(qCode).toEqual(expectedRunnerBlock.question.answers[0].q_code);
     });
 
     it("copies a routing from the previous question and converts it to runner format", () => {
@@ -429,11 +492,69 @@ describe("Group", () => {
       ];
 
       expect(resultantJson.blocks[0].routing_rules).toBeUndefined();
-
       expect(resultantJson.blocks[1].routing_rules).toEqual(
         expectedRunnerRouting
       );
     });
+
+    // it("should build routing rules", () => {
+    //   const routing = {
+    //     rules: [
+    //       {
+    //         expressionGroup: {
+    //           operator: "And",
+    //           expressions: [
+    //             {
+    //               left: {
+    //                 id: "1",
+    //                 type: "Radio",
+    //                 options: [
+    //                   {
+    //                     id: "1"
+    //                   }
+    //                 ]
+    //               },
+    //               condition: "OneOf",
+    //               right: {
+    //                 options: [
+    //                   {
+    //                     id: "1",
+    //                     label: "2.3"
+    //                   }
+    //                 ]
+    //               }
+    //             }
+    //           ]
+    //         },
+    //         destination: {
+    //           section: {
+    //             id: "2"
+    //           },
+    //           page: null,
+    //           logical: null
+    //         }
+    //       }
+    //     ],
+    //     else: {
+    //       section: null,
+    //       page: null,
+    //       logical: "EndOfQuestionnaire"
+    //     }
+    //   };
+    //   const routingRuleSet = {
+    //     routingRules: []
+    //   };
+    //   const ctx = ctxGenerator(routingRuleSet, routing);
+    //   const resultantJson = new Group(
+    //     "Section 1",
+    //     ctx.questionnaireJson.sections[0],
+    //     ctx
+    //   );
+    //   const routingRules = resultantJson.blocks[1].routing_rules;
+
+    //   expect(routingRules.length).toBe(2);
+    //   expect(routingRules[0]).not.toMatchObject(routingRules[0].goto);
+    // });
 
     it("pipes in checkbox values from the previous questions", () => {
       const ctx = ctxGenerator(null);
