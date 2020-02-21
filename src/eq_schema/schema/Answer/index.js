@@ -91,20 +91,6 @@ class Answer {
     }
   }
 
-  static buildChildAnswer(
-    { id, properties, type, label, description },
-    parentAnswerId
-  ) {
-    return {
-      id,
-      properties,
-      type,
-      label,
-      description,
-      parentAnswerId
-    };
-  }
-
   buildNumberValidation(validationRule, validationType) {
     const { enabled } = validationRule;
     if (!enabled) {
