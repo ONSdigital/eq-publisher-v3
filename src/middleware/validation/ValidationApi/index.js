@@ -16,7 +16,7 @@ class ValidationApi {
         json: true
       })
       .then(res => {
-        if (!res.success) {
+        if (Object.entries(res).length > 0) {
           return res;
         }
         return res;
