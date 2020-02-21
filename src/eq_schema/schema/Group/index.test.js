@@ -63,10 +63,14 @@ describe("Group", () => {
       title: "Section 1",
       blocks: [
         {
-          description: "Intro Content",
           id: "group1-introduction",
-          title: "Intro Title",
-          type: "Interstitial"
+          type: "Interstitial",
+          content: {
+            title: "Intro Title",
+            contents : [{
+              description: "Intro Content",
+            }]
+          }
         },
         expect.any(Block)
       ]

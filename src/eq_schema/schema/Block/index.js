@@ -44,8 +44,12 @@ class Block {
     return {
       type: "Interstitial",
       id: `group${groupId}-introduction`,
-      title: processPipedTitle(ctx)(introductionTitle) || "",
-      description: processPipedText(ctx)(introductionContent) || ""
+      content: {
+        title: processPipedTitle(ctx)(introductionTitle) || "",
+        contents: [{
+          description: processPipedText(ctx)(introductionContent) || ""
+        }]
+      }
     };
   }
 

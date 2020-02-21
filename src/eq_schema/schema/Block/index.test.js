@@ -117,8 +117,7 @@ describe("Block", () => {
         0,
         createContext()
       );
-
-      expect(introBlock.title).toEqual("{{ answers['answer1'] }}");
+      expect(introBlock.content.title).toEqual("{{ answers['answer1'] }}");
     });
 
     it("should handle piped values in title while stripping html", () => {
@@ -129,7 +128,7 @@ describe("Block", () => {
         createContext()
       );
 
-      expect(introBlock.title).toEqual("{{ answers['answer1'] }}");
+      expect(introBlock.content.title).toEqual("{{ answers['answer1'] }}");
     });
 
     it("should handle piped values in description", () => {
@@ -140,7 +139,7 @@ describe("Block", () => {
         createContext()
       );
 
-      expect(introBlock.description).toEqual(
+      expect(introBlock.content.contents[0].description).toEqual(
         "<strong>{{ answers['answer1'] }}</strong><ul><li>Some Value</li></ul>"
       );
     });
