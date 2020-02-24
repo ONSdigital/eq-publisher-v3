@@ -19,6 +19,7 @@ describe("Questionnaire", () => {
         title: "Quarterly Business Survey",
         description: "Quarterly Business Survey",
         type: BUSINESS,
+        theme: "default",
         navigation: false,
         surveyId: "0112",
         summary: true,
@@ -74,13 +75,6 @@ describe("Questionnaire", () => {
       })
     );
     expect(questionnaire.legal_basis).toEqual(undefined);
-  });
-
-  it("should set the theme based on the type", () => {
-    questionnaire = new Questionnaire(
-      createQuestionnaireJSON({ type: SOCIAL })
-    );
-    expect(questionnaire.theme).toEqual("social");
   });
 
   it("should add a Summary to end of Questionnaire", () => {

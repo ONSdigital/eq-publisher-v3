@@ -9,7 +9,6 @@ const {
   types: { VOLUNTARY },
   contentMap
 } = require("../../../constants/legalBases");
-const { DEFAULT_THEME } = require("../../../constants/themes");
 
 const { Confirmation, Introduction, Summary } = require("../../block-types");
 
