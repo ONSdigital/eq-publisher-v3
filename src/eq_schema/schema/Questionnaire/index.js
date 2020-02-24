@@ -35,7 +35,7 @@ class Questionnaire {
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
-    this.theme = questionnaireJson.theme || DEFAULT_THEME;
+    this.theme = questionnaireJson.theme;
 
     this.legal_basis = this.buildLegalBasis(questionnaireJson.introduction);
     this.navigation = {
