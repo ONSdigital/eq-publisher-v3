@@ -4,42 +4,17 @@ const {
   DEFAULT_METADATA,
   DEFAULT_METADATA_NAMES
 } = require("../../../constants/metadata");
-const { SOCIAL } = require("../../../constants/questionnaireTypes");
+
 const {
   types: { VOLUNTARY },
   contentMap
 } = require("../../../constants/legalBases");
-const {
-  DEFAULT_THEME,
-  NI_THEME,
-  SOCIAL_THEME
-} = require("../../../constants/themes");
+const { DEFAULT_THEME } = require("../../../constants/themes");
 
 const { Confirmation, Introduction, Summary } = require("../../block-types");
 
 const Section = require("../Section");
 const Hub = require("../Hub");
-
-// const DEFAULT_METADATA = [
-//   {
-//     name: "user_id",
-//     type: "string"
-//   },
-//   {
-//     name: "period_id",
-//     type: "string"
-//   },
-//   {
-//     name: "ru_name",
-//     type: "string"
-//   }
-// ];
-
-// const SOCIAL_THEME = "social";
-// const DEFAULT_THEME = "default";
-// const NI_THEME = "northernireland";
-
-// const DEFAULT_METADATA_NAMES = DEFAULT_METADATA.map(({ name }) => name);
 
 class Questionnaire {
   constructor(questionnaireJson) {
@@ -129,5 +104,4 @@ class Questionnaire {
   }
 }
 
-Questionnaire.DEFAULT_METADATA = DEFAULT_METADATA;
 module.exports = Questionnaire;
