@@ -36,7 +36,7 @@ Run `yarn develop` to start the application with Nodemon. Nodemon automatically 
 
 Run `yarn test` to kick-start the unit tests. Our unit tests are written in [Jest](https://jestjs.io/), which allows a [variety of flags](https://jestjs.io/docs/en/cli#options) to be passed along with the start command; you may use these at your leisure.
 
-Run `yarn test:watch` to run Jest on file changes.
+Run `yarn test` to run Jest on file changes.
 
 We do not currently have end-to-end tests.
 
@@ -97,7 +97,7 @@ Validates converted questionnaire against schema
 - **Body Params**
 
   ```
-  { questionnaire: author questionnaire }
+  { author questionnaire }
   ```
 
 - **Success Response:**
