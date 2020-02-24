@@ -24,7 +24,7 @@ class Questionnaire {
     this.schema_version = "0.0.1";
     this.data_version = "0.0.3";
     this.survey_id =
-      questionnaireJson.surveyId ||
+      questionnaireJson.publishDetails[0].surveyId ||
       questionnaireJson.title.toLowerCase().replace(/[^a-z0-9]/g, "");
     this.title = questionnaireJson.title;
 
