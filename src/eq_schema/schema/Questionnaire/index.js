@@ -1,36 +1,45 @@
 const { last } = require("lodash");
 
+const {
+  DEFAULT_METADATA,
+  DEFAULT_METADATA_NAMES
+} = require("../../../constants/metadata");
 const { SOCIAL } = require("../../../constants/questionnaireTypes");
 const {
   types: { VOLUNTARY },
   contentMap
 } = require("../../../constants/legalBases");
+const {
+  DEFAULT_THEME,
+  NI_THEME,
+  SOCIAL_THEME
+} = require("../../../constants/themes");
 
 const { Confirmation, Introduction, Summary } = require("../../block-types");
 
 const Section = require("../Section");
 const Hub = require("../Hub");
 
-const DEFAULT_METADATA = [
-  {
-    name: "user_id",
-    type: "string"
-  },
-  {
-    name: "period_id",
-    type: "string"
-  },
-  {
-    name: "ru_name",
-    type: "string"
-  }
-];
+// const DEFAULT_METADATA = [
+//   {
+//     name: "user_id",
+//     type: "string"
+//   },
+//   {
+//     name: "period_id",
+//     type: "string"
+//   },
+//   {
+//     name: "ru_name",
+//     type: "string"
+//   }
+// ];
 
-const SOCIAL_THEME = "social";
-const DEFAULT_THEME = "default";
-const NI_THEME = "northernireland";
+// const SOCIAL_THEME = "social";
+// const DEFAULT_THEME = "default";
+// const NI_THEME = "northernireland";
 
-const DEFAULT_METADATA_NAMES = DEFAULT_METADATA.map(({ name }) => name);
+// const DEFAULT_METADATA_NAMES = DEFAULT_METADATA.map(({ name }) => name);
 
 class Questionnaire {
   constructor(questionnaireJson) {
@@ -46,15 +55,12 @@ class Questionnaire {
     this.title = questionnaireJson.title;
 
     const ctx = this.createContext(questionnaireJson);
-    // hub will be called here
+
     this.hub = this.buildHub(questionnaireJson.hub, ctx);
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
-    this.theme =
-      questionnaireJson.type === SOCIAL ? SOCIAL_THEME : DEFAULT_THEME;
-
-    this.theme = questionnaireJson.theme === NI_THEME ? NI_THEME : this.theme;
+    this.theme = questionnaireJson.theme || DEFAULT_THEME;
 
     this.legal_basis = this.buildLegalBasis(questionnaireJson.introduction);
     this.navigation = {
