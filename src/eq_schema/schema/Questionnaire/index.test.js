@@ -1,6 +1,7 @@
 const { last } = require("lodash");
 
 const { BUSINESS, SOCIAL } = require("../../../constants/questionnaireTypes");
+const { DEFAULT_METADATA } = require("../../../constants/metadata");
 const {
   types: { NOTICE_1, VOLUNTARY }
 } = require("../../../constants/legalBases");
@@ -55,7 +56,7 @@ describe("Questionnaire", () => {
       sections: [expect.any(Section)],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
-      metadata: expect.arrayContaining(Questionnaire.DEFAULT_METADATA)
+      metadata: expect.arrayContaining(DEFAULT_METADATA)
     });
   });
 
