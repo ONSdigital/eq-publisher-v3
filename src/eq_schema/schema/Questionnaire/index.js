@@ -23,9 +23,10 @@ class Questionnaire {
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
     this.data_version = "0.0.3";
-    this.survey_id =
-      questionnaireJson.publishDetails[0].surveyId ||
-      questionnaireJson.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+    this.survey_id = this.buildSurveyId(
+      questionnaireJson.publishDetails,
+      questionnaireJson.title
+    );
     this.title = questionnaireJson.title;
 
     const ctx = this.createContext(questionnaireJson);
@@ -48,6 +49,14 @@ class Questionnaire {
     };
 
     this.buildSummaryOrConfirmation(questionnaireJson.summary);
+  }
+
+  buildSurveyId(publishDetails, title) {
+    if (publishDetails) {
+      return publishDetails[0].surveyId;
+    }
+
+    return title.toLowerCase().replace(/[^a-z0-9]/g, "");
   }
 
   createContext(questionnaireJson) {

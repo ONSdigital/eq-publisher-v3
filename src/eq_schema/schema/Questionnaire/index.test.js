@@ -21,7 +21,6 @@ describe("Questionnaire", () => {
         type: BUSINESS,
         theme: "default",
         navigation: false,
-        surveyId: "0112",
         summary: true,
         hub: false,
         sections: [
@@ -35,7 +34,8 @@ describe("Questionnaire", () => {
         introduction: {
           legalBasis: NOTICE_1,
           collapsibles: []
-        }
+        },
+        publishDetails: [{ surveyId: "874" }]
       },
       questionnaire
     );
@@ -51,7 +51,7 @@ describe("Questionnaire", () => {
       mime_type: "application/json/ons/eq",
       schema_version: "0.0.1",
       data_version: "0.0.3",
-      survey_id: "0112",
+      survey_id: "874",
       title: "Quarterly Business Survey",
       theme: "default",
       sections: [expect.any(Section)],
@@ -173,7 +173,7 @@ describe("Questionnaire", () => {
     const questionnaireJson = createQuestionnaireJSON({
       title: 'Questionnaire-For-Test-With-!@£$%^&*()foo+"{}'
     });
-    delete questionnaireJson.surveyId;
+    delete questionnaireJson.publishDetails;
     questionnaire = new Questionnaire(questionnaireJson);
     expect(questionnaire.survey_id).toEqual("questionnairefortestwithfoo");
   });
