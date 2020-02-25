@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Confirmation should build valid runner Confirmation 1`] = `
+Confirmation {
+  "blocks": Array [
+    Object {
+      "content": Object {
+        "contents": Array [
+          Object {
+            "list": Array [
+              "You will not be able to access or change your answers on submitting the questionnaire",
+              "If you wish to review your answers please select the relevant completed sections",
+            ],
+            "title": "You are now ready to submit this survey",
+          },
+        ],
+        "title": "Submission",
+      },
+      "id": "confirmation",
+      "type": "Confirmation",
+    },
+  ],
+  "id": "confirmation-group",
+  "title": "confirmation",
+}
+`;

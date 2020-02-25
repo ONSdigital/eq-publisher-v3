@@ -22,11 +22,21 @@ These instructions will get you a copy of the project up and running on your loc
 
 **Development**
 
+Testing whether a converted schema is returned relies on passing author json to `eq-publisher-v3`.
+
+It may be easier to set up an endpoint collection in Postman to view the converted schema.
+
+If validating a schema during development envrionment variable `EQ_VALIDATOR_URL` is needed.
+
+When the validator URL is set, it is possible to hit the `/publish/validate` endpoint for more detailed error messages.
+
 Run `yarn develop` to start the application with Nodemon. Nodemon automatically refreshes the application when source files change, making development easy.
 
 ## Running the tests
 
 Run `yarn test` to kick-start the unit tests. Our unit tests are written in [Jest](https://jestjs.io/), which allows a [variety of flags](https://jestjs.io/docs/en/cli#options) to be passed along with the start command; you may use these at your leisure.
+
+Run `yarn test` to run Jest on file changes.
 
 We do not currently have end-to-end tests.
 
@@ -37,3 +47,76 @@ Run `yarn lint` to examine the code for any common styling issues. We do this to
 ## Deployment
 
 There are no deployment steps as this application is currently in development.
+
+## API Reference
+
+| Method | Endpoint                       | Description                                      |
+| ------ | ------------------------------ | ------------------------------------------------ |
+| POST   | [`/publish`](#publish)         | Convert author JSON into Eq/Runner JSON          |
+| POST   | [`/publish/validate`](#submit) | Validates converted JSON with a schema validator |
+
+### Publish
+
+Converts author JSON to Eq/Runner V3 and returns the result
+
+- **URL**
+
+  `/publish`
+
+- **Method:**
+
+  `POST`
+
+- **Body Params**
+
+  ```
+  { author questionnaire }
+  ```
+
+- **Success Response:**
+
+  **Code:** 200 <br />
+  **Example:** Runner JSON; examples: https://github.com/ONSdigital/eq-questionnaire-runner/blob/master/test_schemas/en/ecommerce.json
+
+- **Fail Responses:**
+
+  **Code:** 400 <br/>
+
+  ### Validate Publish
+
+Validates converted questionnaire against schema
+
+- **URL**
+
+  `/publish/validate`
+
+- **Method:**
+
+  `POST`
+
+- **Body Params**
+
+  ```
+  { author questionnaire }
+  ```
+
+- **Success Response:**
+
+  **Code:** 200 <br />
+  **Example:** Runner JSON; examples: https://github.com/ONSdigital/eq-questionnaire-runner/blob/master/test_schemas/en/ecommerce.json
+
+- **Fail Responses:**
+
+  **Code:** 400 <br/>
+  **Example:**
+
+  ```
+  {
+    "valid": false,
+    "errors": {
+        "message": "Additional properties are not allowed ('hub' was unexpected)",
+        "path": "deque([])",
+        "predicted_cause": "Additional properties are not allowed ('hub' was unexpected)"
+    }
+  }
+  ```
