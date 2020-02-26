@@ -3,6 +3,7 @@ const { set } = require("lodash");
 
 const {
   parseContent,
+  parseContents,
   getInnerHTMLWithPiping,
   unescapePiping
 } = require("../../../utils/HTMLUtils");
@@ -21,6 +22,7 @@ const findMutuallyExclusive = flow(
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
+const processContents = ctx => flow(convertPipes(ctx), parseContents);
 
 class Question {
   constructor(question, ctx) {
@@ -37,7 +39,7 @@ class Question {
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = processContent(ctx)(question.guidance);
+      this.guidance = processContents(ctx)(question.guidance);
     }
 
     if (
@@ -47,7 +49,7 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...processContent(ctx)(question.definitionContent)
+          ...processContents(ctx)(question.definitionContent)
         }
       ];
     }

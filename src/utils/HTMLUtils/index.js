@@ -52,10 +52,24 @@ const parseContent = html => {
   return { content };
 };
 
+const parseContents = html => {
+  const contents = cheerio(html)
+    .filter((i, elem) => getInnerHTML(elem) !== "")
+    .map((i, elem) => mapElementToObject(elem))
+    .toArray();
+
+  if (contents.length === 0) {
+    return;
+  }
+
+  return { contents };
+};
+
 module.exports = {
   getInnerHTML,
   getText,
   parseContent,
+  parseContents,
   getInnerHTMLWithPiping,
   unescapePiping
 };
