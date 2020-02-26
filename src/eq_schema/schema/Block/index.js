@@ -61,20 +61,12 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.titles = [
-        {
-          value: processPipedTitle(ctx)(page.title)
-        }
-      ];
+      this.title = processPipedTitle(ctx)(page.title)
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map(o => `answer${o.id}`),
-        titles: [
-          {
-            value: processPipedTitle(ctx)(page.totalTitle)
-          }
-        ]
+        title: processPipedTitle(ctx)(page.totalTitle)
       };
     }
   }
