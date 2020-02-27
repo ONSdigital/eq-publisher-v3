@@ -52,6 +52,20 @@ const questionnaireJson = {
               id: "3",
               type: "Number",
               label: "Answer 3"
+            },
+            {
+              id: "4",
+              type: "Checkbox",
+              options: [
+                {
+                  id: "123",
+                  label: "red",
+                },
+                {
+                  id: "456",
+                  label: "white",
+                }
+              ]
             }
           ]
         }

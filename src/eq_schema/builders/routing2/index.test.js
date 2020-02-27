@@ -1,5 +1,4 @@
 const translateAuthorRouting = require("./");
-const { RADIO, CURRENCY } = require("../../../constants/answerTypes");
 const { questionnaireJson } = require("./basicQuestionnaireJSON");
 const { AND, OR } = require("../../../constants/routingOperators");
 
@@ -21,12 +20,14 @@ describe("Routing2", () => {
             expressions: [
               {
                 left: {
-                  id: "1",
-                  type: CURRENCY
+                  answerId: "1",
+                  type: "Answer"
                 },
                 condition: "Equal",
                 right: {
-                  number: 5
+                  customValue: {
+                    number: 5
+                  }
                 }
               }
             ]
@@ -41,19 +42,16 @@ describe("Routing2", () => {
             expressions: [
               {
                 left: {
-                  id: "2",
-                  type: RADIO
+                  answerId: "2",
+                  type: "Answer"
                 },
                 condition: "OneOf",
                 right: {
-                  options: [
-                    {
-                      label: "red"
-                    },
-                    {
-                      label: "white"
-                    }
+                  type: "SelectedOptions",
+                  optionIds: [
+                    "123", "456"
                   ]
+                  
                 }
               }
             ]
@@ -64,9 +62,7 @@ describe("Routing2", () => {
         }
       ],
       else: {
-        page: {
-          id: "3"
-        }
+        pageId: "3"
       }
     };
 
@@ -127,23 +123,14 @@ describe("Routing2", () => {
             expressions: [
               {
                 left: {
-                  id: "1",
-                  type: RADIO,
-                  options: [
-                    {
-                      label: "A"
-                    },
-                    {
-                      label: "B"
-                    }
-                  ]
+                  answerId: "1",
+                  type: "Answer",
                 },
                 condition: "OneOf",
                 right: {
-                  options: [
-                    {
-                      label: "A"
-                    }
+                  type: "SelectedOptions",
+                  optionIds: [
+                    "123", "456"
                   ]
                 }
               }
@@ -159,23 +146,14 @@ describe("Routing2", () => {
             expressions: [
               {
                 left: {
-                  id: "2",
-                  type: RADIO,
-                  options: [
-                    {
-                      label: "D"
-                    },
-                    {
-                      label: "E"
-                    }
-                  ]
+                  answerId: "2",
+                  type: "Answer",
                 },
                 condition: "OneOf",
                 right: {
-                  options: [
-                    {
-                      label: "E"
-                    }
+                  type: "SelectedOptions",
+                  optionIds: [
+                    "123", "456"
                   ]
                 }
               }
@@ -187,9 +165,7 @@ describe("Routing2", () => {
         }
       ],
       else: {
-        page: {
-          id: "3"
-        }
+        pageId: "3"
       }
     };
     const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
@@ -201,7 +177,7 @@ describe("Routing2", () => {
             {
               id: "answer1",
               condition: "contains any",
-              values: ["A"]
+              values: ["red", "white"]
             }
           ]
         }
@@ -213,7 +189,7 @@ describe("Routing2", () => {
             {
               id: "answer2",
               condition: "contains any",
-              values: ["E"]
+              values: ["red", "white"]
             }
           ]
         }

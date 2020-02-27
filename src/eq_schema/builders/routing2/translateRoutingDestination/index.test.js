@@ -4,9 +4,7 @@ const { questionnaireJson, questionnaireJsonWithSummary } = require("../basicQue
 describe("Translation of a routing destination", () => {
   it("should translate an absolute destination to another Page", () => {
     const authorDestination = {
-      page: {
-        id: "2"
-      }
+      pageId: "2"
     };
     expect(translateRoutingDestination(authorDestination)).toMatchObject({
       block: "block2"
@@ -14,9 +12,7 @@ describe("Translation of a routing destination", () => {
   });
   it("should translate an absolute destination to another Section", () => {
     const authorDestination = {
-      section: {
-        id: "2"
-      }
+      sectionId: "2"
     };
     expect(translateRoutingDestination(authorDestination)).toMatchObject({
       group: "group2"
