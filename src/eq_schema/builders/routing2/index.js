@@ -22,7 +22,7 @@ module.exports = (routing, pageId, groupId, ctx) => {
     );
     if (rule.expressionGroup.operator === AND) {
       const when = rule.expressionGroup.expressions.map(expression =>
-        translateBinaryExpression(expression)
+        translateBinaryExpression(expression, ctx)
       );
       runnerRules = [
         {
@@ -37,7 +37,7 @@ module.exports = (routing, pageId, groupId, ctx) => {
         return {
           goto: {
             ...destination,
-            when: [translateBinaryExpression(expression)]
+            when: [translateBinaryExpression(expression, ctx)]
           }
         };
       });

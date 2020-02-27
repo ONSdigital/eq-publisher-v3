@@ -1,10 +1,10 @@
 const { flatMap, get, findIndex, isNil } = require("lodash");
 
 const getAbsoluteDestination = destination => {
-  if (destination.page) {
-    return { block: `block${destination.page.id}` };
+  if (destination.pageId) {
+    return { block: `block${destination.pageId}` };
   }
-  return { group: `group${destination.section.id}` };
+  return { group: `group${destination.sectionId}` };
 };
 
 const getNextPageDestination = (pageId, ctx) => {
@@ -52,7 +52,7 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
 const translateRoutingDestination = (destination, pageId, ctx) => {
   if (destination.logical) {
     return getLogicalDestination(pageId, destination, ctx);
-  } else if (destination.page || destination.section) {
+  } else if (destination.pageId || destination.sectionId) {
     return getAbsoluteDestination(destination);
   } else {
     throw new Error(`${destination} is not a valid destination object`);
