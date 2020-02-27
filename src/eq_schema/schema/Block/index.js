@@ -46,9 +46,11 @@ class Block {
       id: `group${groupId}-introduction`,
       content: {
         title: processPipedTitle(ctx)(introductionTitle) || "",
-        contents: [{
-          description: processPipedText(ctx)(introductionContent) || ""
-        }]
+        contents: [
+          {
+            description: processPipedText(ctx)(introductionContent) || ""
+          }
+        ]
       }
     };
   }
@@ -61,12 +63,27 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.title = processPipedTitle(ctx)(page.title)
+      // this.title = [
+      //   {
+      //     value: processPipedTitle(ctx)(page.title)
+      //   }
+      // ];
+      this.title = processPipedTitle(ctx)(page.title);
+
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
-        answers_to_calculate: page.summaryAnswers.map(o => `answer${o.id}`),
-        title: processPipedTitle(ctx)(page.totalTitle)
+        answers_to_calculate: page.summaryAnswers.map(o => {
+          console.log("o - - - -  ", o);
+          return `answer${o}`;
+        }),
+        title: processPipedTitle(ctx)(page.title)
+
+        // title: [
+        //   {
+        //     value: processPipedTitle(ctx)(page.totalTitle)
+        //   }
+        // ]
       };
     }
   }
