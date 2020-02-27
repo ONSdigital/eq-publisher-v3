@@ -168,10 +168,10 @@ describe("Block", () => {
         calculation: {
           answers_to_calculate: ["answer1", "answer2", "answer3"],
           calculation_type: "sum",
-          titles: [{ value: "Bye" }]
+          title: "Bye"
         },
         // id: "block1",
-        titles: [{ value: "Hi is your total %(total)s" }],
+        title: "Hi is your total %(total)s",
         type: "CalculatedSummary"
       });
     });

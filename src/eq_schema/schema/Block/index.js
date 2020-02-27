@@ -68,8 +68,8 @@ class Block {
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
-        answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        title: processPipedTitle(ctx)(page.totaltitle)
+        answers_to_calculate: page.summaryAnswers.map(o => `answer${o.id}`),
+        title: processPipedTitle(ctx)(page.totalTitle)
       };
     }
   }

@@ -474,10 +474,10 @@ describe("Question", () => {
           ]
         }
       ];
-      answers[0].validation.earliestDate.enabled = false
-      answers[0].validation.latestDate.enabled = false
-      answers[0].validation.minDuration.enabled = false
-      answers[0].validation.maxDuration.enabled = false
+      answers[0].validation.earliestDate.enabled = false;
+      answers[0].validation.latestDate.enabled = false;
+      answers[0].validation.minDuration.enabled = false;
+      answers[0].validation.maxDuration.enabled = false;
       const question = new Question(createQuestionJSON({ answers }));
 
       expect(question.answers[0]).toEqual(
@@ -516,7 +516,7 @@ describe("Question", () => {
       );
     });
 
-    it("should create date with qcodes", () => {
+    it("should create date with qCodes", () => {
       const answers = [
         {
           type: DATE_RANGE,
@@ -544,8 +544,6 @@ describe("Question", () => {
         })
       );
     });
-
-
   });
 
   describe("piping", () => {
@@ -580,8 +578,7 @@ describe("Question", () => {
         }),
         createContext()
       );
-
-      expect(question.guidance.content[0]).toEqual({
+      expect(question.guidance.contents[0]).toEqual({
         title: "{{ metadata['my_metadata'] }}"
       });
     });
@@ -865,7 +862,7 @@ describe("Question", () => {
       });
     });
 
-    it("should set the custom value when the entiyType is Custom", () => {
+    it("should set the custom value when the entityType is Custom", () => {
       validation.entityType = "Custom";
       validation.custom = 10;
       validation.previousAnswer = { id: 20 };

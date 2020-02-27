@@ -45,7 +45,7 @@ class Answer {
     }
 
     if (answer.type === TEXTAREA) {
-      if (this.maxLength) {
+      if (answer.properties.maxLength) {
         this.max_length = parseInt(answer.properties.maxLength);
       }
     }
