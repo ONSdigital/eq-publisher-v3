@@ -8,7 +8,6 @@ const validation = async (req, res, next) => {
   if (!(Object.entries(result).length === 0)) {
     return res.status(400).send(result);
   }
-  console.log("success - - - = - - -");
   next();
 };
 
