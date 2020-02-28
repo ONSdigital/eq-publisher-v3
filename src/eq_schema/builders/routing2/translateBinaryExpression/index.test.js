@@ -1,11 +1,3 @@
-const {
-  RADIO,
-  CURRENCY,
-  NUMBER,
-  PERCENTAGE,
-  CHECKBOX,
-  UNIT
-} = require("../../../../constants/answerTypes");
 const { questionnaireJson } = require("../basicQuestionnaireJSON");
 
 const translateBinaryExpression = require(".");
@@ -23,26 +15,28 @@ describe("Should build a runner representation of a binary expression", () => {
       }
     };
 
-    expect(() => translateBinaryExpression(expression, {questionnaireJson} )).toThrow(
-      "not a valid routing answer type"
-    );
+    expect(() =>
+      translateBinaryExpression(expression, { questionnaireJson })
+    ).toThrow("not a valid routing answer type");
   });
   describe("With Radio answers", () => {
     const buildBinaryExpression = (optionIds, condition) => ({
       left: {
         answerId: "1",
-        type: "Answer",
+        type: "Answer"
       },
       condition,
       right: {
         type: "SelectedOptions",
         optionIds
-      } 
+      }
     });
 
     it("With a radio answer and single selected option", () => {
       const expression = buildBinaryExpression(["123"], "OneOf");
-      const runnerExpression = translateBinaryExpression(expression, {questionnaireJson});
+      const runnerExpression = translateBinaryExpression(expression, {
+        questionnaireJson
+      });
 
       expect(runnerExpression).toMatchObject({
         id: "answer1",
@@ -53,7 +47,9 @@ describe("Should build a runner representation of a binary expression", () => {
 
     it("With a radio answer and no selected options", () => {
       const expression = buildBinaryExpression(["123", "456"], "Unanswered");
-      const runnerExpression = translateBinaryExpression(expression, {questionnaireJson});
+      const runnerExpression = translateBinaryExpression(expression, {
+        questionnaireJson
+      });
 
       expect(runnerExpression).toMatchObject({
         condition: "not set",
@@ -64,7 +60,9 @@ describe("Should build a runner representation of a binary expression", () => {
     it("With a radio answer and multiple selected options", () => {
       const expression = buildBinaryExpression(["123", "456"], "OneOf");
 
-      const runnerExpression = translateBinaryExpression(expression, {questionnaireJson});
+      const runnerExpression = translateBinaryExpression(expression, {
+        questionnaireJson
+      });
       expect(runnerExpression).toMatchObject({
         id: "answer1",
         condition: "contains any",
@@ -82,12 +80,14 @@ describe("Should build a runner representation of a binary expression", () => {
         },
         condition: "Equal",
         right: {
-          customValue:{
-            number: 5,
+          customValue: {
+            number: 5
           }
         }
       };
-      const runnerExpression = translateBinaryExpression(expression, {questionnaireJson});
+      const runnerExpression = translateBinaryExpression(expression, {
+        questionnaireJson
+      });
       expect(runnerExpression).toMatchObject({
         id: "answer1",
         condition: "equals",
@@ -103,13 +103,15 @@ describe("Should build a runner representation of a binary expression", () => {
         },
         condition: "Unanswered",
         right: {
-          customValue:{
-            number: 5,
+          customValue: {
+            number: 5
           }
         }
       };
 
-      const runnerExpression = translateBinaryExpression(expression, {questionnaireJson});
+      const runnerExpression = translateBinaryExpression(expression, {
+        questionnaireJson
+      });
 
       expect(runnerExpression).toMatchObject({
         id: "answer1",
