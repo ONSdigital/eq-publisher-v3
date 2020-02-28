@@ -151,17 +151,7 @@ describe("Block", () => {
           '<p>Hi is your total <span data-piped="variable"data-id="1">[Total]</span></p>',
         pageType: "CalculatedSummaryPage",
         totalTitle: "<p>Bye</p>",
-        summaryAnswers: [
-          {
-            id: "1"
-          },
-          {
-            id: "2"
-          },
-          {
-            id: "3"
-          }
-        ]
+        summaryAnswers: ["1","2","3",]
       };
       const block = new Block(calculatedPageGraphql, ctx);
       expect(block).toMatchObject({
