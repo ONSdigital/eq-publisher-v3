@@ -39,7 +39,7 @@ const mapElementToObject = elem => {
   }
 };
 
-const parseContent = html => propertyName => {
+const parseContent = html => contentType => {
   const content = cheerio(html)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
@@ -49,7 +49,7 @@ const parseContent = html => propertyName => {
     return;
   }
 
-  return { [propertyName]: content };
+  return { [contentType]: content };
 };
 
 module.exports = {
