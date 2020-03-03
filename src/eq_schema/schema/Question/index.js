@@ -3,7 +3,6 @@ const { set } = require("lodash");
 
 const {
   parseContent,
-  parseContents,
   getInnerHTMLWithPiping,
   unescapePiping
 } = require("../../../utils/HTMLUtils");
@@ -22,7 +21,6 @@ const findMutuallyExclusive = flow(
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
-const processContents = ctx => flow(convertPipes(ctx), parseContents);
 
 class Question {
   constructor(question, ctx) {
@@ -39,7 +37,7 @@ class Question {
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = processContents(ctx)(question.guidance);
+      this.guidance = processContent(ctx)(question.guidance)("contents");
     }
 
     if (
@@ -49,7 +47,7 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...processContents(ctx)(question.definitionContent)
+          ...processContent(ctx)(question.definitionContent)("contents")
         }
       ];
     }
@@ -115,7 +113,8 @@ class Question {
       last(this.answers).guidance = {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
-        ...processContent(ctx)(question.additionalInfoContent)
+
+        ...processContent(ctx)(question.additionalInfoContent)("content")
       };
     }
   }
@@ -133,7 +132,7 @@ class Question {
     const dateFrom = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}from`,
-      label: answer.label,
+      label: answer.label
     };
     if (answer.qCode) {
       dateFrom.q_code = answer.qCode;
@@ -141,7 +140,7 @@ class Question {
     const dateTo = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}to`,
-      label: answer.secondaryLabel,
+      label: answer.secondaryLabel
     };
     if (answer.secondaryQCode) {
       dateTo.q_code = answer.secondaryQCode;

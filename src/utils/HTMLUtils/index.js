@@ -39,7 +39,7 @@ const mapElementToObject = elem => {
   }
 };
 
-const parseContent = html => {
+const parseContent = html => propertyName => {
   const content = cheerio(html)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
@@ -49,27 +49,13 @@ const parseContent = html => {
     return;
   }
 
-  return { content };
-};
-
-const parseContents = html => {
-  const contents = cheerio(html)
-    .filter((i, elem) => getInnerHTML(elem) !== "")
-    .map((i, elem) => mapElementToObject(elem))
-    .toArray();
-
-  if (contents.length === 0) {
-    return;
-  }
-
-  return { contents };
+  return { [propertyName]: content };
 };
 
 module.exports = {
   getInnerHTML,
   getText,
   parseContent,
-  parseContents,
   getInnerHTMLWithPiping,
   unescapePiping
 };

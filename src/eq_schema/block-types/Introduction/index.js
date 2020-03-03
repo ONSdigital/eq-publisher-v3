@@ -11,7 +11,7 @@ const getSimpleText = (content, ctx) =>
   flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
 
 const getComplexText = (content, ctx) => {
-  const result = processContent(ctx)(content);
+  const result = processContent(ctx)(content)("content");
   if (result) {
     return result.content;
   }
@@ -51,17 +51,19 @@ module.exports = class Introduction {
           contents: getComplexText(description, ctx)
         }))
     };
-    let tertiaryContent
+    let tertiaryContent;
     if (tertiaryDescription) {
-      tertiaryContent = getComplexText(tertiaryDescription, ctx)[0]
+      tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
     }
     this.secondary_content = [
       {
         id: "secondary-content",
-        contents: [{
-          title: getSimpleText(tertiaryTitle, ctx), 
-          ...tertiaryContent,
-        }]
+        contents: [
+          {
+            title: getSimpleText(tertiaryTitle, ctx),
+            ...tertiaryContent
+          }
+        ]
       }
     ];
   }
