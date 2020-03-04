@@ -17,7 +17,7 @@ dotenv.config();
 const logger = pino();
 const app = express();
 
-app.use(bodyParser.json({limit: '10mb', extended: true}));
+app.use(bodyParser.json({ limit: "10mb", extended: true }));
 app.use(
   helmet({
     referrerPolicy: {

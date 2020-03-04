@@ -330,8 +330,8 @@ describe("Group", () => {
                 {
                   id:
                     "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                  condition: "contains any",
-                  values: ["Wait I can get more?"]
+                  condition: "equals",
+                  value: "Wait I can get more?"
                 }
               ]
             }
@@ -392,8 +392,8 @@ describe("Group", () => {
                 {
                   id:
                     "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                  condition: "contains any",
-                  values: ["Wait I can get more?"]
+                  condition: "equals",
+                  value: "Wait I can get more?"
                 }
               ]
             }
@@ -418,30 +418,20 @@ describe("Group", () => {
               expressions: [
                 {
                   left: {
-                    id: "1",
-                    type: "Radio",
-                    options: [
-                      {
-                        id: "1"
-                      }
-                    ]
+                    answerId: "1",
+                    type: "Answer",
                   },
-                  condition: "OneOf",
+                  condition: "Equal",
                   right: {
-                    options: [
-                      {
-                        id: "1",
-                        label: "2.3"
-                      }
-                    ]
+                    customValue: {
+                      number: "5"
+                    }
                   }
                 }
               ]
             },
             destination: {
-              section: {
-                id: "2"
-              },
+              sectionId: "2",
               page: null,
               logical: null
             }
@@ -470,8 +460,8 @@ describe("Group", () => {
               {
                 id:
                   "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                condition: "contains any",
-                values: ["Wait I can get more?"]
+                condition: "equals",
+                value: "Wait I can get more?"
               }
             ]
           }
@@ -482,8 +472,8 @@ describe("Group", () => {
             when: [
               {
                 id: "answer1",
-                condition: "contains any",
-                values: ["2.3"]
+                condition: "equals",
+                value: "5"
               }
             ]
           }

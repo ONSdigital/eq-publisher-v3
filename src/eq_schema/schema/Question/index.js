@@ -37,7 +37,7 @@ class Question {
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = processContent(ctx)(question.guidance);
+      this.guidance = processContent(ctx)(question.guidance)("contents");
     }
 
     if (
@@ -47,7 +47,7 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...processContent(ctx)(question.definitionContent)
+          ...processContent(ctx)(question.definitionContent)("contents")
         }
       ];
     }
@@ -113,7 +113,8 @@ class Question {
       last(this.answers).guidance = {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
-        ...processContent(ctx)(question.additionalInfoContent)
+
+        ...processContent(ctx)(question.additionalInfoContent)("content")
       };
     }
   }
@@ -131,7 +132,7 @@ class Question {
     const dateFrom = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}from`,
-      label: answer.label,
+      label: answer.label
     };
     if (answer.qCode) {
       dateFrom.q_code = answer.qCode;
@@ -139,7 +140,7 @@ class Question {
     const dateTo = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}to`,
-      label: answer.secondaryLabel,
+      label: answer.secondaryLabel
     };
     if (answer.secondaryQCode) {
       dateTo.q_code = answer.secondaryQCode;

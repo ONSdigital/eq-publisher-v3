@@ -23,9 +23,9 @@ describe("HTMLUtils", () => {
 
   describe("parseContent", () => {
     it("should return undefined if no content supplied", () => {
-      expect(parseContent()).toBeUndefined();
-      expect(parseContent("")).toBeUndefined();
-      expect(parseContent("<p></p>")).toBeUndefined();
+      expect(parseContent()("content")).toBeUndefined();
+      expect(parseContent("")("content")).toBeUndefined();
+      expect(parseContent("<p></p>")("content")).toBeUndefined();
     });
 
     it("should correctly parse content into runner-compatible object", () => {
@@ -42,7 +42,7 @@ describe("HTMLUtils", () => {
         </ul>
       `;
 
-      expect(parseContent(guidance)).toEqual({
+      expect(parseContent(guidance)("content")).toEqual({
         content: [
           {
             title: "Vivamus sagittis lacus vel augue laoreet"

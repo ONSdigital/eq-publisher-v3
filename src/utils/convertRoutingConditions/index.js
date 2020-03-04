@@ -7,7 +7,8 @@ const routingConditionConversions = {
   LessOrEqual: "less than or equal to",
   AllOf: "contains all",
   AnyOf: "contains any",
-  Unanswered: "not set"
+  Unanswered: "not set",
+  OneOf: "contains any"
 };
 
 const conditionConversion = authorCondition => {

@@ -129,8 +129,16 @@ describe("Answer", () => {
         }
       })
     );
-
     expect(answer.max_length).toBe(64);
+  });
+
+  it("should not set maxLength property for textarea types if undefined", () => {
+    const answer = new Answer(
+      createAnswerJSON({
+        type: TEXTAREA
+      })
+    );
+    expect(answer.max_length).toBeUndefined();
   });
 
   describe("validation", () => {

@@ -151,27 +151,17 @@ describe("Block", () => {
           '<p>Hi is your total <span data-piped="variable"data-id="1">[Total]</span></p>',
         pageType: "CalculatedSummaryPage",
         totalTitle: "<p>Bye</p>",
-        summaryAnswers: [
-          {
-            id: "1"
-          },
-          {
-            id: "2"
-          },
-          {
-            id: "3"
-          }
-        ]
+        summaryAnswers: ["1","2","3",]
       };
       const block = new Block(calculatedPageGraphql, ctx);
       expect(block).toMatchObject({
         calculation: {
           answers_to_calculate: ["answer1", "answer2", "answer3"],
           calculation_type: "sum",
-          titles: [{ value: "Bye" }]
+          title: "Bye"
         },
         // id: "block1",
-        titles: [{ value: "Hi is your total %(total)s" }],
+        title: "Hi is your total %(total)s",
         type: "CalculatedSummary"
       });
     });

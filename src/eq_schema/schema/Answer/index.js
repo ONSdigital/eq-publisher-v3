@@ -45,7 +45,9 @@ class Answer {
     }
 
     if (answer.type === TEXTAREA) {
-      this.max_length = parseInt(answer.properties.maxLength);
+      if (answer.properties.maxLength) {
+        this.max_length = parseInt(answer.properties.maxLength);
+      }
     }
 
     if (!isNil(answer.validation)) {

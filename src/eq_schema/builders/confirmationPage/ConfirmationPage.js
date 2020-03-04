@@ -35,24 +35,20 @@ const buildAuthorConfirmationQuestion = (
       expressions: [
         {
           left: {
-            id: `confirmation-answer-for-${page.id}`,
-            type: RADIO
+            answerId: `confirmation-answer-for-${page.id}`,
+            type: 'Answer'
           },
-          condition: "OneOf",
+          condition: "Equal",
           right: {
-            options: [
-              {
-                label: page.confirmation.negative.label
-              }
-            ]
+            customValue: {
+              number: page.confirmation.negative.label
+            }    
           }
         }
       ]
     },
     destination: {
-      page: {
-        id: page.id
-      }
+      pageId: page.id
     }
   };
 
