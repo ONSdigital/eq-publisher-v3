@@ -420,9 +420,7 @@ describe("Answer", () => {
                 entityType: "Metadata",
                 custom: null,
                 previousAnswer: null,
-                metadata: {
-                  key: "test_ref"
-                },
+                metadata: "test_ref",
                 offset: {
                   value: 4,
                   unit: "Days"
@@ -630,9 +628,7 @@ describe("Answer", () => {
                 entityType: "Metadata",
                 custom: null,
                 previousAnswer: null,
-                metadata: {
-                  key: "test_ref"
-                },
+                metadata: "test_ref",
                 offset: {
                   value: 4,
                   unit: "Days"
