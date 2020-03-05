@@ -138,7 +138,7 @@ class Answer {
       if (isNil(metadata)) {
         return;
       }
-      return { meta: metadata.key };
+      return { meta: metadata };
     }
     return;
   }
