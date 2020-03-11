@@ -35,7 +35,7 @@ const PIPE_TYPES = {
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
-    render: ({ key }) => `metadata['${key}']`,
+    render: ({ key }) => `${key}`,
     getType: ({ type }) => type
   },
   variable: {
@@ -61,8 +61,8 @@ const convertElementToPipe = ($elem, ctx) => {
   const dataType = pipeConfig.getType(entity);
 
   const filter = FILTER_MAP[dataType];
-
-  return filter ? `{{ ${filter(output)} }}` : `{{ ${output} }}`;
+  console.log(filter || output);
+  return filter ? `${filter(output)}` : `${output}`;
 };
 
 const parseHTML = html => {
