@@ -4,7 +4,6 @@ const { set } = require("lodash");
 const {
   parseContent,
   getInnerHTMLWithPiping,
-  getNewInnerHTMLWithPiping,
   unescapePiping
 } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -22,7 +21,14 @@ const findMutuallyExclusive = flow(
 
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const processNewPipe = ctx => flow(newPipes(ctx), getNewInnerHTMLWithPiping);
+const isPlaceholders = place => {
+  const { placeholders } = place;
+  if (!placeholders.length) {
+    return place.text;
+  }
+  return place;
+};
+const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
 
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
@@ -31,7 +37,6 @@ class Question {
     this.id = `question${question.id}`;
     // this.title = processPipedText(ctx)(question.title);
     this.title = processNewPipe(ctx)(question.title);
-    // console.log(newPipes(ctx)(question.title), "this is function return");
 
     if (question.qCode) {
       this.q_code = question.qCode;
