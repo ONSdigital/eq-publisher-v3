@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
+const { flow } = require("lodash/fp");
 const { unescapePiping } = require("../HTMLUtils");
 
 const getMetadata = (ctx, metadataId) =>
@@ -54,6 +55,7 @@ const convertElementToPipe = ($elem, ctx) => {
   }
 
   const entity = pipeConfig.retrieve(elementData, ctx);
+  // console.log(entity);
   if (!entity) {
     return "";
   }
@@ -61,12 +63,68 @@ const convertElementToPipe = ($elem, ctx) => {
   const dataType = pipeConfig.getType(entity);
 
   const filter = FILTER_MAP[dataType];
-  console.log(filter || output);
   return filter ? `${filter(output)}` : `${output}`;
 };
 
 const parseHTML = html => {
   return cheerio.load(html)("body");
+};
+
+const findData = place => (element, ctx) => {
+  const { piped, ...elementData } = element.data();
+  const pipeConfig = PIPE_TYPES[piped];
+
+  if (piped === "variable") {
+    return pipeConfig.render();
+  }
+
+  if (!pipeConfig) {
+    return "";
+  }
+
+  const entity = pipeConfig.retrieve(elementData, ctx);
+  if (!entity) {
+    return "";
+  }
+
+  const output = pipeConfig.render(entity);
+  const dataType = pipeConfig.getType(entity);
+
+  const filter = FILTER_MAP[dataType];
+  const isText = filter ? `{${filter(output)}}` : `{${output}}`;
+
+  const placeholder = {
+    placeholder: isText,
+    value: {
+      source: piped,
+      identifier: entity.key
+    }
+  };
+  console.log(placeholder.value);
+  place.placeholders = [...place.placeholders, placeholder];
+
+  return `${isText}`;
+};
+
+const newPiping = ctx => html => {
+  if (!html) {
+    return html;
+  }
+
+  const place = {
+    text: "",
+    placeholders: []
+  };
+
+  const $ = parseHTML(html);
+
+  $.find("[data-piped]").each((index, element) => {
+    const $elem = cheerio(element);
+    $elem.replaceWith(findData(place)($elem, ctx));
+  });
+
+  place.text = unescapePiping($.html());
+  return place;
 };
 
 const convertPipes = ctx => html => {
@@ -85,4 +143,5 @@ const convertPipes = ctx => html => {
 };
 
 module.exports = convertPipes;
+module.exports.newPipes = newPiping;
 module.exports.getAllAnswers = getAllAnswers;

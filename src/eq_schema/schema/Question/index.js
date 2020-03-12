@@ -4,9 +4,11 @@ const { set } = require("lodash");
 const {
   parseContent,
   getInnerHTMLWithPiping,
+  getNewInnerHTMLWithPiping,
   unescapePiping
 } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
+const newPipes = require("../../../utils/convertPipes").newPipes;
 const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
 const Answer = require("../Answer");
@@ -20,12 +22,17 @@ const findMutuallyExclusive = flow(
 
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
+const processNewPipe = ctx => flow(newPipes(ctx), getNewInnerHTMLWithPiping);
+
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-    this.title = processPipedText(ctx)(question.title);
+    // this.title = processPipedText(ctx)(question.title);
+    this.title = processNewPipe(ctx)(question.title);
+    // console.log(newPipes(ctx)(question.title), "this is function return");
+
     if (question.qCode) {
       this.q_code = question.qCode;
     }

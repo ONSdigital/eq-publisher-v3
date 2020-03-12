@@ -38,7 +38,8 @@ app.use(
 
 app.get("/status", status);
 
-app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
+// app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
+app.post("/publish", postQuestionnaire, convertSchema, respondWithData);
 
 // keeping for development purposes
 app.post(
