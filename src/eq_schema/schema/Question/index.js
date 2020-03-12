@@ -31,7 +31,7 @@ const isPlaceholders = store => {
 };
 const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
 
-const processContent = ctx => flow(convertPipes(ctx), parseContent);
+const processContent = ctx => flow(newPipes(ctx), isPlaceholders, parseContent);
 
 class Question {
   constructor(question, ctx) {
@@ -51,6 +51,7 @@ class Question {
 
     if (question.guidanceEnabled && question.guidance) {
       this.guidance = processContent(ctx)(question.guidance)("contents");
+      console.log(this.guidance);
     }
 
     if (
