@@ -22,7 +22,8 @@ const findMutuallyExclusive = flow(
 
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const processNewPipe = ctx => flow(newPipes(ctx), getNewInnerHTMLWithPiping);
+// const processNewPipe = ctx => flow(newPipes(ctx), getNewInnerHTMLWithPiping);
+const processNewPipe = ctx => flow(newPipes(ctx));
 
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
