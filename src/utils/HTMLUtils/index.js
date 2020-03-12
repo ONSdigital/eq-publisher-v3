@@ -14,8 +14,6 @@ const unescapePiping = value =>
   );
 
 const getInnerHTMLWithPiping = elem => unescapePiping(getInnerHTML(elem));
-const getNewInnerHTMLWithPiping = place =>
-  (place.text = unescapePiping(getInnerHTML(place.text)));
 
 const getText = elem => (isPlainText(elem) ? elem : cheerio(elem).text());
 
@@ -59,6 +57,5 @@ module.exports = {
   getText,
   parseContent,
   getInnerHTMLWithPiping,
-  getNewInnerHTMLWithPiping,
   unescapePiping
 };
