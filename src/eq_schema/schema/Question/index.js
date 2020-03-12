@@ -21,12 +21,13 @@ const findMutuallyExclusive = flow(
 
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const isPlaceholders = place => {
-  const { placeholders } = place;
+const isPlaceholders = store => {
+  const { placeholders, text } = store;
   if (!placeholders.length) {
-    return place.text;
+    return text;
   }
-  return place;
+  store.text = getInnerHTMLWithPiping(text);
+  return store;
 };
 const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
 

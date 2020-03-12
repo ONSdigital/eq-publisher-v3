@@ -54,7 +54,6 @@ const convertElementToPipe = ($elem, ctx) => {
   }
 
   const entity = pipeConfig.retrieve(elementData, ctx);
-  // console.log(entity);
   if (!entity) {
     return "";
   }
@@ -69,7 +68,7 @@ const parseHTML = html => {
   return cheerio.load(html)("body");
 };
 
-const findData = place => (element, ctx) => {
+const getPipedData = store => (element, ctx) => {
   const { piped, ...elementData } = element.data();
   const pipeConfig = PIPE_TYPES[piped];
 
@@ -99,9 +98,8 @@ const findData = place => (element, ctx) => {
       identifier: entity.key
     }
   };
-  console.log(placeholder.value);
 
-  place.placeholders = [...place.placeholders, placeholder];
+  store.placeholders = [...store.placeholders, placeholder];
 
   return `{${isText}}`;
 };
@@ -111,7 +109,7 @@ const newPiping = ctx => html => {
     return html;
   }
 
-  const place = {
+  const storePlaceholders = {
     text: "",
     placeholders: []
   };
@@ -120,13 +118,10 @@ const newPiping = ctx => html => {
 
   $.find("[data-piped]").each((index, element) => {
     const $elem = cheerio(element);
-    $elem.replaceWith(findData(place)($elem, ctx));
-    console.log("nothing");
+    $elem.replaceWith(getPipedData(storePlaceholders)($elem, ctx));
   });
-  console.log("before nothing");
-  place.text = unescapePiping(getInnerHTML($.html()));
-  console.log(place.text);
-  return place;
+  storePlaceholders.text = $.html();
+  return storePlaceholders;
 };
 
 const convertPipes = ctx => html => {
