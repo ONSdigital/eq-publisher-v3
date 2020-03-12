@@ -1,7 +1,6 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
-const { flow } = require("lodash/fp");
-const { unescapePiping } = require("../HTMLUtils");
+const { unescapePiping, getInnerHTML } = require("../HTMLUtils");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
@@ -91,7 +90,7 @@ const findData = place => (element, ctx) => {
   const dataType = pipeConfig.getType(entity);
 
   const filter = FILTER_MAP[dataType];
-  const isText = filter ? `{${filter(output)}}` : `{${output}}`;
+  const isText = filter ? `${filter(output)}` : `${output}`;
 
   const placeholder = {
     placeholder: isText,
@@ -103,7 +102,7 @@ const findData = place => (element, ctx) => {
   console.log(placeholder.value);
   place.placeholders = [...place.placeholders, placeholder];
 
-  return `${isText}`;
+  return `{${isText}}`;
 };
 
 const newPiping = ctx => html => {
@@ -121,9 +120,11 @@ const newPiping = ctx => html => {
   $.find("[data-piped]").each((index, element) => {
     const $elem = cheerio(element);
     $elem.replaceWith(findData(place)($elem, ctx));
+    console.log("nothing");
   });
-
-  place.text = unescapePiping($.html());
+  console.log("before nothing");
+  place.text = unescapePiping(getInnerHTML($.html()));
+  console.log(place.text);
   return place;
 };
 
