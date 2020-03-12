@@ -100,6 +100,7 @@ const findData = place => (element, ctx) => {
     }
   };
   console.log(placeholder.value);
+
   place.placeholders = [...place.placeholders, placeholder];
 
   return `{${isText}}`;
