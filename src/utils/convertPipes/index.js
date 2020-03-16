@@ -31,7 +31,7 @@ const getAnswer = (ctx, answerId) =>
     .filter(answer => isPipeableType(answer))
     .find(answer => answer.id === answerId);
 
-// Follows filter_map - used in propBuilder
+// Follows filter_map - used in transform()
 // ------------------------------------------------------------ //
 const TRANSFORM_MAP = {
   Currency: { format: CURRENCY, objectKey: NUMBER_TO_FORMAT },
