@@ -109,7 +109,7 @@ const newPiping = ctx => html => {
     return html;
   }
 
-  const storePlaceholders = {
+  const store = {
     text: "",
     placeholders: []
   };
@@ -118,10 +118,16 @@ const newPiping = ctx => html => {
 
   $.find("[data-piped]").each((index, element) => {
     const $elem = cheerio(element);
-    $elem.replaceWith(getPipedData(storePlaceholders)($elem, ctx));
+    $elem.replaceWith(getPipedData(store)($elem, ctx));
   });
-  storePlaceholders.text = $.html();
-  return storePlaceholders;
+
+  store.text = unescapePiping(getInnerHTML($.html()));
+
+  if (!store.placeholders.length) {
+    return store.text;
+  }
+
+  return store;
 };
 
 const convertPipes = ctx => html => {
