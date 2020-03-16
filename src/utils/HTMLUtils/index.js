@@ -48,7 +48,7 @@ const parseContent = html => contentType => {
   if (content.length === 0) {
     return;
   }
-
+  console.log("content - - - - - - - :", content);
   return { [contentType]: content };
 };
 
