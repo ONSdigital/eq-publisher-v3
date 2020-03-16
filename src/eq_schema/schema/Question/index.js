@@ -21,17 +21,9 @@ const findMutuallyExclusive = flow(
 
 const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const isPlaceholders = store => {
-  const { placeholders, text } = store;
-  if (!placeholders.length) {
-    return text;
-  }
-  store.text = getInnerHTMLWithPiping(text);
-  return store;
-};
-const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
+const processNewPipe = ctx => flow(newPipes(ctx));
 
-const processContent = ctx => flow(newPipes(ctx), isPlaceholders, parseContent);
+const processContent = ctx => flow(newPipes(ctx), parseContent);
 
 class Question {
   constructor(question, ctx) {
