@@ -3,10 +3,10 @@ const { set } = require("lodash");
 
 const {
   parseContent,
-  getInnerHTMLWithPiping,
-  unescapePiping
+  getInnerHTMLWithPiping
+  // unescapePiping
 } = require("../../../utils/HTMLUtils");
-const convertPipes = require("../../../utils/convertPipes");
+// const convertPipes = require("../../../utils/convertPipes");
 const newPipes = require("../../../utils/convertPipes").newPipes;
 const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
@@ -19,7 +19,7 @@ const findMutuallyExclusive = flow(
   find(answer => !isNil(get("mutuallyExclusiveOption", answer)))
 );
 
-const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+// const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const processNewPipe = ctx => flow(newPipes(ctx));
 
@@ -28,6 +28,7 @@ const processContent = ctx => flow(newPipes(ctx), parseContent);
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
+
     // this.title = processPipedText(ctx)(question.title);
     this.title = processNewPipe(ctx)(question.title);
 
@@ -35,15 +36,18 @@ class Question {
       this.q_code = question.qCode;
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = processPipedText(ctx)(question.description);
-      this.description = unescapePiping(
-        convertPipes(ctx)(question.description)
-      );
+      this.description = processNewPipe(ctx)(question.description);
+      // this.description = processPipedText(ctx)(question.description);
+      // this.description = unescapePiping(
+      //   convertPipes(ctx)(question.description)
+      // );
     }
 
     if (question.guidanceEnabled && question.guidance) {
+      // console.log("question.guidance = = = -: ", question.guidance);
+
       this.guidance = processContent(ctx)(question.guidance)("contents");
-      console.log(this.guidance);
+      console.log("this.guidance --- = = = = = = = = = = -: ", this.guidance);
     }
 
     if (

@@ -2,6 +2,7 @@ const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
+const newPipes = require("../../../utils/convertPipes").newPipes;
 
 const translateAuthorRouting = require("../../builders/routing2");
 const {
@@ -21,6 +22,16 @@ const processPipedTitle = ctx =>
   flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const processPipedText = ctx => flow(convertPipes(ctx), unescapePiping);
+
+const isPlaceholders = store => {
+  const { placeholders, text } = store;
+  if (!placeholders.length) {
+    return text;
+  }
+  store.text = getInnerHTMLWithPiping(text);
+  return store;
+};
+const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
@@ -63,13 +74,15 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.title = processPipedTitle(ctx)(page.title);
+      // this.title = processPipedTitle(ctx)(page.title);
+      this.title = processNewPipe(ctx)(page.title);
 
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        title: processPipedTitle(ctx)(page.totalTitle)
+        // title: processPipedTitle(ctx)(page.totalTitle)
+        title: processNewPipe(ctx)(page.totalTitle)
       };
     }
   }
