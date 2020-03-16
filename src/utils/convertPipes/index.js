@@ -2,6 +2,17 @@ const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, getInnerHTML } = require("../HTMLUtils");
 
+// Going to separate into another file
+// once decided on better var names
+// -----------------------------------------------
+let formatPlaceholder = "format_";
+const CURRENCY = `${formatPlaceholder}currency`;
+const NUMBER = `${formatPlaceholder}number`;
+const DATE = `${formatPlaceholder}date`;
+const DATE_TO_FORMAT = "date_to_format";
+const NUMBER_TO_FORMAT = "number";
+// -----------------------------------------------
+
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
 
@@ -20,11 +31,35 @@ const getAnswer = (ctx, answerId) =>
     .filter(answer => isPipeableType(answer))
     .find(answer => answer.id === answerId);
 
+// Follows filter_map - used in propBuilder
+// ------------------------------------------------------------ //
+const TRANSFORM_MAP = {
+  Currency: { format: CURRENCY, objectKey: NUMBER_TO_FORMAT },
+  Date: { format: DATE, objectKey: DATE_TO_FORMAT },
+  DateRange: { format: DATE, objectKey: DATE_TO_FORMAT },
+  Number: { format: NUMBER, objectKey: NUMBER_TO_FORMAT }
+};
+// ------------------------------------------------------------ //
+
+// Used to build the transformation properties
+// ------------------------------------------------------------ //
+const transform = (dataType, value) => ({
+  value,
+  format: TRANSFORM_MAP[dataType].format,
+  options: (source, identifier) => ({
+    [TRANSFORM_MAP[dataType].objectKey]: {
+      source,
+      identifier
+    }
+  })
+});
+// ------------------------------------------------------------ //
+
 const FILTER_MAP = {
-  Number: value => `${value} | format_number`,
   Currency: (value, unit = "GBP") => `format_currency(${value}, '${unit}')`,
-  Date: value => `${value} | format_date`,
-  DateRange: value => `${value} | format_date`
+  Date: (format, value) => transform(format, value),
+  DateRange: (format, value) => transform(format, value),
+  Number: (format, value) => transform(format, value)
 };
 
 const PIPE_TYPES = {
@@ -86,18 +121,33 @@ const getPipedData = store => (element, ctx) => {
   }
 
   const output = pipeConfig.render(entity);
-  const dataType = pipeConfig.getType(entity);
+  const pipedType = pipeConfig.getType(entity);
 
-  const filter = FILTER_MAP[dataType];
-  const isText = filter ? `${filter(output)}` : `${output}`;
+  const sifted = FILTER_MAP[pipedType];
+  const isText = sifted ? `${sifted(pipedType, output).value}` : `${output}`;
 
-  const placeholder = {
-    placeholder: isText,
-    value: {
-      source: piped,
-      identifier: entity.key
-    }
-  };
+  let placeholder = {};
+
+  if (sifted) {
+    const { format, value, options } = sifted(pipedType, output);
+    placeholder = {
+      placeholder: value,
+      transforms: [
+        {
+          transform: format,
+          arguments: options(piped, entity.key)
+        }
+      ]
+    };
+  } else {
+    placeholder = {
+      placeholder: isText,
+      value: {
+        source: piped,
+        identifier: entity.key
+      }
+    };
+  }
 
   store.placeholders = [...store.placeholders, placeholder];
 
