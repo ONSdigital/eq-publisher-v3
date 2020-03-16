@@ -21,15 +21,14 @@ const findMutuallyExclusive = flow(
 
 // const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const processNewPipe = ctx => flow(newPipes(ctx));
+const processNewPipe = ctx => newPipes(ctx);
+// const processNewPipe = ctx => flow(newPipes(ctx));
 
 const processContent = ctx => flow(newPipes(ctx), parseContent);
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-
-    // this.title = processPipedText(ctx)(question.title);
     this.title = processNewPipe(ctx)(question.title);
 
     if (question.qCode) {
@@ -44,7 +43,7 @@ class Question {
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      // console.log("question.guidance = = = -: ", question.guidance);
+      console.log("question.guidance = = = -: ", question.guidance);
 
       this.guidance = processContent(ctx)(question.guidance)("contents");
       console.log("this.guidance --- = = = = = = = = = = -: ", this.guidance);
