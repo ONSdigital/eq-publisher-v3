@@ -22,17 +22,7 @@ const processPipedTitle = ctx =>
 
 const processPipedText = ctx => flow(convertPipes(ctx), unescapePiping);
 
-const isPlaceholders = store => {
-  const { placeholders, text } = store;
-
-  if (placeholders === null || typeof placeholders === "undefined") {
-    return text;
-  }
-  store.text = getInnerHTMLWithPiping(text);
-  return store;
-};
-
-const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
+const processNewPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
@@ -75,14 +65,11 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      // this.title = processPipedTitle(ctx)(page.title);
       this.title = processNewPipe(ctx)(page.title);
-
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        // title: processPipedTitle(ctx)(page.totalTitle)
         title: processNewPipe(ctx)(page.totalTitle)
       };
     }
