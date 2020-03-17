@@ -1,12 +1,19 @@
 const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
+// const newPipes = require("../../../utils/convertPipes").newPipes;
+
 const {
   parseContent,
   getInnerHTMLWithPiping
 } = require("../../../utils/HTMLUtils");
 
+// const processNewPipe = ctx => newPipes(ctx);
+
+// const processContent = ctx => flow(newPipes(ctx), parseContent);
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
+// const getSimpleText = (content, ctx) =>
+//   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
 const getSimpleText = (content, ctx) =>
   flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
 
@@ -30,6 +37,8 @@ module.exports = class Introduction {
     },
     ctx
   ) {
+    console.log("ctx  - - - - - - :", ctx);
+
     this.type = "Introduction";
     this.id = "introduction-block";
 
@@ -42,16 +51,24 @@ module.exports = class Introduction {
 
     this.preview_content = {
       id: "preview",
+
+      // title: processNewPipe(secondaryTitle, ctx),
       title: getSimpleText(secondaryTitle, ctx),
+
       contents: getComplexText(secondaryDescription, ctx),
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: title,
+          // contents: processNewPipe(description, ctx)
           contents: getComplexText(description, ctx)
         }))
     };
+
+    console.log("this.preview_content :", this.preview_content);
+
     let tertiaryContent;
+
     if (tertiaryDescription) {
       tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
     }
