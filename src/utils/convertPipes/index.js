@@ -65,7 +65,8 @@ const FILTER_MAP = {
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id }, ctx) => getAnswer(ctx, id.toString()),
-    render: ({ id }) => `answers['answer${id}']`,
+    // render: ({ id }) => `answers['answer${id}']`,
+    render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type
   },
   metadata: {
@@ -127,12 +128,9 @@ const getPipedData = store => (element, ctx) => {
   const isText = sifted ? `${sifted(pipedType, output).value}` : `${output}`;
 
   let placeholder = {};
-  // console.log("sifted :", sifted);
-  // console.log("isText :", isText);
 
   if (sifted) {
     const { format, value, options } = sifted(pipedType, output);
-    // console.log("format, value, options :", format, value, options);
     placeholder = {
       placeholder: value,
       transforms: [
@@ -147,7 +145,7 @@ const getPipedData = store => (element, ctx) => {
       placeholder: isText,
       value: {
         source: piped,
-        identifier: entity.key
+        identifier: entity.key || `answer${entity.id}`
       }
     };
   }
