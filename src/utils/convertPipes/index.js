@@ -34,10 +34,10 @@ const getAnswer = (ctx, answerId) =>
 // Follows filter_map - used in transform()
 // ------------------------------------------------------------ //
 const TRANSFORM_MAP = {
-  Currency: { format: CURRENCY, objectKey: NUMBER_TO_FORMAT },
-  Date: { format: DATE, objectKey: DATE_TO_FORMAT },
-  DateRange: { format: DATE, objectKey: DATE_TO_FORMAT },
-  Number: { format: NUMBER, objectKey: NUMBER_TO_FORMAT }
+  Currency: { format: CURRENCY, transformKey: NUMBER_TO_FORMAT },
+  Date: { format: DATE, transformKey: DATE_TO_FORMAT },
+  DateRange: { format: DATE, transformKey: DATE_TO_FORMAT },
+  Number: { format: NUMBER, transformKey: NUMBER_TO_FORMAT }
 };
 // ------------------------------------------------------------ //
 
@@ -47,7 +47,7 @@ const transform = (dataType, value) => ({
   value,
   format: TRANSFORM_MAP[dataType].format,
   options: (source, identifier) => ({
-    [TRANSFORM_MAP[dataType].objectKey]: {
+    [TRANSFORM_MAP[dataType].transformKey]: {
       source,
       identifier
     }
@@ -127,12 +127,12 @@ const getPipedData = store => (element, ctx) => {
   const isText = sifted ? `${sifted(pipedType, output).value}` : `${output}`;
 
   let placeholder = {};
-  console.log("sifted :", sifted);
-  console.log("isText :", isText);
+  // console.log("sifted :", sifted);
+  // console.log("isText :", isText);
 
   if (sifted) {
     const { format, value, options } = sifted(pipedType, output);
-    console.log("format, value, options :", format, value, options);
+    // console.log("format, value, options :", format, value, options);
     placeholder = {
       placeholder: value,
       transforms: [
@@ -174,7 +174,7 @@ const newPiping = ctx => html => {
     $elem.replaceWith(getPipedData(store)($elem, ctx));
   });
 
-  store.text = unescapePiping(getInnerHTML($.html()));
+  store.text = unescapePiping($.html());
 
   if (!store.placeholders.length) {
     return store.text;
