@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
-const { unescapePiping, getInnerHTML } = require("../HTMLUtils");
+const { unescapePiping, removeDash } = require("../HTMLUtils");
 
 // Going to separate into another file
 // once decided on better var names
@@ -50,7 +50,12 @@ const transform = (dataType, value) => ({
     [TRANSFORM_MAP[dataType].transformKey]: {
       source,
       identifier
-    }
+    },
+    // Conditionally add if DATE - this fixes runner error
+    // Validator is missing required property
+    // ------------------------------------------------------------ //
+    ...(dataType === "Date" && { date_format: "d MMMM yyyy" })
+    // ------------------------------------------------------------ //
   })
 });
 // ------------------------------------------------------------ //
@@ -65,7 +70,6 @@ const FILTER_MAP = {
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id }, ctx) => getAnswer(ctx, id.toString()),
-    // render: ({ id }) => `answers['answer${id}']`,
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type
   },
@@ -117,6 +121,7 @@ const getPipedData = store => (element, ctx) => {
   }
 
   const entity = pipeConfig.retrieve(elementData, ctx);
+
   if (!entity) {
     return "";
   }
@@ -124,22 +129,25 @@ const getPipedData = store => (element, ctx) => {
   const output = pipeConfig.render(entity);
   const pipedType = pipeConfig.getType(entity);
 
-  const sifted = FILTER_MAP[pipedType];
-  const isText = sifted ? `${sifted(pipedType, output).value}` : `${output}`;
+  const transformed = FILTER_MAP[pipedType];
+  const isText = transformed
+    ? `${transformed(pipedType, output).value}`
+    : `${output}`;
 
   let placeholder = {};
 
-  if (sifted) {
-    const { format, value, options } = sifted(pipedType, output);
+  if (transformed) {
+    const { format, value, options } = transformed(pipedType, output);
     placeholder = {
-      placeholder: value,
+      placeholder: removeDash(value),
       transforms: [
         {
           transform: format,
-          arguments: options(piped, entity.key)
+          arguments: options(piped, entity.key || `answer${entity.id}`)
         }
       ]
     };
+    console.log(placeholder, "transformation");
   } else {
     placeholder = {
       placeholder: isText,
@@ -152,7 +160,7 @@ const getPipedData = store => (element, ctx) => {
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${isText}}`;
+  return `{${removeDash(isText)}}`;
 };
 
 const newPiping = ctx => html => {
