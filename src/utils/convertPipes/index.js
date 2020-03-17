@@ -5,10 +5,11 @@ const { unescapePiping, removeDash } = require("../HTMLUtils");
 // Going to separate into another file
 // once decided on better var names
 // -----------------------------------------------
-let formatPlaceholder = "format_";
-const CURRENCY = `${formatPlaceholder}currency`;
-const NUMBER = `${formatPlaceholder}number`;
-const DATE = `${formatPlaceholder}date`;
+const formatPlaceholder = "format_";
+const FORMAT_CURRENCY = `${formatPlaceholder}currency`;
+const FORMAT_NUMBER = `${formatPlaceholder}number`;
+const FORMAT_DATE = `${formatPlaceholder}date`;
+
 const DATE_TO_FORMAT = "date_to_format";
 const NUMBER_TO_FORMAT = "number";
 // -----------------------------------------------
@@ -34,10 +35,10 @@ const getAnswer = (ctx, answerId) =>
 // Follows filter_map - used in transform()
 // ------------------------------------------------------------ //
 const TRANSFORM_MAP = {
-  Currency: { format: CURRENCY, transformKey: NUMBER_TO_FORMAT },
-  Date: { format: DATE, transformKey: DATE_TO_FORMAT },
-  DateRange: { format: DATE, transformKey: DATE_TO_FORMAT },
-  Number: { format: NUMBER, transformKey: NUMBER_TO_FORMAT }
+  Currency: { format: FORMAT_CURRENCY, transformKey: NUMBER_TO_FORMAT },
+  Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TO_FORMAT },
+  Date: { format: FORMAT_DATE, transformKey: DATE_TO_FORMAT },
+  DateRange: { format: FORMAT_DATE, transformKey: DATE_TO_FORMAT }
 };
 // ------------------------------------------------------------ //
 
@@ -56,12 +57,18 @@ const transform = (dataType, value) => ({
     // ------------------------------------------------------------ //
     ...(dataType === "Date" && { date_format: "d MMMM yyyy" })
     // ------------------------------------------------------------ //
+
+    // Validator doesn't seem to accept currency so it always defaults
+    // to GBP
+    // ------------------------------------------------------------ //
+    // ...(unit && { currency: "GBP" })
+    // ------------------------------------------------------------ //
   })
 });
 // ------------------------------------------------------------ //
 
 const FILTER_MAP = {
-  Currency: (value, unit = "GBP") => `format_currency(${value}, '${unit}')`,
+  Currency: (format, value, unit = "GBP") => transform(format, value),
   Date: (format, value) => transform(format, value),
   DateRange: (format, value) => transform(format, value),
   Number: (format, value) => transform(format, value)
@@ -147,7 +154,6 @@ const getPipedData = store => (element, ctx) => {
         }
       ]
     };
-    console.log(placeholder, "transformation");
   } else {
     placeholder = {
       placeholder: isText,
