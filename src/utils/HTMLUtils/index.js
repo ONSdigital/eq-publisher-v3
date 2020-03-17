@@ -6,6 +6,8 @@ const isPlainText = elem => typeof elem === "string" && !elem.startsWith("<");
 
 const getInnerHTML = elem => (isPlainText(elem) ? elem : cheerio(elem).html());
 
+const removeDash = elem => replace(/-/g, "_", elem);
+
 const unescapePiping = value =>
   replace(
     /{{([^}}]+)}}/g,
@@ -60,8 +62,9 @@ const parseContent = html => contentType => {
 
 module.exports = {
   getInnerHTML,
+  getInnerHTMLWithPiping,
   getText,
   parseContent,
-  getInnerHTMLWithPiping,
+  removeDash,
   unescapePiping
 };
