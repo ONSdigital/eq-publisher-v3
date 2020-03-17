@@ -13,7 +13,8 @@ const unescapePiping = value =>
     value
   );
 
-const getInnerHTMLWithPiping = elem => unescapePiping(getInnerHTML(elem));
+const getInnerHTMLWithPiping = elem =>
+  unescapePiping(getInnerHTML(elem || elem.text));
 
 const getText = elem => (isPlainText(elem) ? elem : cheerio(elem).text());
 
