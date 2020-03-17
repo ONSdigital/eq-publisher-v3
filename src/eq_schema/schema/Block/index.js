@@ -17,7 +17,6 @@ const pageTypeMappings = {
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
-
 const processPipedTitle = ctx =>
   flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -25,12 +24,14 @@ const processPipedText = ctx => flow(convertPipes(ctx), unescapePiping);
 
 const isPlaceholders = store => {
   const { placeholders, text } = store;
-  if (!placeholders.length) {
+
+  if (placeholders === null || typeof placeholders === "undefined") {
     return text;
   }
   store.text = getInnerHTMLWithPiping(text);
   return store;
 };
+
 const processNewPipe = ctx => flow(newPipes(ctx), isPlaceholders);
 
 const isLastPageInSection = (page, ctx) =>

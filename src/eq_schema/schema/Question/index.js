@@ -2,8 +2,8 @@ const { find, get, flow, isNil, concat, last } = require("lodash/fp");
 const { set } = require("lodash");
 
 const {
-  parseContent,
-  getInnerHTMLWithPiping
+  parseContent
+  // getInnerHTMLWithPiping
   // unescapePiping
 } = require("../../../utils/HTMLUtils");
 // const convertPipes = require("../../../utils/convertPipes");

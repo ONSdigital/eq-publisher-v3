@@ -127,9 +127,12 @@ const getPipedData = store => (element, ctx) => {
   const isText = sifted ? `${sifted(pipedType, output).value}` : `${output}`;
 
   let placeholder = {};
+  console.log("sifted :", sifted);
+  console.log("isText :", isText);
 
   if (sifted) {
     const { format, value, options } = sifted(pipedType, output);
+    console.log("format, value, options :", format, value, options);
     placeholder = {
       placeholder: value,
       transforms: [
