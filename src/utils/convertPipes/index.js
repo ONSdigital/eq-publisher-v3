@@ -156,7 +156,7 @@ const getPipedData = store => (element, ctx) => {
     };
   } else {
     placeholder = {
-      placeholder: isText,
+      placeholder: removeDash(isText),
       value: {
         source: piped,
         identifier: entity.key || `answer${entity.id}`
