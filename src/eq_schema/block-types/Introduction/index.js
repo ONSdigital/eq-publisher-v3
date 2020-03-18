@@ -14,11 +14,12 @@ const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
-// const getSimpleText = (content, ctx) =>
-//   flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
+const processNewPipe = (content, ctx) =>
+  flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
 
 const getComplexText = (content, ctx) => {
   const result = processContent(ctx)(content)("content");
+  console.log("content = = =  :", content);
   if (result) {
     return result.content;
   }
@@ -42,26 +43,47 @@ module.exports = class Introduction {
     this.type = "Introduction";
     this.id = "introduction-block";
 
+    let primaryContent;
+
+    if (description) {
+      primaryContent = getComplexText(description, ctx)[0];
+    }
+
     this.primary_content = [
       {
         id: "primary",
-        contents: getComplexText(description, ctx)
+        contents: [
+          {
+            description: processNewPipe(description, ctx),
+            ...primaryContent
+          }
+        ]
+        // contents: getComplexText(description, ctx)
       }
     ];
 
     this.preview_content = {
       id: "preview",
 
-      // title: processNewPipe(secondaryTitle, ctx),
-      title: getSimpleText(secondaryTitle, ctx),
+      title: processNewPipe(secondaryTitle, ctx),
+      // title: getSimpleText(secondaryTitle, ctx),
 
-      contents: getComplexText(secondaryDescription, ctx),
+      // contents: getComplexText(secondaryDescription, ctx),
+      contents: [
+        {
+          description: processNewPipe(secondaryDescription, ctx)
+        }
+      ],
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: title,
-          // contents: processNewPipe(description, ctx)
-          contents: getComplexText(description, ctx)
+          contents: [
+            {
+              description: processNewPipe(description, ctx)
+            }
+          ]
+          // contents: getComplexText(description, ctx)
         }))
     };
 
@@ -72,6 +94,7 @@ module.exports = class Introduction {
     if (tertiaryDescription) {
       tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
     }
+
     this.secondary_content = [
       {
         id: "secondary-content",
