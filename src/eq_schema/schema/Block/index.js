@@ -1,14 +1,10 @@
 const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
-const convertPipes = require("../../../utils/convertPipes");
 const newPipes = require("../../../utils/convertPipes").newPipes;
 
 const translateAuthorRouting = require("../../builders/routing2");
-const {
-  getInnerHTMLWithPiping,
-  unescapePiping
-} = require("../../../utils/HTMLUtils");
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const Question = require("../Question");
 
 const pageTypeMappings = {
@@ -17,10 +13,6 @@ const pageTypeMappings = {
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
-const processPipedTitle = ctx =>
-  flow(convertPipes(ctx), getInnerHTMLWithPiping);
-
-const processPipedText = ctx => flow(convertPipes(ctx), unescapePiping);
 
 const processNewPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
@@ -47,10 +39,10 @@ class Block {
       type: "Interstitial",
       id: `group${groupId}-introduction`,
       content: {
-        title: processPipedTitle(ctx)(introductionTitle) || "",
+        title: processNewPipe(ctx)(introductionTitle) || "",
         contents: [
           {
-            description: processPipedText(ctx)(introductionContent) || ""
+            description: processNewPipe(ctx)(introductionContent) || ""
           }
         ]
       }

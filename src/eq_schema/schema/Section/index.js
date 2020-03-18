@@ -19,9 +19,6 @@ class Section {
 
   buildGroups(section, ctx) {
     // Sections always contain a single group currently
-
-    // console.log("section  = = = =:", section);
-
     return [new Group(getText(section.title), section, ctx)];
   }
 }

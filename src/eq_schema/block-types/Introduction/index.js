@@ -1,6 +1,6 @@
 const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
-// const newPipes = require("../../../utils/convertPipes").newPipes;
+const newPipes = require("../../../utils/convertPipes").newPipes;
 
 const {
   parseContent,
@@ -12,10 +12,10 @@ const {
 // const processContent = ctx => flow(newPipes(ctx), parseContent);
 const processContent = ctx => flow(convertPipes(ctx), parseContent);
 
-// const getSimpleText = (content, ctx) =>
-//   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
 const getSimpleText = (content, ctx) =>
-  flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
+  flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
+// const getSimpleText = (content, ctx) =>
+//   flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
 
 const getComplexText = (content, ctx) => {
   const result = processContent(ctx)(content)("content");
