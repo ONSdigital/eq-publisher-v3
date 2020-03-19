@@ -11,8 +11,11 @@ const {
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 
+const getMetadata = (ctx, metadataId) =>
+  ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
+
 class Answer {
-  constructor(answer) {
+  constructor(answer, ctx) {
     this.id = `answer${answer.id}`;
     this.mandatory = answer.properties.required;
     this.type = answer.type;
@@ -53,12 +56,14 @@ class Answer {
     if (!isNil(answer.validation)) {
       if ([NUMBER, CURRENCY, PERCENTAGE, UNIT].includes(answer.type)) {
         const { minValue, maxValue } = answer.validation;
-        this.buildNumberValidation(minValue, "min_value");
-        this.buildNumberValidation(maxValue, "max_value");
+
+        this.buildNumberValidation(minValue, "minimum");
+        this.buildNumberValidation(maxValue, "maximum");
       } else if (answer.type === DATE) {
         const { earliestDate, latestDate } = answer.validation;
-        this.minimum = Answer.buildDateValidation(earliestDate);
-        this.maximum = Answer.buildDateValidation(latestDate);
+
+        this.minimum = Answer.buildDateValidation(earliestDate, ctx);
+        this.maximum = Answer.buildDateValidation(latestDate, ctx);
       }
     }
 
@@ -111,7 +116,32 @@ class Answer {
     };
   }
 
-  static buildComparator(validationRule) {
+  static buildDateValidation(validationRule, ctx) {
+    const { enabled } = validationRule;
+    if (!enabled) {
+      return;
+    }
+
+    const comparator = Answer.buildComparator(validationRule, ctx);
+
+    if (isNil(comparator)) {
+      return;
+    }
+
+    const { offset, relativePosition } = validationRule;
+    const multiplier = relativePosition === "Before" ? -1 : 1;
+    const offsetValue = offset.value * multiplier;
+    const offsetUnit = offset.unit.toLowerCase();
+
+    return {
+      ...comparator,
+      offset_by: {
+        [offsetUnit]: offsetValue
+      }
+    };
+  }
+
+  static buildComparator(validationRule, ctx) {
     const {
       entityType = "Custom",
       custom,
@@ -131,48 +161,27 @@ class Answer {
       if (isNil(previousAnswer)) {
         return;
       }
-      return { answer_id: `answer${previousAnswer.id}` };
+      return {
+        value: {
+          source: "answers",
+          identifier: `answer${previousAnswer}`
+        }
+      };
     }
 
     if (entityType === "Metadata") {
       if (isNil(metadata)) {
         return;
       }
-      // return { meta: metadata };
+
       return {
         value: {
           source: "metadata",
-          // hardcoding for tests
-          identifier: "ref_p_start_date"
+          identifier: getMetadata(ctx, metadata).key
         }
       };
     }
     return;
-  }
-
-  static buildDateValidation(validationRule) {
-    const { enabled } = validationRule;
-    if (!enabled) {
-      return;
-    }
-
-    const comparator = Answer.buildComparator(validationRule);
-
-    if (isNil(comparator)) {
-      return;
-    }
-    console.log(comparator, "this is my comparator", comparator);
-    const { offset, relativePosition } = validationRule;
-    const multiplier = relativePosition === "Before" ? -1 : 1;
-    const offsetValue = offset.value * multiplier;
-    const offsetUnit = offset.unit.toLowerCase();
-
-    return {
-      ...comparator,
-      offset_by: {
-        [offsetUnit]: offsetValue
-      }
-    };
   }
 
   static buildOption(
