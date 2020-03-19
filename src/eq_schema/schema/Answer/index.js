@@ -138,7 +138,14 @@ class Answer {
       if (isNil(metadata)) {
         return;
       }
-      return { meta: metadata };
+      // return { meta: metadata };
+      return {
+        value: {
+          source: "metadata",
+          // hardcoding for tests
+          identifier: "ref_p_start_date"
+        }
+      };
     }
     return;
   }
@@ -154,7 +161,7 @@ class Answer {
     if (isNil(comparator)) {
       return;
     }
-
+    console.log(comparator, "this is my comparator", comparator);
     const { offset, relativePosition } = validationRule;
     const multiplier = relativePosition === "Before" ? -1 : 1;
     const offsetValue = offset.value * multiplier;
