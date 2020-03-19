@@ -19,7 +19,9 @@ const processNewPipe = (content, ctx) =>
 
 const getComplexText = (content, ctx) => {
   const result = processContent(ctx)(content)("content");
-  console.log("content = = =  :", content);
+
+  console.log("\n\nresult = = =  :", result);
+
   if (result) {
     return result.content;
   }
@@ -29,6 +31,7 @@ const getComplexText = (content, ctx) => {
 module.exports = class Introduction {
   constructor(
     {
+      title,
       description,
       secondaryTitle,
       secondaryDescription,
@@ -43,15 +46,25 @@ module.exports = class Introduction {
     this.type = "Introduction";
     this.id = "introduction-block";
 
-    let primaryContent;
+    let primaryContent, test;
 
     if (description) {
-      primaryContent = getComplexText(description, ctx)[0];
+      console.log("\n\ndescription - - - - :", description);
+
+      primaryContent = getComplexText(description, ctx)[1];
+
+      console.log("\n\nprimaryContent ========== :", primaryContent);
+
+      // test = primaryContent.map((description, index) => {
+      //   console.log("description, index :", description, index);
+      //   processNewPipe(description, ctx);
+      // });
     }
 
     this.primary_content = [
       {
         id: "primary",
+        title: processNewPipe(title, ctx),
         contents: [
           {
             description: processNewPipe(description, ctx),
@@ -87,11 +100,13 @@ module.exports = class Introduction {
         }))
     };
 
-    console.log("this.preview_content :", this.preview_content);
-
     let tertiaryContent;
 
     if (tertiaryDescription) {
+      console.log(
+        "\n\ngetComplexText(tertiaryDescription, ctx) :",
+        getComplexText(tertiaryDescription, ctx)
+      );
       tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
     }
 
