@@ -1,6 +1,7 @@
 const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
 const newPipes = require("../../../utils/convertPipes").newPipes;
+const convertPipesXXX = require("../../../utils/convertPipes");
 
 const {
   parseContent,
@@ -9,16 +10,18 @@ const {
 
 // const processNewPipe = ctx => newPipes(ctx);
 
-// const processContent = ctx => flow(newPipes(ctx), parseContent);
-const processContent = ctx => flow(convertPipes(ctx), parseContent);
-
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
 const processNewPipe = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
 
+// const processContentNew = ctx => flow(newPipes(ctx), parseContent);
+const processContentNew = ctx => flow(convertPipesXXX(ctx), parseContent);
+const processContent = ctx => flow(convertPipes(ctx), parseContent);
+// const processContent = ctx => flow(parseContent(ctx));
+
 const getComplexText = (content, ctx) => {
-  const result = processContent(ctx)(content)("content");
+  const result = processContentNew(ctx)(content)("content");
 
   console.log("\n\nresult = = =  :", result);
 
@@ -46,14 +49,17 @@ module.exports = class Introduction {
     this.type = "Introduction";
     this.id = "introduction-block";
 
-    let primaryContent, test;
-
+    let primaryContent, test2;
+    let test = [];
     if (description) {
       console.log("\n\ndescription - - - - :", description);
 
-      primaryContent = getComplexText(description, ctx)[1];
-
+      primaryContent = getComplexText(description, ctx);
       console.log("\n\nprimaryContent ========== :", primaryContent);
+
+      // test2 = processNewPipe(description, ctx);
+      // test2 = processNewPipe(primaryContent, ctx);
+      console.log("test2 ======= ", test2);
 
       // test = primaryContent.map((description, index) => {
       //   console.log("description, index :", description, index);
@@ -67,8 +73,9 @@ module.exports = class Introduction {
         title: processNewPipe(title, ctx),
         contents: [
           {
-            description: processNewPipe(description, ctx),
-            ...primaryContent
+            description: processNewPipe(description, ctx)
+            // primaryContent
+            // title: test2
           }
         ]
         // contents: getComplexText(description, ctx)
@@ -107,7 +114,7 @@ module.exports = class Introduction {
         "\n\ngetComplexText(tertiaryDescription, ctx) :",
         getComplexText(tertiaryDescription, ctx)
       );
-      tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
+      tertiaryContent = getComplexText(tertiaryDescription, ctx)[1];
     }
 
     this.secondary_content = [
