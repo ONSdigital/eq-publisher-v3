@@ -20,7 +20,6 @@ const getInnerHTMLWithPiping = elem => {
     elem.text = unescapePiping(getInnerHTML(elem.text));
     return elem;
   }
-
   return unescapePiping(getInnerHTML(elem));
 };
 
@@ -49,6 +48,18 @@ const mapElementToObject = elem => {
 };
 
 const parseContent = html => contentType => {
+  // this might not be needed anymore
+  // --------------------------------------------------------------------------------------------------
+  // let text;
+  // if (html.text) {
+  //   console.log("with text");
+  //   text = html.text;
+  // } else {
+  //   console.log("without text");
+  //   text = html;
+  // }
+  // --------------------------------------------------------------------------------------------------
+
   const content = cheerio(html)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
