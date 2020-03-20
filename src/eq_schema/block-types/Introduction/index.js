@@ -1,37 +1,52 @@
 const { flow } = require("lodash");
-const convertPipes = require("../../../utils/convertPipes");
 const newPipes = require("../../../utils/convertPipes").newPipes;
-const convertPipesXXX = require("../../../utils/convertPipes");
 
 const {
   parseContent,
   getInnerHTMLWithPiping
 } = require("../../../utils/HTMLUtils");
 
-// const processNewPipe = ctx => newPipes(ctx);
+const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
-const processNewPipe = (content, ctx) =>
-  flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
-
-// const processContentNew = ctx => flow(newPipes(ctx), parseContent);
-const processContentNew = ctx => flow(convertPipesXXX(ctx), parseContent);
-const processContent = ctx => flow(convertPipes(ctx), parseContent);
-// const processContent = ctx => flow(parseContent(ctx));
-
-const getComplexText = (content, ctx) => {
-  const result = processContentNew(ctx)(content)("content");
-
-  console.log("\n\nresult = = =  :", result);
-
+// --------------------------------------------------------------------------------------------------
+const getComplexText = content => {
+  const result = parseContent(content)("content");
   if (result) {
     return result.content;
   }
   return undefined;
 };
+// --------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
+// Hi Shane, hope you see this and don't mind that I took a good look & go at it
+// It was a hassle, basically have reversed the whole idea of the way we were processing
+// It's not 100% done yet and needs some tidying up
+// --------------------------------------------------------------------------------------------------
+// Basically in the function below, parseContent was in the wrong place
+// It separated everything out and so I swapped it around and then applied the piping stuff
+// const processContentNew = ctx => flow(convertPipesXXX(ctx), parseContent);
+// --------------------------------------------------------------------------------------------------
 
-module.exports = class Introduction {
+// --------------------------------------------------------------------------------------------------
+const reversePiping = (content, ctx) => {
+  if (!content) {
+    return "";
+  }
+  const gotthis = content.map(items => {
+    if (items.list) {
+      items.list = items.list.map(item => processPipe(ctx)(item));
+    }
+    if (items.description) {
+      items.description = processPipe(ctx)(items.description);
+    }
+    return items;
+  });
+  return gotthis;
+};
+// --------------------------------------------------------------------------------------------------
+class Introduction {
   constructor(
     {
       title,
@@ -44,79 +59,43 @@ module.exports = class Introduction {
     },
     ctx
   ) {
-    console.log("ctx  - - - - - - :", ctx);
-
-    this.type = "Introduction";
     this.id = "introduction-block";
-
-    let primaryContent, test2;
-    let test = [];
-    if (description) {
-      console.log("\n\ndescription - - - - :", description);
-
-      primaryContent = getComplexText(description, ctx);
-      console.log("\n\nprimaryContent ========== :", primaryContent);
-
-      // test2 = processNewPipe(description, ctx);
-      // test2 = processNewPipe(primaryContent, ctx);
-      console.log("test2 ======= ", test2);
-
-      // test = primaryContent.map((description, index) => {
-      //   console.log("description, index :", description, index);
-      //   processNewPipe(description, ctx);
-      // });
-    }
-
+    this.type = "Introduction";
     this.primary_content = [
       {
         id: "primary",
-        title: processNewPipe(title, ctx),
-        contents: [
-          {
-            description: processNewPipe(description, ctx)
-            // primaryContent
-            // title: test2
-          }
-        ]
-        // contents: getComplexText(description, ctx)
+        title: this.buildTitle(title, ctx),
+        // --------------------------------------------------------------------------------------------------
+        contents: reversePiping(getComplexText(description), ctx)
+        // --------------------------------------------------------------------------------------------------
       }
     ];
-
     this.preview_content = {
       id: "preview",
-
-      title: processNewPipe(secondaryTitle, ctx),
-      // title: getSimpleText(secondaryTitle, ctx),
-
-      // contents: getComplexText(secondaryDescription, ctx),
-      contents: [
-        {
-          description: processNewPipe(secondaryDescription, ctx)
-        }
-      ],
+      title: getSimpleText(secondaryTitle, ctx),
+      // --------------------------------------------------------------------------------------------------
+      contents: reversePiping(getComplexText(secondaryDescription), ctx),
+      // --------------------------------------------------------------------------------------------------
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
-          question: title,
-          contents: [
-            {
-              description: processNewPipe(description, ctx)
-            }
-          ]
-          // contents: getComplexText(description, ctx)
+          question: getSimpleText(title, ctx),
+          // --------------------------------------------------------------------------------------------------
+          contents: reversePiping(getComplexText(description), ctx)
+          // --------------------------------------------------------------------------------------------------
         }))
     };
 
     let tertiaryContent;
-
     if (tertiaryDescription) {
-      console.log(
-        "\n\ngetComplexText(tertiaryDescription, ctx) :",
-        getComplexText(tertiaryDescription, ctx)
-      );
-      tertiaryContent = getComplexText(tertiaryDescription, ctx)[1];
+      // not sure about the need for the [0]
+      // --------------------------------------------------------------------------------------------------
+      tertiaryContent = reversePiping(
+        getComplexText(tertiaryDescription),
+        ctx
+      )[0];
+      // --------------------------------------------------------------------------------------------------
     }
-
     this.secondary_content = [
       {
         id: "secondary-content",
@@ -129,4 +108,21 @@ module.exports = class Introduction {
       }
     ];
   }
-};
+  // looking to move the build functions into here
+  // --------------------------------------------------------------------------------------------------
+  buildContents(description, ctx) {
+    let obj = {};
+    if (description) {
+      // this works for question contents
+      obj = processPipe(ctx)(description);
+    }
+    return obj;
+  }
+
+  buildTitle(title, ctx) {
+    return processPipe(ctx)(title);
+  }
+  // --------------------------------------------------------------------------------------------------
+}
+
+module.exports = Introduction;
