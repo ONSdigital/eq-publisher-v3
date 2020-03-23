@@ -16,6 +16,13 @@ const unescapePiping = value =>
   );
 
 const getInnerHTMLWithPiping = elem => {
+  // this fixes 10 tests but need to ensure for the right reason
+  // --------------------------------------------------------------------------------------------------
+  if (!elem) {
+    return;
+  }
+  // --------------------------------------------------------------------------------------------------
+
   if (elem.text) {
     elem.text = unescapePiping(getInnerHTML(elem.text));
     return elem;
@@ -48,6 +55,13 @@ const mapElementToObject = elem => {
 };
 
 const parseContent = html => {
+  // catch undefined
+  // --------------------------------------------------------------------------------------------------
+  if (!html) {
+    return;
+  }
+  // --------------------------------------------------------------------------------------------------
+
   // this is need for - this.guidance in Question
   // --------------------------------------------------------------------------------------------------
   let text;
