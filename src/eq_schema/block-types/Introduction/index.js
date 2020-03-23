@@ -1,42 +1,19 @@
 const { flow } = require("lodash");
 const newPipes = require("../../../utils/convertPipes").newPipes;
-
 const {
-  parseContent,
-  getInnerHTMLWithPiping
-} = require("../../../utils/HTMLUtils");
+  wrapContents,
+  reversePiping
+} = require("../../../utils/compoundFunctions");
+
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
-// --------------------------------------------------------------------------------------------------
-const getComplexText = content => {
-  const result = parseContent(content)("content");
-  if (result) {
-    return result.content;
-  }
-  return undefined;
-};
-// --------------------------------------------------------------------------------------------------
-// Hi Tom - looks great!
-// --------------------------------------------------------------------------------------------------
-const reversePiping = (content, ctx) => {
-  if (!content) {
-    return "";
-  }
-  const gotthis = content.map(items => {
-    if (items.list) {
-      items.list = items.list.map(item => processPipe(ctx)(item));
-    }
-    if (items.description) {
-      items.description = processPipe(ctx)(items.description);
-    }
-    return items;
-  });
-  return gotthis;
-};
-// --------------------------------------------------------------------------------------------------
+
+const reverseContent = ctx => flow(wrapContents("content"), reversePiping(ctx));
+
 class Introduction {
   constructor(
     {
@@ -57,7 +34,7 @@ class Introduction {
         id: "primary",
         title: this.buildTitle(title, ctx),
         // --------------------------------------------------------------------------------------------------
-        contents: reversePiping(getComplexText(description), ctx)
+        contents: reverseContent(ctx)(description).content
         // --------------------------------------------------------------------------------------------------
       }
     ];
@@ -65,36 +42,32 @@ class Introduction {
       id: "preview",
       title: getSimpleText(secondaryTitle, ctx),
       // --------------------------------------------------------------------------------------------------
-      contents: reversePiping(getComplexText(secondaryDescription), ctx),
+      contents: reverseContent(ctx)(secondaryDescription).content,
       // --------------------------------------------------------------------------------------------------
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: getSimpleText(title, ctx),
           // --------------------------------------------------------------------------------------------------
-          contents: reversePiping(getComplexText(description), ctx)
+          contents: reverseContent(ctx)(description).content
           // --------------------------------------------------------------------------------------------------
         }))
     };
 
-    // --------not quite sure why this doesn't work when place as ... after title???
-    // let tertiaryContent;
-    // if (tertiaryDescription) {
-    //   // not sure about the need for the [0]
-    //   tertiaryContent = reversePiping(
-    //     getComplexText(tertiaryDescription),
-    //     ctx
-    //   )[0];
-    // }
-    //--------------
+    // ----------------------------------------------------------------------
+    // not quite sure why this doesn't work when place as ... after title???
+    // ----------------------------------------------------------------------
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [
           {
             title: getSimpleText(tertiaryTitle, ctx),
-            // ...tertiaryContent
-            contents: reversePiping(getComplexText(tertiaryDescription), ctx)
+            // Could you let me know if this works better?
+            // ----------------------------------------------------------------------
+            ...(tertiaryDescription &&
+              reverseContent(ctx)(tertiaryDescription).content[0])
+            // ----------------------------------------------------------------------
           }
         ]
       }
