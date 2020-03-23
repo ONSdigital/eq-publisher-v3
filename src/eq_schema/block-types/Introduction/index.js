@@ -40,20 +40,19 @@ class Introduction {
     ];
     this.preview_content = {
       id: "preview",
-      title: getSimpleText(secondaryTitle, ctx),
+      title: this.buildTitle(secondaryTitle, ctx),
       // --------------------------------------------------------------------------------------------------
       contents: this.buildContents(secondaryDescription, ctx),
       // --------------------------------------------------------------------------------------------------
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
-          question: getSimpleText(title, ctx),
+          question: this.buildTitle(title, ctx),
           // --------------------------------------------------------------------------------------------------
           contents: this.buildContents(description, ctx)
           // --------------------------------------------------------------------------------------------------
         }))
     };
-
     // ----------------------------------------------------------------------
     // not quite sure why this doesn't work when place as ... after title???
     // ----------------------------------------------------------------------
@@ -78,7 +77,7 @@ class Introduction {
   buildContents(description, ctx) {
     return reverseContent(ctx)(description).content;
   }
-
+  // --------------------------------------------------------------------------------------------------
   buildTitle(title, ctx) {
     return processPipe(ctx)(title);
   }
