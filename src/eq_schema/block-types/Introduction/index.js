@@ -4,7 +4,10 @@ const {
   wrapContents,
   reversePiping
 } = require("../../../utils/compoundFunctions");
+
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+
+const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
@@ -31,7 +34,7 @@ class Introduction {
         id: "primary",
         title: this.buildTitle(title, ctx),
         // --------------------------------------------------------------------------------------------------
-        contents: reverseContent(ctx)(description).content
+        contents: this.buildContents(description, ctx)
         // --------------------------------------------------------------------------------------------------
       }
     ];
@@ -39,17 +42,18 @@ class Introduction {
       id: "preview",
       title: getSimpleText(secondaryTitle, ctx),
       // --------------------------------------------------------------------------------------------------
-      contents: reverseContent(ctx)(secondaryDescription).content,
+      contents: this.buildContents(secondaryDescription, ctx),
       // --------------------------------------------------------------------------------------------------
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: getSimpleText(title, ctx),
           // --------------------------------------------------------------------------------------------------
-          contents: reverseContent(ctx)(description).content
+          contents: this.buildContents(description, ctx)
           // --------------------------------------------------------------------------------------------------
         }))
     };
+
     // ----------------------------------------------------------------------
     // not quite sure why this doesn't work when place as ... after title???
     // ----------------------------------------------------------------------
@@ -62,13 +66,23 @@ class Introduction {
             // Could you let me know if this works better?
             // ----------------------------------------------------------------------
             ...(tertiaryDescription &&
-              reverseContent(ctx)(tertiaryDescription).content[0])
+              this.buildContents(tertiaryDescription, ctx)[0])
             // ----------------------------------------------------------------------
           }
         ]
       }
     ];
   }
+  // looking to move the build functions into here
+  // --------------------------------------------------------------------------------------------------
+  buildContents(description, ctx) {
+    return reverseContent(ctx)(description).content;
+  }
+
+  buildTitle(title, ctx) {
+    return processPipe(ctx)(title);
+  }
+  // --------------------------------------------------------------------------------------------------
 }
 
 module.exports = Introduction;
