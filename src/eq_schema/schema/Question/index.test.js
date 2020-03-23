@@ -25,6 +25,19 @@ describe("Question", () => {
       options
     );
 
+  const createPipedFormat = (placeholder, source) => ({
+    text: `{${placeholder}}`,
+    placeholders: [
+      {
+        placeholder,
+        value: {
+          identifier: placeholder,
+          source
+        }
+      }
+    ]
+  });
+
   it("should construct a valid eQ runner question from an author question", () => {
     const question = new Question(createQuestionJSON());
 
@@ -567,19 +580,23 @@ describe("Question", () => {
         createContext()
       );
 
-      expect(question.title).toEqual("{{ answers['answer1'] }}");
+      // expect(question.title).toEqual("{{ answers['answer1'] }}");
+      expect(question.title).toEqual(createPipedFormat("answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
       const question = new Question(
         createQuestionJSON({
-          guidance: `<h2>${createPipe({ id: 123, pipeType: "metadata" })}</h2>`,
-          guidanceEnabled: true
+          guidanceEnabled: true,
+          guidance: `<p>${createPipe({
+            id: 123,
+            pipeType: "metadata"
+          })}</p><p>hello</p>`
         }),
         createContext()
       );
       expect(question.guidance.contents[0]).toEqual({
-        title: "{{ metadata['my_metadata'] }}"
+        description: createPipedFormat("my_metadata", "metadata")
       });
     });
 
@@ -592,7 +609,10 @@ describe("Question", () => {
         createContext()
       );
 
-      expect(question.description).toEqual("<p>foo</p><p>bar</p>");
+      expect(question.description).toEqual([
+        { description: "foo" },
+        { description: "bar" }
+      ]);
     });
 
     it("should handle piped values in description", () => {
@@ -603,8 +623,9 @@ describe("Question", () => {
         }),
         createContext()
       );
-
-      expect(question.description).toEqual("<h2>{{ answers['answer1'] }}</h2>");
+      expect(question.description).toEqual(
+        createPipedFormat("answer1", "answers")
+      );
     });
   });
 
