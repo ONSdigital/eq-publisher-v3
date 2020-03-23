@@ -19,16 +19,7 @@ const getComplexText = content => {
   return undefined;
 };
 // --------------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------------
-// Hi Shane, hope you see this and don't mind that I took a good look & go at it
-// It was a hassle, basically have reversed the whole idea of the way we were processing
-// It's not 100% done yet and needs some tidying up
-// --------------------------------------------------------------------------------------------------
-// Basically in the function below, parseContent was in the wrong place
-// It separated everything out and so I swapped it around and then applied the piping stuff
-// const processContentNew = ctx => flow(convertPipesXXX(ctx), parseContent);
-// --------------------------------------------------------------------------------------------------
-
+// Hi Tom - looks great!
 // --------------------------------------------------------------------------------------------------
 const reversePiping = (content, ctx) => {
   if (!content) {
@@ -86,23 +77,24 @@ class Introduction {
         }))
     };
 
-    let tertiaryContent;
-    if (tertiaryDescription) {
-      // not sure about the need for the [0]
-      // --------------------------------------------------------------------------------------------------
-      tertiaryContent = reversePiping(
-        getComplexText(tertiaryDescription),
-        ctx
-      )[0];
-      // --------------------------------------------------------------------------------------------------
-    }
+    // --------not quite sure why this doesn't work when place as ... after title???
+    // let tertiaryContent;
+    // if (tertiaryDescription) {
+    //   // not sure about the need for the [0]
+    //   tertiaryContent = reversePiping(
+    //     getComplexText(tertiaryDescription),
+    //     ctx
+    //   )[0];
+    // }
+    //--------------
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [
           {
             title: getSimpleText(tertiaryTitle, ctx),
-            ...tertiaryContent
+            // ...tertiaryContent
+            contents: reversePiping(getComplexText(tertiaryDescription), ctx)
           }
         ]
       }

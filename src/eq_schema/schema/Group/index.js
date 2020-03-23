@@ -38,18 +38,15 @@ class Group {
   }
 
   buildBlocks(section, ctx) {
+    console.log("section", section);
+
     const blocks = flatten(
       section.pages.map(page => {
         const block = new Block(page, section.id, ctx);
         if (page.confirmation) {
           return [
             block,
-            buildAuthorConfirmationQuestion(
-              page,
-              section.id,
-              page.routing,
-              ctx
-            )
+            buildAuthorConfirmationQuestion(page, section.id, page.routing, ctx)
           ];
         }
         return block;
