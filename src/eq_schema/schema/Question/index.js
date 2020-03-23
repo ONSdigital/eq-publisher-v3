@@ -42,7 +42,7 @@ class Question {
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = reversePipe(ctx, "contents")(question.guidance);
+      this.guidance = reversePipe(ctx)(question.guidance);
     }
 
     if (
