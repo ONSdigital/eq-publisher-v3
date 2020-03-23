@@ -4,10 +4,7 @@ const {
   wrapContents,
   reversePiping
 } = require("../../../utils/compoundFunctions");
-
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
-
-const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
 const getSimpleText = (content, ctx) =>
   flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
@@ -53,7 +50,6 @@ class Introduction {
           // --------------------------------------------------------------------------------------------------
         }))
     };
-
     // ----------------------------------------------------------------------
     // not quite sure why this doesn't work when place as ... after title???
     // ----------------------------------------------------------------------
@@ -73,21 +69,6 @@ class Introduction {
       }
     ];
   }
-  // looking to move the build functions into here
-  // --------------------------------------------------------------------------------------------------
-  buildContents(description, ctx) {
-    let obj = {};
-    if (description) {
-      // this works for question contents
-      obj = processPipe(ctx)(description);
-    }
-    return obj;
-  }
-
-  buildTitle(title, ctx) {
-    return processPipe(ctx)(title);
-  }
-  // --------------------------------------------------------------------------------------------------
 }
 
 module.exports = Introduction;
