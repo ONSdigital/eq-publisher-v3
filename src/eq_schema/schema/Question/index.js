@@ -1,17 +1,16 @@
 const { find, get, flow, isNil, concat, last } = require("lodash/fp");
 const { set } = require("lodash");
 
-const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
-
-const {
-  parseContent,
-  getInnerHTMLWithPiping
-  // unescapePiping
-} = require("../../../utils/HTMLUtils");
-
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const newPipes = require("../../../utils/convertPipes").newPipes;
+const {
+  wrapContents,
+  reversePiping
+} = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
+
+const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
@@ -20,32 +19,30 @@ const findMutuallyExclusive = flow(
   find(answer => !isNil(get("mutuallyExclusiveOption", answer)))
 );
 
-const processNewPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
-const processContent = ctx => flow(newPipes(ctx), parseContent);
+const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
+// --------------------------------------------------------------------------------------------------
+const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
+// --------------------------------------------------------------------------------------------------
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-    this.title = processNewPipe(ctx)(question.title);
+    this.title = processPipe(ctx)(question.title);
 
     if (question.qCode) {
       this.q_code = question.qCode;
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = processNewPipe(ctx)(question.description);
-
-      // this.description = processPipedText(ctx)(question.description);
-
-      // Not sure what this bit was doing
       // ---------------------------------------------------------------------
-      // this.description = unescapePiping(
-      //   convertPipes(ctx)(question.description)
-      // );
+      // Description doesn't work correctly if you pipe out the html
+      // solution below works as intended but leaves the html <p> tags in
+      // ---------------------------------------------------------------------
+      this.description = newPipes(ctx)(question.description);
       // ---------------------------------------------------------------------
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = processContent(ctx)(question.guidance)("contents");
+      this.guidance = reversePipe(ctx, "contents")(question.guidance);
     }
 
     if (
@@ -55,7 +52,7 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...processContent(ctx)(question.definitionContent)("contents")
+          ...reversePipe(ctx)(question.definitionContent)
         }
       ];
     }
@@ -122,7 +119,9 @@ class Question {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
 
-        ...processContent(ctx)(question.additionalInfoContent)("content")
+        // ---------------------------------------------------------------------
+        ...reversePipe(ctx, "content")(question.definitionContent)
+        // ---------------------------------------------------------------------
       };
     }
   }
