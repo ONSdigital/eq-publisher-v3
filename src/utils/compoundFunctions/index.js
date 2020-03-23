@@ -9,8 +9,17 @@ const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 // ---------------------------------------------------------------------------------
 
 const wrapContents = propName => content => {
+  // Catch non content
+  // ---------------------------------------------------------------------------------
+  if (!content) {
+    return;
+  }
+  if (!propName || propName === "") {
+    throw new Error("Property name of 'content' or 'contents' needed");
+  }
+  // ---------------------------------------------------------------------------------
+
   const result = parseContent(content);
-  console.log(result, "here are my results");
   if (result.length) {
     return { [propName]: result };
   }
