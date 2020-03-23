@@ -2,12 +2,14 @@ const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const newPipes = require("../../../utils/convertPipes").newPipes;
+const {
+  wrapContents,
+  reversePiping
+} = require("../../../utils/compoundFunctions");
 
 const translateAuthorRouting = require("../../builders/routing2");
-const {
-  parseContent,
-  getInnerHTMLWithPiping
-} = require("../../../utils/HTMLUtils");
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+
 const Question = require("../Question");
 
 const pageTypeMappings = {
@@ -19,31 +21,38 @@ const getLastPage = flow(getOr([], "pages"), last);
 
 const processNewPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
 
+const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
+
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
 
-const getComplexText = content => {
-  const result = parseContent(content)("content");
-  if (result) {
-    return result.content;
-  }
-  return undefined;
-};
-const reversePiping = (content, ctx) => {
-  if (!content) {
-    return "";
-  }
-  const gotthis = content.map(items => {
-    if (items.list) {
-      items.list = items.list.map(item => processNewPipe(ctx)(item));
-    }
-    if (items.description) {
-      items.description = processNewPipe(ctx)(items.description);
-    }
-    return items;
-  });
-  return gotthis;
-};
+// ------------------------------------------------------------------------
+// const getComplexText = content => {
+//   const result = parseContent(content)("content");
+//   if (result) {
+//     return result.content;
+//   }
+//   return undefined;
+// };
+// ------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------
+// const reversePiping = (content, ctx) => {
+//   if (!content) {
+//     return "";
+//   }
+//   const gotthis = content.map(items => {
+//     if (items.list) {
+//       items.list = items.list.map(item => processNewPipe(ctx)(item));
+//     }
+//     if (items.description) {
+//       items.description = processNewPipe(ctx)(items.description);
+//     }
+//     return items;
+//   });
+//   return gotthis;
+// };
+// ------------------------------------------------------------------------
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -66,7 +75,8 @@ class Block {
       id: `group${groupId}-introduction`,
       content: {
         title: processNewPipe(ctx)(introductionTitle) || "",
-        contents: reversePiping(getComplexText(introductionContent), ctx)
+        contents: reversePipe(ctx)(introductionContent).contents
+        // contents: reversePiping(getComplexText(introductionContent), ctx)
       }
     };
   }
@@ -92,6 +102,10 @@ class Block {
   convertPageType(type) {
     return get(pageTypeMappings, type, type);
   }
+
+  buildTitles() {}
+
+  buildContent() {}
 }
 
 module.exports = Block;
