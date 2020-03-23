@@ -47,20 +47,17 @@ const mapElementToObject = elem => {
   }
 };
 
-const parseContent = html => contentType => {
-  // this might not be needed anymore
+const parseContent = html => {
+  // this is need for - this.guidance in Question
   // --------------------------------------------------------------------------------------------------
-  // let text;
-  // if (html.text) {
-  //   console.log("with text");
-  //   text = html.text;
-  // } else {
-  //   console.log("without text");
-  //   text = html;
-  // }
+  let text;
+  if (html.text) {
+    text = html.text;
+  } else {
+    text = html;
+  }
   // --------------------------------------------------------------------------------------------------
-
-  const content = cheerio(html)
+  const content = cheerio(text)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
     .toArray();
@@ -68,7 +65,7 @@ const parseContent = html => contentType => {
   if (content.length === 0) {
     return;
   }
-  return { [contentType]: content };
+  return content;
 };
 
 module.exports = {
