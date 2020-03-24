@@ -26,34 +26,6 @@ const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
 
-// ------------------------------------------------------------------------
-// const getComplexText = content => {
-//   const result = parseContent(content)("content");
-//   if (result) {
-//     return result.content;
-//   }
-//   return undefined;
-// };
-// ------------------------------------------------------------------------
-
-// ------------------------------------------------------------------------
-// const reversePiping = (content, ctx) => {
-//   if (!content) {
-//     return "";
-//   }
-//   const gotthis = content.map(items => {
-//     if (items.list) {
-//       items.list = items.list.map(item => processNewPipe(ctx)(item));
-//     }
-//     if (items.description) {
-//       items.description = processNewPipe(ctx)(items.description);
-//     }
-//     return items;
-//   });
-//   return gotthis;
-// };
-// ------------------------------------------------------------------------
-
 class Block {
   constructor(page, groupId, ctx) {
     this.id = `block${page.id}`;
@@ -76,7 +48,6 @@ class Block {
       content: {
         title: processNewPipe(ctx)(introductionTitle) || "",
         contents: reversePipe(ctx)(introductionContent).contents
-        // contents: reversePiping(getComplexText(introductionContent), ctx)
       }
     };
   }
