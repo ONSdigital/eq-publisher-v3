@@ -579,8 +579,6 @@ describe("Question", () => {
         }),
         createContext()
       );
-
-      // expect(question.title).toEqual("{{ answers['answer1'] }}");
       expect(question.title).toEqual(createPipedFormat("answer1", "answers"));
     });
 
@@ -609,16 +607,13 @@ describe("Question", () => {
         createContext()
       );
 
-      expect(question.description).toEqual([
-        { description: "foo" },
-        { description: "bar" }
-      ]);
+      expect(question.description).toEqual("<p>foo</p><p>bar</p>");
     });
 
     it("should handle piped values in description", () => {
       const question = new Question(
         createQuestionJSON({
-          description: `<h2>${createPipe()}</h2>`,
+          description: `${createPipe()}`,
           descriptionEnabled: true
         }),
         createContext()
