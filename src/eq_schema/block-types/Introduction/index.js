@@ -54,8 +54,6 @@ class Introduction {
         }))
     };
     // ----------------------------------------------------------------------
-    // not quite sure why this doesn't work when place as ... after title???
-    // ----------------------------------------------------------------------
     this.secondary_content = [
       {
         id: "secondary-content",
@@ -63,9 +61,9 @@ class Introduction {
           {
             title: getSimpleText(tertiaryTitle, ctx),
             // Could you let me know if this works better?
+            // This does the trick!
             // ----------------------------------------------------------------------
-            ...(tertiaryDescription &&
-              this.buildContents(tertiaryDescription, ctx)[0])
+            contents: this.buildContents(tertiaryDescription, ctx)
             // ----------------------------------------------------------------------
           }
         ]
