@@ -55,22 +55,11 @@ const mapElementToObject = elem => {
 };
 
 const parseContent = html => {
-  // catch undefined
-  // --------------------------------------------------------------------------------------------------
   if (!html) {
     return;
   }
-  // --------------------------------------------------------------------------------------------------
 
-  // this is need for - this.guidance in Question
-  // --------------------------------------------------------------------------------------------------
-  let text;
-  if (html.text) {
-    text = html.text;
-  } else {
-    text = html;
-  }
-  // --------------------------------------------------------------------------------------------------
+  const text = html.text ? html.text : html;
   const content = cheerio(text)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
