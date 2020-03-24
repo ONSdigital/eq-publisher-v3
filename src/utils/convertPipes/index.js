@@ -2,17 +2,13 @@ const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
 
-// Going to separate into another file
-// once decided on better var names
-// -----------------------------------------------
-const formatPlaceholder = "format_";
-const FORMAT_CURRENCY = `${formatPlaceholder}currency`;
-const FORMAT_NUMBER = `${formatPlaceholder}number`;
-const FORMAT_DATE = `${formatPlaceholder}date`;
-
-const DATE_TO_FORMAT = "date_to_format";
-const NUMBER_TO_FORMAT = "number";
-// -----------------------------------------------
+const {
+  FORMAT_CURRENCY,
+  FORMAT_DATE,
+  FORMAT_NUMBER,
+  NUMBER_TRANSFORMATION,
+  DATE_TRANSFORMATION
+} = require("../../constants/piping");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
@@ -32,18 +28,13 @@ const getAnswer = (ctx, answerId) =>
     .filter(answer => isPipeableType(answer))
     .find(answer => answer.id === answerId);
 
-// Follows filter_map - used in transform()
-// ------------------------------------------------------------ //
 const TRANSFORM_MAP = {
-  Currency: { format: FORMAT_CURRENCY, transformKey: NUMBER_TO_FORMAT },
-  Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TO_FORMAT },
-  Date: { format: FORMAT_DATE, transformKey: DATE_TO_FORMAT },
-  DateRange: { format: FORMAT_DATE, transformKey: DATE_TO_FORMAT }
+  Currency: { format: FORMAT_CURRENCY, transformKey: NUMBER_TRANSFORMATION },
+  Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
+  Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
+  DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION }
 };
-// ------------------------------------------------------------ //
 
-// Used to build the transformation properties
-// ------------------------------------------------------------ //
 const transform = (dataType, value) => ({
   value,
   format: TRANSFORM_MAP[dataType].format,
@@ -52,20 +43,9 @@ const transform = (dataType, value) => ({
       source,
       identifier
     },
-    // Conditionally add if DATE - this fixes runner error
-    // Validator is missing required property
-    // ------------------------------------------------------------ //
     ...(dataType === "Date" && { date_format: "d MMMM yyyy" })
-    // ------------------------------------------------------------ //
-
-    // Validator doesn't seem to accept currency so it always defaults
-    // to GBP
-    // ------------------------------------------------------------ //
-    // ...(unit && { currency: "GBP" })
-    // ------------------------------------------------------------ //
   })
 });
-// ------------------------------------------------------------ //
 
 const FILTER_MAP = {
   Currency: (format, value, unit = "GBP") => transform(format, value),
@@ -88,27 +68,6 @@ const PIPE_TYPES = {
   variable: {
     render: () => `%(total)s`
   }
-};
-
-const convertElementToPipe = ($elem, ctx) => {
-  const { piped, ...elementData } = $elem.data();
-  const pipeConfig = PIPE_TYPES[piped];
-  if (piped === "variable") {
-    return pipeConfig.render();
-  }
-  if (!pipeConfig) {
-    return "";
-  }
-
-  const entity = pipeConfig.retrieve(elementData, ctx);
-  if (!entity) {
-    return "";
-  }
-  const output = pipeConfig.render(entity);
-  const dataType = pipeConfig.getType(entity);
-
-  const filter = FILTER_MAP[dataType];
-  return filter ? `${filter(output)}` : `${output}`;
 };
 
 const parseHTML = html => {
@@ -137,6 +96,7 @@ const getPipedData = store => (element, ctx) => {
   const pipedType = pipeConfig.getType(entity);
 
   const transformed = FILTER_MAP[pipedType];
+
   const isText = transformed
     ? `${transformed(pipedType, output).value}`
     : `${output}`;
@@ -169,7 +129,7 @@ const getPipedData = store => (element, ctx) => {
   return `{${removeDash(isText)}}`;
 };
 
-const newPiping = ctx => html => {
+const convertPipes = ctx => html => {
   if (!html) {
     return html;
   }
@@ -195,21 +155,5 @@ const newPiping = ctx => html => {
   return store;
 };
 
-const convertPipes = ctx => html => {
-  if (!html) {
-    return html;
-  }
-
-  const $ = parseHTML(html);
-
-  $.find("[data-piped]").each((i, elem) => {
-    const $elem = cheerio(elem);
-    $elem.replaceWith(convertElementToPipe($elem, ctx));
-  });
-
-  return unescapePiping($.html());
-};
-
 module.exports = convertPipes;
-module.exports.newPipes = newPiping;
 module.exports.getAllAnswers = getAllAnswers;
