@@ -28,6 +28,12 @@ const getAnswer = (ctx, answerId) =>
     .filter(answer => isPipeableType(answer))
     .find(answer => answer.id === answerId);
 
+const DATE_FORMAT_MAP = {
+  "dd/mm/yyyy": "d MMMM yyyy",
+  "mm/yyyy": "MMMM yyyy",
+  yyyy: "yyyy"
+};
+
 const TRANSFORM_MAP = {
   Currency: { format: FORMAT_CURRENCY, transformKey: NUMBER_TRANSFORMATION },
   Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
@@ -38,18 +44,18 @@ const TRANSFORM_MAP = {
 const transform = (dataType, value) => ({
   value,
   format: TRANSFORM_MAP[dataType].format,
-  options: (source, identifier) => ({
+  options: (source, identifier, dateFormat) => ({
     [TRANSFORM_MAP[dataType].transformKey]: {
       source,
       identifier
     },
-    ...(dataType === "Date" && { date_format: "d MMMM yyyy" })
+    ...(dataType === "Date" && { date_format: DATE_FORMAT_MAP[dateFormat] })
   })
 });
 
 const FILTER_MAP = {
   Currency: (format, value, unit = "GBP") => transform(format, value),
-  Date: (format, value) => transform(format, value),
+  Date: (format, value, extra) => transform(format, value, extra),
   DateRange: (format, value) => transform(format, value),
   Number: (format, value) => transform(format, value)
 };
@@ -104,13 +110,21 @@ const getPipedData = store => (element, ctx) => {
   let placeholder = {};
 
   if (transformed) {
+    let dateFormat;
+    if (entity.properties) {
+      dateFormat = entity.properties.format;
+    }
     const { format, value, options } = transformed(pipedType, output);
     placeholder = {
       placeholder: removeDash(value),
       transforms: [
         {
           transform: format,
-          arguments: options(piped, entity.key || `answer${entity.id}`)
+          arguments: options(
+            piped,
+            entity.key || `answer${entity.id}`,
+            dateFormat
+          )
         }
       ]
     };
