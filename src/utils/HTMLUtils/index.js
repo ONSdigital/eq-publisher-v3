@@ -76,7 +76,7 @@ const parseContent = html => {
     .map((i, elem) => mapElementToObject(elem))
     .toArray();
 
-  if (content.length === 0) {
+  if (!content.length) {
     return;
   }
   return content;
