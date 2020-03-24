@@ -1,6 +1,5 @@
 const convertPipes = require("../../utils/convertPipes");
 const getAllAnswers = require("../../utils/convertPipes").getAllAnswers;
-const newPipes = require("../../utils/convertPipes").newPipes;
 
 const createPipe = ({ pipeType = "answers", id = 1, text = "foo" } = {}) =>
   `<span data-piped="${pipeType}" data-id="${id}">${text}</span>`;
@@ -70,34 +69,34 @@ describe("getAllAnswers", () => {
 
 describe("convertPipes", () => {
   it("should handle empty strings", () => {
-    expect(newPipes(createContext())("")).toEqual("");
+    expect(convertPipes(createContext())("")).toEqual("");
   });
 
   it("should handle null values", () => {
-    expect(newPipes(createContext())(null)).toBeNull();
+    expect(convertPipes(createContext())(null)).toBeNull();
   });
 
   it("should handle undefined values", () => {
-    expect(newPipes(createContext())(undefined)).toBeUndefined();
+    expect(convertPipes(createContext())(undefined)).toBeUndefined();
   });
 
   it("should handle empty html tags", () => {
-    expect(newPipes(createContext())("<p></p>")).toEqual("<p></p>");
+    expect(convertPipes(createContext())("<p></p>")).toEqual("<p></p>");
   });
 
   it("should handle unknown pipe types", () => {
-    expect(newPipes(createContext())(createPipe({ pipeType: "Foo" }))).toEqual(
-      ""
-    );
+    expect(
+      convertPipes(createContext())(createPipe({ pipeType: "Foo" }))
+    ).toEqual("");
   });
   it("should handle empty answer in page", () => {
-    expect(newPipes(createContext())("<p></p>")).toEqual("<p></p>");
+    expect(convertPipes(createContext())("<p></p>")).toEqual("<p></p>");
   });
 
   describe("Answer pipes", () => {
     it("should convert relevant elements to pipe format", () => {
       const html = createPipe();
-      expect(newPipes(createContext())(html)).toEqual(
+      expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
           "{answer1}",
           createPlaceholders({
@@ -113,7 +112,7 @@ describe("convertPipes", () => {
       const pipe2 = createPipe({ id: "2", text: "bar" });
       const html = `${pipe1}${pipe2}`;
 
-      expect(newPipes(createContext())(html)).toEqual(
+      expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
           "{answer1}{answer2}",
           createPlaceholders({
@@ -135,7 +134,7 @@ describe("convertPipes", () => {
       const pipe2 = createPipe({ id: "2", text: "bar" });
       const html = `hello ${pipe1}${pipe2} world`;
 
-      expect(newPipes(createContext())(html)).toEqual(
+      expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
           "hello {answer1}{answer2} world",
           createPlaceholders({
@@ -155,7 +154,7 @@ describe("convertPipes", () => {
     describe("formatting", () => {
       it("should format Date Range answers with `format_date`", () => {
         const html = createPipe({ id: "3" });
-        expect(newPipes(createContext())(html)).toEqual(
+        expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer3}",
             createTransformation({
@@ -171,7 +170,7 @@ describe("convertPipes", () => {
       it("should format Date answers with `format_date`", () => {
         const html = createPipe({ id: "4" });
 
-        expect(newPipes(createContext())(html)).toEqual(
+        expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer4}",
             createTransformation(
@@ -189,7 +188,7 @@ describe("convertPipes", () => {
 
       it("should format Currency answers with `format_currency`", () => {
         const html = createPipe({ id: "2" });
-        expect(newPipes(createContext())(html)).toEqual(
+        expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer2}",
             createTransformation({
@@ -204,7 +203,7 @@ describe("convertPipes", () => {
 
       it("should format Number answers with `format_number`", () => {
         const html = createPipe({ id: "5" });
-        expect(newPipes(createContext())(html)).toEqual(
+        expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer5}",
             createTransformation({
@@ -223,7 +222,7 @@ describe("convertPipes", () => {
     it("should convert a metdata to the correct pipe format", () => {
       const html = createPipe({ id: "123", pipeType: "metadata" });
       const metadata = [{ id: "123", key: "my_metadata", type: "Text" }];
-      expect(newPipes(createContext(metadata))(html)).toEqual(
+      expect(convertPipes(createContext(metadata))(html)).toEqual(
         createWrapper(
           `{${metadata[0].key}}`,
           createPlaceholders({
@@ -237,14 +236,14 @@ describe("convertPipes", () => {
     it("should ignore non-existant metadata", () => {
       const html = createPipe({ pipeType: "metadata" });
       const metadata = [{ id: "456", key: "my_metadata", type: "Text" }];
-      expect(newPipes(createContext(metadata))(html)).toEqual("");
+      expect(convertPipes(createContext(metadata))(html)).toEqual("");
     });
 
     describe("formatting", () => {
       it("should format date metadata as date", () => {
         const html = createPipe({ id: "123", pipeType: "metadata" });
         const metadata = [{ id: "123", key: "my_metadata", type: "Date" }];
-        expect(newPipes(createContext(metadata))(html)).toEqual(
+        expect(convertPipes(createContext(metadata))(html)).toEqual(
           createWrapper(
             "{my_metadata}",
             createTransformation(

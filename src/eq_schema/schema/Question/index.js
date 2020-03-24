@@ -2,7 +2,7 @@ const { find, get, flow, isNil, concat, last } = require("lodash/fp");
 const { set } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
-const newPipes = require("../../../utils/convertPipes").newPipes;
+const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
   reversePiping
@@ -19,7 +19,7 @@ const findMutuallyExclusive = flow(
   find(answer => !isNil(get("mutuallyExclusiveOption", answer)))
 );
 
-const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 // --------------------------------------------------------------------------------------------------
 const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
 // --------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ class Question {
       // Description doesn't work correctly if you pipe out the html
       // solution below works as intended but leaves the html <p> tags in
       // ---------------------------------------------------------------------
-      this.description = newPipes(ctx)(question.description);
+      this.description = convertPipes(ctx)(question.description);
       // ---------------------------------------------------------------------
     }
 

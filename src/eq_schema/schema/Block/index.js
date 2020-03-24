@@ -1,7 +1,7 @@
 const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
-const newPipes = require("../../../utils/convertPipes").newPipes;
+const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
   reversePiping
@@ -19,7 +19,7 @@ const pageTypeMappings = {
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processNewPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
+const processNewPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
 

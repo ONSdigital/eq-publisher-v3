@@ -1,5 +1,5 @@
 const { flow } = require("lodash");
-const newPipes = require("../../../utils/convertPipes").newPipes;
+const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
   reversePiping
@@ -7,10 +7,10 @@ const {
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
-const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const getSimpleText = (content, ctx) =>
-  flow(newPipes(ctx), getInnerHTMLWithPiping)(content);
+  flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
 
 const reverseContent = ctx => flow(wrapContents("content"), reversePiping(ctx));
 

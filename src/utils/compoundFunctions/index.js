@@ -1,8 +1,8 @@
 const { flow } = require("lodash/fp");
 const { parseContent, getInnerHTMLWithPiping } = require("../HTMLUtils");
-const newPipes = require("../convertPipes").newPipes;
+const convertPipes = require("../convertPipes");
 
-const processPipe = ctx => flow(newPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const wrapContents = propName => content => {
   if (!propName || propName === "") {
