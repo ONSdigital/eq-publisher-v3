@@ -48,7 +48,7 @@ const createContext = (metadata = []) => ({
               { id: `1`, type: "Text" },
               { id: `2`, type: "Currency" },
               { id: `3`, type: "DateRange" },
-              { id: `4`, type: "Date" },
+              { id: `4`, type: "Date", properties: { format: "d MMMM yyyy" } },
               { id: `5`, type: "Number" }
             ]
           },
@@ -169,7 +169,6 @@ describe("convertPipes", () => {
 
       it("should format Date answers with `format_date`", () => {
         const html = createPipe({ id: "4" });
-
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer4}",
@@ -243,18 +242,16 @@ describe("convertPipes", () => {
       it("should format date metadata as date", () => {
         const html = createPipe({ id: "123", pipeType: "metadata" });
         const metadata = [{ id: "123", key: "my_metadata", type: "Date" }];
+
         expect(convertPipes(createContext(metadata))(html)).toEqual(
           createWrapper(
             "{my_metadata}",
-            createTransformation(
-              {
-                placeholder: "my_metadata",
-                source: "metadata",
-                argument: "date_to_format",
-                transform: "format_date"
-              },
-              { date_format: "d MMMM yyyy" }
-            )
+            createTransformation({
+              placeholder: "my_metadata",
+              source: "metadata",
+              argument: "date_to_format",
+              transform: "format_date"
+            })
           )
         );
       });
