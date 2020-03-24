@@ -194,7 +194,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
         expect(last(question.answers).guidance.hide_guidance).toBeDefined();
-        expect(last(question.answers).guidance.content).toBeDefined();
+        expect(last(question.answers).guidance.contents).toBeDefined();
       });
       it("should be populated when label and no content", () => {
         const question = new Question(
@@ -207,7 +207,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
         expect(last(question.answers).guidance.hide_guidance).toBeDefined();
-        expect(last(question.answers).guidance.content).toBeUndefined();
+        expect(last(question.answers).guidance.contents).toBeUndefined();
       });
       it("should be populated when no label and content", () => {
         const question = new Question(
@@ -220,7 +220,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeFalsy();
         expect(last(question.answers).guidance.hide_guidance).toBeFalsy();
-        expect(last(question.answers).guidance.content).toBeDefined();
+        expect(last(question.answers).guidance.contents).toBeDefined();
       });
 
       it("should throw an error when no answers on the page", () => {
