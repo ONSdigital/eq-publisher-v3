@@ -63,8 +63,15 @@ class Introduction {
             // Could you let me know if this works better?
             // This does the trick!
             // ----------------------------------------------------------------------
-            contents: this.buildContents(tertiaryDescription, ctx)
+            // Hi Shane, may need to run this by you tomorrow
+            // It has an extra contents prop which my validator is saying it doesn't like
+            // contents: this.buildContents(tertiaryDescription, ctx)
             // ----------------------------------------------------------------------
+            // This gets rid of the contents prop - the [0] is to stop it printing that out?
+            // Not sure if we are getting our wires mixed somewhere
+            // ...this.buildContents(tertiaryDescription, ctx)[0]
+            ...(tertiaryDescription &&
+              this.buildContents(tertiaryDescription, ctx)[0])
           }
         ]
       }
