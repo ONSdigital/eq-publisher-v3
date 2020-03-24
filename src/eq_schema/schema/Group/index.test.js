@@ -53,11 +53,9 @@ describe("Group", () => {
   it("returns a schema with an introduction when there is one", () => {
     const groupJSON = createGroupJSON({
       introductionTitle: "Intro Title",
-      introductionContent: "Intro Content"
+      introductionContent: "<p>Intro Content<p>"
     });
-
     const runnerJSON = new Group(groupJSON.title, groupJSON, createCtx());
-
     expect(runnerJSON).toMatchObject({
       id: "group1",
       title: "Section 1",
@@ -67,9 +65,11 @@ describe("Group", () => {
           type: "Interstitial",
           content: {
             title: "Intro Title",
-            contents : [{
-              description: "Intro Content",
-            }]
+            contents: [
+              {
+                description: "Intro Content"
+              }
+            ]
           }
         },
         expect.any(Block)
@@ -349,7 +349,7 @@ describe("Group", () => {
 
     it("should build a confirmation page with qCode", () => {
       const ctx = ctxGenerator(null);
-      ctx.questionnaireJson.sections[0].pages[0].confirmation.qCode = "123"
+      ctx.questionnaireJson.sections[0].pages[0].confirmation.qCode = "123";
       const resultantJson = new Group(
         "Section 1",
         ctx.questionnaireJson.sections[0],
@@ -419,7 +419,7 @@ describe("Group", () => {
                 {
                   left: {
                     answerId: "1",
-                    type: "Answer",
+                    type: "Answer"
                   },
                   condition: "Equal",
                   right: {
