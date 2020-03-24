@@ -4,6 +4,18 @@ const piping = '<span data-piped="metadata" data-id="1">[some_metadata]</span>';
 
 describe("Introduction", () => {
   let apiData, context;
+  const createPipedFormat = (placeholder, source) => ({
+    text: `{${placeholder}}`,
+    placeholders: [
+      {
+        placeholder,
+        value: {
+          identifier: placeholder,
+          source
+        }
+      }
+    ]
+  });
   beforeEach(() => {
     apiData = {
       id: "1",
@@ -50,7 +62,7 @@ describe("Introduction", () => {
               "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. ",
               "You can provide info estimates if actual figures aren&#x2019;t available.",
               "We will treat your data securely and confidentially.",
-              "{{ metadata['some_metadata'] }}"
+              createPipedFormat("some_metadata", "metadata")
             ]
           }
         ],
@@ -70,7 +82,18 @@ describe("Introduction", () => {
       ],
       id: "preview",
       questions: expect.any(Array),
-      title: "Information you need {{ metadata['some_metadata'] }}"
+      title: {
+        text: "Information you need {some_metadata}",
+        placeholders: [
+          {
+            placeholder: "some_metadata",
+            value: {
+              identifier: "some_metadata",
+              source: "metadata"
+            }
+          }
+        ]
+      }
     });
   });
 
@@ -78,12 +101,27 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content.questions).toMatchObject([
       {
-        contents: [{ description: "World {{ metadata['some_metadata'] }}" }],
-        question: "<p>Hello</p>"
+        contents: [
+          {
+            description: {
+              text: "World {some_metadata}",
+              placeholders: [
+                {
+                  placeholder: "some_metadata",
+                  value: {
+                    identifier: "some_metadata",
+                    source: "metadata"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        question: "Hello"
       },
       {
         contents: [{ description: "Description" }],
-        question: "<p>Collapsible</p>"
+        question: "Collapsible"
       }
     ]);
   });
@@ -110,7 +148,7 @@ describe("Introduction", () => {
     expect(introduction.preview_content.questions).toMatchObject([
       {
         contents: [{ description: "World" }],
-        question: "<p>Hello</p>"
+        question: "Hello"
       }
     ]);
   });
@@ -122,11 +160,22 @@ describe("Introduction", () => {
         id: "secondary-content",
         contents: [
           {
-            title: "How we use your data {{ metadata['some_metadata'] }}",
+            title: {
+              text: "How we use your data {some_metadata}",
+              placeholders: [
+                {
+                  placeholder: "some_metadata",
+                  value: {
+                    identifier: "some_metadata",
+                    source: "metadata"
+                  }
+                }
+              ]
+            },
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
               "The information you provide contributes to Gross Domestic Product (GDP).",
-              "{{ metadata['some_metadata'] }}"
+              createPipedFormat("some_metadata", "metadata")
             ]
           }
         ]
