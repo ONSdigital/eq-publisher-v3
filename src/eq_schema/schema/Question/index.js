@@ -120,7 +120,7 @@ class Question {
         hide_guidance: question.additionalInfoLabel,
 
         // ---------------------------------------------------------------------
-        ...reversePipe(ctx, "content")(question.definitionContent)
+        ...reversePipe(ctx)(question.additionalInfoContent)
         // ---------------------------------------------------------------------
       };
     }
