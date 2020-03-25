@@ -33,35 +33,26 @@ class Introduction {
       {
         id: "primary",
         title: this.buildTitle(title, ctx),
-        // --------------------------------------------------------------------------------------------------
         contents: this.buildContents(description, ctx)
-        // --------------------------------------------------------------------------------------------------
       }
     ];
     this.preview_content = {
       id: "preview",
       title: this.buildTitle(secondaryTitle, ctx),
-      // --------------------------------------------------------------------------------------------------
       contents: this.buildContents(secondaryDescription, ctx),
-      // --------------------------------------------------------------------------------------------------
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: this.buildTitle(title, ctx),
-          // --------------------------------------------------------------------------------------------------
           contents: this.buildContents(description, ctx)
-          // --------------------------------------------------------------------------------------------------
         }))
     };
-    // ----------------------------------------------------------------------
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [
           {
             title: getSimpleText(tertiaryTitle, ctx),
-            // Could you let me know if this works better?
-            // This does the trick!
             // ----------------------------------------------------------------------
             // Hi Shane, may need to run this by you tomorrow
             // It has an extra contents prop which my validator is saying it doesn't like
@@ -69,6 +60,9 @@ class Introduction {
             // ----------------------------------------------------------------------
             // This gets rid of the contents prop - the [0] is to stop it printing that out?
             // Not sure if we are getting our wires mixed somewhere
+            // ----------------------------------------------------------------------
+            // Hey Tom, Although it gets rid of the validator issue - it only displays the first item in the description -
+            // so if you have a description line, then a list - the list will be left out - for example
             // ...this.buildContents(tertiaryDescription, ctx)[0]
             ...(tertiaryDescription &&
               this.buildContents(tertiaryDescription, ctx)[0])
