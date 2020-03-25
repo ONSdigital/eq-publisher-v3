@@ -31,12 +31,7 @@ class Question {
       this.q_code = question.qCode;
     }
     if (question.descriptionEnabled && question.description) {
-      // ---------------------------------------------------------------------
-      // Description doesn't work correctly if you pipe out the html
-      // solution below works as intended but leaves the html <p> tags in
-      // ---------------------------------------------------------------------
       this.description = convertPipes(ctx)(question.description);
-      // ---------------------------------------------------------------------
     }
 
     if (question.guidanceEnabled && question.guidance) {
