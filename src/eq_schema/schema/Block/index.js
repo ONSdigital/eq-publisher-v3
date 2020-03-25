@@ -74,10 +74,6 @@ class Block {
   convertPageType(type) {
     return get(pageTypeMappings, type, type);
   }
-
-  buildTitles() {}
-
-  buildContent() {}
 }
 
 module.exports = Block;
