@@ -9,9 +9,6 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const getSimpleText = (content, ctx) =>
-  flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
-
 const reverseContent = ctx => flow(wrapContents("content"), reversePiping(ctx));
 
 class Introduction {
@@ -47,32 +44,21 @@ class Introduction {
           contents: this.buildContents(description, ctx)
         }))
     };
+
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [
           {
-            title: getSimpleText(tertiaryTitle, ctx),
-            // ----------------------------------------------------------------------
-            // Hi Shane, may need to run this by you tomorrow
-            // It has an extra contents prop which my validator is saying it doesn't like
-            // contents: this.buildContents(tertiaryDescription, ctx)
-            // ----------------------------------------------------------------------
-            // This gets rid of the contents prop - the [0] is to stop it printing that out?
-            // Not sure if we are getting our wires mixed somewhere
-            // ----------------------------------------------------------------------
-            // Hey Tom, Although it gets rid of the validator issue - it only displays the first item in the description -
-            // so if you have a description line, then a list - the list will be left out - for example
-            // ...this.buildContents(tertiaryDescription, ctx)[0]
-            ...(tertiaryDescription &&
-              this.buildContents(tertiaryDescription, ctx)[0])
-          }
+            title: this.buildTitle(tertiaryTitle, ctx)
+          },
+          ...(tertiaryDescription &&
+            this.buildContents(tertiaryDescription, ctx))
         ]
       }
     ];
   }
-  // looking to move the build functions into here
-  // --------------------------------------------------------------------------------------------------
+
   buildContents(description, ctx) {
     return reverseContent(ctx)(description).content;
   }
