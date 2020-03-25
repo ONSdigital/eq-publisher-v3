@@ -76,11 +76,9 @@ class Introduction {
   buildContents(description, ctx) {
     return reverseContent(ctx)(description).content;
   }
-  // --------------------------------------------------------------------------------------------------
   buildTitle(title, ctx) {
     return processPipe(ctx)(title);
   }
-  // --------------------------------------------------------------------------------------------------
 }
 
 module.exports = Introduction;

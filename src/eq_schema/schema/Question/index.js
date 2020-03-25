@@ -20,9 +20,7 @@ const findMutuallyExclusive = flow(
 );
 
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
-// --------------------------------------------------------------------------------------------------
 const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
-// --------------------------------------------------------------------------------------------------
 
 class Question {
   constructor(question, ctx) {
@@ -118,10 +116,7 @@ class Question {
       last(this.answers).guidance = {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
-
-        // ---------------------------------------------------------------------
         ...reversePipe(ctx)(question.additionalInfoContent)
-        // ---------------------------------------------------------------------
       };
     }
   }

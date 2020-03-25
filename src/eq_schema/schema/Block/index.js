@@ -19,7 +19,7 @@ const pageTypeMappings = {
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processNewPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
 
@@ -46,7 +46,7 @@ class Block {
       type: "Interstitial",
       id: `group${groupId}-introduction`,
       content: {
-        title: processNewPipe(ctx)(introductionTitle) || "",
+        title: processPipe(ctx)(introductionTitle) || "",
         contents: reversePipe(ctx)(introductionContent).contents
       }
     };
@@ -60,12 +60,12 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.title = processNewPipe(ctx)(page.title);
+      this.title = processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        title: processNewPipe(ctx)(page.totalTitle)
+        title: processPipe(ctx)(page.totalTitle)
       };
     }
   }
