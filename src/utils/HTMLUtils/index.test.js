@@ -28,6 +28,22 @@ describe("HTMLUtils", () => {
       expect(parseContent("<p></p>")).toBeUndefined();
     });
 
+    it("should correctly handle plain text and object.text", () => {
+      const guidance = {
+        text: "<p>Vivamus sagittis lacus vel augue laoreet</p>"
+      };
+      expect(parseContent(guidance)).toEqual([
+        {
+          description: "Vivamus sagittis lacus vel augue laoreet"
+        }
+      ]);
+      expect(parseContent(guidance.text)).toEqual([
+        {
+          description: "Vivamus sagittis lacus vel augue laoreet"
+        }
+      ]);
+    });
+
     it("should correctly parse content into runner-compatible object", () => {
       const guidance = `
         <h2>Vivamus sagittis lacus vel augue laoreet</h2>
