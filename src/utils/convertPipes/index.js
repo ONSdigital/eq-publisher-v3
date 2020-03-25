@@ -54,8 +54,8 @@ const transform = (dataType, value) => ({
 });
 
 const FILTER_MAP = {
-  Currency: (format, value, unit = "GBP") => transform(format, value),
-  Date: (format, value, extra) => transform(format, value, extra),
+  Currency: (format, value) => transform(format, value),
+  Date: (format, value) => transform(format, value),
   DateRange: (format, value) => transform(format, value),
   Number: (format, value) => transform(format, value)
 };
