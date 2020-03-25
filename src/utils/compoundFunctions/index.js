@@ -5,20 +5,16 @@ const convertPipes = require("../convertPipes");
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 const wrapContents = propName => content => {
-  if (!propName || propName === "") {
-    throw new Error("Property name of 'content' or 'contents' needed");
-  }
-
-  if (!content) {
+  if (!propName || propName === "" || !content) {
     return;
   }
 
   const result = parseContent(content);
-  if (result.length) {
-    return { [propName]: result };
-  }
 
-  return undefined;
+  if (!result) {
+    return;
+  }
+  return { [propName]: result };
 };
 
 const reversePiping = ctx => data => {
