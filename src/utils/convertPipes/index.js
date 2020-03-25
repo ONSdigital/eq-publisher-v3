@@ -49,7 +49,11 @@ const transform = (dataType, value) => ({
       source,
       identifier
     },
-    ...(dataType === "Date" && { date_format: DATE_FORMAT_MAP[dateFormat] })
+    ...(dataType === "Date" && {
+      date_format:
+        DATE_FORMAT_MAP[dateFormat] ||
+        (source === "metadata" && DATE_FORMAT_MAP["dd/mm/yyyy"])
+    })
   })
 });
 
@@ -114,6 +118,7 @@ const getPipedData = store => (element, ctx) => {
     if (entity.properties) {
       dateFormat = entity.properties.format;
     }
+
     const { format, value, options } = transformed(pipedType, output);
     placeholder = {
       placeholder: removeDash(value),

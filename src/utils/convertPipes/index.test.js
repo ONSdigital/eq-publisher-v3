@@ -246,12 +246,15 @@ describe("convertPipes", () => {
         expect(convertPipes(createContext(metadata))(html)).toEqual(
           createWrapper(
             "{my_metadata}",
-            createTransformation({
-              placeholder: "my_metadata",
-              source: "metadata",
-              argument: "date_to_format",
-              transform: "format_date"
-            })
+            createTransformation(
+              {
+                placeholder: "my_metadata",
+                source: "metadata",
+                argument: "date_to_format",
+                transform: "format_date"
+              },
+              { date_format: "d MMMM yyyy" }
+            )
           )
         );
       });
