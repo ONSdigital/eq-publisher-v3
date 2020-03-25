@@ -48,7 +48,7 @@ const createContext = (metadata = []) => ({
               { id: `1`, type: "Text" },
               { id: `2`, type: "Currency" },
               { id: `3`, type: "DateRange" },
-              { id: `4`, type: "Date", properties: { format: "d MMMM yyyy" } },
+              { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
               { id: `5`, type: "Number" }
             ]
           },
