@@ -51,12 +51,17 @@ class Introduction {
         contents: [
           {
             title: this.buildTitle(tertiaryTitle, ctx)
-          },
-          ...(tertiaryDescription &&
-            this.buildContents(tertiaryDescription, ctx))
+          }
         ]
       }
     ];
+    if (tertiaryDescription) {
+      const mergeContents = [
+        ...this.secondary_content[0].contents,
+        ...this.buildContents(tertiaryDescription, ctx)
+      ];
+      this.secondary_content[0].contents = mergeContents;
+    }
   }
 
   buildContents(description, ctx) {

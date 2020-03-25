@@ -171,7 +171,9 @@ describe("Introduction", () => {
                   }
                 }
               ]
-            },
+            }
+          },
+          {
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
               "The information you provide contributes to Gross Domestic Product (GDP).",
