@@ -38,15 +38,7 @@ app.use(
 
 app.get("/status", status);
 
-// This needs to be uncommented when finished
-// ------------------------------------------------------------------------------------
-// app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
-// ------------------------------------------------------------------------------------
-
-// This needs to be removed
-// ------------------------------------------------------------------------------------
-app.post("/publish", postQuestionnaire, convertSchema, respondWithData);
-// ------------------------------------------------------------------------------------
+app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
 
 // keeping for development purposes
 app.post(
