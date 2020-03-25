@@ -2,14 +2,15 @@ const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePiping
+  reversePipeContent
 } = require("../../../utils/compoundFunctions");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const reverseContent = ctx => flow(wrapContents("content"), reversePiping(ctx));
+const reverseContent = ctx =>
+  flow(wrapContents("content"), reversePipeContent(ctx));
 
 class Introduction {
   constructor(

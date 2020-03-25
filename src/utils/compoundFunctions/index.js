@@ -17,29 +17,27 @@ const wrapContents = propName => content => {
   return { [propName]: result };
 };
 
-const reversePiping = ctx => data => {
+const reversePipeContent = ctx => data => {
   if (!data) {
     return "";
   }
 
   const content = data.contents ? data.contents : data.content;
 
-  if (content.length) {
-    content.map(items => {
-      if (items.list) {
-        items.list = items.list.map(item => processPipe(ctx)(item));
-      }
-      if (items.description) {
-        items.description = processPipe(ctx)(items.description);
-      }
-      return items;
-    });
-  }
+  content.map(items => {
+    if (items.list) {
+      items.list = items.list.map(item => processPipe(ctx)(item));
+    }
+    if (items.description) {
+      items.description = processPipe(ctx)(items.description);
+    }
+    return items;
+  });
 
   return data;
 };
 
 module.exports = {
   wrapContents,
-  reversePiping
+  reversePipeContent
 };

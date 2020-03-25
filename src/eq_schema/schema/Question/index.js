@@ -5,7 +5,7 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePiping
+  reversePipeContent
 } = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
@@ -20,7 +20,8 @@ const findMutuallyExclusive = flow(
 );
 
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
-const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
+const reversePipe = ctx =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
 
 class Question {
   constructor(question, ctx) {

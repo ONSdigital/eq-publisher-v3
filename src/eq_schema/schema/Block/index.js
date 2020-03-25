@@ -4,7 +4,7 @@ const { flow, getOr, last, map, some } = require("lodash/fp");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePiping
+  reversePipeContent
 } = require("../../../utils/compoundFunctions");
 
 const translateAuthorRouting = require("../../builders/routing2");
@@ -21,7 +21,8 @@ const getLastPage = flow(getOr([], "pages"), last);
 
 const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const reversePipe = ctx => flow(wrapContents("contents"), reversePiping(ctx));
+const reversePipe = ctx =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
