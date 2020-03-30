@@ -14,8 +14,8 @@ const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
 
 const isPipeableType = answer => {
-  const notPipeableDataTypes = ["TextArea", "Radio", "CheckBox"];
-  return !includes(notPipeableDataTypes, answer.type);
+  const notPipeableAnswerTypes = ["TextArea", "Radio", "CheckBox"];
+  return !includes(notPipeableAnswerTypes, answer.type);
 };
 
 const getAllAnswers = questionnaire =>
@@ -41,21 +41,36 @@ const TRANSFORM_MAP = {
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION }
 };
 
-const transform = (dataType, value) => ({
-  value,
-  format: TRANSFORM_MAP[dataType].format,
-  options: (source, identifier, dateFormat) => ({
-    [TRANSFORM_MAP[dataType].transformKey]: {
-      source,
-      identifier
-    },
-    ...(dataType === "Date" && {
-      date_format:
-        DATE_FORMAT_MAP[dateFormat] ||
-        (source === "metadata" && DATE_FORMAT_MAP["dd/mm/yyyy"])
-    })
-  })
-});
+const transform = (AnswerType, value) => {
+  const structureOptions = (source, identifier, dateFormat) => {
+    const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
+
+    const options = {
+      [transformKey]: {
+        source,
+        identifier
+      }
+    };
+
+    if (AnswerType === "Date") {
+      const format =
+        source === "metadata"
+          ? DATE_FORMAT_MAP["dd/mm/yyyy"]
+          : DATE_FORMAT_MAP[dateFormat];
+
+      options.date_format = format;
+    }
+    return options;
+  };
+
+  const structure = {
+    value,
+    format: TRANSFORM_MAP[AnswerType].format,
+    options: structureOptions
+  };
+
+  return structure;
+};
 
 const FILTER_MAP = {
   Currency: (format, value) => transform(format, value),
@@ -107,7 +122,7 @@ const getPipedData = store => (element, ctx) => {
 
   const transformed = FILTER_MAP[pipedType];
 
-  const isText = transformed
+  const placeHolderText = transformed
     ? `${transformed(pipedType, output).value}`
     : `${output}`;
 
@@ -135,7 +150,7 @@ const getPipedData = store => (element, ctx) => {
     };
   } else {
     placeholder = {
-      placeholder: removeDash(isText),
+      placeholder: removeDash(placeHolderText),
       value: {
         source: piped,
         identifier: entity.key || `answer${entity.id}`
@@ -145,7 +160,7 @@ const getPipedData = store => (element, ctx) => {
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${removeDash(isText)}}`;
+  return `{${removeDash(placeHolderText)}}`;
 };
 
 const convertPipes = ctx => html => {
