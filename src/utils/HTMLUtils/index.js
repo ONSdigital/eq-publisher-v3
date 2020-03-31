@@ -16,20 +16,15 @@ const unescapePiping = value =>
   );
 
 const getInnerHTMLWithPiping = elem => {
-  try {
-    if (!elem) {
-      throw new Error("Invalid argument");
-      // return;
-    }
-
-    if (elem.text) {
-      elem.text = unescapePiping(getInnerHTML(elem.text));
-      return elem;
-    }
-    return unescapePiping(getInnerHTML(elem));
-  } catch (error) {
-    console.log(error);
+  if (!elem) {
+    return;
   }
+
+  if (elem.text) {
+    elem.text = unescapePiping(getInnerHTML(elem.text));
+    return elem;
+  }
+  return unescapePiping(getInnerHTML(elem));
 };
 
 const getText = elem => (isPlainText(elem) ? elem : cheerio(elem).text());
