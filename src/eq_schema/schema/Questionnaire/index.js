@@ -19,6 +19,7 @@ class Questionnaire {
   constructor(questionnaireJson) {
     const questionnaireId = questionnaireJson.id;
     this.eq_id = questionnaireId;
+    this.language = "en";
     this.form_type = questionnaireId;
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
