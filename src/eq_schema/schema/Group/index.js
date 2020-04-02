@@ -44,12 +44,7 @@ class Group {
         if (page.confirmation) {
           return [
             block,
-            buildAuthorConfirmationQuestion(
-              page,
-              section.id,
-              page.routing,
-              ctx
-            )
+            buildAuthorConfirmationQuestion(page, section.id, page.routing, ctx)
           ];
         }
         return block;

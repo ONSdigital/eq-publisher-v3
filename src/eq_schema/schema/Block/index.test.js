@@ -15,6 +15,19 @@ describe("Block", () => {
       block
     );
 
+  const createPipedFormat = (placeholder, source) => ({
+    text: `{${placeholder}}`,
+    placeholders: [
+      {
+        placeholder,
+        value: {
+          identifier: placeholder,
+          source
+        }
+      }
+    ]
+  });
+
   it("should build valid runner Block from Author page", () => {
     const block = new Block(createBlockJSON(), ctx);
 
@@ -97,9 +110,10 @@ describe("Block", () => {
     const createPipeInHtml = ({
       id = 1,
       text = "foo",
-      pipeType = "answers"
+      pipeType = "answers",
+      element = "h2"
     } = {}) =>
-      `<strong><span data-piped="${pipeType}" data-id="${id}">${text}</span></strong><ul><li>Some Value</li></ul>`;
+      `<${element}><span data-piped="${pipeType}" data-id="${id}">${text}</span></${element}>`;
 
     const createContext = (
       metadata = [{ id: "123", type: "Text", key: "my_metadata" }]
@@ -117,7 +131,9 @@ describe("Block", () => {
         0,
         createContext()
       );
-      expect(introBlock.content.title).toEqual("{{ answers['answer1'] }}");
+      expect(introBlock.content.title).toEqual(
+        createPipedFormat("answer1", "answers")
+      );
     });
 
     it("should handle piped values in title while stripping html", () => {
@@ -128,20 +144,22 @@ describe("Block", () => {
         createContext()
       );
 
-      expect(introBlock.content.title).toEqual("{{ answers['answer1'] }}");
+      expect(introBlock.content.title).toEqual(
+        createPipedFormat("answer1", "answers")
+      );
     });
 
     it("should handle piped values in description", () => {
       const introBlock = Block.buildIntroBlock(
         "",
-        createPipeInHtml(),
+        `<ul>${createPipeInHtml({ element: "li" })}<li>Some Value</li</ul>`,
         0,
         createContext()
       );
-
-      expect(introBlock.content.contents[0].description).toEqual(
-        "<strong>{{ answers['answer1'] }}</strong><ul><li>Some Value</li></ul>"
-      );
+      expect(introBlock.content.contents[0].list).toEqual([
+        createPipedFormat("answer1", "answers"),
+        "Some Value"
+      ]);
     });
 
     it("should build a calculated summary page", () => {
@@ -151,7 +169,7 @@ describe("Block", () => {
           '<p>Hi is your total <span data-piped="variable"data-id="1">[Total]</span></p>',
         pageType: "CalculatedSummaryPage",
         totalTitle: "<p>Bye</p>",
-        summaryAnswers: ["1","2","3",]
+        summaryAnswers: ["1", "2", "3"]
       };
       const block = new Block(calculatedPageGraphql, ctx);
       expect(block).toMatchObject({

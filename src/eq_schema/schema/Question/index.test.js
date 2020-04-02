@@ -25,6 +25,19 @@ describe("Question", () => {
       options
     );
 
+  const createPipedFormat = (placeholder, source) => ({
+    text: `{${placeholder}}`,
+    placeholders: [
+      {
+        placeholder,
+        value: {
+          identifier: placeholder,
+          source
+        }
+      }
+    ]
+  });
+
   it("should construct a valid eQ runner question from an author question", () => {
     const question = new Question(createQuestionJSON());
 
@@ -181,7 +194,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
         expect(last(question.answers).guidance.hide_guidance).toBeDefined();
-        expect(last(question.answers).guidance.content).toBeDefined();
+        expect(last(question.answers).guidance.contents).toBeDefined();
       });
       it("should be populated when label and no content", () => {
         const question = new Question(
@@ -194,7 +207,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
         expect(last(question.answers).guidance.hide_guidance).toBeDefined();
-        expect(last(question.answers).guidance.content).toBeUndefined();
+        expect(last(question.answers).guidance.contents).toBeUndefined();
       });
       it("should be populated when no label and content", () => {
         const question = new Question(
@@ -207,7 +220,7 @@ describe("Question", () => {
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeFalsy();
         expect(last(question.answers).guidance.hide_guidance).toBeFalsy();
-        expect(last(question.answers).guidance.content).toBeDefined();
+        expect(last(question.answers).guidance.contents).toBeDefined();
       });
 
       it("should throw an error when no answers on the page", () => {
@@ -566,20 +579,22 @@ describe("Question", () => {
         }),
         createContext()
       );
-
-      expect(question.title).toEqual("{{ answers['answer1'] }}");
+      expect(question.title).toEqual(createPipedFormat("answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
       const question = new Question(
         createQuestionJSON({
-          guidance: `<h2>${createPipe({ id: 123, pipeType: "metadata" })}</h2>`,
-          guidanceEnabled: true
+          guidanceEnabled: true,
+          guidance: `<p>${createPipe({
+            id: 123,
+            pipeType: "metadata"
+          })}</p><p>hello</p>`
         }),
         createContext()
       );
       expect(question.guidance.contents[0]).toEqual({
-        title: "{{ metadata['my_metadata'] }}"
+        description: createPipedFormat("my_metadata", "metadata")
       });
     });
 
@@ -598,13 +613,14 @@ describe("Question", () => {
     it("should handle piped values in description", () => {
       const question = new Question(
         createQuestionJSON({
-          description: `<h2>${createPipe()}</h2>`,
+          description: `${createPipe()}`,
           descriptionEnabled: true
         }),
         createContext()
       );
-
-      expect(question.description).toEqual("<h2>{{ answers['answer1'] }}</h2>");
+      expect(question.description).toEqual(
+        createPipedFormat("answer1", "answers")
+      );
     });
   });
 

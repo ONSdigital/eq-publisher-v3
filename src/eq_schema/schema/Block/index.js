@@ -2,12 +2,14 @@ const { get, isNil } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
+const {
+  wrapContents,
+  reversePipeContent
+} = require("../../../utils/compoundFunctions");
 
 const translateAuthorRouting = require("../../builders/routing2");
-const {
-  getInnerHTMLWithPiping,
-  unescapePiping
-} = require("../../../utils/HTMLUtils");
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+
 const Question = require("../Question");
 
 const pageTypeMappings = {
@@ -17,10 +19,10 @@ const pageTypeMappings = {
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processPipedTitle = ctx =>
-  flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const processPipedText = ctx => flow(convertPipes(ctx), unescapePiping);
+const reversePipe = ctx =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
@@ -45,12 +47,8 @@ class Block {
       type: "Interstitial",
       id: `group${groupId}-introduction`,
       content: {
-        title: processPipedTitle(ctx)(introductionTitle) || "",
-        contents: [
-          {
-            description: processPipedText(ctx)(introductionContent) || ""
-          }
-        ]
+        title: processPipe(ctx)(introductionTitle) || "",
+        contents: reversePipe(ctx)(introductionContent).contents
       }
     };
   }
@@ -63,13 +61,12 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.title = processPipedTitle(ctx)(page.title);
-
+      this.title = processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        title: processPipedTitle(ctx)(page.totalTitle)
+        title: processPipe(ctx)(page.totalTitle)
       };
     }
   }

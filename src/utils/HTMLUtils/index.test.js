@@ -23,9 +23,25 @@ describe("HTMLUtils", () => {
 
   describe("parseContent", () => {
     it("should return undefined if no content supplied", () => {
-      expect(parseContent()("content")).toBeUndefined();
-      expect(parseContent("")("content")).toBeUndefined();
-      expect(parseContent("<p></p>")("content")).toBeUndefined();
+      expect(parseContent()).toBeUndefined();
+      expect(parseContent("")).toBeUndefined();
+      expect(parseContent("<p></p>")).toBeUndefined();
+    });
+
+    it("should correctly handle plain text and object.text", () => {
+      const guidance = {
+        text: "<p>Vivamus sagittis lacus vel augue laoreet</p>"
+      };
+      expect(parseContent(guidance)).toEqual([
+        {
+          description: "Vivamus sagittis lacus vel augue laoreet"
+        }
+      ]);
+      expect(parseContent(guidance.text)).toEqual([
+        {
+          description: "Vivamus sagittis lacus vel augue laoreet"
+        }
+      ]);
     });
 
     it("should correctly parse content into runner-compatible object", () => {
@@ -42,25 +58,23 @@ describe("HTMLUtils", () => {
         </ul>
       `;
 
-      expect(parseContent(guidance)("content")).toEqual({
-        content: [
-          {
-            title: "Vivamus sagittis lacus vel augue laoreet"
-          },
-          {
-            description:
-              "Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula."
-          },
-          {
-            list: [
-              "Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
-              "Aenean eu leo quam.",
-              "Pellentesque ornare sem lacinia quam venenatis vestibulum.",
-              "Vestibulum id ligula porta felis euismod semper."
-            ]
-          }
-        ]
-      });
+      expect(parseContent(guidance)).toEqual([
+        {
+          title: "Vivamus sagittis lacus vel augue laoreet"
+        },
+        {
+          description:
+            "Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula."
+        },
+        {
+          list: [
+            "Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+            "Aenean eu leo quam.",
+            "Pellentesque ornare sem lacinia quam venenatis vestibulum.",
+            "Vestibulum id ligula porta felis euismod semper."
+          ]
+        }
+      ]);
     });
   });
 });

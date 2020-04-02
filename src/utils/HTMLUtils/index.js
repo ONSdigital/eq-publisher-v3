@@ -6,6 +6,8 @@ const isPlainText = elem => typeof elem === "string" && !elem.startsWith("<");
 
 const getInnerHTML = elem => (isPlainText(elem) ? elem : cheerio(elem).html());
 
+const removeDash = elem => replace(/-/g, "_", elem);
+
 const unescapePiping = value =>
   replace(
     /{{([^}}]+)}}/g,
@@ -13,7 +15,17 @@ const unescapePiping = value =>
     value
   );
 
-const getInnerHTMLWithPiping = elem => unescapePiping(getInnerHTML(elem));
+const getInnerHTMLWithPiping = elem => {
+  if (!elem) {
+    return;
+  }
+
+  if (elem.text) {
+    elem.text = unescapePiping(getInnerHTML(elem.text));
+    return elem;
+  }
+  return unescapePiping(getInnerHTML(elem));
+};
 
 const getText = elem => (isPlainText(elem) ? elem : cheerio(elem).text());
 
@@ -39,23 +51,28 @@ const mapElementToObject = elem => {
   }
 };
 
-const parseContent = html => contentType => {
-  const content = cheerio(html)
+const parseContent = html => {
+  if (!html) {
+    return;
+  }
+
+  const text = html.text ? html.text : html;
+  const content = cheerio(text)
     .filter((i, elem) => getInnerHTML(elem) !== "")
     .map((i, elem) => mapElementToObject(elem))
     .toArray();
 
-  if (content.length === 0) {
+  if (!content.length) {
     return;
   }
-
-  return { [contentType]: content };
+  return content;
 };
 
 module.exports = {
   getInnerHTML,
+  getInnerHTMLWithPiping,
   getText,
   parseContent,
-  getInnerHTMLWithPiping,
+  removeDash,
   unescapePiping
 };

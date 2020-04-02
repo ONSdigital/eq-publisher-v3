@@ -1,15 +1,16 @@
 const { find, get, flow, isNil, concat, last } = require("lodash/fp");
 const { set } = require("lodash");
 
-const {
-  parseContent,
-  getInnerHTMLWithPiping,
-  unescapePiping
-} = require("../../../utils/HTMLUtils");
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
-const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
+const {
+  wrapContents,
+  reversePipeContent
+} = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
+
+const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
@@ -18,26 +19,24 @@ const findMutuallyExclusive = flow(
   find(answer => !isNil(get("mutuallyExclusiveOption", answer)))
 );
 
-const processPipedText = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
-
-const processContent = ctx => flow(convertPipes(ctx), parseContent);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const reversePipe = ctx =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-    this.title = processPipedText(ctx)(question.title);
+    this.title = processPipe(ctx)(question.title);
+
     if (question.qCode) {
       this.q_code = question.qCode;
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = processPipedText(ctx)(question.description);
-      this.description = unescapePiping(
-        convertPipes(ctx)(question.description)
-      );
+      this.description = convertPipes(ctx)(question.description);
     }
 
     if (question.guidanceEnabled && question.guidance) {
-      this.guidance = processContent(ctx)(question.guidance)("contents");
+      this.guidance = reversePipe(ctx)(question.guidance);
     }
 
     if (
@@ -47,7 +46,7 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...processContent(ctx)(question.definitionContent)("contents")
+          ...reversePipe(ctx)(question.definitionContent)
         }
       ];
     }
@@ -113,8 +112,7 @@ class Question {
       last(this.answers).guidance = {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
-
-        ...processContent(ctx)(question.additionalInfoContent)("content")
+        ...reversePipe(ctx)(question.additionalInfoContent)
       };
     }
   }

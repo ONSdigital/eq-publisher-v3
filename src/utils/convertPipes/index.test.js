@@ -4,6 +4,39 @@ const getAllAnswers = require("../../utils/convertPipes").getAllAnswers;
 const createPipe = ({ pipeType = "answers", id = 1, text = "foo" } = {}) =>
   `<span data-piped="${pipeType}" data-id="${id}">${text}</span>`;
 
+const createPlaceholders = ({ placeholder, source }, extra) => ({
+  placeholder,
+  value: {
+    identifier: placeholder,
+    source
+  },
+  ...extra
+});
+
+const createTransformation = (
+  { placeholder, source, argument, transform },
+  extra
+) => ({
+  placeholder,
+  transforms: [
+    {
+      arguments: {
+        [argument]: {
+          identifier: placeholder,
+          source
+        },
+        ...extra
+      },
+      transform
+    }
+  ]
+});
+
+const createWrapper = (text, ...args) => ({
+  text,
+  placeholders: [...args]
+});
+
 const createContext = (metadata = []) => ({
   questionnaireJson: {
     metadata,
@@ -15,7 +48,7 @@ const createContext = (metadata = []) => ({
               { id: `1`, type: "Text" },
               { id: `2`, type: "Currency" },
               { id: `3`, type: "DateRange" },
-              { id: `4`, type: "Date" },
+              { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
               { id: `5`, type: "Number" }
             ]
           },
@@ -64,7 +97,13 @@ describe("convertPipes", () => {
     it("should convert relevant elements to pipe format", () => {
       const html = createPipe();
       expect(convertPipes(createContext())(html)).toEqual(
-        "{{ answers['answer1'] }}"
+        createWrapper(
+          "{answer1}",
+          createPlaceholders({
+            placeholder: "answer1",
+            source: "answers"
+          })
+        )
       );
     });
 
@@ -74,7 +113,19 @@ describe("convertPipes", () => {
       const html = `${pipe1}${pipe2}`;
 
       expect(convertPipes(createContext())(html)).toEqual(
-        "{{ answers['answer1'] }}{{ format_currency(answers['answer2'], 'GBP') }}"
+        createWrapper(
+          "{answer1}{answer2}",
+          createPlaceholders({
+            placeholder: "answer1",
+            source: "answers"
+          }),
+          createTransformation({
+            placeholder: "answer2",
+            source: "answers",
+            argument: "number",
+            transform: "format_currency"
+          })
+        )
       );
     });
 
@@ -84,7 +135,19 @@ describe("convertPipes", () => {
       const html = `hello ${pipe1}${pipe2} world`;
 
       expect(convertPipes(createContext())(html)).toEqual(
-        "hello {{ answers['answer1'] }}{{ format_currency(answers['answer2'], 'GBP') }} world"
+        createWrapper(
+          "hello {answer1}{answer2} world",
+          createPlaceholders({
+            placeholder: "answer1",
+            source: "answers"
+          }),
+          createTransformation({
+            placeholder: "answer2",
+            source: "answers",
+            argument: "number",
+            transform: "format_currency"
+          })
+        )
       );
     });
 
@@ -92,28 +155,63 @@ describe("convertPipes", () => {
       it("should format Date Range answers with `format_date`", () => {
         const html = createPipe({ id: "3" });
         expect(convertPipes(createContext())(html)).toEqual(
-          "{{ answers['answer3'] | format_date }}"
+          createWrapper(
+            "{answer3}",
+            createTransformation({
+              placeholder: "answer3",
+              source: "answers",
+              argument: "date_to_format",
+              transform: "format_date"
+            })
+          )
         );
       });
 
       it("should format Date answers with `format_date`", () => {
         const html = createPipe({ id: "4" });
         expect(convertPipes(createContext())(html)).toEqual(
-          "{{ answers['answer4'] | format_date }}"
+          createWrapper(
+            "{answer4}",
+            createTransformation(
+              {
+                placeholder: "answer4",
+                source: "answers",
+                argument: "date_to_format",
+                transform: "format_date"
+              },
+              { date_format: "d MMMM yyyy" }
+            )
+          )
         );
       });
 
       it("should format Currency answers with `format_currency`", () => {
         const html = createPipe({ id: "2" });
         expect(convertPipes(createContext())(html)).toEqual(
-          "{{ format_currency(answers['answer2'], 'GBP') }}"
+          createWrapper(
+            "{answer2}",
+            createTransformation({
+              placeholder: "answer2",
+              source: "answers",
+              argument: "number",
+              transform: "format_currency"
+            })
+          )
         );
       });
 
       it("should format Number answers with `format_number`", () => {
         const html = createPipe({ id: "5" });
         expect(convertPipes(createContext())(html)).toEqual(
-          "{{ answers['answer5'] | format_number }}"
+          createWrapper(
+            "{answer5}",
+            createTransformation({
+              placeholder: "answer5",
+              source: "answers",
+              argument: "number",
+              transform: "format_number"
+            })
+          )
         );
       });
     });
@@ -124,7 +222,13 @@ describe("convertPipes", () => {
       const html = createPipe({ id: "123", pipeType: "metadata" });
       const metadata = [{ id: "123", key: "my_metadata", type: "Text" }];
       expect(convertPipes(createContext(metadata))(html)).toEqual(
-        "{{ metadata['my_metadata'] }}"
+        createWrapper(
+          `{${metadata[0].key}}`,
+          createPlaceholders({
+            placeholder: metadata[0].key,
+            source: "metadata"
+          })
+        )
       );
     });
 
@@ -138,8 +242,20 @@ describe("convertPipes", () => {
       it("should format date metadata as date", () => {
         const html = createPipe({ id: "123", pipeType: "metadata" });
         const metadata = [{ id: "123", key: "my_metadata", type: "Date" }];
+
         expect(convertPipes(createContext(metadata))(html)).toEqual(
-          "{{ metadata['my_metadata'] | format_date }}"
+          createWrapper(
+            "{my_metadata}",
+            createTransformation(
+              {
+                placeholder: "my_metadata",
+                source: "metadata",
+                argument: "date_to_format",
+                transform: "format_date"
+              },
+              { date_format: "d MMMM yyyy" }
+            )
+          )
         );
       });
     });

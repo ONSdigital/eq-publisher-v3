@@ -2,7 +2,7 @@
   "name": "eq-publisher-v3",
   "version": "1.0.0",
   "description": "A NodeJS application for changing Author-compatible schemas into Runner-compatible schemas.",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "repository": "git@github.com:ONSdigital/eq-publisher-v3.git",
   "author": "Eq Author, Survey Data Collection, Digital Services & Technology, Office for National Statistics",
   "license": "MIT",

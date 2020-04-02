@@ -8,6 +8,7 @@ class Section {
     if (ctx.questionnaireJson.navigation) {
       this.title = getText(section.title);
     }
+
     this.groups = this.buildGroups(section, ctx);
   }
 

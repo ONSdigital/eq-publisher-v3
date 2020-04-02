@@ -1,26 +1,21 @@
 const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
 const {
-  parseContent,
-  getInnerHTMLWithPiping
-} = require("../../../utils/HTMLUtils");
+  wrapContents,
+  reversePipeContent
+} = require("../../../utils/compoundFunctions");
 
-const processContent = ctx => flow(convertPipes(ctx), parseContent);
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
-const getSimpleText = (content, ctx) =>
-  flow(convertPipes(ctx), getInnerHTMLWithPiping)(content);
+const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const getComplexText = (content, ctx) => {
-  const result = processContent(ctx)(content)("content");
-  if (result) {
-    return result.content;
-  }
-  return undefined;
-};
+const reverseContent = ctx =>
+  flow(wrapContents("content"), reversePipeContent(ctx));
 
-module.exports = class Introduction {
+class Introduction {
   constructor(
     {
+      title,
       description,
       secondaryTitle,
       secondaryDescription,
@@ -30,41 +25,52 @@ module.exports = class Introduction {
     },
     ctx
   ) {
-    this.type = "Introduction";
     this.id = "introduction-block";
-
+    this.type = "Introduction";
     this.primary_content = [
       {
         id: "primary",
-        contents: getComplexText(description, ctx)
+        title: this.buildTitle(title, ctx),
+        contents: this.buildContents(description, ctx)
       }
     ];
-
     this.preview_content = {
       id: "preview",
-      title: getSimpleText(secondaryTitle, ctx),
-      contents: getComplexText(secondaryDescription, ctx),
+      title: this.buildTitle(secondaryTitle, ctx),
+      contents: this.buildContents(secondaryDescription, ctx),
       questions: collapsibles
         .filter(collapsible => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
-          question: title,
-          contents: getComplexText(description, ctx)
+          question: this.buildTitle(title, ctx),
+          contents: this.buildContents(description, ctx)
         }))
     };
-    let tertiaryContent;
-    if (tertiaryDescription) {
-      tertiaryContent = getComplexText(tertiaryDescription, ctx)[0];
-    }
+
     this.secondary_content = [
       {
         id: "secondary-content",
         contents: [
           {
-            title: getSimpleText(tertiaryTitle, ctx),
-            ...tertiaryContent
+            title: this.buildTitle(tertiaryTitle, ctx)
           }
         ]
       }
     ];
+    if (tertiaryDescription) {
+      const mergeContents = [
+        ...this.secondary_content[0].contents,
+        ...this.buildContents(tertiaryDescription, ctx)
+      ];
+      this.secondary_content[0].contents = mergeContents;
+    }
   }
-};
+
+  buildContents(description, ctx) {
+    return reverseContent(ctx)(description).content;
+  }
+  buildTitle(title, ctx) {
+    return processPipe(ctx)(title);
+  }
+}
+
+module.exports = Introduction;
