@@ -90,13 +90,13 @@ class Question {
       delete this.answers[1].label;
     } else if (question.totalValidation && question.totalValidation.enabled) {
       this.type = "Calculated";
-      this.answers = this.buildAnswers(question.answers);
+      this.answers = this.buildAnswers(question.answers, ctx);
       this.calculations = [
         this.buildCalculation(question.totalValidation, question.answers)
       ];
     } else {
       this.type = "General";
-      this.answers = this.buildAnswers(question.answers);
+      this.answers = this.buildAnswers(question.answers, ctx);
     }
 
     if (
@@ -117,8 +117,8 @@ class Question {
     }
   }
 
-  buildAnswers(answers) {
-    return answers.map(answer => new Answer(answer));
+  buildAnswers(answers, ctx) {
+    return answers.map(answer => new Answer(answer, ctx));
   }
 
   buildDateRangeAnswers(answer) {
@@ -146,7 +146,7 @@ class Question {
     return [dateFrom, dateTo];
   }
 
-  buildMutuallyExclusiveAnswers(mutuallyExclusive) {
+  buildMutuallyExclusiveAnswers(mutuallyExclusive, ctx) {
     Object.assign(mutuallyExclusive.properties, { required: false });
     const mutuallyExclusiveAnswer = new Answer({
       ...mutuallyExclusive,
@@ -156,7 +156,7 @@ class Question {
     });
 
     return concat(
-      this.buildAnswers([mutuallyExclusive]),
+      this.buildAnswers([mutuallyExclusive], ctx),
       mutuallyExclusiveAnswer
     );
   }

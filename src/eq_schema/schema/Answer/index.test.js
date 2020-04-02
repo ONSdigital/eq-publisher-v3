@@ -16,22 +16,33 @@ const Answer = require(".");
 const Question = require("../Question");
 
 describe("Answer", () => {
-  const createAnswerJSON = answer =>
-    Object.assign(
-      {
-        id: 1,
-        description: "This is a description",
-        guidance: null,
-        qCode: "51",
-        label: "Number of male employees working more than 30 hours per week",
-        type: NUMBER,
-        properties: {
-          required: true,
-          decimals: 2
+  const createAnswerJSON = answer => ({
+    id: 1,
+    description: "This is a description",
+    guidance: null,
+    qCode: "51",
+    label: "Number of male employees working more than 30 hours per week",
+    type: NUMBER,
+    properties: {
+      required: true,
+      decimals: 2
+    },
+    ...answer
+  });
+
+  const createContextJSON = () => ({
+    questionnaireJson: {
+      metadata: [
+        {
+          id: "test_ref",
+          key: "ru_name",
+          alias: "Ru Name",
+          type: "Text",
+          textValue: "ESSENTIAL ENTERPRISE LTD."
         }
-      },
-      answer
-    );
+      ]
+    }
+  });
 
   it("should generate a valid eQ answer from an author answer", () => {
     const answer = new Answer(createAnswerJSON({ type: NUMBER }));
@@ -192,7 +203,7 @@ describe("Answer", () => {
               }
             })
           );
-          expect(answer.min_value).toMatchObject({
+          expect(answer.minimum).toMatchObject({
             value: 0,
             exclusive: true
           });
@@ -220,7 +231,7 @@ describe("Answer", () => {
               }
             })
           );
-          expect(answer.max_value).toMatchObject({
+          expect(answer.maximum).toMatchObject({
             value: 5,
             exclusive: true
           });
@@ -257,9 +268,7 @@ describe("Answer", () => {
                 inclusive: true,
                 enabled: true,
                 entityType: "PreviousAnswer",
-                previousAnswer: {
-                  id: "3"
-                }
+                previousAnswer: "3"
               },
               maxValue: {
                 id: "1",
@@ -269,8 +278,9 @@ describe("Answer", () => {
             }
           })
         );
-        expect(answer.min_value).toMatchObject({
-          answer_id: "answer3"
+        expect(answer.minimum).toMatchObject({
+          value: { source: "answers", identifier: "answer3" },
+          exclusive: false
         });
       });
 
@@ -287,15 +297,14 @@ describe("Answer", () => {
                 inclusive: true,
                 enabled: true,
                 entityType: "PreviousAnswer",
-                previousAnswer: {
-                  id: "3"
-                }
+                previousAnswer: "3"
               }
             }
           })
         );
-        expect(answer.max_value).toMatchObject({
-          answer_id: "answer3"
+        expect(answer.maximum).toMatchObject({
+          value: { source: "answers", identifier: "answer3" },
+          exclusive: false
         });
       });
 
@@ -388,9 +397,7 @@ describe("Answer", () => {
                 enabled: true,
                 entityType: "PreviousAnswer",
                 custom: null,
-                previousAnswer: {
-                  id: "3"
-                },
+                previousAnswer: "3",
                 offset: {
                   value: 4,
                   unit: "Days"
@@ -405,7 +412,10 @@ describe("Answer", () => {
         );
 
         expect(answer.minimum).toMatchObject({
-          answer_id: "answer3"
+          value: { source: "answers", identifier: "answer3" },
+          offset_by: {
+            days: -4
+          }
         });
       });
 
@@ -420,9 +430,7 @@ describe("Answer", () => {
                 entityType: "Metadata",
                 custom: null,
                 previousAnswer: null,
-                metadata: {
-                  key: "test_ref"
-                },
+                metadata: "test_ref",
                 offset: {
                   value: 4,
                   unit: "Days"
@@ -433,11 +441,14 @@ describe("Answer", () => {
                 enabled: false
               }
             }
-          })
+          }),
+          createContextJSON()
         );
-
         expect(answer.minimum).toMatchObject({
-          meta: "test_ref"
+          value: {
+            source: "metadata",
+            identifier: "ru_name"
+          }
         });
       });
 
@@ -570,9 +581,7 @@ describe("Answer", () => {
                 enabled: true,
                 entityType: "PreviousAnswer",
                 custom: null,
-                previousAnswer: {
-                  id: "3"
-                },
+                previousAnswer: "3",
                 offset: {
                   value: 4,
                   unit: "Days"
@@ -585,9 +594,14 @@ describe("Answer", () => {
             }
           })
         );
-
         expect(answer.maximum).toMatchObject({
-          answer_id: "answer3"
+          value: {
+            source: "answers",
+            identifier: "answer3"
+          },
+          offset_by: {
+            days: -4
+          }
         });
       });
 
@@ -630,9 +644,7 @@ describe("Answer", () => {
                 entityType: "Metadata",
                 custom: null,
                 previousAnswer: null,
-                metadata: {
-                  key: "test_ref"
-                },
+                metadata: "test_ref",
                 offset: {
                   value: 4,
                   unit: "Days"
@@ -643,11 +655,15 @@ describe("Answer", () => {
                 enabled: false
               }
             }
-          })
+          }),
+          createContextJSON()
         );
 
         expect(answer.maximum).toMatchObject({
-          meta: "test_ref"
+          value: {
+            source: "metadata",
+            identifier: "ru_name"
+          }
         });
       });
 
