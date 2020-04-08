@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "node ./src",
+    "start": "node ./src/server.js",
     "develop": "nodemon yarn start",
     "lint": "eslint .",
     "test": "jest --watch",
