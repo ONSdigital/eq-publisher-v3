@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
-const { unitConversion } = require("./unitTypes");
+const { unitConversion } = require("../../constants/units");
 
 const {
   FORMAT_CURRENCY,
