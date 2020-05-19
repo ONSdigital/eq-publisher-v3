@@ -2,6 +2,7 @@ const formatPlaceholder = "format_";
 const FORMAT_CURRENCY = `${formatPlaceholder}currency`;
 const FORMAT_NUMBER = `${formatPlaceholder}number`;
 const FORMAT_DATE = `${formatPlaceholder}date`;
+const FORMAT_UNIT = `${formatPlaceholder}unit`;
 
 // Transformation arguments
 const DATE_TRANSFORMATION = "date_to_format";
@@ -13,5 +14,6 @@ module.exports = {
   FORMAT_NUMBER,
   FORMAT_DATE,
   DATE_TRANSFORMATION,
-  NUMBER_TRANSFORMATION
+  NUMBER_TRANSFORMATION,
+  FORMAT_UNIT,
 };

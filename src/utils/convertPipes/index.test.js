@@ -8,9 +8,9 @@ const createPlaceholders = ({ placeholder, source }, extra) => ({
   placeholder,
   value: {
     identifier: placeholder,
-    source
+    source,
   },
-  ...extra
+  ...extra,
 });
 
 const createTransformation = (
@@ -23,18 +23,18 @@ const createTransformation = (
       arguments: {
         [argument]: {
           identifier: placeholder,
-          source
+          source,
         },
-        ...extra
+        ...extra,
       },
-      transform
-    }
-  ]
+      transform,
+    },
+  ],
 });
 
 const createWrapper = (text, ...args) => ({
   text,
-  placeholders: [...args]
+  placeholders: [...args],
 });
 
 const createContext = (metadata = []) => ({
@@ -49,14 +49,15 @@ const createContext = (metadata = []) => ({
               { id: `2`, type: "Currency" },
               { id: `3`, type: "DateRange" },
               { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
-              { id: `5`, type: "Number" }
-            ]
+              { id: `5`, type: "Number" },
+              { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
+            ],
           },
-          {}
-        ]
-      }
-    ]
-  }
+          {},
+        ],
+      },
+    ],
+  },
 });
 
 describe("getAllAnswers", () => {
@@ -101,7 +102,7 @@ describe("convertPipes", () => {
           "{answer1}",
           createPlaceholders({
             placeholder: "answer1",
-            source: "answers"
+            source: "answers",
           })
         )
       );
@@ -117,13 +118,13 @@ describe("convertPipes", () => {
           "{answer1}{answer2}",
           createPlaceholders({
             placeholder: "answer1",
-            source: "answers"
+            source: "answers",
           }),
           createTransformation({
             placeholder: "answer2",
             source: "answers",
             argument: "number",
-            transform: "format_currency"
+            transform: "format_currency",
           })
         )
       );
@@ -139,13 +140,13 @@ describe("convertPipes", () => {
           "hello {answer1}{answer2} world",
           createPlaceholders({
             placeholder: "answer1",
-            source: "answers"
+            source: "answers",
           }),
           createTransformation({
             placeholder: "answer2",
             source: "answers",
             argument: "number",
-            transform: "format_currency"
+            transform: "format_currency",
           })
         )
       );
@@ -161,7 +162,7 @@ describe("convertPipes", () => {
               placeholder: "answer3",
               source: "answers",
               argument: "date_to_format",
-              transform: "format_date"
+              transform: "format_date",
             })
           )
         );
@@ -177,7 +178,7 @@ describe("convertPipes", () => {
                 placeholder: "answer4",
                 source: "answers",
                 argument: "date_to_format",
-                transform: "format_date"
+                transform: "format_date",
               },
               { date_format: "d MMMM yyyy" }
             )
@@ -194,7 +195,7 @@ describe("convertPipes", () => {
               placeholder: "answer2",
               source: "answers",
               argument: "number",
-              transform: "format_currency"
+              transform: "format_currency",
             })
           )
         );
@@ -209,10 +210,28 @@ describe("convertPipes", () => {
               placeholder: "answer5",
               source: "answers",
               argument: "number",
-              transform: "format_number"
+              transform: "format_number",
             })
           )
         );
+      });
+
+      it("should format Unit answers with `unit`", () => {
+        const html = createPipe({ id: "6" });
+        const runnerJSON = createWrapper(
+          "{answer6}",
+          createTransformation({
+            placeholder: "answer6",
+            source: "answers",
+            argument: "number",
+            transform: "format_unit",
+          })
+        );
+
+        runnerJSON.placeholders[0].transforms[0].arguments.unit =
+          "length-kilometer";
+
+        expect(convertPipes(createContext())(html)).toEqual(runnerJSON);
       });
     });
   });
@@ -226,7 +245,7 @@ describe("convertPipes", () => {
           `{${metadata[0].key}}`,
           createPlaceholders({
             placeholder: metadata[0].key,
-            source: "metadata"
+            source: "metadata",
           })
         )
       );
@@ -251,7 +270,7 @@ describe("convertPipes", () => {
                 placeholder: "my_metadata",
                 source: "metadata",
                 argument: "date_to_format",
-                transform: "format_date"
+                transform: "format_date",
               },
               { date_format: "d MMMM yyyy" }
             )

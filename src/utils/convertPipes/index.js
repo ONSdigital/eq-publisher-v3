@@ -1,55 +1,58 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
+const { unitConversion } = require("../../constants/units");
 
 const {
   FORMAT_CURRENCY,
   FORMAT_DATE,
   FORMAT_NUMBER,
   NUMBER_TRANSFORMATION,
-  DATE_TRANSFORMATION
+  DATE_TRANSFORMATION,
+  FORMAT_UNIT,
 } = require("../../constants/piping");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
 
-const isPipeableType = answer => {
+const isPipeableType = (answer) => {
   const notPipeableAnswerTypes = ["TextArea", "Radio", "CheckBox"];
   return !includes(notPipeableAnswerTypes, answer.type);
 };
 
-const getAllAnswers = questionnaire =>
-  flatMap(questionnaire.sections, section =>
-    compact(flatMap(section.pages, page => page.answers))
+const getAllAnswers = (questionnaire) =>
+  flatMap(questionnaire.sections, (section) =>
+    compact(flatMap(section.pages, (page) => page.answers))
   );
 
 const getAnswer = (ctx, answerId) =>
   getAllAnswers(ctx.questionnaireJson)
-    .filter(answer => isPipeableType(answer))
-    .find(answer => answer.id === answerId);
+    .filter((answer) => isPipeableType(answer))
+    .find((answer) => answer.id === answerId);
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
   "mm/yyyy": "MMMM yyyy",
-  yyyy: "yyyy"
+  yyyy: "yyyy",
 };
 
 const TRANSFORM_MAP = {
   Currency: { format: FORMAT_CURRENCY, transformKey: NUMBER_TRANSFORMATION },
   Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
-  DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION }
+  DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
+  Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
 const transform = (AnswerType, value) => {
-  const structureOptions = (source, identifier, dateFormat) => {
+  const structureOptions = (source, identifier, dateFormat, unitType) => {
     const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
 
     const options = {
       [transformKey]: {
         source,
-        identifier
-      }
+        identifier,
+      },
     };
 
     if (AnswerType === "Date") {
@@ -60,13 +63,18 @@ const transform = (AnswerType, value) => {
 
       options.date_format = format;
     }
+
+    if (AnswerType === "Unit") {
+      options.unit = unitConversion[unitType];
+    }
+
     return options;
   };
 
   const structure = {
     value,
     format: TRANSFORM_MAP[AnswerType].format,
-    options: structureOptions
+    options: structureOptions,
   };
 
   return structure;
@@ -76,30 +84,31 @@ const FILTER_MAP = {
   Currency: (format, value) => transform(format, value),
   Date: (format, value) => transform(format, value),
   DateRange: (format, value) => transform(format, value),
-  Number: (format, value) => transform(format, value)
+  Number: (format, value) => transform(format, value),
+  Unit: (format, value) => transform(format, value),
 };
 
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id }, ctx) => getAnswer(ctx, id.toString()),
     render: ({ id }) => `answer${id}`,
-    getType: ({ type }) => type
+    getType: ({ type }) => type,
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
     render: ({ key }) => `${key}`,
-    getType: ({ type }) => type
+    getType: ({ type }) => type,
   },
   variable: {
-    render: () => `%(total)s`
-  }
+    render: () => `%(total)s`,
+  },
 };
 
-const parseHTML = html => {
+const parseHTML = (html) => {
   return cheerio.load(html)("body");
 };
 
-const getPipedData = store => (element, ctx) => {
+const getPipedData = (store) => (element, ctx) => {
   const { piped, ...elementData } = element.data();
   const pipeConfig = PIPE_TYPES[piped];
 
@@ -129,9 +138,10 @@ const getPipedData = store => (element, ctx) => {
   let placeholder = {};
 
   if (transformed) {
-    let dateFormat;
+    let dateFormat, unitType;
     if (entity.properties) {
       dateFormat = entity.properties.format;
+      unitType = entity.properties.unit;
     }
 
     const { format, value, options } = transformed(pipedType, output);
@@ -143,18 +153,19 @@ const getPipedData = store => (element, ctx) => {
           arguments: options(
             piped,
             entity.key || `answer${entity.id}`,
-            dateFormat
-          )
-        }
-      ]
+            dateFormat,
+            unitType
+          ),
+        },
+      ],
     };
   } else {
     placeholder = {
       placeholder: removeDash(placeHolderText),
       value: {
         source: piped,
-        identifier: entity.key || `answer${entity.id}`
-      }
+        identifier: entity.key || `answer${entity.id}`,
+      },
     };
   }
 
@@ -163,14 +174,14 @@ const getPipedData = store => (element, ctx) => {
   return `{${removeDash(placeHolderText)}}`;
 };
 
-const convertPipes = ctx => html => {
+const convertPipes = (ctx) => (html) => {
   if (!html) {
     return html;
   }
 
   const store = {
     text: "",
-    placeholders: []
+    placeholders: [],
   };
 
   const $ = parseHTML(html);
