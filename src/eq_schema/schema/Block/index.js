@@ -8,6 +8,7 @@ const {
 } = require("../../../utils/compoundFunctions");
 
 const translateAuthorRouting = require("../../builders/routing2");
+const translateAuthorSkipconditions = require("../../builders/skipConditions");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
@@ -39,6 +40,9 @@ class Block {
         groupId,
         ctx
       );
+    }
+    if (page.skipConditions) {
+      this.skip_conditions = translateAuthorSkipconditions(page.skipConditions, ctx);
     }
   }
 

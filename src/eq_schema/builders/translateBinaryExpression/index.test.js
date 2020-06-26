@@ -1,4 +1,4 @@
-const { questionnaireJson } = require("../basicQuestionnaireJSON");
+const { questionnaireJson } = require("./basicQuestionnaireJSON");
 
 const translateBinaryExpression = require(".");
 
