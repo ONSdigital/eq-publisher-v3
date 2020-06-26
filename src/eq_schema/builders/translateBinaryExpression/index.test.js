@@ -40,7 +40,7 @@ describe("Should build a runner representation of a binary expression", () => {
 
       expect(runnerExpression).toMatchObject({
         id: "answer1",
-        condition: "contains any",
+        condition: "equals any",
         values: ["red"]
       });
     });
@@ -65,7 +65,7 @@ describe("Should build a runner representation of a binary expression", () => {
       });
       expect(runnerExpression).toMatchObject({
         id: "answer1",
-        condition: "contains any",
+        condition: "equals any",
         values: ["red", "white"]
       });
     });
