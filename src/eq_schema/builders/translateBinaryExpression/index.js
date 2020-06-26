@@ -1,4 +1,4 @@
-const conditionConverter = require("../../../../utils/convertRoutingConditions");
+const conditionConverter = require("../../../utils/convertRoutingConditions");
 const { flatMap, filter } = require("lodash");
 
 const authorConditions = {
