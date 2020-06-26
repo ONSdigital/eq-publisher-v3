@@ -73,7 +73,7 @@ describe("Routing2", () => {
         groupId: "group1",
         when: [
           {
-            condition: "contains any",
+            condition: "equals any",
             id: "answer2",
             values: ["red", "white"]
           }
@@ -100,7 +100,7 @@ describe("Routing2", () => {
           when: [
             {
               id: "answer2",
-              condition: "contains any",
+              condition: "equals any",
               values: ["red", "white"]
             }
           ]
@@ -176,7 +176,7 @@ describe("Routing2", () => {
           when: [
             {
               id: "answer1",
-              condition: "contains any",
+              condition: "equals any",
               values: ["red", "white"]
             }
           ]
@@ -188,7 +188,7 @@ describe("Routing2", () => {
           when: [
             {
               id: "answer2",
-              condition: "contains any",
+              condition: "equals any",
               values: ["red", "white"]
             }
           ]

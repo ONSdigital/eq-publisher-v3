@@ -56,7 +56,7 @@ describe("skipConditions", () => {
         when: [
           {
             id: "answer2",
-            condition: "contains any",
+            condition: "equals any",
             values: ["red", "white"],
           },
         ],
