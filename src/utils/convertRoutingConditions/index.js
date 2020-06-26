@@ -8,7 +8,7 @@ const routingConditionConversions = {
   AllOf: "contains all",
   AnyOf: "contains any",
   Unanswered: "not set",
-  OneOf: "contains any"
+  OneOf: "equals any"
 };
 
 const conditionConversion = authorCondition => {
