@@ -122,10 +122,14 @@ class Answer {
       return;
     }
 
-    const comparator = Answer.buildComparator(validationRule, ctx);
+    let comparator = Answer.buildComparator(validationRule, ctx);
 
     if (isNil(comparator)) {
       return;
+    }
+    
+    if(validationRule.entityType === "Custom" && validationRule.custom) {
+      comparator = { value: validationRule.custom.substring(0,10) }
     }
 
     const { offset, relativePosition } = validationRule;
