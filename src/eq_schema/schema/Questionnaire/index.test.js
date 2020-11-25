@@ -231,6 +231,10 @@ describe("Questionnaire", () => {
           type: "Text"
         },
         {
+          key: "example_optional_text",
+          type: "Text_Optional",
+        },
+        {
           key: "example_region",
           type: "Region"
         },
@@ -261,6 +265,10 @@ describe("Questionnaire", () => {
       {
         name: "example_text",
         type: "string"
+      },
+      {
+        name: "example_optional_text",
+        type: "optional_string",
       },
       {
         name: "example_region",

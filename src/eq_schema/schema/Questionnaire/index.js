@@ -85,11 +85,22 @@ class Questionnaire {
   }
 
   buildMetadata(metadata) {
+    const getRunnerType = type => {
+      switch (type) {
+        case "Date":
+          return "date";
+        case "Text_Optional":
+          return "optional_string";
+        default:
+          return "string";
+      }
+    };
+
     const userMetadata = metadata
       .filter(({ key }) => !DEFAULT_METADATA_NAMES.includes(key))
       .map(({ key, type }) => ({
         name: key,
-        type: type === "Date" ? "date" : "string"
+        type: getRunnerType(type),
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
