@@ -27,7 +27,12 @@ describe("Questionnaire", () => {
           {
             id: "1",
             title: "Section",
-            pages: []
+            folders: [
+              {
+                id: "f1",
+                pages: [],
+              }
+            ],
           }
         ],
         metadata: [],
@@ -110,14 +115,24 @@ describe("Questionnaire", () => {
           {
             id: "2",
             title: "Section number 2",
-            pages: []
+            folders: [
+              {
+                id: "f1",
+                pages: [],
+              },
+            ],
           },
           {
             id: "3",
             title: "Section number 3",
-            pages: []
-          }
-        ]
+            folders: [
+              {
+                id: "f2",
+                pages: [],
+              },
+            ],
+          },
+        ],
       })
     );
 
@@ -144,16 +159,27 @@ describe("Questionnaire", () => {
           {
             id: "2",
             title: "<p>Section <em>number</em> 2</p>",
-            pages: []
+            folders: [
+              {
+                id: "f1",
+                pages: [],
+              },
+            ],
           },
           {
             id: "3",
             title: "<p>Section <em>number</em> 3</p>",
-            pages: []
-          }
-        ]
+            folders: [
+              {
+                id: "f2",
+                pages: [],
+              },
+            ],
+          },
+        ],
       })
     );
+
 
     expect(questionnaire).toMatchObject({
       sections: [
