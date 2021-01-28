@@ -1,20 +1,21 @@
-const { isEmpty, reject, flatten } = require("lodash");
-
+const Block = require("../Block");
+const { isEmpty, reject, flatten, uniqWith, isEqual } = require("lodash");
 const {
-  buildAuthorConfirmationQuestion
+  buildAuthorConfirmationQuestion,
 } = require("../../builders/confirmationPage/ConfirmationPage");
 
-const Block = require("../Block");
-
 class Group {
-  constructor(title, section, ctx) {
-    this.id = `group${section.id}`;
+  constructor(title, folder, ctx) {
+    this.id = `group${folder.id}`;
     this.title = ctx.questionnaireJson.navigation ? title : "";
-    this.blocks = this.buildBlocks(section, ctx);
+    this.blocks = this.buildBlocks(folder, ctx);
 
     if (!isEmpty(ctx.routingGotos)) {
       this.filterContext(this.id, ctx);
-      const skipConditions = this.buildSkipConditions(this.id, ctx);
+      const skipConditions = uniqWith(
+        this.buildSkipConditions(this.id, ctx),
+        isEqual
+      );
 
       if (!isEmpty(skipConditions)) {
         this.skip_conditions = skipConditions;
@@ -32,37 +33,29 @@ class Group {
   buildSkipConditions(currentId, ctx) {
     return reject(ctx.routingGotos, goto => goto.groupId === currentId).map(
       ({ when }) => ({
-        when
+        when,
       })
     );
   }
 
-  buildBlocks(section, ctx) {
-    const blocks = flatten(
-      section.pages.map(page => {
-        const block = new Block(page, section.id, ctx);
+  buildBlocks(folder, ctx) {
+    return flatten(
+      folder.pages.map(page => {
+        const block = new Block(page, folder.id, ctx);
         if (page.confirmation) {
           return [
             block,
-            buildAuthorConfirmationQuestion(page, section.id, page.routing, ctx)
+            buildAuthorConfirmationQuestion(
+              page,
+              folder.id,
+              page.routing,
+              ctx
+            ),
           ];
         }
         return block;
       })
     );
-
-    if (!section.introductionTitle || !section.introductionContent) {
-      return blocks;
-    }
-    return [
-      Block.buildIntroBlock(
-        section.introductionTitle,
-        section.introductionContent,
-        section.id,
-        ctx
-      ),
-      ...blocks
-    ];
   }
 }
 

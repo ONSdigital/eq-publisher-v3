@@ -42,19 +42,23 @@ const createContext = (metadata = []) => ({
     metadata,
     sections: [
       {
-        pages: [
+        folders: [
           {
-            answers: [
-              { id: `1`, type: "Text" },
-              { id: `2`, type: "Currency" },
-              { id: `3`, type: "DateRange" },
-              { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
-              { id: `5`, type: "Number" },
-              { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
+            pages: [
+              {
+                answers: [
+                  { id: `1`, type: "Text" },
+                  { id: `2`, type: "Currency" },
+                  { id: `3`, type: "DateRange" },
+                  { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
+                  { id: `5`, type: "Number" },
+                  { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
+                ],
+              },
+              {},
             ],
-          },
-          {},
-        ],
+          }
+        ]
       },
     ],
   },
@@ -63,7 +67,7 @@ const createContext = (metadata = []) => ({
 describe("getAllAnswers", () => {
   it("should retrieve all answers when one page is empty", () => {
     expect(getAllAnswers(createContext().questionnaireJson)).toEqual(
-      createContext().questionnaireJson.sections[0].pages[0].answers
+      createContext().questionnaireJson.sections[0].folders[0].pages[0].answers
     );
   });
 });

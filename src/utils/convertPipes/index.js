@@ -20,9 +20,11 @@ const isPipeableType = (answer) => {
   return !includes(notPipeableAnswerTypes, answer.type);
 };
 
-const getAllAnswers = (questionnaire) =>
+const getAllAnswers = questionnaire =>
   flatMap(questionnaire.sections, (section) =>
-    compact(flatMap(section.pages, (page) => page.answers))
+    flatMap(section.folders, folder =>
+      compact(flatMap(folder.pages, (page) => page.answers))
+    )
   );
 
 const getAnswer = (ctx, answerId) =>
