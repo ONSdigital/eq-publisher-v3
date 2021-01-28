@@ -41,12 +41,7 @@ const getNextPageDestination = (pageId, ctx) => {
         ? "summary-group"
         : "confirmation-group",
     };
-  } else if (currentPage.sectionId !== nextPage.sectionId) {
-    return { group: `group${nextPage.folderId}` };
-  } else if (
-    currentPage.folderId !== nextPage.folderId &&
-    nextPage.folderEnabled
-  ) {
+  } else if (currentPage.sectionId !== nextPage.sectionId || (currentPage.folderId !== nextPage.folderId && nextPage.folderEnabled)) {
     return { group: `group${nextPage.folderId}` };
   } else {
     return { block: `block${nextPage.id}` };
