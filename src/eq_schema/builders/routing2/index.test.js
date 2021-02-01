@@ -1,5 +1,5 @@
 const translateAuthorRouting = require("./");
-const { questionnaireJson } = require("./basicQuestionnaireJSON");
+const { questionnaireJson } = require("../basicQuestionnaireJSON");
 const { AND, OR } = require("../../../constants/routingOperators");
 
 describe("Routing2", () => {

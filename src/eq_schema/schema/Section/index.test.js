@@ -7,10 +7,15 @@ describe("Section", () => {
       {
         id: "1",
         title: "Section 1",
-        pages: [
+        folders: [
           {
-            id: "2",
-            answers: []
+            id: "folder-1",
+            pages: [
+              {
+                id: "2",
+                answers: []
+              }
+            ]
           }
         ]
       },
@@ -30,8 +35,8 @@ describe("Section", () => {
       title: "Section 1",
       groups: [
         {
-          id: "group1",
-          title: "Section 1",
+          id: "groupfolder-1",
+          title: "",
           blocks: [expect.any(Block)]
         }
       ]
@@ -48,11 +53,66 @@ describe("Section", () => {
       id: "section1",
       groups: [
         {
-          id: "group1",
+          id: "groupfolder-1",
           title: "",
           blocks: [expect.any(Block)]
         }
       ]
+    });
+  });
+
+  describe("mergeDisabledFolders", () => {
+    let sectionJSON;
+    beforeEach(() => {
+      sectionJSON = createSectionJSON();
+    });
+
+    it("should merge consecutive disabled folders together", () => {
+      sectionJSON.folders.push(sectionJSON.folders[0]);
+      const section = new Section(sectionJSON, createCtx());
+
+      expect(section.groups).toHaveLength(1);
+    });
+
+    it("shouldn't merge enabled folders with previous disabled folder", () => {
+      sectionJSON.folders.push({
+        ...sectionJSON.folders[0],
+        enabled: true,
+      });
+      const section = new Section(sectionJSON, createCtx());
+
+      expect(section.groups).toHaveLength(2);
+    });
+
+    it("shouldn't merge disabled folders with previous enabled folder", () => {
+      sectionJSON.folders.push({ ...sectionJSON.folders[0] });
+      sectionJSON.folders[0].enabled = true;
+      const section = new Section(sectionJSON, createCtx());
+
+      expect(section.groups).toHaveLength(2);
+    });
+  });
+
+  describe("Section introduction", () => {
+    it("should add introduction content to first group if present", () => {
+      const sectionJSON = createSectionJSON();
+      const title = "Beware the Jabberwock!";
+      const description = "The jaws that bite! The claws that snatch!";
+      sectionJSON.introductionTitle = title;
+      sectionJSON.introductionContent = `<p>${description}</p>`;
+
+      const section = new Section(sectionJSON, createCtx());
+      const introBlock = section.groups[0].blocks[0];
+
+      expect(introBlock.type).toBe("Interstitial");
+      expect(introBlock.content.title).toBe(title);
+      expect(introBlock.content.contents[0].description).toBe(description);
+    });
+
+    it("shouldn't add introduction block when there's no title / content", () => {
+      const sectionJSON = createSectionJSON();
+      const section = new Section(sectionJSON, createCtx());
+      expect(section.groups[0].blocks[0].type).not.toBe("Interstitial");
     });
   });
 });

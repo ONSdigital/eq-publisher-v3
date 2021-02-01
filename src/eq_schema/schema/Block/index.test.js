@@ -120,7 +120,14 @@ describe("Block", () => {
     ) => ({
       questionnaireJson: {
         metadata,
-        sections: [{ pages: [{ answers: [{ id: `1`, type: "Text" }] }] }]
+        sections: [{
+          folders: [
+            {
+              id: "folder-1",
+              pages: [{ answers: [{ id: `1`, type: "Text" }] }]
+            }
+          ],
+        }]
       }
     });
 

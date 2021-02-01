@@ -1,5 +1,5 @@
 const translateAuthorSkipConditions = require("./");
-const questionnaireJson = require("./basicQuestionnaireJSON");
+const { questionnaireJson } = require("../basicQuestionnaireJSON");
 
 describe("skipConditions", () => {
   it("should translate a complex example correctly", () => {
@@ -31,10 +31,7 @@ describe("skipConditions", () => {
             condition: "OneOf",
             right: {
               type: "SelectedOptions",
-              optionIds: [
-                "option1",
-                "option2"
-              ]
+              optionIds: ["123", "456"]
             },
           },
         ],

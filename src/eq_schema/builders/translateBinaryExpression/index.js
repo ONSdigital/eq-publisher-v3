@@ -6,13 +6,15 @@ const authorConditions = {
 };
 
 const getOptionsFromQuestionaire = (questionnaire) => {
-  const pages = flatMap(questionnaire.sections, 'pages')
+  const pages = flatMap(questionnaire.sections, section =>
+    flatMap(section.folders, 'pages')
+  );
   const answers = flatMap(pages, 'answers')
   return flatMap(filter(answers, 'options'), 'options')
 }
 
 const getOptionValues = (optionIds, questionnaire) => {
-  const options = getOptionsFromQuestionaire(questionnaire)
+  const options = getOptionsFromQuestionaire(questionnaire);
   return optionIds.map((id) => filter(options, { id })[0].label)
 }
 
