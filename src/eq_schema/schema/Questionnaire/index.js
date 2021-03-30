@@ -1,34 +1,51 @@
 const { last } = require("lodash");
+const legalBases = require("../../../constants/legalBases");
+const { SOCIAL } = require("../../../constants/questionnaireTypes");
 
 const {
   DEFAULT_METADATA,
-  DEFAULT_METADATA_NAMES
+  DEFAULT_METADATA_NAMES,
 } = require("../../../constants/metadata");
 
-const {
-  types: { VOLUNTARY },
-  contentMap
-} = require("../../../constants/legalBases");
+const SOCIAL_THEME = "social";
+const DEFAULT_THEME = "default";
+const NI_THEME = "northernireland";
 
 const { Confirmation, Introduction, Summary } = require("../../block-types");
 
 const Section = require("../Section");
 const Hub = require("../Hub");
 
+const getPreviewTheme = ({ themes, previewTheme }) =>
+  previewTheme &&
+  themes &&
+  themes.find((theme) => theme && theme.shortName === previewTheme);
+
 class Questionnaire {
   constructor(questionnaireJson) {
-    const questionnaireId = questionnaireJson.id;
-    this.eq_id = questionnaireId;
-    this.language = "en";
-    this.form_type = questionnaireId;
+    const { id: questionnaireId, introduction } = questionnaireJson;
+    const isSocialSurvey = questionnaireJson.type === SOCIAL;
+    const previewTheme = getPreviewTheme(questionnaireJson) || {
+      shortName:
+        (isSocialSurvey && SOCIAL_THEME) ||
+        (questionnaireJson.theme === NI_THEME ? NI_THEME : DEFAULT_THEME),
+      legalBasis: introduction && introduction.legalBasis,
+      eqId: questionnaireId,
+      formType: questionnaireId,
+    };
+
+    this.eq_id = previewTheme.eqId;
+    this.form_type = previewTheme.formType;
     this.language = "en";
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
     this.data_version = "0.0.3";
-    this.survey_id = this.buildSurveyId(
-      questionnaireJson.publishDetails,
-      questionnaireJson.title
-    );
+    this.survey_id =
+      questionnaireJson.surveyId ||
+      this.buildSurveyId(
+        questionnaireJson.publishDetails,
+        questionnaireJson.title
+      );
     this.title = questionnaireJson.title;
 
     const ctx = this.createContext(questionnaireJson);
@@ -37,17 +54,20 @@ class Questionnaire {
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
-    this.theme = questionnaireJson.theme;
+    this.theme = previewTheme.shortName;
 
-    this.legal_basis = this.buildLegalBasis(questionnaireJson.introduction);
+    this.legal_basis = isSocialSurvey
+      ? undefined
+      : legalBases[previewTheme.legalBasis];
+
     this.navigation = {
-      visible: questionnaireJson.navigation
+      visible: questionnaireJson.navigation,
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
     this.view_submitted_response = {
       enabled: true,
-      duration: 900
+      duration: 900,
     };
 
     this.buildSummaryOrConfirmation(questionnaireJson.summary);
@@ -64,7 +84,7 @@ class Questionnaire {
   createContext(questionnaireJson) {
     return {
       routingGotos: [],
-      questionnaireJson
+      questionnaireJson,
     };
   }
 
@@ -76,7 +96,7 @@ class Questionnaire {
   }
 
   buildSections(sections, ctx) {
-    return sections.map(section => new Section(section, ctx));
+    return sections.map((section) => new Section(section, ctx));
   }
 
   buildSummaryOrConfirmation(summary) {
@@ -89,17 +109,10 @@ class Questionnaire {
       .filter(({ key }) => !DEFAULT_METADATA_NAMES.includes(key))
       .map(({ key, type }) => ({
         name: key,
-        type: type === "Date" ? "date" : "string"
+        type: type === "Date" ? "date" : "string",
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
-  }
-
-  buildLegalBasis(introduction) {
-    if (!introduction || introduction.legalBasis === VOLUNTARY) {
-      return undefined;
-    }
-    return contentMap[introduction.legalBasis];
   }
 
   buildIntroduction(introduction, ctx) {
@@ -109,7 +122,7 @@ class Questionnaire {
     const groupToAddTo = this.sections[0].groups[0];
     groupToAddTo.blocks = [
       new Introduction(introduction, ctx),
-      ...groupToAddTo.blocks
+      ...groupToAddTo.blocks,
     ];
   }
 }
