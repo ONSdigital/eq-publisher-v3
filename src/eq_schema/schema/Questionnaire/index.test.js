@@ -4,7 +4,7 @@ const {
   types: { NOTICE_1, VOLUNTARY },
 } = legalBases;
 
-const { BUSINESS } = require("../../../constants/questionnaireTypes");
+const { BUSINESS, SOCIAL } = require("../../../constants/questionnaireTypes");
 const { DEFAULT_METADATA } = require("../../../constants/metadata");
 
 const Summary = require("../../block-types/Summary");
@@ -374,6 +374,13 @@ describe("Questionnaire", () => {
         legal_basis: legalBases[legalBasis],
       })
     );
+  });
+
+  it("should set theme to 'social' for unmigrated social surveys", () => {
+    questionnaire = new Questionnaire(
+      createQuestionnaireJSON({ type: SOCIAL })
+    );
+    expect(questionnaire.theme).toEqual("social");
   });
 
   it("should build hub if selected", () => {
