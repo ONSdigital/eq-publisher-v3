@@ -30,7 +30,7 @@ describe("Questionnaire", () => {
             folders: [
               {
                 id: "folder-1",
-                pages: [],
+                pages: []
               }
             ]
           }
@@ -120,7 +120,7 @@ describe("Questionnaire", () => {
                 id: "folder-2",
                 pages: []
               }
-            ],
+            ]
           },
           {
             id: "3",
@@ -130,7 +130,7 @@ describe("Questionnaire", () => {
                 id: "folder-3",
                 pages: []
               }
-            ],
+            ]
           }
         ]
       })
@@ -164,7 +164,7 @@ describe("Questionnaire", () => {
                 id: "folder-3",
                 pages: []
               }
-            ],
+            ]
           },
           {
             id: "3",
@@ -174,7 +174,7 @@ describe("Questionnaire", () => {
                 id: "folder-4",
                 pages: []
               }
-            ],
+            ]
           }
         ]
       })
@@ -192,15 +192,6 @@ describe("Questionnaire", () => {
         }
       ]
     });
-  });
-
-  it("should convert questionnaire title to a valid survey id", () => {
-    const questionnaireJson = createQuestionnaireJSON({
-      title: 'Questionnaire-For-Test-With-!@£$%^&*()foo+"{}'
-    });
-    delete questionnaireJson.publishDetails;
-    questionnaire = new Questionnaire(questionnaireJson);
-    expect(questionnaire.survey_id).toEqual("questionnairefortestwithfoo");
   });
 
   it("should add a summary page if toggled on", () => {
