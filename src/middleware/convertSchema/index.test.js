@@ -29,7 +29,7 @@ describe("schemaConverter", () => {
           "<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li></ul>"
       },
       navigation: false,
-      surveyId: null,
+      surveyId: "874",
       summary: false,
       metadata: [
         {
