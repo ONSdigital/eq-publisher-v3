@@ -614,7 +614,7 @@ describe("Question", () => {
         createContext()
       );
 
-      expect(question.description).toEqual("<p>foo</p><p>bar</p>");
+      expect(question.description).toEqual(["<p>foo</p><p>bar</p>"]);
     });
 
     it("should handle piped values in description", () => {
@@ -626,7 +626,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual(
-        createPipedFormat("answer1", "answers")
+        [createPipedFormat("answer1", "answers")]
       );
     });
   });
