@@ -32,7 +32,7 @@ class Question {
       this.q_code = question.qCode;
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = convertPipes(ctx)(question.description);
+      this.description = [convertPipes(ctx)(question.description)];
     }
 
     if (question.guidanceEnabled && question.guidance) {
