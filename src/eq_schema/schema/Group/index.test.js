@@ -4,12 +4,12 @@ const Block = require("../Block");
 describe("Group", () => {
   const createCtx = (options = {}) => ({
     questionnaireJson: {
-      navigation: true
+      navigation: true,
     },
-    ...options
+    ...options,
   });
 
-  const createGroupJSON = options =>
+  const createGroupJSON = (options) =>
     Object.assign(
       {
         id: "1",
@@ -20,9 +20,9 @@ describe("Group", () => {
           {
             id: "2",
             pageType: "QuestionPage",
-            answers: []
-          }
-        ]
+            answers: [],
+          },
+        ],
       },
       options
     );
@@ -34,7 +34,7 @@ describe("Group", () => {
     expect(group).toMatchObject({
       id: "group1",
       title: "Folder 1",
-      blocks: [expect.any(Block)]
+      blocks: [expect.any(Block)],
     });
   });
 
@@ -46,7 +46,7 @@ describe("Group", () => {
       createCtx({ questionnaireJson: { navigation: false } })
     );
     expect(group).toMatchObject({
-      title: ""
+      title: "",
     });
   });
 
@@ -57,22 +57,22 @@ describe("Group", () => {
         title: "Group 1",
         pages: [],
         introductionTitle: "",
-        introductionContent: ""
+        introductionContent: "",
       },
       {
         id: 2,
         title: "Group 2",
         pages: [],
         introductionTitle: "",
-        introductionContent: ""
+        introductionContent: "",
       },
       {
         id: 3,
         title: "Group 3",
         pages: [],
         introductionTitle: "",
-        introductionContent: ""
-      }
+        introductionContent: "",
+      },
     ];
 
     it("should add skip conditions to the required groups", () => {
@@ -85,15 +85,15 @@ describe("Group", () => {
             when: {
               id: "answer1",
               condition: "equals",
-              value: "Goto End"
+              value: "Goto End",
             },
-            groupId: "group1"
-          }
-        ]
+            groupId: "group1",
+          },
+        ],
       });
 
       const runnerJson = groupsJson.map(
-        group => new Group(group.title, group, ctx)
+        (group) => new Group(group.title, group, ctx)
       );
 
       const expectedrunnerJson = [
@@ -103,22 +103,56 @@ describe("Group", () => {
           title: "Group 2",
           blocks: [],
           skip_conditions: [
-            { when: { id: "answer1", condition: "equals", value: "Goto End" } }
-          ]
+            { when: { id: "answer1", condition: "equals", value: "Goto End" } },
+          ],
         },
         {
           id: "group3",
           title: "Group 3",
           blocks: [],
           skip_conditions: [
-            { when: { id: "answer1", condition: "equals", value: "Goto End" } }
-          ]
-        }
+            { when: { id: "answer1", condition: "equals", value: "Goto End" } },
+          ],
+        },
       ];
 
       expect(runnerJson[0]).not.toHaveProperty("skip_conditions");
 
       expect(runnerJson).toMatchObject(expectedrunnerJson);
+    });
+
+    it("adds skip conditions when specified for a folder", () => {
+      const ctx = createCtx();
+      const folder = {
+        id: "folder-1",
+        enabled: "true",
+        pages: [],
+        skipConditions: [
+          {
+            expressions: [
+              {
+                left: {
+                  answerId: "1",
+                  type: "Answer",
+                },
+                condition: "Equal",
+                right: {
+                  type: "Custom",
+                  customValue: {
+                    number: 1337,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+      const group = new Group(null, folder, ctx);
+
+      expect(group.skip_conditions[0]).toMatchObject({
+        when: [{ id: "answer1", condition: "equals", value: 1337 }],
+      });
     });
 
     it("can handle multiple skip conditions for each group", () => {
@@ -131,24 +165,24 @@ describe("Group", () => {
             when: {
               id: "answer1",
               condition: "equals",
-              value: "Goto End"
+              value: "Goto End",
             },
-            groupId: "group1"
+            groupId: "group1",
           },
           {
             group: "group3",
             when: {
               id: "answer1",
               condition: "equals",
-              value: "Goto group3"
+              value: "Goto group3",
             },
-            groupId: "group1"
-          }
-        ]
+            groupId: "group1",
+          },
+        ],
       });
 
       const runnerJson = groupsJson.map(
-        group => new Group(group.title, group, ctx)
+        (group) => new Group(group.title, group, ctx)
       );
 
       const expectedrunnerJson = [
@@ -163,19 +197,19 @@ describe("Group", () => {
               when: {
                 id: "answer1",
                 condition: "equals",
-                value: "Goto group3"
-              }
-            }
-          ]
+                value: "Goto group3",
+              },
+            },
+          ],
         },
         {
           id: "group3",
           title: "Group 3",
           blocks: [],
           skip_conditions: [
-            { when: { id: "answer1", condition: "equals", value: "Goto End" } }
-          ]
-        }
+            { when: { id: "answer1", condition: "equals", value: "Goto End" } },
+          ],
+        },
       ];
 
       expect(runnerJson).toMatchObject(expectedrunnerJson);
@@ -207,16 +241,16 @@ describe("Group", () => {
                       id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-2",
                       title: "<p>Are you sure?</p>",
                       page: {
-                        id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1"
+                        id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                       },
                       positive: {
                         label: "Oh yes.",
-                        description: "Positive"
+                        description: "Positive",
                       },
                       negative: {
                         label: "Wait I can get more?",
-                        description: "Negative"
-                      }
+                        description: "Negative",
+                      },
                     },
                     answers: [
                       {
@@ -227,18 +261,18 @@ describe("Group", () => {
                         guidance: "",
                         properties: {
                           decimals: 0,
-                          required: false
+                          required: false,
                         },
-                        qCode: ""
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                        qCode: "",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     });
 
     it("should build a confirmation page", () => {
@@ -266,16 +300,16 @@ describe("Group", () => {
                 {
                   label: "Oh yes.",
                   value: "Oh yes.",
-                  description: "Positive"
+                  description: "Positive",
                 },
                 {
                   label: "Wait I can get more?",
                   value: "Wait I can get more?",
-                  description: "Negative"
-                }
-              ]
-            }
-          ]
+                  description: "Negative",
+                },
+              ],
+            },
+          ],
         },
         routing_rules: [
           {
@@ -286,17 +320,17 @@ describe("Group", () => {
                   id:
                     "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                   condition: "equals",
-                  value: "Wait I can get more?"
-                }
-              ]
-            }
+                  value: "Wait I can get more?",
+                },
+              ],
+            },
           },
           {
             goto: {
-              group: "confirmation-group"
-            }
-          }
-        ]
+              group: "confirmation-group",
+            },
+          },
+        ],
       };
 
       expect(resultantJson.blocks[1]).toMatchObject(expectedRunnerBlock);
@@ -304,7 +338,8 @@ describe("Group", () => {
 
     it("should build a confirmation page with qCode", () => {
       const ctx = ctxGenerator(null);
-      ctx.questionnaireJson.sections[0].folders[0].pages[0].confirmation.qCode = "123";
+      ctx.questionnaireJson.sections[0].folders[0].pages[0].confirmation.qCode =
+        "123";
       const resultantJson = new Group(
         "Section 1",
         ctx.questionnaireJson.sections[0].folders[0],
@@ -328,16 +363,16 @@ describe("Group", () => {
                 {
                   label: "Oh yes.",
                   value: "Oh yes.",
-                  description: "Positive"
+                  description: "Positive",
                 },
                 {
                   label: "Wait I can get more?",
                   value: "Wait I can get more?",
-                  description: "Negative"
-                }
-              ]
-            }
-          ]
+                  description: "Negative",
+                },
+              ],
+            },
+          ],
         },
         routing_rules: [
           {
@@ -348,17 +383,17 @@ describe("Group", () => {
                   id:
                     "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                   condition: "equals",
-                  value: "Wait I can get more?"
-                }
-              ]
-            }
+                  value: "Wait I can get more?",
+                },
+              ],
+            },
           },
           {
             goto: {
-              group: "confirmation-group"
-            }
-          }
-        ]
+              group: "confirmation-group",
+            },
+          },
+        ],
       };
 
       expect(resultantJson.blocks[1]).toMatchObject(expectedRunnerBlock);
@@ -374,29 +409,29 @@ describe("Group", () => {
                 {
                   left: {
                     answerId: "1",
-                    type: "Answer"
+                    type: "Answer",
                   },
                   condition: "Equal",
                   right: {
                     customValue: {
-                      number: "5"
-                    }
-                  }
-                }
-              ]
+                      number: "5",
+                    },
+                  },
+                },
+              ],
             },
             destination: {
               sectionId: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
               page: null,
-              logical: null
-            }
-          }
+              logical: null,
+            },
+          },
         ],
         else: {
           section: null,
           page: null,
-          logical: "EndOfQuestionnaire"
-        }
+          logical: "EndOfQuestionnaire",
+        },
       };
 
       const ctx = ctxGenerator(null, routing);
@@ -416,10 +451,10 @@ describe("Group", () => {
                 id:
                   "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                 condition: "equals",
-                value: "Wait I can get more?"
-              }
-            ]
-          }
+                value: "Wait I can get more?",
+              },
+            ],
+          },
         },
         {
           goto: {
@@ -428,16 +463,16 @@ describe("Group", () => {
               {
                 id: "answer1",
                 condition: "equals",
-                value: "5"
-              }
-            ]
-          }
+                value: "5",
+              },
+            ],
+          },
         },
         {
           goto: {
-            group: "confirmation-group"
-          }
-        }
+            group: "confirmation-group",
+          },
+        },
       ];
 
       expect(resultantJson.blocks[0].routing_rules).toBeUndefined();
@@ -458,27 +493,27 @@ describe("Group", () => {
         options: [
           {
             id: "Foo",
-            label: "Foo"
+            label: "Foo",
           },
           {
             id: "Bar",
-            label: "Bar"
+            label: "Bar",
           },
           {
             id: "Baz",
-            label: "Baz"
-          }
+            label: "Baz",
+          },
         ],
         properties: {
-          required: false
-        }
+          required: false,
+        },
       };
 
       const folder = ctx.questionnaireJson.sections[0].folders[0];
       const resultantJson = new Group(folder.title, folder, ctx);
-      expect(resultantJson.blocks[1].question.description).toEqual(
-        [`{{ answers['answer${folder.pages[0].answers[0].id}']|format_unordered_list }}`]
-      );
+      expect(resultantJson.blocks[1].question.description).toEqual([
+        `{{ answers['answer${folder.pages[0].answers[0].id}']|format_unordered_list }}`,
+      ]);
     });
   });
 });
