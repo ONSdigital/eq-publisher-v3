@@ -477,7 +477,7 @@ describe("Group", () => {
       const folder = ctx.questionnaireJson.sections[0].folders[0];
       const resultantJson = new Group(folder.title, folder, ctx);
       expect(resultantJson.blocks[1].question.description).toEqual(
-        `{{ answers['answer${folder.pages[0].answers[0].id}']|format_unordered_list }}`
+        [`{{ answers['answer${folder.pages[0].answers[0].id}']|format_unordered_list }}`]
       );
     });
   });
