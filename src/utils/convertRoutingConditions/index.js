@@ -7,11 +7,12 @@ const routingConditionConversions = {
   LessOrEqual: "less than or equal to",
   AllOf: "contains all",
   AnyOf: "contains any",
+  NotAnyOf: "not contains any",
   Unanswered: "not set",
-  OneOf: "equals any"
+  OneOf: "equals any",
 };
 
-const conditionConversion = authorCondition => {
+const conditionConversion = (authorCondition) => {
   const runnerCondition = routingConditionConversions[authorCondition];
   if (!runnerCondition) {
     throw new Error(`Unsupported author condition: ${authorCondition}`);

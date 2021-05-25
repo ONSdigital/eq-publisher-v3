@@ -8,9 +8,10 @@ describe("Convert routing conditions", () => {
       GreaterThan: "greater than",
       LessThan: "less than",
       GreaterOrEqual: "greater than or equal to",
-      LessOrEqual: "less than or equal to"
+      LessOrEqual: "less than or equal to",
+      NotAnyOf: "not contains any",
     };
-    Object.keys(conditionMap).forEach(authorCondition =>
+    Object.keys(conditionMap).forEach((authorCondition) =>
       expect(converter(authorCondition)).toEqual(conditionMap[authorCondition])
     );
   });
