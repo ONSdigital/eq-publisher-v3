@@ -2,9 +2,6 @@ const { last } = require("lodash");
 
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
 const { DEFAULT_METADATA } = require("../../../constants/metadata");
-const {
-  types: { NOTICE_1, VOLUNTARY },
-} = require("../../../constants/legalBases");
 
 const Summary = require("../../block-types/Summary");
 
