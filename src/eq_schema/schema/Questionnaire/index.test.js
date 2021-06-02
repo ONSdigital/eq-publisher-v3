@@ -3,7 +3,7 @@ const { last } = require("lodash");
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
 const { DEFAULT_METADATA } = require("../../../constants/metadata");
 const {
-  types: { NOTICE_1, VOLUNTARY }
+  types: { NOTICE_1, VOLUNTARY },
 } = require("../../../constants/legalBases");
 
 const Summary = require("../../block-types/Summary");
@@ -12,7 +12,7 @@ const Questionnaire = require(".");
 const Section = require("../Section");
 
 describe("Questionnaire", () => {
-  const createQuestionnaireJSON = questionnaire =>
+  const createQuestionnaireJSON = (questionnaire) =>
     Object.assign(
       {
         id: "1",
@@ -23,6 +23,21 @@ describe("Questionnaire", () => {
         navigation: false,
         summary: true,
         hub: false,
+        surveyId: "123",
+        themeSettings: {
+          id: "1",
+          previewTheme: "default",
+          themes: [
+            {
+              enabled: true,
+              shortName: "default",
+              legalBasisCode: "NOTICE_1",
+              eqId: "1",
+              formType: "2",
+              id: "default",
+            },
+          ],
+        },
         sections: [
           {
             id: "1",
@@ -31,16 +46,15 @@ describe("Questionnaire", () => {
               {
                 id: "folder-1",
                 pages: [],
-              }
-            ]
-          }
+              },
+            ],
+          },
         ],
         metadata: [],
         introduction: {
-          legalBasis: NOTICE_1,
-          collapsibles: []
+          collapsibles: [],
         },
-        publishDetails: [{ surveyId: "874" }]
+        publishDetails: [{ surveyId: "874" }],
       },
       questionnaire
     );
@@ -56,30 +70,14 @@ describe("Questionnaire", () => {
       mime_type: "application/json/ons/eq",
       schema_version: "0.0.1",
       data_version: "0.0.3",
-      survey_id: "874",
+      survey_id: "123",
       title: "Quarterly Business Survey",
       theme: "default",
       sections: [expect.any(Section)],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
-      metadata: expect.arrayContaining(DEFAULT_METADATA)
+      metadata: expect.arrayContaining(DEFAULT_METADATA),
     });
-  });
-
-  it("should not set a legal basis when there is no introduction", () => {
-    questionnaire = new Questionnaire(
-      createQuestionnaireJSON({ introduction: null })
-    );
-    expect(questionnaire.legal_basis).toEqual(undefined);
-  });
-
-  it("should not set a legal basis when the legal basis is voluntary", () => {
-    questionnaire = new Questionnaire(
-      createQuestionnaireJSON({
-        introduction: { legalBasis: VOLUNTARY, collapsibles: [] }
-      })
-    );
-    expect(questionnaire.legal_basis).toEqual(undefined);
   });
 
   it("should add a Summary to end of Questionnaire", () => {
@@ -90,11 +88,23 @@ describe("Questionnaire", () => {
     expect(finalGroup).toBeInstanceOf(Summary);
   });
 
-  it("should include form_type and eq_id", () => {
-    const questionnaireId = createQuestionnaireJSON().id;
+  it("should include survey_id", () => {
     expect(questionnaire).toMatchObject({
-      eq_id: questionnaireId,
-      form_type: questionnaireId
+      survey_id: "123",
+    });
+  });
+
+  it("should include form_type and eq_id", () => {
+    expect(questionnaire).toMatchObject({
+      eq_id: "1",
+      form_type: "2",
+    });
+  });
+
+  it("should include the correct legal basis", () => {
+    expect(questionnaire).toMatchObject({
+      legal_basis:
+        "Notice is given under section 1 of the Statistics of Trade Act 1947.",
     });
   });
 
@@ -102,8 +112,8 @@ describe("Questionnaire", () => {
     expect(questionnaire).toMatchObject({
       view_submitted_response: {
         enabled: true,
-        duration: 900
-      }
+        duration: 900,
+      },
     });
   });
 
@@ -118,8 +128,8 @@ describe("Questionnaire", () => {
             folders: [
               {
                 id: "folder-2",
-                pages: []
-              }
+                pages: [],
+              },
             ],
           },
           {
@@ -128,26 +138,26 @@ describe("Questionnaire", () => {
             folders: [
               {
                 id: "folder-3",
-                pages: []
-              }
+                pages: [],
+              },
             ],
-          }
-        ]
+          },
+        ],
       })
     );
 
     expect(questionnaire).toMatchObject({
       navigation: {
-        visible: true
+        visible: true,
       },
       sections: [
         {
-          id: "section2"
+          id: "section2",
         },
         {
-          id: "section3"
-        }
-      ]
+          id: "section3",
+        },
+      ],
     });
   });
 
@@ -162,8 +172,8 @@ describe("Questionnaire", () => {
             folders: [
               {
                 id: "folder-3",
-                pages: []
-              }
+                pages: [],
+              },
             ],
           },
           {
@@ -172,11 +182,11 @@ describe("Questionnaire", () => {
             folders: [
               {
                 id: "folder-4",
-                pages: []
-              }
+                pages: [],
+              },
             ],
-          }
-        ]
+          },
+        ],
       })
     );
 
@@ -184,29 +194,20 @@ describe("Questionnaire", () => {
       sections: [
         {
           id: "section2",
-          title: "Section number 2"
+          title: "Section number 2",
         },
         {
           id: "section3",
-          title: "Section number 3"
-        }
-      ]
+          title: "Section number 3",
+        },
+      ],
     });
-  });
-
-  it("should convert questionnaire title to a valid survey id", () => {
-    const questionnaireJson = createQuestionnaireJSON({
-      title: 'Questionnaire-For-Test-With-!@£$%^&*()foo+"{}'
-    });
-    delete questionnaireJson.publishDetails;
-    questionnaire = new Questionnaire(questionnaireJson);
-    expect(questionnaire.survey_id).toEqual("questionnairefortestwithfoo");
   });
 
   it("should add a summary page if toggled on", () => {
     const questionnaire = new Questionnaire(
       createQuestionnaireJSON({
-        summary: true
+        summary: true,
       })
     );
     const lastSection = last(questionnaire.sections);
@@ -217,7 +218,7 @@ describe("Questionnaire", () => {
   it("should add a confirmation page if summary is toggled off", () => {
     const questionnaire = new Questionnaire(
       createQuestionnaireJSON({
-        summary: false
+        summary: false,
       })
     );
     const lastSection = last(questionnaire.sections);
@@ -230,17 +231,17 @@ describe("Questionnaire", () => {
       metadata: [
         {
           name: "user_id",
-          type: "string"
+          type: "string",
         },
         {
           name: "period_id",
-          type: "string"
+          type: "string",
         },
         {
           name: "ru_name",
-          type: "string"
-        }
-      ]
+          type: "string",
+        },
+      ],
     });
   });
 
@@ -249,52 +250,52 @@ describe("Questionnaire", () => {
       metadata: [
         {
           key: "example_date",
-          type: "Date"
+          type: "Date",
         },
         {
           key: "example_text",
-          type: "Text"
+          type: "Text",
         },
         {
           key: "example_region",
-          type: "Region"
+          type: "Region",
         },
         {
           key: "example_language",
-          type: "Language"
-        }
-      ]
+          type: "Language",
+        },
+      ],
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
         name: "user_id",
-        type: "string"
+        type: "string",
       },
       {
         name: "period_id",
-        type: "string"
+        type: "string",
       },
       {
         name: "ru_name",
-        type: "string"
+        type: "string",
       },
       {
         name: "example_date",
-        type: "date"
+        type: "date",
       },
       {
         name: "example_text",
-        type: "string"
+        type: "string",
       },
       {
         name: "example_region",
-        type: "string"
+        type: "string",
       },
       {
         name: "example_language",
-        type: "string"
-      }
+        type: "string",
+      },
     ]);
   });
 
@@ -303,30 +304,30 @@ describe("Questionnaire", () => {
       metadata: [
         {
           key: "ru_name",
-          type: "Date"
-        }
-      ]
+          type: "Date",
+        },
+      ],
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
         name: "user_id",
-        type: "string"
+        type: "string",
       },
       {
         name: "period_id",
-        type: "string"
+        type: "string",
       },
       {
         name: "ru_name",
-        type: "string"
-      }
+        type: "string",
+      },
     ]);
   });
 
   it("should allow setting northern ireland theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
-      theme: "northernireland"
+      theme: "northernireland",
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
@@ -337,7 +338,7 @@ describe("Questionnaire", () => {
 
   it("should allow setting default theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
-      theme: "default"
+      theme: "default",
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
@@ -349,8 +350,8 @@ describe("Questionnaire", () => {
   it("should build hub if selected", () => {
     const questionnaireJson = createQuestionnaireJSON({
       hub: {
-        enabled: true
-      }
+        enabled: true,
+      },
     });
     expect(new Questionnaire(questionnaireJson).hub.enabled).toBeTruthy();
   });
