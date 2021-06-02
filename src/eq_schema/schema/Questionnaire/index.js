@@ -5,10 +5,7 @@ const {
   DEFAULT_METADATA_NAMES,
 } = require("../../../constants/metadata");
 
-const {
-  types: { VOLUNTARY },
-  contentMap,
-} = require("../../../constants/legalBases");
+const { contentMap } = require("../../../constants/legalBases");
 
 const { Confirmation, Introduction, Summary } = require("../../block-types");
 
