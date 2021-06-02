@@ -58,14 +58,6 @@ class Questionnaire {
     this.buildSummaryOrConfirmation(questionnaireJson.summary);
   }
 
-  buildSurveyId(publishDetails, title) {
-    if (publishDetails) {
-      return publishDetails[0].surveyId;
-    }
-
-    return title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  }
-
   createContext(questionnaireJson) {
     return {
       routingGotos: [],
@@ -98,13 +90,6 @@ class Questionnaire {
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
-  }
-
-  buildLegalBasis(introduction) {
-    if (!introduction || introduction.legalBasis === VOLUNTARY) {
-      return undefined;
-    }
-    return contentMap[introduction.legalBasis];
   }
 
   buildIntroduction(introduction, ctx) {
