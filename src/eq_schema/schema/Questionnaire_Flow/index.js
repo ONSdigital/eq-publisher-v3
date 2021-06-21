@@ -8,7 +8,10 @@ class Questionnaire_Flow {
   build_options(questionnaireJson) {
     const options = {}
     if(questionnaireJson.hub) {
-      options.required_completed_sections = this.build_required_sections(questionnaireJson);
+      const required_completed_sections = this.build_required_sections(questionnaireJson);
+      if(required_completed_sections.length) {
+        options.required_completed_sections = required_completed_sections;
+      }
       return options;
     };
     if(questionnaireJson.summary) {
