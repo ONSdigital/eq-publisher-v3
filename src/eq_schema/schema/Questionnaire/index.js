@@ -11,6 +11,7 @@ const { Confirmation, Introduction, Summary } = require("../../block-types");
 
 const Section = require("../Section");
 const Hub = require("../Hub");
+const Questionnaire_Flow = require("../Questionnaire_Flow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
@@ -36,7 +37,23 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
 
-    this.hub = this.buildHub(questionnaireJson.hub, ctx);
+    // this.hub = this.buildHub(questionnaireJson.hub, ctx);
+    // this.hub = { enabled: false };
+
+    this.questionnaire_flow = {
+          "type": "Linear",
+            "options": {
+              "summary" : {
+                "collapsible": false
+          },
+      }
+    };
+
+    // this.questionnaire_flow = this.buildQuestionnaire_Flow(
+    //   questionnaireJson.questionnaire_flow,
+    //   ctx
+    // );
+
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
@@ -67,6 +84,20 @@ class Questionnaire {
       return new Hub(hub);
     }
     return { enabled: false };
+  }
+
+  buildQuestionnaire_Flow(questionnaire_flow) {
+    if (questionnaire_flow) {
+      return new Questionnaire_Flow(questionnaire_flow);
+    }
+    return {
+      type: "Linear",
+      options: {
+        summary: {
+          collapsible: false,
+        },
+      },
+    };
   }
 
   buildSections(sections, ctx) {
