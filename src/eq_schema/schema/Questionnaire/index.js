@@ -1,5 +1,3 @@
-const { last } = require("lodash");
-
 const {
   DEFAULT_METADATA,
   DEFAULT_METADATA_NAMES,
@@ -7,7 +5,7 @@ const {
 
 const { contentMap } = require("../../../constants/legalBases");
 
-const { Confirmation, Introduction, Summary } = require("../../block-types");
+const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
 const Hub = require("../Hub");
@@ -19,7 +17,7 @@ const getPreviewTheme = ({ previewTheme, themes }) =>
 class Questionnaire {
   constructor(questionnaireJson) {
     const { surveyId } = questionnaireJson;
-    const { eqId, formType, legalBasisCode } = getPreviewTheme(
+    const { formType, legalBasisCode } = getPreviewTheme(
       questionnaireJson.themeSettings
     );
 
@@ -29,7 +27,6 @@ class Questionnaire {
     this.data_version = "0.0.3";
 
     this.survey_id = surveyId;
-    this.eq_id = eqId;
     this.form_type = formType;
     this.legal_basis = contentMap[legalBasisCode];
 
@@ -63,13 +60,6 @@ class Questionnaire {
       visible: questionnaireJson.navigation,
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
-
-    this.view_submitted_response = {
-      enabled: true,
-      duration: 900,
-    };
-
-    this.buildSummaryOrConfirmation(questionnaireJson.summary);
   }
 
   createContext(questionnaireJson) {
@@ -102,11 +92,6 @@ class Questionnaire {
 
   buildSections(sections, ctx) {
     return sections.map((section) => new Section(section, ctx));
-  }
-
-  buildSummaryOrConfirmation(summary) {
-    const finalPage = summary ? new Summary() : new Confirmation();
-    last(this.sections).groups.push(finalPage);
   }
 
   buildMetadata(metadata) {

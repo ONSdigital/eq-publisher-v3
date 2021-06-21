@@ -8,7 +8,9 @@ const translateAuthorSkipconditions = require("../../builders/skipConditions");
 class Group {
   constructor(title, folder, ctx) {
     this.id = `group${folder.id}`;
-    this.title = ctx.questionnaireJson.navigation ? title : "";
+    if (title) {
+      this.title = title;
+    }
     this.blocks = this.buildBlocks(folder, ctx);
 
     this.skip_conditions = [];
