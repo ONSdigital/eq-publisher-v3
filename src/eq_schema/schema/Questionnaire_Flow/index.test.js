@@ -9,7 +9,7 @@ describe("questionnaire_flow", () => {
   });
 
   it("should build questionnaire_flow if selected", () => {
-    expect(questionnaire_flow).toMatchObject({
+    expect(hub).toMatchObject({
       enabled: true,
       requiredCompletedSections: ["sectionOne", "sectionTwo"],
     });

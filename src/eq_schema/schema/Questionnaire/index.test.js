@@ -1,9 +1,5 @@
-const { last } = require("lodash");
-
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
 const { DEFAULT_METADATA } = require("../../../constants/metadata");
-
-const Summary = require("../../block-types/Summary");
 
 const Questionnaire = require(".");
 const Section = require("../Section");
@@ -77,23 +73,14 @@ describe("Questionnaire", () => {
     });
   });
 
-  it("should add a Summary to end of Questionnaire", () => {
-    const questionnaire = new Questionnaire(createQuestionnaireJSON());
-    const finalSection = last(questionnaire.sections);
-    const finalGroup = last(finalSection.groups);
-
-    expect(finalGroup).toBeInstanceOf(Summary);
-  });
-
   it("should include survey_id", () => {
     expect(questionnaire).toMatchObject({
       survey_id: "123",
     });
   });
 
-  it("should include form_type and eq_id", () => {
+  it("should include form_type", () => {
     expect(questionnaire).toMatchObject({
-      eq_id: "1",
       form_type: "2",
     });
   });
@@ -102,15 +89,6 @@ describe("Questionnaire", () => {
     expect(questionnaire).toMatchObject({
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
-    });
-  });
-
-  it("should include view_submitted_response", () => {
-    expect(questionnaire).toMatchObject({
-      view_submitted_response: {
-        enabled: true,
-        duration: 900,
-      },
     });
   });
 
@@ -199,28 +177,6 @@ describe("Questionnaire", () => {
         },
       ],
     });
-  });
-
-  it("should add a summary page if toggled on", () => {
-    const questionnaire = new Questionnaire(
-      createQuestionnaireJSON({
-        summary: true,
-      })
-    );
-    const lastSection = last(questionnaire.sections);
-    const lastGroup = last(lastSection.groups);
-    expect(lastGroup).toBeInstanceOf(Summary);
-  });
-
-  it("should add a confirmation page if summary is toggled off", () => {
-    const questionnaire = new Questionnaire(
-      createQuestionnaireJSON({
-        summary: false,
-      })
-    );
-    const lastSection = last(questionnaire.sections);
-    const lastGroup = last(lastSection.groups);
-    expect(last(lastGroup.blocks).type).toEqual("Confirmation");
   });
 
   it("should build the default metadata", () => {
@@ -344,15 +300,4 @@ describe("Questionnaire", () => {
     );
   });
 
-  it("should build hub if selected", () => {
-    const questionnaireJson = createQuestionnaireJSON({
-      hub: {
-        enabled: true,
-      },
-    });
-    expect(new Questionnaire(questionnaireJson).hub.enabled).toBeTruthy();
-  });
-  it("should not build hub if not selected", () => {
-    expect(questionnaire.hub.enabled).toBeFalsy();
-  });
 });
