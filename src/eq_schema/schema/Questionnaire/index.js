@@ -8,7 +8,6 @@ const { contentMap } = require("../../../constants/legalBases");
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
-const Hub = require("../Hub");
 const Questionnaire_Flow = require("../Questionnaire_Flow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
@@ -34,22 +33,7 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
 
-    // this.hub = this.buildHub(questionnaireJson.hub, ctx);
-    // this.hub = { enabled: false };
-
-    this.questionnaire_flow = {
-          "type": "Linear",
-            "options": {
-              "summary" : {
-                "collapsible": false
-          },
-      }
-    };
-
-    // this.questionnaire_flow = this.buildQuestionnaire_Flow(
-    //   questionnaireJson.questionnaire_flow,
-    //   ctx
-    // );
+    this.questionnaire_flow = this.buildQuestionnaire_Flow(questionnaireJson)
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
@@ -69,25 +53,8 @@ class Questionnaire {
     };
   }
 
-  buildHub(hub) {
-    if (hub) {
-      return new Hub(hub);
-    }
-    return { enabled: false };
-  }
-
-  buildQuestionnaire_Flow(questionnaire_flow) {
-    if (questionnaire_flow) {
-      return new Questionnaire_Flow(questionnaire_flow);
-    }
-    return {
-      type: "Linear",
-      options: {
-        summary: {
-          collapsible: false,
-        },
-      },
-    };
+  buildQuestionnaire_Flow(questionnaireJson) {
+    return new Questionnaire_Flow(questionnaireJson);
   }
 
   buildSections(sections, ctx) {

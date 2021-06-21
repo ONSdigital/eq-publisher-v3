@@ -1,8 +1,23 @@
 class Questionnaire_Flow {
-  constructor(questionnaire_flow) {
-    this.enabled = true;
-    this.requiredCompletedSections =
-      questionnaire_flow.required_completed_sections;
+  constructor(questionnaireJson) {
+    this.type = questionnaireJson.hub ? "Hub" : "Linear"
+    this.options = this.build_options(questionnaireJson) 
+  }
+
+  build_options(questionnaireJson) {
+    const options = {}
+    if(questionnaireJson.hub) {
+      if(questionnaireJson.required_completed_sections) {
+          options.required_completed_sections = questionnaireJson.required_completed_sections
+      }
+      return options
+    }
+    if(questionnaireJson.summary) {
+        options.summary = {
+          collapsible: questionnaireJson.collapsibleSummary
+      }
+    }
+    return options
   }
 }
 
