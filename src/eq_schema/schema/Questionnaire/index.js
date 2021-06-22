@@ -8,7 +8,7 @@ const { contentMap } = require("../../../constants/legalBases");
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
-const Questionnaire_Flow = require("../Questionnaire_Flow");
+const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
@@ -33,7 +33,7 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
 
-    this.questionnaire_flow = this.buildQuestionnaire_Flow(questionnaireJson)
+    this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson)
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
@@ -53,8 +53,8 @@ class Questionnaire {
     };
   }
 
-  buildQuestionnaire_Flow(questionnaireJson) {
-    return new Questionnaire_Flow(questionnaireJson);
+  buildQuestionnaireFlow(questionnaireJson) {
+    return new QuestionnaireFlow(questionnaireJson);
   }
 
   buildSections(sections, ctx) {

@@ -1,5 +1,5 @@
 const { filter } = require("lodash");
-class Questionnaire_Flow {
+class QuestionnaireFlow {
   constructor(questionnaireJson) {
     this.type = questionnaireJson.hub ? "Hub" : "Linear";
     this.options = this.build_options(questionnaireJson);
@@ -29,4 +29,4 @@ class Questionnaire_Flow {
   }
 }
 
-module.exports = Questionnaire_Flow;
+module.exports = QuestionnaireFlow;
