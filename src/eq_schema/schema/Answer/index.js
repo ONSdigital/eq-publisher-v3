@@ -19,9 +19,15 @@ class Answer {
     this.id = `answer${answer.id}`;
     this.mandatory = answer.properties.required;
     this.type = answer.type;
-    this.label = answer.label;
-    this.description = answer.description;
 
+    if (answer.label) {
+      this.label = answer.label;
+    }
+
+    if (answer.description) {
+      this.description = answer.description;
+    }
+    
     if (answer.qCode) {
       this.q_code = answer.qCode;
     }

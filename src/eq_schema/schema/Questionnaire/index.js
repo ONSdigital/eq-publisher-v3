@@ -1,5 +1,3 @@
-const { last } = require("lodash");
-
 const {
   DEFAULT_METADATA,
   DEFAULT_METADATA_NAMES,
@@ -7,10 +5,10 @@ const {
 
 const { contentMap } = require("../../../constants/legalBases");
 
-const { Confirmation, Introduction, Summary } = require("../../block-types");
+const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
-const Hub = require("../Hub");
+const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
@@ -18,7 +16,7 @@ const getPreviewTheme = ({ previewTheme, themes }) =>
 class Questionnaire {
   constructor(questionnaireJson) {
     const { surveyId } = questionnaireJson;
-    const { eqId, formType, legalBasisCode } = getPreviewTheme(
+    const { formType, legalBasisCode } = getPreviewTheme(
       questionnaireJson.themeSettings
     );
 
@@ -28,7 +26,6 @@ class Questionnaire {
     this.data_version = "0.0.3";
 
     this.survey_id = surveyId;
-    this.eq_id = eqId;
     this.form_type = formType;
     this.legal_basis = contentMap[legalBasisCode];
 
@@ -36,7 +33,8 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
 
-    this.hub = this.buildHub(questionnaireJson.hub, ctx);
+    this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson)
+
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
@@ -46,13 +44,6 @@ class Questionnaire {
       visible: questionnaireJson.navigation,
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
-
-    this.view_submitted_response = {
-      enabled: true,
-      duration: 900,
-    };
-
-    this.buildSummaryOrConfirmation(questionnaireJson.summary);
   }
 
   createContext(questionnaireJson) {
@@ -62,20 +53,12 @@ class Questionnaire {
     };
   }
 
-  buildHub(hub) {
-    if (hub) {
-      return new Hub(hub);
-    }
-    return { enabled: false };
+  buildQuestionnaireFlow(questionnaireJson) {
+    return new QuestionnaireFlow(questionnaireJson);
   }
 
   buildSections(sections, ctx) {
     return sections.map((section) => new Section(section, ctx));
-  }
-
-  buildSummaryOrConfirmation(summary) {
-    const finalPage = summary ? new Summary() : new Confirmation();
-    last(this.sections).groups.push(finalPage);
   }
 
   buildMetadata(metadata) {

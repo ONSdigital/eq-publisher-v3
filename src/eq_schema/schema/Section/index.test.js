@@ -36,7 +36,6 @@ describe("Section", () => {
       groups: [
         {
           id: "groupfolder-1",
-          title: "",
           blocks: [expect.any(Block)]
         }
       ]
@@ -54,7 +53,6 @@ describe("Section", () => {
       groups: [
         {
           id: "groupfolder-1",
-          title: "",
           blocks: [expect.any(Block)]
         }
       ]
