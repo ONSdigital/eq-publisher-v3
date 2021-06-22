@@ -11,7 +11,7 @@ class QuestionnaireFlow {
       const requiredCompletedSections =
         this.buildRequiredSections(questionnaireJson);
       if (requiredCompletedSections.length) {
-        options.requiredCompletedSections = requiredCompletedSections;
+        options.required_completed_sections = requiredCompletedSections;
       }
       return options;
     };
