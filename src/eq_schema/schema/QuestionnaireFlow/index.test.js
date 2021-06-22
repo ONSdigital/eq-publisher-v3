@@ -1,4 +1,4 @@
-const questionnaire_flow = require(".");
+const questionnaireFlow = require(".");
 
 describe("questionnaire_flow", () => {
   let hub;
@@ -7,7 +7,7 @@ describe("questionnaire_flow", () => {
   };
 
   it("should build linear questionnaire_flow with no options", () => {
-    hub = new questionnaire_flow(questionnaire);
+    hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Linear",
       options:{}
@@ -16,7 +16,7 @@ describe("questionnaire_flow", () => {
 
   it("should build linear questionnaire_flow with summary", () => {
     questionnaire.summary = true
-    hub = new questionnaire_flow(questionnaire);
+    hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Linear",
       options: {
@@ -27,7 +27,7 @@ describe("questionnaire_flow", () => {
 
   it("should build linear questionnaire_flow with summary and collapsible", () => {
     questionnaire.collapsibleSummary = true
-    hub = new questionnaire_flow(questionnaire);
+    hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Linear",
       options: {
@@ -40,7 +40,7 @@ describe("questionnaire_flow", () => {
 
   it("should build hub questionnaire_flow with no mandatory sections", () => {
     questionnaire.hub = true
-    hub = new questionnaire_flow(questionnaire);
+    hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Hub",
       options: {}
@@ -56,7 +56,7 @@ describe("questionnaire_flow", () => {
       id: "section-two",
       required: false
     }]
-    hub = new questionnaire_flow(questionnaire);
+    hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Hub",
       options: {

@@ -2,15 +2,16 @@ const { filter } = require("lodash");
 class QuestionnaireFlow {
   constructor(questionnaireJson) {
     this.type = questionnaireJson.hub ? "Hub" : "Linear";
-    this.options = this.build_options(questionnaireJson);
+    this.options = this.buildOptions(questionnaireJson);
   }
 
-  build_options(questionnaireJson) {
+  buildOptions(questionnaireJson) {
     const options = {}
     if(questionnaireJson.hub) {
-      const required_completed_sections = this.build_required_sections(questionnaireJson);
-      if(required_completed_sections.length) {
-        options.required_completed_sections = required_completed_sections;
+      const requiredCompletedSections =
+        this.buildRequiredSections(questionnaireJson);
+      if (requiredCompletedSections.length) {
+        options.requiredCompletedSections = requiredCompletedSections;
       }
       return options;
     };
@@ -22,10 +23,10 @@ class QuestionnaireFlow {
     return options;
   }
 
-  build_required_sections(questionnaireJson){
+  buildRequiredSections(questionnaireJson){
     const sections = filter(questionnaireJson.sections, {"required": true});
-    const required_sections = sections.map((section) => section.id);
-    return required_sections;
+    const requiredSections = sections.map((section) => section.id);
+    return requiredSections;
   }
 }
 
