@@ -25,9 +25,9 @@ const mergeDisabledFolders = oldFolders => {
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
-    if (ctx.questionnaireJson.navigation) {
+    if (section.title) {
       this.title = getText(section.title);
-    }
+    };
 
     // Map folders to eq-runner "groups"
     // No need to make a group for each; we merge disabled (hidden) folders together where possible
