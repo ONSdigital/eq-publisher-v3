@@ -36,6 +36,7 @@ class Questionnaire {
     this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson)
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
+    
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
     this.theme = questionnaireJson.theme;
@@ -57,6 +58,25 @@ class Questionnaire {
     return new QuestionnaireFlow(questionnaireJson);
   }
 
+buildIntroduction(introduction, ctx) {
+    if (!introduction) {
+      return;
+    }
+  
+  const newSections = [{
+    id: introduction.id,
+    title: "Introduction",
+    show_on_hub: false,
+    groups: [{
+      id: `${introduction.id}-group`,
+      title: "Introduction",
+      blocks: [new Introduction(introduction, ctx)]
+    }],
+  }, ...this.sections];
+  
+  this.sections = newSections;
+  }
+
   buildSections(sections, ctx) {
     return sections.map((section) => new Section(section, ctx));
   }
@@ -72,16 +92,7 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildIntroduction(introduction, ctx) {
-    if (!introduction) {
-      return;
-    }
-    const groupToAddTo = this.sections[0].groups[0];
-    groupToAddTo.blocks = [
-      new Introduction(introduction, ctx),
-      ...groupToAddTo.blocks,
-    ];
-  }
+
 }
 
 module.exports = Questionnaire;
