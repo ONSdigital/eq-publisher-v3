@@ -44,9 +44,6 @@ describe("Questionnaire", () => {
           },
         ],
         metadata: [],
-        introduction: {
-          collapsibles: [],
-        },
         publishDetails: [{ surveyId: "874" }],
       },
       questionnaire
