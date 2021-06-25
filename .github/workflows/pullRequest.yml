@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Unit tests
-        run: yarn test
+        run: yarn test-ci
 
   Linter:
     runs-on: ubuntu-latest
