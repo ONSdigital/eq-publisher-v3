@@ -25,7 +25,7 @@ const mergeDisabledFolders = oldFolders => {
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
-    if (section.title) {
+    if (ctx.questionnaireJson.navigation || ctx.questionnaireJson.hub) {
       this.title = getText(section.title);
     };
 
