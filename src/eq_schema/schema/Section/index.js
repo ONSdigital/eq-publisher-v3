@@ -1,27 +1,7 @@
 const Group = require("../Group");
 const { getText } = require("../../../utils/HTMLUtils");
 const { buildIntroBlock } = require("../Block");
-
-const mergeDisabledFolders = oldFolders => {
-  const folders = [...oldFolders];
-  const newFolders = [folders.shift()];
-
-  folders.forEach(folder => {
-    if (folder.enabled) {
-      newFolders.push(folder);
-    } else {
-      const lastMergedFolder = newFolders[newFolders.length - 1];
-      if (lastMergedFolder.enabled) {
-        newFolders.push(folder);
-      } else {
-        lastMergedFolder.pages.push(...folder.pages);
-      }
-    }
-  });
-
-  return newFolders;
-};
-
+const { flatMap } = require("lodash");
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
@@ -29,11 +9,23 @@ class Section {
       this.title = getText(section.title);
     };
 
-    // Map folders to eq-runner "groups"
-    // No need to make a group for each; we merge disabled (hidden) folders together where possible
-    this.groups = mergeDisabledFolders(section.folders).map(
-      folder => new Group(getText(folder.title), folder, ctx)
+    const pages = flatMap(section.folders, (folder) =>
+      flatMap(folder.pages, (page) =>
+        folder.skipConditions
+          ? {
+              ...page,
+              skipConditions: [
+                ...folder.skipConditions,
+                ...(page.skipConditions || []),
+              ],
+            }
+          : page
+      )
     );
+
+    this.groups = [
+      new Group(getText(section.title), { ...section, pages }, ctx),
+    ];
 
     if (section.introductionTitle && section.introductionContent) {
       // Add introduction page if present

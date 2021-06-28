@@ -35,7 +35,7 @@ describe("Section", () => {
       title: "Section 1",
       groups: [
         {
-          id: "groupfolder-1",
+          id: "group1",
           blocks: [expect.any(Block)]
         }
       ]
@@ -52,42 +52,10 @@ describe("Section", () => {
       id: "section1",
       groups: [
         {
-          id: "groupfolder-1",
+          id: "group1",
           blocks: [expect.any(Block)]
         }
       ]
-    });
-  });
-
-  describe("mergeDisabledFolders", () => {
-    let sectionJSON;
-    beforeEach(() => {
-      sectionJSON = createSectionJSON();
-    });
-
-    it("should merge consecutive disabled folders together", () => {
-      sectionJSON.folders.push(sectionJSON.folders[0]);
-      const section = new Section(sectionJSON, createCtx());
-
-      expect(section.groups).toHaveLength(1);
-    });
-
-    it("shouldn't merge enabled folders with previous disabled folder", () => {
-      sectionJSON.folders.push({
-        ...sectionJSON.folders[0],
-        enabled: true,
-      });
-      const section = new Section(sectionJSON, createCtx());
-
-      expect(section.groups).toHaveLength(2);
-    });
-
-    it("shouldn't merge disabled folders with previous enabled folder", () => {
-      sectionJSON.folders.push({ ...sectionJSON.folders[0] });
-      sectionJSON.folders[0].enabled = true;
-      const section = new Section(sectionJSON, createCtx());
-
-      expect(section.groups).toHaveLength(2);
     });
   });
 
