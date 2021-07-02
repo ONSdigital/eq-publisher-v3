@@ -51,7 +51,7 @@ describe("questionnaire_flow", () => {
     questionnaire.hub = true
     questionnaire.sections = [{
       id: "section-one",
-      required: true
+      requiredCompleted: true
     },{
       id: "section-two",
       required: false

@@ -8,7 +8,9 @@ class Section {
     if (ctx.questionnaireJson.navigation || ctx.questionnaireJson.hub) {
       this.title = getText(section.title);
     };
-
+    if("showOnHub" in section) {
+      this.show_on_hub = section.showOnHub
+    }
     const pages = flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
         folder.skipConditions

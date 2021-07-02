@@ -24,7 +24,7 @@ class QuestionnaireFlow {
   }
 
   buildRequiredSections(questionnaireJson){
-    const sections = filter(questionnaireJson.sections, {"required": true});
+    const sections = filter(questionnaireJson.sections, {"requiredCompleted": true});
     const requiredSections = sections.map((section) => section.id);
 
     if (questionnaireJson.introduction) {
