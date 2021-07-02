@@ -25,8 +25,8 @@ class Questionnaire {
     this.schema_version = "0.0.1";
     this.data_version = "0.0.3";
 
-    this.survey_id = surveyId;
-    this.form_type = formType;
+    this.survey_id = surveyId || "zzz";
+    this.form_type = formType || "9999";
     this.legal_basis = contentMap[legalBasisCode];
 
     this.title = questionnaireJson.title;
