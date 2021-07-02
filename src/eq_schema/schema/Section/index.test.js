@@ -59,6 +59,26 @@ describe("Section", () => {
     });
   });
 
+  it("should not add show_on_hub", () => {
+    const sectionJSON = createSectionJSON();
+    const section = new Section(sectionJSON, createCtx());
+    expect("show_on_hub" in section).toBe(false)
+  });
+
+  it("should set show_on_hub to true", () => {
+    const sectionJSON = createSectionJSON();
+    sectionJSON.showOnHub = false;
+    const section = new Section(sectionJSON, createCtx());
+    expect(section.show_on_hub).toBe(false)
+  });
+
+  it("should set show_on_hub to false", () => {
+    const sectionJSON = createSectionJSON();
+    sectionJSON.showOnHub = true;
+    const section = new Section(sectionJSON, createCtx());
+    expect(section.show_on_hub).toBe(true)
+  });
+
   describe("Section introduction", () => {
     it("should add introduction content to first group if present", () => {
       const sectionJSON = createSectionJSON();
