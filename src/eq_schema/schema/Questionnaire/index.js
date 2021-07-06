@@ -58,23 +58,23 @@ class Questionnaire {
     return new QuestionnaireFlow(questionnaireJson);
   }
 
-buildIntroduction(introduction, ctx) {
+  buildIntroduction(introduction, ctx) {
     if (!introduction) {
       return;
     }
   
-  const newSections = [{
-    id: introduction.id,
-    title: "Introduction",
-    show_on_hub: false,
-    groups: [{
-      id: `${introduction.id}-group`,
+    const newSections = [{
+      id: introduction.id,
       title: "Introduction",
-      blocks: [new Introduction(introduction, ctx)]
-    }],
-  }, ...this.sections];
-  
-  this.sections = newSections;
+      show_on_hub: false,
+      groups: [{
+        id: `${introduction.id}-group`,
+        title: "Introduction",
+        blocks: [new Introduction(introduction, ctx)]
+      }],
+    }, ...this.sections];
+    
+    this.sections = newSections;
   }
 
   buildSections(sections, ctx) {
