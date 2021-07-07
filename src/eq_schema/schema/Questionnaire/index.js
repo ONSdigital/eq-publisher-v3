@@ -64,11 +64,11 @@ class Questionnaire {
     }
   
     const newSections = [{
-      id: introduction.id,
+      id: `section${introduction.id}`,
       title: "Introduction",
       show_on_hub: false,
       groups: [{
-        id: `${introduction.id}-group`,
+        id: `group${introduction.id}`,
         title: "Introduction",
         blocks: [new Introduction(introduction, ctx)]
       }],
