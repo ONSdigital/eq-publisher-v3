@@ -50,17 +50,17 @@ describe("questionnaire_flow", () => {
   it("should build hub questionnaire_flow with mandatory sections", () => {
     questionnaire.hub = true
     questionnaire.sections = [{
-      id: "section-one",
+      id: "one",
       requiredCompleted: true
     },{
-      id: "section-two",
+      id: "two",
       required: false
     }]
     hub = new questionnaireFlow(questionnaire);
     expect(hub).toMatchObject({
       type: "Hub",
       options: {
-        required_completed_sections: ["section-one"]
+        required_completed_sections: ["sectionone"]
       }
     });
   });
