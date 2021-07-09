@@ -2,14 +2,15 @@ const Group = require("../Group");
 const { getText } = require("../../../utils/HTMLUtils");
 const { buildIntroBlock } = require("../Block");
 const { flatMap } = require("lodash");
+const translateDisplayConditions = require("../../builders/expressionGroup");
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
     if (ctx.questionnaireJson.navigation || ctx.questionnaireJson.hub) {
       this.title = getText(section.title);
-    };
-    if("showOnHub" in section) {
-      this.show_on_hub = section.showOnHub
+    }
+    if ("showOnHub" in section) {
+      this.show_on_hub = section.showOnHub;
     }
     const pages = flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
@@ -39,6 +40,10 @@ class Section {
           ctx
         )
       );
+    }
+
+    if (section.displayConditions) {
+      this.enabled = translateDisplayConditions(section.displayConditions, ctx);
     }
   }
 }

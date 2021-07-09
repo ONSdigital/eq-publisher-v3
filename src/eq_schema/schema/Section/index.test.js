@@ -2,7 +2,7 @@ const Block = require("../Block");
 const Section = require(".");
 
 describe("Section", () => {
-  const createSectionJSON = options =>
+  const createSectionJSON = (options) =>
     Object.assign(
       {
         id: "1",
@@ -13,18 +13,18 @@ describe("Section", () => {
             pages: [
               {
                 id: "2",
-                answers: []
-              }
-            ]
-          }
-        ]
+                answers: [],
+              },
+            ],
+          },
+        ],
       },
       options
     );
   const createCtx = (options = {}) => ({
     routingGotos: [],
     questionnaireJson: { navigation: true },
-    ...options
+    ...options,
   });
 
   it("should build valid runner Section from Author section", () => {
@@ -36,9 +36,9 @@ describe("Section", () => {
       groups: [
         {
           id: "group1",
-          blocks: [expect.any(Block)]
-        }
-      ]
+          blocks: [expect.any(Block)],
+        },
+      ],
     });
   });
 
@@ -53,30 +53,30 @@ describe("Section", () => {
       groups: [
         {
           id: "group1",
-          blocks: [expect.any(Block)]
-        }
-      ]
+          blocks: [expect.any(Block)],
+        },
+      ],
     });
   });
 
   it("should not add show_on_hub", () => {
     const sectionJSON = createSectionJSON();
     const section = new Section(sectionJSON, createCtx());
-    expect("show_on_hub" in section).toBe(false)
+    expect("show_on_hub" in section).toBe(false);
   });
 
   it("should set show_on_hub to true", () => {
     const sectionJSON = createSectionJSON();
     sectionJSON.showOnHub = false;
     const section = new Section(sectionJSON, createCtx());
-    expect(section.show_on_hub).toBe(false)
+    expect(section.show_on_hub).toBe(false);
   });
 
   it("should set show_on_hub to false", () => {
     const sectionJSON = createSectionJSON();
     sectionJSON.showOnHub = true;
     const section = new Section(sectionJSON, createCtx());
-    expect(section.show_on_hub).toBe(true)
+    expect(section.show_on_hub).toBe(true);
   });
 
   describe("Section introduction", () => {
@@ -99,6 +99,56 @@ describe("Section", () => {
       const sectionJSON = createSectionJSON();
       const section = new Section(sectionJSON, createCtx());
       expect(section.groups[0].blocks[0].type).not.toBe("Interstitial");
+    });
+  });
+
+  describe("Display conditions", () => {
+    it("Should add a display condition if there are any", () => {
+      const sectionJSON = createSectionJSON();
+
+      sectionJSON.displayConditions = [
+        {
+          id: "2dd60b72-279a-47e9-b0db-e8ff1691adfe",
+          operator: "And",
+          expressions: [
+            {
+              id: "f9d2fb13-0120-4ae5-adf1-3561b30e030b",
+              condition: "GreaterThan",
+              left: {
+                type: "Answer",
+                answerId: "43881b52-bdb2-450e-ac05-0326c39cedcf",
+              },
+              right: {
+                type: "Custom",
+                customValue: {
+                  number: 0,
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      const section = new Section(sectionJSON, createCtx());
+
+      expect(section.enabled).toBeTruthy();
+      expect(section.enabled[0]).toMatchObject({
+        when: [
+          {
+            id: "answer43881b52-bdb2-450e-ac05-0326c39cedcf",
+            condition: "greater than",
+            value: 0,
+          },
+        ],
+      });
+    });
+
+    it("Should not add display conditions if there are none", () => {
+      const sectionJSON = createSectionJSON();
+
+      const section = new Section(sectionJSON, createCtx());
+
+      expect(section.enabled).toBeFalsy();
     });
   });
 });

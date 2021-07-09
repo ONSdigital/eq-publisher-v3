@@ -1,9 +1,9 @@
-const translateAuthorSkipConditions = require("./");
+const translateAuthorExpressionGroup = require(".");
 const { questionnaireJson } = require("../basicQuestionnaireJSON");
 
-describe("skipConditions", () => {
+describe("expressionGroup", () => {
   it("should translate a complex example correctly", () => {
-    const authorSkipConditions = [
+    const authorExpressionGroup = [
       {
         expressions: [
           {
@@ -15,8 +15,8 @@ describe("skipConditions", () => {
             right: {
               type: "Custom",
               customValue: {
-                number: 5
-              }
+                number: 5,
+              },
             },
           },
         ],
@@ -31,15 +31,18 @@ describe("skipConditions", () => {
             condition: "OneOf",
             right: {
               type: "SelectedOptions",
-              optionIds: ["123", "456"]
+              optionIds: ["123", "456"],
             },
           },
         ],
       },
     ];
 
-    const skipConditions = translateAuthorSkipConditions(authorSkipConditions, { questionnaireJson });
-    expect(skipConditions).toMatchObject([
+    const expressionGroup = translateAuthorExpressionGroup(
+      authorExpressionGroup,
+      { questionnaireJson }
+    );
+    expect(expressionGroup).toMatchObject([
       {
         when: [
           {
