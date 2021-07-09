@@ -4,25 +4,25 @@ const { flow, getOr, last, map, some } = require("lodash/fp");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePipeContent
+  reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 
 const translateAuthorRouting = require("../../builders/routing2");
-const translateAuthorSkipconditions = require("../../builders/skipConditions");
+const translateAuthorSkipconditions = require("../../builders/expressionGroup");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
 
 const pageTypeMappings = {
   QuestionPage: "Question",
-  InterstitialPage: "Interstitial"
+  InterstitialPage: "Interstitial",
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const reversePipe = ctx =>
+const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
 
 const isLastPageInSection = (page, ctx) =>
@@ -42,7 +42,10 @@ class Block {
       );
     }
     if (page.skipConditions) {
-      this.skip_conditions = translateAuthorSkipconditions(page.skipConditions, ctx);
+      this.skip_conditions = translateAuthorSkipconditions(
+        page.skipConditions,
+        ctx
+      );
     }
   }
 
@@ -52,8 +55,8 @@ class Block {
       id: `group${groupId}-introduction`,
       content: {
         title: processPipe(ctx)(introductionTitle) || "",
-        contents: reversePipe(ctx)(introductionContent).contents
-      }
+        contents: reversePipe(ctx)(introductionContent).contents,
+      },
     };
   }
 
@@ -69,8 +72,8 @@ class Block {
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
-        answers_to_calculate: page.summaryAnswers.map(o => `answer${o}`),
-        title: processPipe(ctx)(page.totalTitle)
+        answers_to_calculate: page.summaryAnswers.map((o) => `answer${o}`),
+        title: processPipe(ctx)(page.totalTitle),
       };
     }
   }
