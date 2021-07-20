@@ -1,26 +1,31 @@
 const translateRoutingDestination = require(".");
-const { questionnaireJson, questionnaireJsonWithSummary } = require("../../basicQuestionnaireJSON");
+const {
+  questionnaireJson,
+  questionnaireJsonWithSummary,
+} = require("../../basicQuestionnaireJSON");
 
 describe("Translation of a routing destination", () => {
   it("should translate an absolute destination to another Page", () => {
     const authorDestination = {
-      pageId: "2"
+      pageId: "2",
     };
     expect(translateRoutingDestination(authorDestination)).toMatchObject({
-      block: "block2"
+      block: "block2",
     });
   });
   it("should translate an absolute destination to another Section", () => {
     const authorDestination = {
-      sectionId: "2"
+      sectionId: "2",
     };
-    expect(translateRoutingDestination(authorDestination, "2", { questionnaireJson })).toMatchObject({
-      group: "groupfolder-2"
+    expect(
+      translateRoutingDestination(authorDestination, "2", { questionnaireJson })
+    ).toMatchObject({
+      group: "group2",
     });
   });
   it("should translate a next page destination", () => {
     const authorDestination = {
-      logical: "NextPage"
+      logical: "NextPage",
     };
     expect(
       translateRoutingDestination(authorDestination, "1", { questionnaireJson })
@@ -29,16 +34,16 @@ describe("Translation of a routing destination", () => {
 
   it("should translate a next page destination when last page in section", () => {
     const authorDestination = {
-      logical: "NextPage"
+      logical: "NextPage",
     };
     expect(
       translateRoutingDestination(authorDestination, "2", { questionnaireJson })
-    ).toMatchObject({ group: "groupfolder-2" });
+    ).toMatchObject({ group: "group2" });
   });
 
   it("should translate a next page destination as confirmation-group when last page in questionnaire", () => {
     const authorDestination = {
-      logical: "NextPage"
+      logical: "NextPage",
     };
     expect(
       translateRoutingDestination(authorDestination, "3", { questionnaireJson })
@@ -47,25 +52,29 @@ describe("Translation of a routing destination", () => {
 
   it("should translate a next page destination as summary when last page in questionnaire", () => {
     const authorDestination = {
-      logical: "NextPage"
+      logical: "NextPage",
     };
     expect(
-      translateRoutingDestination(authorDestination, "3", { questionnaireJson: questionnaireJsonWithSummary })
+      translateRoutingDestination(authorDestination, "3", {
+        questionnaireJson: questionnaireJsonWithSummary,
+      })
     ).toMatchObject({ group: "summary-group" });
   });
 
   it("should translate a end of questionnaire destination as summary", () => {
     const authorDestination = {
-      logical: "EndOfQuestionnaire"
+      logical: "EndOfQuestionnaire",
     };
     expect(
-      translateRoutingDestination(authorDestination, "3", { questionnaireJson: questionnaireJsonWithSummary })
+      translateRoutingDestination(authorDestination, "3", {
+        questionnaireJson: questionnaireJsonWithSummary,
+      })
     ).toMatchObject({ group: "summary-group" });
   });
 
   it("should translate a end of questionnaire destination as confirmation-group", () => {
     const authorDestination = {
-      logical: "EndOfQuestionnaire"
+      logical: "EndOfQuestionnaire",
     };
     expect(
       translateRoutingDestination(authorDestination, "1", { questionnaireJson })

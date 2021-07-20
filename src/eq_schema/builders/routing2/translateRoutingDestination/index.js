@@ -10,15 +10,14 @@ const getAbsoluteDestination = (destination, ctx) => {
   const targetSection = ctx.questionnaireJson.sections.find(
     ({ id }) => id === destination.sectionId
   );
-  const targetFolder = targetSection.folders[0];
 
-  return { group: `group${targetFolder.id}` };
+  return { group: `group${targetSection.id}` };
 };
 
 const getNextPageDestination = (pageId, ctx) => {
-  const pages = flatMap(ctx.questionnaireJson.sections, section =>
-    flatMap(section.folders, folder =>
-      flatMap(folder.pages, page => ({
+  const pages = flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, (folder) =>
+      flatMap(folder.pages, (page) => ({
         id: page.id,
         sectionId: section.id,
         folderId: folder.id,
@@ -41,8 +40,8 @@ const getNextPageDestination = (pageId, ctx) => {
         ? "summary-group"
         : "confirmation-group",
     };
-  } else if (currentPage.sectionId !== nextPage.sectionId || (currentPage.folderId !== nextPage.folderId && nextPage.folderEnabled)) {
-    return { group: `group${nextPage.folderId}` };
+  } else if (currentPage.sectionId !== nextPage.sectionId) {
+    return { group: `group${nextPage.sectionId}` };
   } else {
     return { block: `block${nextPage.id}` };
   }
