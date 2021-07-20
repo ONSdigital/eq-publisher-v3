@@ -246,8 +246,7 @@ describe("Group", () => {
           type: "General",
           answers: [
             {
-              id:
-                "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
               mandatory: true,
               type: "Radio",
               options: [
@@ -271,8 +270,7 @@ describe("Group", () => {
               block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
               when: [
                 {
-                  id:
-                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                   condition: "equals",
                   value: "Wait I can get more?",
                 },
@@ -308,8 +306,7 @@ describe("Group", () => {
           type: "General",
           answers: [
             {
-              id:
-                "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
               mandatory: true,
               type: "Radio",
               q_code: "123",
@@ -334,8 +331,7 @@ describe("Group", () => {
               block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
               when: [
                 {
-                  id:
-                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                   condition: "equals",
                   value: "Wait I can get more?",
                 },
@@ -402,8 +398,7 @@ describe("Group", () => {
             block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
             when: [
               {
-                id:
-                  "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                 condition: "equals",
                 value: "Wait I can get more?",
               },
@@ -412,7 +407,7 @@ describe("Group", () => {
         },
         {
           goto: {
-            group: "groupfolder-1",
+            group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
             when: [
               {
                 id: "answer1",
