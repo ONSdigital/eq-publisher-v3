@@ -92,7 +92,13 @@ const FILTER_MAP = {
 
 const PIPE_TYPES = {
   answers: {
-    retrieve: ({ id }, ctx) => getAnswer(ctx, id.toString()),
+    retrieve: ({ id, type }, ctx) => {
+      let tempId = id.toString()
+      if (type === "DateRange") {
+        tempId = id.endsWith("from") ? id.slice(0, -4) : id.slice(0, -2)
+      }
+      return getAnswer(ctx, tempId)
+    },
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type,
   },
@@ -128,7 +134,7 @@ const getPipedData = (store) => (element, ctx) => {
     return "";
   }
 
-  const output = pipeConfig.render(entity);
+  const output = elementData.type === "DateRange" ? pipeConfig.render(elementData) : pipeConfig.render(entity);
   const pipedType = pipeConfig.getType(entity);
 
   const transformed = FILTER_MAP[pipedType];
@@ -154,7 +160,7 @@ const getPipedData = (store) => (element, ctx) => {
           transform: format,
           arguments: options(
             piped,
-            entity.key || `answer${entity.id}`,
+            entity.key || output,
             dateFormat,
             unitType
           ),
@@ -166,7 +172,7 @@ const getPipedData = (store) => (element, ctx) => {
       placeholder: removeDash(placeHolderText),
       value: {
         source: piped,
-        identifier: entity.key || `answer${entity.id}`,
+        identifier: entity.key || output,
       },
     };
   }
