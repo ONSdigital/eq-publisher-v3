@@ -26,7 +26,8 @@ const getAnswer = (ctx, answerId) =>
 const FILTER_MAP = {
   Currency: (format, value) => buildStructure(format, value),
   Date: (format, value) => buildStructure(format, value),
-  DateRange: (format, value) => buildStructure(format, value),
+  DateRange: (format, value, fallback) =>
+    buildStructure(format, value, fallback),
   Number: (format, value) => buildStructure(format, value),
   Unit: (format, value) => buildStructure(format, value),
 };
@@ -42,6 +43,9 @@ const PIPE_TYPES = {
     },
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type,
+    getFallback: ({
+      properties: { fallback: { enabled, start, end } = {} } = {},
+    }) => (enabled ? { from: start, to: end } : null),
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
@@ -64,7 +68,6 @@ const getPipedData = (store) => (element, ctx) => {
   if (piped === "variable") {
     return pipeConfig.render();
   }
-
   if (!pipeConfig) {
     return "";
   }
@@ -98,15 +101,13 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
-    const { format, value, options } = transformed(pipedType, output);
+    const fallback = pipeConfig.getFallback(entity);
+
+    const { value, transforms } = transformed(pipedType, output, fallback);
+
     placeholder = {
       placeholder: removeDash(value),
-      transforms: [
-        {
-          transform: format,
-          arguments: options(piped, entity.key || output, dateFormat, unitType),
-        },
-      ],
+      transforms: transforms(piped, entity.key || output, dateFormat, unitType),
     };
   } else {
     placeholder = {

@@ -25,24 +25,8 @@ const TRANSFORM_MAP = {
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
-// this returns
-// structure {
-//   value: 'answer3bd97c0f-7e79-4cb3-9823-159c7ef6674ato',
-//   format: 'format_date',
-//   options: [Function: structureOptions]
-// }
-// options {
-//   date_to_format: {
-//     source: 'answers',
-//     identifier: 'answer3bd97c0f-7e79-4cb3-9823-159c7ef6674ato'
-//   },
-//   date_format: 'd MMMM yyyy'
-// }
-// Which is then used to build the transform
-
-const buildStructure = (AnswerType, value) => {
-  //Unit type and DateFormat are both undefined
-  const structureOptions = (source, identifier, dateFormat, unitType) => {
+const buildStructure = (AnswerType, value, fallback) => {
+  const transformStructure = (source, identifier, dateFormat, unitType) => {
     const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
 
     const options = {
@@ -72,24 +56,64 @@ const buildStructure = (AnswerType, value) => {
         break;
     }
 
-    return options;
+    let transform;
+
+    if (fallback) {
+      const metaIdentifier = identifier.includes("to")
+        ? fallback.to
+        : fallback.from;
+
+      const items = {
+        items: [
+          {
+            source,
+            identifier,
+          },
+          {
+            source: "metadata",
+            identifier: metaIdentifier,
+          },
+        ],
+      };
+
+      transform = [
+        {
+          transform: "first_non_empty_item",
+          arguments: items,
+        },
+        {
+          transform: TRANSFORM_MAP[AnswerType].format,
+          arguments: {
+            [transformKey]: {
+              source: "previous_transform",
+            },
+            date_format: format,
+          },
+        },
+      ];
+
+      return transform;
+    } else {
+      transform = [
+        {
+          transform: TRANSFORM_MAP[AnswerType].format,
+          arguments: options,
+        },
+      ];
+
+      return transform;
+    }
   };
 
   const structure = {
     value,
     format: TRANSFORM_MAP[AnswerType].format,
-    options: structureOptions,
+    transforms: transformStructure,
   };
 
   return structure;
 };
 
-// Create another function that accepts the structure from transform and returns the transform
-// What do we need
-// structure, elementData
-const buildTransform = (structure) => {};
-
 module.exports = {
   buildStructure,
-  buildTransform,
 };
