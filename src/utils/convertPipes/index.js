@@ -26,8 +26,7 @@ const getAnswer = (ctx, answerId) =>
 const FILTER_MAP = {
   Currency: (format, value) => buildStructure(format, value),
   Date: (format, value) => buildStructure(format, value),
-  DateRange: (format, value, fallback) =>
-    buildStructure(format, value, fallback),
+  DateRange: (format, value) => buildStructure(format, value),
   Number: (format, value) => buildStructure(format, value),
   Unit: (format, value) => buildStructure(format, value),
 };
@@ -103,11 +102,17 @@ const getPipedData = (store) => (element, ctx) => {
 
     const fallback = pipeConfig.getFallback(entity);
 
-    const { value, transforms } = transformed(pipedType, output, fallback);
+    const { value, transforms } = transformed(pipedType, output);
 
     placeholder = {
       placeholder: removeDash(value),
-      transforms: transforms(piped, entity.key || output, dateFormat, unitType),
+      transforms: transforms(
+        piped,
+        entity.key || output,
+        dateFormat,
+        unitType,
+        fallback
+      ),
     };
   } else {
     placeholder = {

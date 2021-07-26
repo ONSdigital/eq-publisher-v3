@@ -25,8 +25,14 @@ const TRANSFORM_MAP = {
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
-const buildStructure = (AnswerType, value, fallback) => {
-  const transformStructure = (source, identifier, dateFormat, unitType) => {
+const buildStructure = (AnswerType, value) => {
+  const transformArrayBuilder = (
+    source,
+    identifier,
+    dateFormat,
+    unitType,
+    fallback
+  ) => {
     const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
 
     const options = {
@@ -58,7 +64,7 @@ const buildStructure = (AnswerType, value, fallback) => {
 
     let transform;
 
-    if (fallback) {
+    if (fallback && AnswerType === "DateRange") {
       const metaIdentifier = identifier.includes("to")
         ? fallback.to
         : fallback.from;
@@ -93,22 +99,21 @@ const buildStructure = (AnswerType, value, fallback) => {
       ];
 
       return transform;
-    } else {
-      transform = [
-        {
-          transform: TRANSFORM_MAP[AnswerType].format,
-          arguments: options,
-        },
-      ];
-
-      return transform;
     }
+
+    transform = [
+      {
+        transform: TRANSFORM_MAP[AnswerType].format,
+        arguments: options,
+      },
+    ];
+
+    return transform;
   };
 
   const structure = {
     value,
-    format: TRANSFORM_MAP[AnswerType].format,
-    transforms: transformStructure,
+    transforms: transformArrayBuilder,
   };
 
   return structure;
