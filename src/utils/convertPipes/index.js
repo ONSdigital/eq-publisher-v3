@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
-const { buildStructure } = require("./transform");
+const { transformArrayBuilder } = require("./TransformArrayBuilder");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
@@ -23,13 +23,10 @@ const getAnswer = (ctx, answerId) =>
     .filter((answer) => isPipeableType(answer))
     .find((answer) => answer.id === answerId);
 
-const FILTER_MAP = {
-  Currency: (format, value) => buildStructure(format, value),
-  Date: (format, value) => buildStructure(format, value),
-  DateRange: (format, value) => buildStructure(format, value),
-  Number: (format, value) => buildStructure(format, value),
-  Unit: (format, value) => buildStructure(format, value),
-};
+const pipeAnswerTypes = ["Currency", "Date", "DateRange", "Number", "Unit"];
+
+const answerThatCanBePiped = (answerType) =>
+  pipeAnswerTypes.some((e) => e.includes(answerType));
 
 const PIPE_TYPES = {
   answers: {
@@ -82,17 +79,13 @@ const getPipedData = (store) => (element, ctx) => {
       ? pipeConfig.render(elementData)
       : pipeConfig.render(entity);
 
-  const pipedType = pipeConfig.getType(entity);
+  const answerType = pipeConfig.getType(entity);
 
-  const transformed = FILTER_MAP[pipedType];
-
-  const placeHolderText = transformed
-    ? `${transformed(pipedType, output).value}`
-    : `${output}`;
+  const canBePiped = answerThatCanBePiped(answerType);
 
   let placeholder = {};
 
-  if (transformed) {
+  if (canBePiped) {
     let dateFormat, unitType;
 
     if (entity.properties) {
@@ -100,23 +93,23 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
-    const fallback = pipeConfig.getFallback(entity);
-
-    const { value, transforms } = transformed(pipedType, output);
+    const fallback =
+      piped === "answers" ? pipeConfig.getFallback(entity) : null;
 
     placeholder = {
-      placeholder: removeDash(value),
-      transforms: transforms(
+      placeholder: removeDash(output),
+      transforms: transformArrayBuilder(
         piped,
         entity.key || output,
         dateFormat,
         unitType,
-        fallback
+        fallback,
+        answerType
       ),
     };
   } else {
     placeholder = {
-      placeholder: removeDash(placeHolderText),
+      placeholder: removeDash(output),
       value: {
         source: piped,
         identifier: entity.key || output,
@@ -126,7 +119,7 @@ const getPipedData = (store) => (element, ctx) => {
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${removeDash(placeHolderText)}}`;
+  return `{${removeDash(output)}}`;
 };
 
 const convertPipes = (ctx) => (html) => {
