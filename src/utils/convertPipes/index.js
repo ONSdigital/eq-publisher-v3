@@ -8,7 +8,8 @@ const getMetadata = (ctx, metadataId) =>
 
 const isPipeableType = (answer) => {
   const notPipeableAnswerTypes = ["TextArea", "Radio", "CheckBox"];
-  return !includes(notPipeableAnswerTypes, answer.type);
+  const { type } = answer;
+  return !includes(notPipeableAnswerTypes, type);
 };
 
 const getAllAnswers = (questionnaire) =>
@@ -17,16 +18,15 @@ const getAllAnswers = (questionnaire) =>
       compact(flatMap(folder.pages, (page) => page.answers))
     )
   );
+const transformTypes = ["Currency", "Date", "DateRange", "Number", "Unit"];
+
+const answerThatCanBeTransformed = (answerType) =>
+  transformTypes.some((e) => e.includes(answerType));
 
 const getAnswer = (ctx, answerId) =>
   getAllAnswers(ctx.questionnaireJson)
     .filter((answer) => isPipeableType(answer))
     .find((answer) => answer.id === answerId);
-
-const pipeAnswerTypes = ["Currency", "Date", "DateRange", "Number", "Unit"];
-
-const answerThatCanBePiped = (answerType) =>
-  pipeAnswerTypes.some((e) => e.includes(answerType));
 
 const PIPE_TYPES = {
   answers: {
@@ -81,7 +81,7 @@ const getPipedData = (store) => (element, ctx) => {
 
   const answerType = pipeConfig.getType(entity);
 
-  const canBePiped = answerThatCanBePiped(answerType);
+  const canBePiped = answerThatCanBeTransformed(answerType);
 
   let placeholder = {};
 
