@@ -21,8 +21,11 @@ const TRANSFORM_MAP = {
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
-  Text: { format: "", transformKey: "" },
-  Text_Optional: { format: "", transformKey: "" },
+  Text: { format: "non_empty_string", transformKey: "non_empty_string" },
+  Text_Optional: {
+    format: "non_empty_string",
+    transformKey: "non_empty_string",
+  },
 };
 
 const transformArrayBuilder = (
@@ -31,7 +34,7 @@ const transformArrayBuilder = (
   dateFormat,
   unitType,
   fallback,
-  fallbackKey,
+  metaFallback,
   AnswerType
 ) => {
   const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
@@ -65,12 +68,14 @@ const transformArrayBuilder = (
 
   let transform;
 
-  if (AnswerType === "Text" || AnswerType === "Text_Optional") {
+  if (metaFallback.fallbackKey) {
+    const { key, fallbackKey } = metaFallback;
+
     const items = {
       items: [
         {
           source,
-          identifier,
+          identifier: key,
         },
         {
           source,

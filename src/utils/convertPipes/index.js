@@ -102,7 +102,10 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
-    const fallbackKey = output;
+    const metaFallback = {
+      key: entity.key,
+      fallbackKey: entity.fallbackKey,
+    };
 
     const fallback =
       piped === "answers" ? pipeConfig.getFallback(entity) : null;
@@ -115,7 +118,7 @@ const getPipedData = (store) => (element, ctx) => {
         dateFormat,
         unitType,
         fallback,
-        fallbackKey,
+        metaFallback,
         answerType
       ),
     };
@@ -131,7 +134,9 @@ const getPipedData = (store) => (element, ctx) => {
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${removeDash(output)}}`;
+  return `{${
+    typeof output === "string" ? removeDash(output) : removeDash(output.key)
+  }}`;
 };
 
 const convertPipes = (ctx) => (html) => {
