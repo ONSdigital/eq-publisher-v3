@@ -21,6 +21,8 @@ const TRANSFORM_MAP = {
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
+  Text: { format: "", transformKey: "" },
+  Text_Optional: { format: "", transformKey: "" },
 };
 
 const transformArrayBuilder = (
@@ -29,6 +31,7 @@ const transformArrayBuilder = (
   dateFormat,
   unitType,
   fallback,
+  fallbackKey,
   AnswerType
 ) => {
   const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
@@ -62,7 +65,31 @@ const transformArrayBuilder = (
 
   let transform;
 
-  if (fallback && AnswerType === "DateRange") {
+  if (AnswerType === "Text" || AnswerType === "Text_Optional") {
+    const items = {
+      items: [
+        {
+          source,
+          identifier,
+        },
+        {
+          source,
+          identifier: fallbackKey,
+        },
+      ],
+    };
+
+    transform = [
+      {
+        transform: "first_non_empty_item",
+        arguments: items,
+      },
+    ];
+
+    return transform;
+  }
+
+  if (fallback) {
     const metaIdentifier = identifier.includes("to")
       ? fallback.to
       : fallback.from;

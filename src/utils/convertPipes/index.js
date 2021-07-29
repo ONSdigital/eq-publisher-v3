@@ -18,7 +18,15 @@ const getAllAnswers = (questionnaire) =>
       compact(flatMap(folder.pages, (page) => page.answers))
     )
   );
-const transformTypes = ["Currency", "Date", "DateRange", "Number", "Unit"];
+const transformTypes = [
+  "Currency",
+  "Date",
+  "DateRange",
+  "Number",
+  "Unit",
+  "Text",
+  "Text_Optional",
+];
 
 const answerThatCanBeTransformed = (answerType) =>
   transformTypes.some((e) => e.includes(answerType));
@@ -45,7 +53,8 @@ const PIPE_TYPES = {
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
-    render: ({ key }) => `${key}`,
+    render: ({ key, fallbackKey }) =>
+      fallbackKey ? `${fallbackKey}` : `${key}`,
     getType: ({ type }) => type,
   },
   variable: {
@@ -93,6 +102,8 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
+    const fallbackKey = output;
+
     const fallback =
       piped === "answers" ? pipeConfig.getFallback(entity) : null;
 
@@ -104,6 +115,7 @@ const getPipedData = (store) => (element, ctx) => {
         dateFormat,
         unitType,
         fallback,
+        fallbackKey,
         answerType
       ),
     };
