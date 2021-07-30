@@ -21,11 +21,11 @@ const TRANSFORM_MAP = {
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
-  Text: { format: "non_empty_string", transformKey: "non_empty_string" },
-  Text_Optional: {
-    format: "non_empty_string",
-    transformKey: "non_empty_string",
-  },
+  // Text: { format: "non_empty_string", transformKey: "non_empty_string" },
+  // Text_Optional: {
+  //   format: "non_empty_string",
+  //   transformKey: "non_empty_string",
+  // },
 };
 
 const transformArrayBuilder = (
@@ -37,8 +37,18 @@ const transformArrayBuilder = (
   metaFallback,
   AnswerType
 ) => {
-  const transformKey = [TRANSFORM_MAP[AnswerType].transformKey];
+  // console.log("transformKey", transformKey);
+  // console.log("source", source);
+  // console.log("identifier", identifier);
+  // console.log("dateFormat", dateFormat);
+  // console.log("unitType", unitType);
+  // console.log("fallback", fallback);
+  // console.log("metaFallback", metaFallback);
+  // console.log("AnswerType", AnswerType);
 
+  const transformKey = TRANSFORM_MAP[AnswerType]
+    ? [TRANSFORM_MAP[AnswerType].transformKey]
+    : "value";
   const options = {
     [transformKey]: {
       source,
@@ -67,11 +77,15 @@ const transformArrayBuilder = (
   }
 
   let transform;
+  let items;
 
-  if (metaFallback.fallbackKey) {
+  if (
+    metaFallback.fallbackKey !== "" &&
+    metaFallback.fallbackKey !== undefined
+  ) {
     const { key, fallbackKey } = metaFallback;
 
-    const items = {
+    items = {
       items: [
         {
           source,
@@ -94,12 +108,12 @@ const transformArrayBuilder = (
     return transform;
   }
 
-  if (fallback) {
+  if (fallback !== null) {
     const metaIdentifier = identifier.includes("to")
       ? fallback.to
       : fallback.from;
 
-    const items = {
+    items = {
       items: [
         {
           source,
@@ -133,7 +147,9 @@ const transformArrayBuilder = (
 
   transform = [
     {
-      transform: TRANSFORM_MAP[AnswerType].format,
+      transform: TRANSFORM_MAP[AnswerType]
+        ? TRANSFORM_MAP[AnswerType].format
+        : "boom",
       arguments: options,
     },
   ];

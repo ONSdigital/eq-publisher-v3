@@ -91,24 +91,22 @@ const getPipedData = (store) => (element, ctx) => {
   const answerType = pipeConfig.getType(entity);
 
   const canBePiped = answerThatCanBeTransformed(answerType);
-
+  const fallback = piped === "answers" ? pipeConfig.getFallback(entity) : null;
+  const metaFallback = {
+    key: entity.key,
+    fallbackKey: entity.fallbackKey,
+  };
   let placeholder = {};
 
-  if (canBePiped) {
+  // console.log("canBePiped", canBePiped);
+  console.log("meta", answerType);
+  if (canBePiped && metaFallback.fallbackKey !== "") {
     let dateFormat, unitType;
 
     if (entity.properties) {
       dateFormat = entity.properties.format;
       unitType = entity.properties.unit;
     }
-
-    const metaFallback = {
-      key: entity.key,
-      fallbackKey: entity.fallbackKey,
-    };
-
-    const fallback =
-      piped === "answers" ? pipeConfig.getFallback(entity) : null;
 
     placeholder = {
       placeholder: removeDash(output),
