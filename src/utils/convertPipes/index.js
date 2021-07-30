@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const { flatMap, includes, compact } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
-const { transformArrayBuilder } = require("./TransformArrayBuilder");
+const { placeholderObjectBuilder } = require("./PlaceholderObjectBuilder");
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
@@ -106,7 +106,7 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
-    placeholder = transformArrayBuilder(
+    placeholder = placeholderObjectBuilder(
       piped,
       entity.key || output,
       dateFormat,

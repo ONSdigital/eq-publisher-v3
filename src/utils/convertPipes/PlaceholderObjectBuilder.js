@@ -24,7 +24,7 @@ const TRANSFORM_MAP = {
   Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
-const transformArrayBuilder = (
+const placeholderObjectBuilder = (
   source,
   identifier,
   dateFormat,
@@ -172,5 +172,5 @@ const transformArrayBuilder = (
 };
 
 module.exports = {
-  transformArrayBuilder,
+  placeholderObjectBuilder,
 };
