@@ -96,11 +96,9 @@ const getPipedData = (store) => (element, ctx) => {
     key: entity.key,
     fallbackKey: entity.fallbackKey,
   };
-  let placeholder = {};
+  let placeholder;
 
-  // console.log("canBePiped", canBePiped);
-  console.log("meta", answerType);
-  if (canBePiped && metaFallback.fallbackKey !== "") {
+  if (canBePiped) {
     let dateFormat, unitType;
 
     if (entity.properties) {
@@ -108,18 +106,15 @@ const getPipedData = (store) => (element, ctx) => {
       unitType = entity.properties.unit;
     }
 
-    placeholder = {
-      placeholder: removeDash(output),
-      transforms: transformArrayBuilder(
-        piped,
-        entity.key || output,
-        dateFormat,
-        unitType,
-        fallback,
-        metaFallback,
-        answerType
-      ),
-    };
+    placeholder = transformArrayBuilder(
+      piped,
+      entity.key || output,
+      dateFormat,
+      unitType,
+      fallback,
+      metaFallback,
+      answerType
+    );
   } else {
     placeholder = {
       placeholder: removeDash(output),
