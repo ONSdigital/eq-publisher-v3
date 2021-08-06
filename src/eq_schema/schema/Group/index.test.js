@@ -275,6 +275,9 @@ describe("Group", () => {
               },
             ],
           },
+          {
+            group: "confirmation-group",
+          },
         ],
       };
 
@@ -328,6 +331,9 @@ describe("Group", () => {
                 value: "Wait I can get more?",
               },
             ],
+          },
+          {
+            group: "confirmation-group",
           },
         ],
       };
@@ -398,6 +404,9 @@ describe("Group", () => {
               value: "5",
             },
           ],
+        },
+        {
+          group: "confirmation-group",
         },
       ];
 

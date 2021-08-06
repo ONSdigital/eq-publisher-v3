@@ -99,6 +99,9 @@ describe("Routing2", () => {
           },
         ],
       },
+      {
+        block: "block3",
+      },
     ]);
   });
 
@@ -173,6 +176,9 @@ describe("Routing2", () => {
             values: ["red", "white"],
           },
         ],
+      },
+      {
+        block: "block3",
       },
     ]);
   });
