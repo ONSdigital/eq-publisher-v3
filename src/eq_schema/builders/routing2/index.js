@@ -47,7 +47,6 @@ module.exports = (routing, pageId, groupId, ctx) => {
   });
 
   const destination = translateRoutingDestination(routing.else, pageId, ctx);
-  // Pretty sure we don't need the goto.
-  // console.log("boom", [...rules, { goto: destination }]);
-  return [...rules];
+
+  return [...rules, { ...destination }];
 };
