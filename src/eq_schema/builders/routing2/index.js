@@ -12,41 +12,43 @@ const addRuleToContext = (goto, groupId, ctx) => {
 };
 
 module.exports = (routing, pageId, groupId, ctx) => {
-  const rules = flatMap(routing.rules, rule => {
+  const rules = flatMap(routing.rules, (rule) => {
     let runnerRules;
 
+    console.log("rule.destination", rule.destination);
     const destination = translateRoutingDestination(
       rule.destination,
       pageId,
       ctx
     );
+
     if (rule.expressionGroup.operator === AND) {
-      const when = rule.expressionGroup.expressions.map(expression =>
+      const when = rule.expressionGroup.expressions.map((expression) =>
         translateBinaryExpression(expression, ctx)
       );
       runnerRules = [
         {
-          goto: {
-            ...destination,
-            when
-          }
-        }
+          ...destination,
+          when,
+        },
       ];
     } else {
-      runnerRules = rule.expressionGroup.expressions.map(expression => {
+      runnerRules = rule.expressionGroup.expressions.map((expression) => {
         return {
-          goto: {
-            ...destination,
-            when: [translateBinaryExpression(expression, ctx)]
-          }
+          ...destination,
+          when: [translateBinaryExpression(expression, ctx)],
         };
       });
     }
-    runnerRules.map(expression => {
-      addRuleToContext(expression.goto, groupId, ctx);
+    runnerRules.map((expression) => {
+      addRuleToContext(expression, groupId, ctx);
     });
+
     return runnerRules;
   });
+
   const destination = translateRoutingDestination(routing.else, pageId, ctx);
-  return [...rules, { goto: destination }];
+  // Pretty sure we don't need the goto.
+  // console.log("boom", [...rules, { goto: destination }]);
+  return [...rules];
 };
