@@ -15,7 +15,6 @@ module.exports = (routing, pageId, groupId, ctx) => {
   const rules = flatMap(routing.rules, (rule) => {
     let runnerRules;
 
-    console.log("rule.destination", rule.destination);
     const destination = translateRoutingDestination(
       rule.destination,
       pageId,

@@ -8,7 +8,7 @@ describe("Routing2", () => {
     routingGotos = [];
     ctx = {
       questionnaireJson,
-      routingGotos
+      routingGotos,
     };
   });
   it("should translate a complex example with 'And' correctly", () => {
@@ -21,20 +21,20 @@ describe("Routing2", () => {
               {
                 left: {
                   answerId: "1",
-                  type: "Answer"
+                  type: "Answer",
                 },
                 condition: "Equal",
                 right: {
                   customValue: {
-                    number: 5
-                  }
-                }
-              }
-            ]
+                    number: 5,
+                  },
+                },
+              },
+            ],
           },
           destination: {
-            logical: "NextPage"
-          }
+            logical: "NextPage",
+          },
         },
         {
           expressionGroup: {
@@ -43,27 +43,24 @@ describe("Routing2", () => {
               {
                 left: {
                   answerId: "2",
-                  type: "Answer"
+                  type: "Answer",
                 },
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                  
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "EndOfQuestionnaire"
-          }
-        }
+            logical: "EndOfQuestionnaire",
+          },
+        },
       ],
       else: {
-        pageId: "3"
-      }
+        pageId: "3",
+      },
     };
 
     const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
@@ -75,42 +72,33 @@ describe("Routing2", () => {
           {
             condition: "equals any",
             id: "answer2",
-            values: ["red", "white"]
-          }
-        ]
-      }
+            values: ["red", "white"],
+          },
+        ],
+      },
     ]);
 
     expect(runnerRouting).toMatchObject([
       {
-        goto: {
-          block: "block2",
-          when: [
-            {
-              id: "answer1",
-              condition: "equals",
-              value: 5
-            }
-          ]
-        }
+        block: "block2",
+        when: [
+          {
+            id: "answer1",
+            condition: "equals",
+            value: 5,
+          },
+        ],
       },
       {
-        goto: {
-          group: "confirmation-group",
-          when: [
-            {
-              id: "answer2",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+        group: "confirmation-group",
+        when: [
+          {
+            id: "answer2",
+            condition: "equals any",
+            values: ["red", "white"],
+          },
+        ],
       },
-      {
-        goto: {
-          block: "block3"
-        }
-      }
     ]);
   });
 
@@ -129,16 +117,14 @@ describe("Routing2", () => {
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "NextPage"
-          }
+            logical: "NextPage",
+          },
         },
         {
           expressionGroup: {
@@ -152,53 +138,42 @@ describe("Routing2", () => {
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "EndOfQuestionnaire"
-          }
-        }
+            logical: "EndOfQuestionnaire",
+          },
+        },
       ],
       else: {
-        pageId: "3"
-      }
+        pageId: "3",
+      },
     };
     const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
     expect(runnerRouting).toMatchObject([
       {
-        goto: {
-          block: "block2",
-          when: [
-            {
-              id: "answer1",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+        block: "block2",
+        when: [
+          {
+            id: "answer1",
+            condition: "equals any",
+            values: ["red", "white"],
+          },
+        ],
       },
       {
-        goto: {
-          group: "confirmation-group",
-          when: [
-            {
-              id: "answer2",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+        group: "confirmation-group",
+        when: [
+          {
+            id: "answer2",
+            condition: "equals any",
+            values: ["red", "white"],
+          },
+        ],
       },
-      {
-        goto: {
-          block: "block3"
-        }
-      }
     ]);
   });
 });

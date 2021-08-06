@@ -266,21 +266,14 @@ describe("Group", () => {
         },
         routing_rules: [
           {
-            goto: {
-              block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-              when: [
-                {
-                  id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                  condition: "equals",
-                  value: "Wait I can get more?",
-                },
-              ],
-            },
-          },
-          {
-            goto: {
-              group: "confirmation-group",
-            },
+            block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+            when: [
+              {
+                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                condition: "equals",
+                value: "Wait I can get more?",
+              },
+            ],
           },
         ],
       };
@@ -327,21 +320,14 @@ describe("Group", () => {
         },
         routing_rules: [
           {
-            goto: {
-              block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-              when: [
-                {
-                  id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                  condition: "equals",
-                  value: "Wait I can get more?",
-                },
-              ],
-            },
-          },
-          {
-            goto: {
-              group: "confirmation-group",
-            },
+            block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+            when: [
+              {
+                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                condition: "equals",
+                value: "Wait I can get more?",
+              },
+            ],
           },
         ],
       };
@@ -394,33 +380,24 @@ describe("Group", () => {
 
       const expectedRunnerRouting = [
         {
-          goto: {
-            block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-            when: [
-              {
-                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                condition: "equals",
-                value: "Wait I can get more?",
-              },
-            ],
-          },
+          block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          when: [
+            {
+              id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+              condition: "equals",
+              value: "Wait I can get more?",
+            },
+          ],
         },
         {
-          goto: {
-            group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
-            when: [
-              {
-                id: "answer1",
-                condition: "equals",
-                value: "5",
-              },
-            ],
-          },
-        },
-        {
-          goto: {
-            group: "confirmation-group",
-          },
+          group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
+          when: [
+            {
+              id: "answer1",
+              condition: "equals",
+              value: "5",
+            },
+          ],
         },
       ];
 
