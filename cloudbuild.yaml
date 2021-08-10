@@ -31,18 +31,18 @@ steps:
         fi
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    id: deploy_registry
+    id: deploy_publisher
     entrypoint: sh
     args:
       - '-c'
       - |
         if [ $_ENV = "staging" ]; then
-          gcloud run deploy eq-questionniare-registry \
+          gcloud run deploy eq-publisher \
           --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA" \
           --region europe-west2 \
           --platform managed
         else
-          gcloud run deploy eq-questionniare-registry \
+          gcloud run deploy eq-publisher \
           --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$TAG_NAME" \
           --region europe-west2 \
           --platform managed
