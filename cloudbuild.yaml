@@ -1,6 +1,6 @@
 steps:
   - name: docker
-    id: build_and_push_registry
+    id: build_and_push
     entrypoint: sh
     args: 
       - '-c'
@@ -31,7 +31,7 @@ steps:
         fi
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    id: deploy_publisher
+    id: deploy
     entrypoint: sh
     args:
       - '-c'
