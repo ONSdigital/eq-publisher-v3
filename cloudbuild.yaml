@@ -31,7 +31,7 @@ steps:
         fi
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    id: deploy_registry
+    id: deploy_publisher
     entrypoint: sh
     args:
       - '-c'
