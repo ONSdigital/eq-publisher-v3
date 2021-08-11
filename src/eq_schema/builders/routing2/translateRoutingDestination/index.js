@@ -54,6 +54,10 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
         ? "summary-group"
         : "confirmation-group",
     };
+  } else if (logical === "EndOfCurrentSection") {
+    return {
+      section: "End",
+    };
   } else if (logical === "NextPage") {
     return getNextPageDestination(pageId, ctx);
   } else {
