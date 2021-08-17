@@ -50,15 +50,19 @@ const createContext = (metadata = []) => ({
                   { id: `1`, type: "Text" },
                   { id: `2`, type: "Currency" },
                   { id: `3`, type: "DateRange" },
-                  { id: `4`, type: "Date", properties: { format: "dd/mm/yyyy" } },
+                  {
+                    id: `4`,
+                    type: "Date",
+                    properties: { format: "dd/mm/yyyy" },
+                  },
                   { id: `5`, type: "Number" },
                   { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
                 ],
               },
               {},
             ],
-          }
-        ]
+          },
+        ],
       },
     ],
   },
@@ -162,12 +166,15 @@ describe("convertPipes", () => {
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer3}",
-            createTransformation({
-              placeholder: "answer3",
-              source: "answers",
-              argument: "date_to_format",
-              transform: "format_date",
-            })
+            createTransformation(
+              {
+                placeholder: "answer3",
+                source: "answers",
+                argument: "date_to_format",
+                transform: "format_date",
+              },
+              { date_format: "d MMMM yyyy" }
+            )
           )
         );
       });

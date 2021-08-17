@@ -1,56 +1,49 @@
-# [START cloudbuild]
 steps:
-  # This step builds the container image.
-  - name: "gcr.io/cloud-builders/docker"
-    id: Build
-    args:
-      - "build"
-      - "-t"
-      - "eu.gcr.io/$PROJECT_ID/eq-publisher:$SHORT_SHA"
-      - "."
-
-  # This step pushes the image to Container Registry
-  - name: "gcr.io/cloud-builders/docker"
-    id: Push
-    args:
-      - "push"
-      - "eu.gcr.io/$PROJECT_ID/eq-publisher:$SHORT_SHA"
-
-  # This step clones the hello-cloudbuild-env repository
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Clone env repository
-    entrypoint: /bin/sh
-    args:
-      - "-c"
+  - name: docker
+    id: build_and_push
+    entrypoint: sh
+    args: 
+      - '-c'
       - |
-        gcloud source repos clone eq-publisher-env && \
-        cd eq-publisher-env && \
-        git checkout ${_ENV}-candidate && \
-        git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
+        if [ $_ENV = "staging" ]; then
+          docker build -t "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA" .
+          docker push "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA"
+        else
+          echo "*************************************************************"
+          echo "* Build not required                                        *"
+          echo "*************************************************************"
+        fi
 
-  # This step generates the new manifest
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Generate manifest
-    entrypoint: /bin/sh
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+    id: tag release
+    entrypoint: /bin/bash
     args:
-      - "-c"
+      - '-c'
       - |
-        sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" kubernetes.yaml.tpl | \
-        sed "s/COMMIT_SHA/${SHORT_SHA}/g" > eq-publisher-env/kubernetes.yaml
+        if [ $_ENV = "preprod" ]; then
+          gcloud container images add-tag \
+          eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA \
+          eu.gcr.io/ons-eqbs-images/eq-publisher:$TAG_NAME
+        else
+          echo "*************************************************************"
+          echo "* Tagging not required                                      *"
+          echo "*************************************************************"
+        fi
 
-  # This step pushes the manifest back to hello-cloudbuild-env
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: Push manifest
-    entrypoint: /bin/sh
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+    id: deploy
+    entrypoint: sh
     args:
-      - "-c"
+      - '-c'
       - |
-        set -x && \
-        cd eq-publisher-env && \
-        git add kubernetes.yaml && \
-        git commit -m "Deploying image eu.gcr.io/${PROJECT_ID}/eq-publisher-env:${SHORT_SHA}
-        Built from commit ${COMMIT_SHA} of repository eq-publisher
-        Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-        git push origin ${_ENV}-candidate
-
-# [END cloudbuild]
+        if [ $_ENV = "staging" ]; then
+          gcloud run deploy eq-publisher \
+          --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA" \
+          --region europe-west2 \
+          --platform managed
+        else
+          gcloud run deploy eq-publisher \
+          --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$TAG_NAME" \
+          --region europe-west2 \
+          --platform managed
+        fi
