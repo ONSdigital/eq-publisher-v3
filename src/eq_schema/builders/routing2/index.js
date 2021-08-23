@@ -3,6 +3,7 @@ const translateRoutingDestination = require("./translateRoutingDestination");
 const { flatMap } = require("lodash");
 const { AND, OR, NOT } = require("../../../constants/routingOperators");
 
+//TODO: Duplication of some code here
 const addRuleToContext = (goto, groupId, ctx) => {
   const destinationType = Object.keys(goto);
 

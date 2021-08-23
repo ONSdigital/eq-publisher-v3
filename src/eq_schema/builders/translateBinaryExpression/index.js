@@ -38,7 +38,6 @@ const buildAnswerBinaryExpression = ({ left, condition, right }, ctx) => {
 };
 
 const translateBinaryExpression = (binaryExpression, ctx) => {
-  console.log("i get here for skip");
   if (binaryExpression.left.type === "Answer") {
     return buildAnswerBinaryExpression(binaryExpression, ctx);
   } else {
