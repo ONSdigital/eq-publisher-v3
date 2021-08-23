@@ -1,7 +1,7 @@
-const translateBinaryExpression = require("../translateBinaryExpression");
+const checkValidRoutingType = require("./newRoutingDestination");
 const translateRoutingDestination = require("./translateRoutingDestination");
 const { flatMap } = require("lodash");
-const { AND } = require("../../../constants/routingOperators");
+const { AND, OR, NOT } = require("../../../constants/routingOperators");
 
 const addRuleToContext = (goto, groupId, ctx) => {
   const destinationType = Object.keys(goto);
@@ -14,16 +14,28 @@ const addRuleToContext = (goto, groupId, ctx) => {
 module.exports = (routing, pageId, groupId, ctx) => {
   const rules = flatMap(routing.rules, (rule) => {
     let runnerRules;
-
     const destination = translateRoutingDestination(
       rule.destination,
       pageId,
       ctx
     );
 
-    if (rule.expressionGroup.operator === AND) {
-      const when = rule.expressionGroup.expressions.map((expression) =>
-        translateBinaryExpression(expression, ctx)
+    const { expressions, operator } = rule.expressionGroup;
+
+    if (operator === AND || operator === OR || operator === NOT) {
+      const when = expressions.map((expression) =>
+        checkValidRoutingType(expression, ctx)
+      );
+
+      runnerRules = [
+        {
+          ...destination,
+          when: { [operator.toLowerCase()]: when },
+        },
+      ];
+    } else {
+      const when = expressions.map((expression) =>
+        checkValidRoutingType(expression, ctx)
       );
       runnerRules = [
         {
@@ -31,14 +43,8 @@ module.exports = (routing, pageId, groupId, ctx) => {
           when,
         },
       ];
-    } else {
-      runnerRules = rule.expressionGroup.expressions.map((expression) => {
-        return {
-          ...destination,
-          when: [translateBinaryExpression(expression, ctx)],
-        };
-      });
     }
+
     runnerRules.map((expression) => {
       addRuleToContext(expression, groupId, ctx);
     });
