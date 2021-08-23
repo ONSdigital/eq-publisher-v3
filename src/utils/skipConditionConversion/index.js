@@ -12,7 +12,7 @@ const routingConditionConversions = {
   OneOf: "equals any",
 };
 
-const conditionConversion = (authorCondition) => {
+const skipConditionConversion = (authorCondition) => {
   const runnerCondition = routingConditionConversions[authorCondition];
   if (!runnerCondition) {
     throw new Error(`Unsupported author condition: ${authorCondition}`);
@@ -20,4 +20,4 @@ const conditionConversion = (authorCondition) => {
   return runnerCondition;
 };
 
-module.exports = conditionConversion;
+module.exports = skipConditionConversion;
