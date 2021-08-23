@@ -11,8 +11,8 @@ const addRuleToContext = (goto, groupId, ctx) => {
   }
 };
 
-module.exports = (routing, pageId, groupId, ctx) => {
-  const rules = flatMap(routing.rules, (rule) => {
+const buildRunnerRules = (rules, pageId, ctx, groupId) => {
+  const builtRunnerRules = flatMap(rules, (rule) => {
     let runnerRules;
     const destination = translateRoutingDestination(
       rule.destination,
@@ -52,7 +52,15 @@ module.exports = (routing, pageId, groupId, ctx) => {
     return runnerRules;
   });
 
+  return builtRunnerRules;
+};
+
+module.exports = (routing, pageId, groupId, ctx) => {
+  const { rules } = routing;
+
+  const runnerRules = buildRunnerRules(rules, pageId, ctx, groupId);
+
   const destination = translateRoutingDestination(routing.else, pageId, ctx);
 
-  return [...rules, { ...destination }];
+  return [...runnerRules, { ...destination }];
 };
