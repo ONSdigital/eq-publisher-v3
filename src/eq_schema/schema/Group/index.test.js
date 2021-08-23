@@ -269,9 +269,14 @@ describe("Group", () => {
             block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
             when: [
               {
-                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                condition: "equals",
-                value: "Wait I can get more?",
+                "==": [
+                  {
+                    identifier:
+                      "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                    source: "Answer",
+                  },
+                  "Wait I can get more?",
+                ],
               },
             ],
           },
@@ -326,9 +331,14 @@ describe("Group", () => {
             block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
             when: [
               {
-                id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                condition: "equals",
-                value: "Wait I can get more?",
+                "==": [
+                  {
+                    identifier:
+                      "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                    source: "Answer",
+                  },
+                  "Wait I can get more?",
+                ],
               },
             ],
           },
@@ -389,21 +399,32 @@ describe("Group", () => {
           block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
           when: [
             {
-              id: "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-              condition: "equals",
-              value: "Wait I can get more?",
+              "==": [
+                {
+                  identifier:
+                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  source: "Answer",
+                },
+                "Wait I can get more?",
+              ],
             },
           ],
         },
         {
           group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
-          when: [
-            {
-              id: "answer1",
-              condition: "equals",
-              value: "5",
-            },
-          ],
+          when: {
+            and: [
+              {
+                "==": [
+                  {
+                    identifier: "answer1",
+                    source: "Answer",
+                  },
+                  "5",
+                ],
+              },
+            ],
+          },
         },
         {
           group: "confirmation-group",
