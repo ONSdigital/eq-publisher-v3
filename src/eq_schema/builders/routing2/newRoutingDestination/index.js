@@ -21,7 +21,7 @@ const getOptionValues = (optionIds, questionnaire) => {
 const buildAnswerObject = ({ left, condition, right }, ctx) => {
   const returnVal = [
     {
-      id: `answer${left.answerId}`,
+      identifier: `answer${left.answerId}`,
       source: left.type,
     },
   ];
