@@ -15,6 +15,7 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
+
   return optionIds.map((id) => filter(options, { id })[0].label);
 };
 
@@ -26,13 +27,30 @@ const buildAnswerObject = ({ left, condition, right }, ctx) => {
     },
   ];
 
-  if (condition === authorConditions.UNANSWERED) {
-    return returnVal;
+  if (right === null) {
+    returnVal.push(null);
+
+    const finalVal = { [routingConditionConversion(condition)]: returnVal };
+
+    return finalVal;
   }
 
   if (right.type === "SelectedOptions") {
-    //TODO How is this handled in the new schema
-    returnVal.values = getOptionValues(right.optionIds, ctx.questionnaireJson);
+    const optionValues = [
+      {
+        identifier: `answer${left.answerId}`,
+        values:
+          condition !== authorConditions.UNANSWERED
+            ? getOptionValues(right.optionIds, ctx.questionnaireJson)
+            : null,
+      },
+    ];
+
+    const SelectedOptions = {
+      [routingConditionConversion(condition)]: optionValues,
+    };
+
+    return SelectedOptions;
   } else {
     returnVal.push(right.customValue.number);
   }
