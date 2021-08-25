@@ -89,9 +89,13 @@ describe("Should build a runner representation of a binary expression", () => {
         questionnaireJson,
       });
       expect(runnerExpression).toMatchObject({
-        id: "answer1",
-        condition: "equals",
-        value: 5,
+        "==": [
+          {
+            identifier: "answer1",
+            source: "Answer",
+          },
+          5,
+        ],
       });
     });
 
