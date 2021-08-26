@@ -39,9 +39,12 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        id: "answer1",
-        condition: "equals any",
-        values: ["red"],
+        "equals any": [
+          {
+            identifier: "answer1",
+            values: ["red"],
+          },
+        ],
       });
     });
 
@@ -52,8 +55,12 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        condition: "not set",
-        id: "answer1",
+        "!=": [
+          {
+            identifier: "answer1",
+            values: null,
+          },
+        ],
       });
     });
 
@@ -64,9 +71,12 @@ describe("Should build a runner representation of a binary expression", () => {
         questionnaireJson,
       });
       expect(runnerExpression).toMatchObject({
-        id: "answer1",
-        condition: "equals any",
-        values: ["red", "white"],
+        "equals any": [
+          {
+            identifier: "answer1",
+            values: ["red", "white"],
+          },
+        ],
       });
     });
   });
@@ -118,8 +128,13 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        id: "answer1",
-        condition: "not set",
+        "!=": [
+          {
+            identifier: "answer1",
+            source: "Answer",
+          },
+          5,
+        ],
       });
     });
   });

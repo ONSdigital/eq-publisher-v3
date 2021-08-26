@@ -68,36 +68,52 @@ describe("Routing2", () => {
       {
         group: "confirmation-group",
         groupId: "group1",
-        when: [
-          {
-            condition: "equals any",
-            id: "answer2",
-            values: ["red", "white"],
-          },
-        ],
+        when: {
+          and: [
+            {
+              "equals any": [
+                {
+                  identifier: "answer2",
+                  values: ["red", "white"],
+                },
+              ],
+            },
+          ],
+        },
       },
     ]);
 
     expect(runnerRouting).toMatchObject([
       {
         block: "block2",
-        when: [
-          {
-            id: "answer1",
-            condition: "equals",
-            value: 5,
-          },
-        ],
+        when: {
+          and: [
+            {
+              "==": [
+                {
+                  identifier: "answer1",
+                  source: "Answer",
+                },
+                5,
+              ],
+            },
+          ],
+        },
       },
       {
         group: "confirmation-group",
-        when: [
-          {
-            id: "answer2",
-            condition: "equals any",
-            values: ["red", "white"],
-          },
-        ],
+        when: {
+          and: [
+            {
+              "equals any": [
+                {
+                  identifier: "answer2",
+                  values: ["red", "white"],
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         block: "block3",
@@ -159,23 +175,33 @@ describe("Routing2", () => {
     expect(runnerRouting).toMatchObject([
       {
         block: "block2",
-        when: [
-          {
-            id: "answer1",
-            condition: "equals any",
-            values: ["red", "white"],
-          },
-        ],
+        when: {
+          or: [
+            {
+              "equals any": [
+                {
+                  identifier: "answer1",
+                  values: ["red", "white"],
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         group: "confirmation-group",
-        when: [
-          {
-            id: "answer2",
-            condition: "equals any",
-            values: ["red", "white"],
-          },
-        ],
+        when: {
+          or: [
+            {
+              "equals any": [
+                {
+                  identifier: "answer2",
+                  values: ["red", "white"],
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         block: "block3",

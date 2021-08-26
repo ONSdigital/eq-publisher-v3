@@ -11,8 +11,8 @@ describe("Convert routing conditions", () => {
       LessOrEqual: "<=",
       AllOf: "all-in",
       AnyOf: "any-in",
-      NotAnyOf: "not contains any",
-      Unanswered: "not set",
+      NotAnyOf: "not",
+      Unanswered: "!=",
       OneOf: "equals any",
     };
     Object.keys(conditionMap).forEach((authorCondition) =>
