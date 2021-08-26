@@ -16,7 +16,13 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
-  return optionIds.map((id) => filter(options, { id })[0].label);
+  const optionResults = optionIds.map((id) => filter(options, { id })[0].label);
+
+  if (optionResults < 1) {
+    return null;
+  } else {
+    return optionResults;
+  }
 };
 
 const buildAnswerObject = ({ left, condition, right }, ctx) => {
@@ -45,6 +51,14 @@ const buildAnswerObject = ({ left, condition, right }, ctx) => {
             : null,
       },
     ];
+
+    if (condition === "NotAnyOf") {
+      const SelectedOptions = {
+        [routingConditionConversion(condition)]: { anyOf: optionValues },
+      };
+
+      return SelectedOptions;
+    }
 
     const SelectedOptions = {
       [routingConditionConversion(condition)]: optionValues,
