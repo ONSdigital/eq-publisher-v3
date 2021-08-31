@@ -17,7 +17,7 @@ class QuestionnaireFlow {
     };
     if(questionnaireJson.summary) {
         options.summary = {
-          collapsible: questionnaireJson.collapsibleSummary
+          collapsible: questionnaireJson.collapsibleSummary || false
       };
     };
     return options;
