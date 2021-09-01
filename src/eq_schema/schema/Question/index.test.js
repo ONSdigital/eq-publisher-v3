@@ -428,6 +428,7 @@ describe("Question", () => {
         {
           type: DATE_RANGE,
           id: "1",
+          advancedProperties: true,
           properties: { required: true },
           validation,
           childAnswers: [

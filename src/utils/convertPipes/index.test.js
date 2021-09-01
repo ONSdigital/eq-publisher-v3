@@ -227,23 +227,24 @@ describe("convertPipes", () => {
         );
       });
 
-      it("should format Unit answers with `unit`", () => {
-        const html = createPipe({ id: "6" });
-        const runnerJSON = createWrapper(
-          "{answer6}",
-          createTransformation({
-            placeholder: "answer6",
-            source: "answers",
-            argument: "number",
-            transform: "format_unit",
-          })
-        );
+      // Put in when Unit in runner
+      // it("should format Unit answers with `unit`", () => {
+      //   const html = createPipe({ id: "6" });
+      //   const runnerJSON = createWrapper(
+      //     "{answer6}",
+      //     createTransformation({
+      //       placeholder: "answer6",
+      //       source: "answers",
+      //       argument: "number",
+      //       transform: "format_unit",
+      //     })
+      //   );
 
-        runnerJSON.placeholders[0].transforms[0].arguments.unit =
-          "length-kilometer";
+      //   runnerJSON.placeholders[0].transforms[0].arguments.unit =
+      //     "length-kilometer";
 
-        expect(convertPipes(createContext())(html)).toEqual(runnerJSON);
-      });
+      //   expect(convertPipes(createContext())(html)).toEqual(runnerJSON);
+      // });
     });
   });
 

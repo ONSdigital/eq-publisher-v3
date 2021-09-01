@@ -1,4 +1,4 @@
-const { unitConversion } = require("../../constants/units");
+//const { unitConversion } = require("../../constants/units");
 
 const {
   FORMAT_CURRENCY,
@@ -30,145 +30,81 @@ const placeholderObjectBuilder = (
   dateFormat,
   unitType,
   fallback,
-  metaFallback,
   AnswerType
 ) => {
-  const transformKey = TRANSFORM_MAP[AnswerType]
-    ? [TRANSFORM_MAP[AnswerType].transformKey]
-    : undefined;
 
-  const options = {
-    [transformKey]: {
+  let valueSource;
+  let argumentList;
+  let placeHolder;
+
+  if (["metadata","answers"].includes(source)) {
+    valueSource = {
       source,
-      identifier,
-    },
+      identifier
+    }
   };
 
-  let format;
-  switch (AnswerType) {
-    case "Date":
-      format =
-        source === "metadata"
-          ? DATE_FORMAT_MAP["dd/mm/yyyy"]
-          : DATE_FORMAT_MAP[dateFormat];
-
-      options.date_format = format;
-      break;
-    case "DateRange":
-      format = DATE_FORMAT_MAP["dd/mm/yyyy"];
-
-      options.date_format = format;
-      break;
-    case "Unit":
-      options.unit = unitConversion[unitType];
-      break;
+  if ([AnswerType]in(TRANSFORM_MAP)) {
+    if (["Date","DateRange"].includes(AnswerType)) {
+      argumentList={
+        "date_format" : DATE_FORMAT_MAP[dateFormat ? dateFormat : "dd/mm/yyyy" ]
+      }
+    }
+    if (["Number","Currency"].includes(AnswerType)) {
+      argumentList={
+      }
+    }
+    if (["Unit"].includes(AnswerType)) {
+      argumentList={
+        // leaving here until unit added to runner
+        //"unit": unitConversion[unitType]
+      }
+    }
   }
 
-  let transform;
-  let items;
-  let placeholder;
-
-  if (
-    metaFallback.fallbackKey !== "" &&
-    metaFallback.fallbackKey !== undefined
-  ) {
-    const { key, fallbackKey } = metaFallback;
-
-    items = {
-      items: [
-        {
-          source,
-          identifier: key,
-        },
-        {
-          source,
-          identifier: fallbackKey,
-        },
-      ],
-    };
-
-    transform = [
-      {
-        transform: "first_non_empty_item",
-        arguments: items,
-      },
-    ];
-
-    placeholder = {
-      placeholder: removeDash(fallbackKey),
-      transforms: transform,
-    };
-
-    return placeholder;
-  }
-
-  if (fallback !== null) {
-    const metaIdentifier = identifier.includes("to")
-      ? fallback.to
-      : fallback.from;
-
-    items = {
-      items: [
-        {
-          source,
-          identifier,
-        },
-        {
-          source: "metadata",
-          identifier: metaIdentifier,
-        },
-      ],
-    };
-
-    transform = [
-      {
-        transform: "first_non_empty_item",
-        arguments: items,
-      },
-      {
-        transform: TRANSFORM_MAP[AnswerType].format,
-        arguments: {
-          [transformKey]: {
-            source: "previous_transform",
-          },
-          date_format: format,
-        },
-      },
-    ];
-
-    placeholder = {
+  if (fallback) {
+    placeHolder = {
       placeholder: removeDash(identifier),
-      transforms: transform,
-    };
-
-    return placeholder;
+      transforms: [
+        {
+          transform: "first_non_empty_item",
+          arguments: {
+            items: [
+              valueSource,
+              fallback
+            ]
+          }
+        },
+      ]
+    }
+    if ([AnswerType]in(TRANSFORM_MAP)) {
+      placeHolder.transforms.push(
+        {
+          transform: TRANSFORM_MAP[AnswerType].format,
+          arguments: { [TRANSFORM_MAP[AnswerType].transformKey] : "previous_transform", ...argumentList }
+        }
+      )
+    }
+    return placeHolder
   }
 
-  if (!transformKey) {
-    placeholder = {
+  if ([AnswerType]in(TRANSFORM_MAP)) {
+    return {
       placeholder: removeDash(identifier),
-      value: {
-        source,
-        identifier,
-      },
-    };
-
-    return placeholder;
+      transforms: [
+        {
+          transform: TRANSFORM_MAP[AnswerType].format,
+          arguments: { [TRANSFORM_MAP[AnswerType].transformKey]: valueSource, ...argumentList }
+        },
+      ]
+    }
   }
 
-  transform = [
-    {
-      transform: TRANSFORM_MAP[AnswerType].format,
-      arguments: options,
-    },
-  ];
-
-  placeholder = {
+  return {
     placeholder: removeDash(identifier),
-    transforms: transform,
+    value: valueSource,
   };
 
-  return placeholder;
 };
 
 module.exports = {
