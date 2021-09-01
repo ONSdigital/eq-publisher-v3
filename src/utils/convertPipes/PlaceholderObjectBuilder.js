@@ -6,7 +6,7 @@ const {
   FORMAT_NUMBER,
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
-  FORMAT_UNIT,
+  // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
 
@@ -21,7 +21,7 @@ const TRANSFORM_MAP = {
   Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
-  Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
+  // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
 const placeholderObjectBuilder = (
@@ -57,7 +57,7 @@ const placeholderObjectBuilder = (
     if (["Unit"].includes(AnswerType)) {
       argumentList={
         // leaving here until unit added to runner
-        //"unit": unitConversion[unitType]
+        // "unit": unitConversion[unitType]
       }
     }
   }

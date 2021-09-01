@@ -35,8 +35,8 @@ const PIPE_TYPES = {
     },
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type,
-    getFallback: ({ properties, id, type }) => {
-      if (!(type==="DateRange")) {return null}
+    getFallback: ({ properties, id, type, advancedProperties }) => {
+      if (!(type==="DateRange") || !advancedProperties) {return null}
       if (!properties || !properties.fallback || !properties.fallback.enabled) {return null}
       return {
         source: "metadata", 
