@@ -81,7 +81,7 @@ const placeholderObjectBuilder = (
       placeHolder.transforms.push(
         {
           transform: TRANSFORM_MAP[AnswerType].format,
-          arguments: { [TRANSFORM_MAP[AnswerType].transformKey] : "previous_transform", ...argumentList }
+          arguments: { [TRANSFORM_MAP[AnswerType].transformKey] : { source: "previous_transform" }, ...argumentList }
         }
       )
     }
