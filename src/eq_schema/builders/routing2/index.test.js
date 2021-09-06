@@ -71,7 +71,7 @@ describe("Routing2", () => {
         when: {
           and: [
             {
-              "equals any": [
+              "any-in": [
                 {
                   identifier: "answer2",
                   values: ["red", "white"],
@@ -105,7 +105,7 @@ describe("Routing2", () => {
         when: {
           and: [
             {
-              "equals any": [
+              "any-in": [
                 {
                   identifier: "answer2",
                   values: ["red", "white"],
@@ -178,7 +178,7 @@ describe("Routing2", () => {
         when: {
           or: [
             {
-              "equals any": [
+              "any-in": [
                 {
                   identifier: "answer1",
                   values: ["red", "white"],
@@ -193,7 +193,7 @@ describe("Routing2", () => {
         when: {
           or: [
             {
-              "equals any": [
+              "any-in": [
                 {
                   identifier: "answer2",
                   values: ["red", "white"],

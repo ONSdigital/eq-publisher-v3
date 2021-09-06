@@ -39,7 +39,7 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        "equals any": [
+        "any-in": [
           {
             identifier: "answer1",
             values: ["red"],
@@ -55,7 +55,7 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        "!=": [
+        "==": [
           {
             identifier: "answer1",
             values: null,
@@ -71,7 +71,7 @@ describe("Should build a runner representation of a binary expression", () => {
         questionnaireJson,
       });
       expect(runnerExpression).toMatchObject({
-        "equals any": [
+        "any-in": [
           {
             identifier: "answer1",
             values: ["red", "white"],
@@ -128,7 +128,7 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        "!=": [
+        "==": [
           {
             identifier: "answer1",
             source: "Answer",

@@ -12,8 +12,8 @@ describe("Convert routing conditions", () => {
       AllOf: "all-in",
       AnyOf: "any-in",
       NotAnyOf: "not",
-      Unanswered: "!=",
-      OneOf: "equals any",
+      Unanswered: "==",
+      OneOf: "any-in",
     };
     Object.keys(conditionMap).forEach((authorCondition) =>
       expect(routingConditionConversion(authorCondition)).toEqual(
