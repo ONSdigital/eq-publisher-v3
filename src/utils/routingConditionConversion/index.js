@@ -8,8 +8,8 @@ const routingConditionConversions = {
   AllOf: "all-in",
   AnyOf: "any-in",
   NotAnyOf: "not",
-  Unanswered: "!=",
-  OneOf: "equals any",
+  Unanswered: "==",
+  OneOf: "any-in",
 };
 
 const routingConditionConversion = (conditionString) => {
