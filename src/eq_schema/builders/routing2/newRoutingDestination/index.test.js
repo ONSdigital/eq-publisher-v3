@@ -109,7 +109,7 @@ describe("Should build a runner representation of a binary expression", () => {
       });
     });
 
-    it("can translate unanswered question routing from Author to Runner for all numeric types", () => {
+    it("Checks that even though there's a number value stored on the right handside, the condition is unanswered, meaning the value should be null on the object", () => {
       const expression = {
         left: {
           answerId: "1",
@@ -133,7 +133,7 @@ describe("Should build a runner representation of a binary expression", () => {
             identifier: "answer1",
             source: "Answer",
           },
-          5,
+          null,
         ],
       });
     });

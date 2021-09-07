@@ -66,7 +66,11 @@ const buildAnswerObject = ({ left, condition, right }, ctx) => {
 
     return SelectedOptions;
   } else {
-    returnVal.push(right.customValue.number);
+    if (condition !== authorConditions.UNANSWERED) {
+      returnVal.push(right.customValue.number);
+    } else {
+      returnVal.push(null);
+    }
   }
 
   const finalVal = { [routingConditionConversion(condition)]: returnVal };
