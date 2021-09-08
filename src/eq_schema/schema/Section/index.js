@@ -45,6 +45,13 @@ class Section {
     if (section.displayConditions) {
       this.enabled = translateDisplayConditions(section.displayConditions, ctx);
     }
+
+    if(section.sectionSummary) {
+      this.summary = {
+        show_on_completion: section.sectionSummary,
+        collapsible: false
+      }
+    }
   }
 }
 
