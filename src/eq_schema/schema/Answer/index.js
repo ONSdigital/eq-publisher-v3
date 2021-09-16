@@ -59,7 +59,7 @@ class Answer {
       }
     }
 
-    if (!isNil(answer.validation)) {
+    if (answer.advancedProperties && !isNil(answer.validation)) {
       if ([NUMBER, CURRENCY, PERCENTAGE, UNIT].includes(answer.type)) {
         const { minValue, maxValue } = answer.validation;
 

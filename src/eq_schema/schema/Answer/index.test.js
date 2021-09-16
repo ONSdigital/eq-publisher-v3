@@ -23,6 +23,7 @@ describe("Answer", () => {
     qCode: "51",
     label: "Number of male employees working more than 30 hours per week",
     type: NUMBER,
+    advancedProperties: true,
     properties: {
       required: true,
       decimals: 2
