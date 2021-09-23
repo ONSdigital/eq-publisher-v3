@@ -45,23 +45,24 @@ class Introduction {
           contents: this.buildContents(description, ctx)
         }))
     };
-
-    this.secondary_content = [
-      {
-        id: "secondary-content",
-        contents: [
-          {
-            title: this.buildTitle(tertiaryTitle, ctx)
-          }
-        ]
-      }
-    ];
-    if (tertiaryDescription) {
-      const mergeContents = [
-        ...this.secondary_content[0].contents,
-        ...this.buildContents(tertiaryDescription, ctx)
+    if(tertiaryTitle || tertiaryDescription) {
+      this.secondary_content = [
+        {
+          id: "secondary-content",
+          contents: [
+            {
+              title: this.buildTitle(tertiaryTitle, ctx) || ""
+            }
+          ]
+        }
       ];
-      this.secondary_content[0].contents = mergeContents;
+      if (tertiaryDescription) {
+        const mergeContents = [
+          ...this.secondary_content[0].contents,
+          ...this.buildContents(tertiaryDescription, ctx)
+        ];
+        this.secondary_content[0].contents = mergeContents;
+      }
     }
   }
 

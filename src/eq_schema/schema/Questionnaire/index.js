@@ -27,7 +27,9 @@ class Questionnaire {
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
-    this.legal_basis = contentMap[legalBasisCode];
+    if(contentMap[legalBasisCode]) {
+      this.legal_basis = contentMap[legalBasisCode];
+    }
 
     this.title = questionnaireJson.title;
 
