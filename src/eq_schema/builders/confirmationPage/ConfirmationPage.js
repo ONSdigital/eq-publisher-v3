@@ -1,32 +1,27 @@
 const Block = require("../../schema/Block");
 const { CHECKBOX, RADIO } = require("../../../constants/answerTypes");
 
-const buildAuthorConfirmationQuestion = (
-  page,
-  groupId,
-  routing,
-  ctx
-) => {
+const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
   const confirmationAnswerObject = {
     id: `confirmation-answer-for-${page.id}`,
     type: RADIO,
     properties: {
-      required: true
+      required: true,
     },
     options: [
       {
         id: "positive-confirmation",
         label: page.confirmation.positive.label,
         description: page.confirmation.positive.description,
-        value: page.confirmation.positive.label
+        value: page.confirmation.positive.label,
       },
       {
         id: "negative-confirmation",
         label: page.confirmation.negative.label,
         description: page.confirmation.negative.description,
-        value: page.confirmation.negative.label
-      }
-    ]
+        value: page.confirmation.negative.label,
+      },
+    ],
   };
 
   const confirmationBackwardsRouting2Rule = {
@@ -36,34 +31,33 @@ const buildAuthorConfirmationQuestion = (
         {
           left: {
             answerId: `confirmation-answer-for-${page.id}`,
-            type: 'Answer'
+            type: "Answer",
           },
           condition: "Equal",
           right: {
             customValue: {
-              number: page.confirmation.negative.label
-            }    
-          }
-        }
-      ]
+              number: page.confirmation.negative.label,
+            },
+          },
+        },
+      ],
     },
     destination: {
-      pageId: page.id
-    }
+      pageId: page.id,
+    },
   };
 
   if (!routing) {
     routing = {
       id: "default-rule-set",
       else: {
-        logical: "NextPage"
+        logical: "NextPage",
       },
-      rules: []
+      rules: [],
     };
   }
 
   routing.rules.unshift(confirmationBackwardsRouting2Rule);
-
 
   const confirmationQuestionObject = {
     id: `confirmation-page-for-${page.id}`,
@@ -75,8 +69,9 @@ const buildAuthorConfirmationQuestion = (
         : null,
     pageType: "ConfirmationQuestion",
     skipConditions: page.confirmation.skipConditions,
+    pageSkipConditions: page.skipConditions,
     routing,
-    answers: [confirmationAnswerObject]
+    answers: [confirmationAnswerObject],
   };
 
   if (page.confirmation.qCode) {
@@ -87,5 +82,5 @@ const buildAuthorConfirmationQuestion = (
 };
 
 module.exports = {
-  buildAuthorConfirmationQuestion
+  buildAuthorConfirmationQuestion,
 };
