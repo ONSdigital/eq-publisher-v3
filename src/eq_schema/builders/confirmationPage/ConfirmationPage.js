@@ -68,8 +68,10 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
         ? `{{ answers['answer${page.answers[0].id}']|format_unordered_list }}`
         : null,
     pageType: "ConfirmationQuestion",
-    skipConditions: page.confirmation.skipConditions,
-    pageSkipConditions: page.skipConditions,
+    skipConditions: [
+      ...(page.confirmation.skipConditions || []),
+      ...(page.skipConditions || []),
+    ],
     routing,
     answers: [confirmationAnswerObject],
   };
