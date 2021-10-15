@@ -59,7 +59,7 @@ describe("Questionnaire", () => {
     expect(questionnaire).toMatchObject({
       mime_type: "application/json/ons/eq",
       schema_version: "0.0.1",
-      data_version: "0.0.3",
+      data_version: "0.0.1",
       survey_id: "123",
       title: "Quarterly Business Survey",
       theme: "default",

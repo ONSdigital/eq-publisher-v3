@@ -227,6 +227,7 @@ class Answer {
       }
 
       return option;
+
     }
   }
 }
