@@ -49,7 +49,7 @@ class Section {
     if(section.sectionSummary) {
       this.summary = {
         show_on_completion: section.sectionSummary,
-        collapsible: false
+        collapsible: section.collapsibleSummary,
       }
     }
   }
