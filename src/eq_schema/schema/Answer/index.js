@@ -32,6 +32,10 @@ class Answer {
       this.q_code = answer.qCode;
     }
 
+    if (answer.type) {
+      this.type = answer.type;
+    }
+
     if (answer.type === UNIT) {
       this.unit = unitConversion[answer.properties.unit];
       this.unit_length = "short";
@@ -196,7 +200,7 @@ class Answer {
 
   static buildOption(
     { label, description, additionalAnswer, qCode: q_code },
-    { properties }
+    { properties, type }
   ) {
     const option = {
       label,
@@ -210,15 +214,20 @@ class Answer {
     if (description) {
       option.description = description;
     }
+
     if (additionalAnswer) {
       option.detail_answer = {
         ...pick(additionalAnswer, ["label", "type"]),
         id: `answer${additionalAnswer.id}`,
         mandatory: properties.required,
-        q_code: additionalAnswer.qCode,
       };
+
+      if (additionalAnswer.qCode && type !== "Checkbox") {
+        option.detail_answer.q_code = additionalAnswer.qCode;
+      }
+
+      return option;
     }
-    return option;
   }
 }
 
