@@ -19,6 +19,7 @@ describe("Introduction", () => {
   beforeEach(() => {
     apiData = {
       id: "1",
+      // primary: "<h2>You are completing this for ESSENTIAL ENTERPRISE LTD. (ESSENTIAL ENTERPRISE LTD.)</h2><p>If the company details or structure have changed contact us on <a href=tel:03001234931>0300 1234 931</a> or email <a href=mailto: surveys@ons.gov.uk?subject = Change%20of%20details%2012346789012A>surveys@ons.gov.uk</a></p>",
       description: `<ul><li>Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. </li><li>You can provide info estimates if actual figures aren’t available.</li><li>We will treat your data securely and confidentially.</li><li>${piping}</li></ul>`,
       legalBasis: "NOTICE_2",
       secondaryTitle: `<p>Information you need ${piping}</p>`,
@@ -41,8 +42,9 @@ describe("Introduction", () => {
     };
     context = {
       questionnaireJson: {
-        metadata: [{ id: "1", key: "some_metadata" }]
-      }
+        metadata: [{ id: "1", key: "some_metadata" }],
+      },
+      telephoneNumber: "1234",
     };
   });
 
@@ -54,7 +56,78 @@ describe("Introduction", () => {
 
   it("should define the primary_content", () => {
     const introduction = new Introduction(apiData, context);
+    console.log("===================================================");
+    console.log(JSON.stringify(introduction, null, 2));
+    console.log("===================================================");
+    // console.log(introduction);
+    // console.log("===================================================");
+    // console.log(introduction.primary_content[0]);
+    // console.log("===================================================");
+    // console.log(introduction.primary_content[0].contents[0]);
+    // console.log("===================================================");
+    // console.log(introduction.primary_content[1]);
+    // console.log("===================================================");
+    // console.log(introduction.primary_content[1].contents[0]);
+    // console.log("===================================================");
     expect(introduction.primary_content).toMatchObject([
+      {
+        id: "primary",
+        title: {
+          text: "You are completing this for {ru_name} ({trad_as})",
+          placeholders: [
+            {
+              placeholder: "ru_name",
+              value: {
+                source: "metadata",
+                identifier: "ru_name",
+              },
+            },
+            {
+              placeholder: "trad_as",
+              value: {
+                source: "metadata",
+                identifier: "trad_as",
+              },
+            },
+          ],
+        },
+        contents: [
+          {
+            description: {
+              text: "If the company details or structure have changed contact us on {telephone_number_link} or email {email_link}",
+              placeholders: [
+                {
+                  placeholder: "telephone_number_link",
+                  transforms: [
+                    {
+                      transform: "telephone_number_link",
+                      arguments: {
+                        telephone_number: "0300 1234 931",
+                      },
+                    },
+                  ],
+                },
+                {
+                  placeholder: "email_link",
+                  transforms: [
+                    {
+                      transform: "email_link",
+                      arguments: {
+                        email_address: "surveys@ons.gov.uk",
+                        email_subject: "Change of details",
+                        email_subject_append: {
+                          identifier: "ru_ref",
+                          source: "metadata",
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
       {
         contents: [
           {
@@ -62,12 +135,12 @@ describe("Introduction", () => {
               "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. ",
               "You can provide info estimates if actual figures aren&#x2019;t available.",
               "We will treat your data securely and confidentially.",
-              createPipedFormat("some_metadata", "metadata")
-            ]
-          }
+              createPipedFormat("some_metadata", "metadata"),
+            ],
+          },
         ],
-        id: "primary"
-      }
+        id: "primary",
+      },
     ]);
   });
 
