@@ -19,7 +19,7 @@ describe("Introduction", () => {
   beforeEach(() => {
     apiData = {
       id: "1",
-      // primary: "<h2>You are completing this for ESSENTIAL ENTERPRISE LTD. (ESSENTIAL ENTERPRISE LTD.)</h2><p>If the company details or structure have changed contact us on <a href=tel:03001234931>0300 1234 931</a> or email <a href=mailto: surveys@ons.gov.uk?subject = Change%20of%20details%2012346789012A>surveys@ons.gov.uk</a></p>",
+      title: "<p>You are completing this for <span data-piped=\"metadata\" data-id=\"ru_name\">ru_name</span> (<span data-piped=\"metadata\" data-id=\"trad_as\">trad_as</span>)</p>",
       description: `<ul><li>Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. </li><li>You can provide info estimates if actual figures aren’t available.</li><li>We will treat your data securely and confidentially.</li><li>${piping}</li></ul>`,
       legalBasis: "NOTICE_2",
       secondaryTitle: `<p>Information you need ${piping}</p>`,
@@ -38,13 +38,31 @@ describe("Introduction", () => {
         }
       ],
       tertiaryTitle: `<p>How we use your data ${piping}</p>`,
-      tertiaryDescription: `<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li><li>${piping}</li></ul>`
+      tertiaryDescription: `<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li><li>${piping}</li></ul>`,
+      contactDetailsPhoneNumber: "0300 1234 931",
+      contactDetailsEmailAddress: "surveys@ons.gov.uk",
+      contactDetailsEmailSubject: "Change of details",
+      contactDetailsIncludeRuRef: true,
     };
     context = {
       questionnaireJson: {
-        metadata: [{ id: "1", key: "some_metadata" }],
+        metadata: [
+          { id: "1", 
+          key: "some_metadata" },
+          {
+            id: "ru_name",
+            key: "ru_name",
+            alias: "Ru Name",
+            type: "Text",
+          },
+          {
+            id: "trad_as",
+            key: "trad_as",
+            alias: "Ru Name",
+            type: "Text_Optional",
+          },
+        ],
       },
-      telephoneNumber: "1234",
     };
   });
 
@@ -56,19 +74,6 @@ describe("Introduction", () => {
 
   it("should define the primary_content", () => {
     const introduction = new Introduction(apiData, context);
-    console.log("===================================================");
-    console.log(JSON.stringify(introduction, null, 2));
-    console.log("===================================================");
-    // console.log(introduction);
-    // console.log("===================================================");
-    // console.log(introduction.primary_content[0]);
-    // console.log("===================================================");
-    // console.log(introduction.primary_content[0].contents[0]);
-    // console.log("===================================================");
-    // console.log(introduction.primary_content[1]);
-    // console.log("===================================================");
-    // console.log(introduction.primary_content[1].contents[0]);
-    // console.log("===================================================");
     expect(introduction.primary_content).toMatchObject([
       {
         id: "primary",
@@ -139,7 +144,7 @@ describe("Introduction", () => {
             ],
           },
         ],
-        id: "primary",
+        id: "description",
       },
     ]);
   });
