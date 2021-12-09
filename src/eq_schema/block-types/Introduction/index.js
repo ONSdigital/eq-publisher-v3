@@ -12,7 +12,7 @@ const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 const reverseContent = ctx =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
-const contactDetails = require("../../../utils/contactDetails");
+const buildContactDetails = require("../../builders/contactDetails");
 class Introduction {
   constructor(
     {
@@ -36,7 +36,7 @@ class Introduction {
       {
         id: "primary",
         title: this.buildTitle(title, ctx),
-        contents: contactDetails(
+        contents: buildContactDetails(
           contactDetailsPhoneNumber,
           contactDetailsEmailAddress,
           contactDetailsEmailSubject,
