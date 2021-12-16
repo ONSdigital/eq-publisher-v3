@@ -56,7 +56,7 @@ class Question {
       ];
     }
     const dateRange = findDateRange(question);
-    const mutuallyExclusive = cloneDeep(findMutuallyExclusive(question));
+    const mutuallyExclusive = findMutuallyExclusive(question);
 
     if (dateRange) {
       this.type = DATE_RANGE;
