@@ -1,5 +1,5 @@
 const { find, get, flow, concat, last, filter } = require("lodash/fp");
-const { set, remove } = require("lodash");
+const { set, remove, cloneDeep } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -56,7 +56,7 @@ class Question {
       ];
     }
     const dateRange = findDateRange(question);
-    const mutuallyExclusive = findMutuallyExclusive(question);
+    const mutuallyExclusive = cloneDeep(findMutuallyExclusive(question));
 
     if (dateRange) {
       this.type = DATE_RANGE;
@@ -123,7 +123,13 @@ class Question {
   }
 
   buildAnswers(answers, ctx) {
-    return answers.map(answer => new Answer(answer, ctx));
+    return answers.map(answer => {
+      const tempAnswer = cloneDeep(answer);
+      if(tempAnswer.options) {
+        remove(tempAnswer.options, {mutuallyExclusive: true})
+      }
+      return new Answer(tempAnswer, ctx)
+    });
   }
 
   buildDateRangeAnswers(answer) {
@@ -159,7 +165,6 @@ class Question {
       type: "Checkbox",
       options: filter({mutuallyExclusive: true}, mutuallyExclusive.options)
     });
-    remove(mutuallyExclusive.options, { mutuallyExclusive: true } )
     return concat(
       this.buildAnswers(answers, ctx),
       mutuallyExclusiveAnswer
