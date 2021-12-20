@@ -49,7 +49,10 @@ class Questionnaire {
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
-    this.post_submission = this.buildSubmission(questionnaireJson.submission);
+    this.post_submission = this.buildSubmission(
+      questionnaireJson.submission,
+      ctx
+    );
   }
 
   createContext(questionnaireJson) {
@@ -102,8 +105,8 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildSubmission(submission) {
-    return new Submission(submission);
+  buildSubmission(submission, ctx) {
+    return new Submission(submission, ctx);
   }
 }
 
