@@ -8,6 +8,7 @@ const { contentMap } = require("../../../constants/legalBases");
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
+const Submission = require("../Submission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
@@ -27,7 +28,7 @@ class Questionnaire {
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
-    if(contentMap[legalBasisCode]) {
+    if (contentMap[legalBasisCode]) {
       this.legal_basis = contentMap[legalBasisCode];
     }
 
@@ -35,10 +36,10 @@ class Questionnaire {
 
     const ctx = this.createContext(questionnaireJson);
 
-    this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson)
+    this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson);
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
-    
+
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
     this.theme = questionnaireJson.theme;
@@ -47,6 +48,8 @@ class Questionnaire {
       visible: questionnaireJson.navigation,
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
+
+    this.post_submission = this.buildSubmission(questionnaireJson.submission);
   }
 
   createContext(questionnaireJson) {
@@ -64,18 +67,23 @@ class Questionnaire {
     if (!introduction) {
       return;
     }
-  
-    const newSections = [{
-      id: `section${introduction.id}`,
-      title: "Introduction",
-      show_on_hub: false,
-      groups: [{
-        id: `group${introduction.id}`,
+
+    const newSections = [
+      {
+        id: `section${introduction.id}`,
         title: "Introduction",
-        blocks: [new Introduction(introduction, ctx)]
-      }],
-    }, ...this.sections];
-    
+        show_on_hub: false,
+        groups: [
+          {
+            id: `group${introduction.id}`,
+            title: "Introduction",
+            blocks: [new Introduction(introduction, ctx)],
+          },
+        ],
+      },
+      ...this.sections,
+    ];
+
     this.sections = newSections;
   }
 
@@ -94,7 +102,9 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-
+  buildSubmission(submission) {
+    return new Submission(submission);
+  }
 }
 
 module.exports = Questionnaire;
