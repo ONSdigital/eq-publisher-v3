@@ -1,9 +1,12 @@
 const { flow } = require("lodash");
 
-const convertPipes = require("../../../utils/convertPipes");
-const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+const {
+  wrapContents,
+  reversePipeContent,
+} = require("../../../utils/compoundFunctions");
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const reverseContent = (ctx) =>
+  flow(wrapContents("content"), reversePipeContent(ctx));
 
 class Submission {
   constructor(submission, ctx) {
@@ -11,11 +14,14 @@ class Submission {
     this.confirmation_email = submission.emailConfirmation;
     this.feedback = submission.feedback;
     this.view_response = submission.viewPrintAnswers;
-    this.guidance = this.buildGuidance(submission.furtherContent, ctx);
+    this.guidance = {
+      id: "guidance",
+      contents: [...this.buildContents(submission.furtherContent, ctx)],
+    };
   }
 
-  buildGuidance(guidance, ctx) {
-    return processPipe(ctx)(guidance);
+  buildContents(description, ctx) {
+    return reverseContent(ctx)(description).content;
   }
 }
 
