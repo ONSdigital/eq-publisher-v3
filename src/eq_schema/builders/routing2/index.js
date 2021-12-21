@@ -38,10 +38,11 @@ const buildRunnerRules = (rules, pageId, ctx, groupId) => {
       const when = expressions.map((expression) =>
         checkValidRoutingType(expression, ctx)
       );
+
       runnerRules = [
         {
           ...destination,
-          when,
+          when: when[0],
         },
       ];
     }
