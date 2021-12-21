@@ -1,5 +1,5 @@
-const { find, get, flow, isNil, concat, last } = require("lodash/fp");
-const { set } = require("lodash");
+const { find, get, flow, concat, last, filter } = require("lodash/fp");
+const { set, remove, cloneDeep } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -14,10 +14,15 @@ const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
+const findMutualOption = flow(
+  get("options"),
+  find({mutuallyExclusive: true})
+)
+
 const findMutuallyExclusive = flow(
   get("answers"),
-  find((answer) => !isNil(get("mutuallyExclusiveOption", answer)))
-);
+  find(findMutualOption),
+)
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 const reversePipe = (ctx) =>
@@ -50,7 +55,6 @@ class Question {
         },
       ];
     }
-
     const dateRange = findDateRange(question);
     const mutuallyExclusive = findMutuallyExclusive(question);
 
@@ -86,7 +90,7 @@ class Question {
     } else if (mutuallyExclusive) {
       this.type = "MutuallyExclusive";
       this.mandatory = get("properties.required", mutuallyExclusive);
-      this.answers = this.buildMutuallyExclusiveAnswers(mutuallyExclusive);
+      this.answers = this.buildMutuallyExclusiveAnswers(mutuallyExclusive, question.answers, ctx);
       delete this.answers[1].label;
     } else if (question.totalValidation && question.totalValidation.enabled) {
       this.type = "Calculated";
@@ -121,7 +125,13 @@ class Question {
   }
 
   buildAnswers(answers, ctx) {
-    return answers.map((answer) => new Answer(answer, ctx));
+    return answers.map(answer => {
+      const tempAnswer = cloneDeep(answer);
+      if(tempAnswer.options) {
+        remove(tempAnswer.options, {mutuallyExclusive: true})
+      }
+      return new Answer(tempAnswer, ctx)
+    });
   }
 
   buildDateRangeAnswers(answer) {
@@ -149,17 +159,16 @@ class Question {
     return [dateFrom, dateTo];
   }
 
-  buildMutuallyExclusiveAnswers(mutuallyExclusive, ctx) {
+  buildMutuallyExclusiveAnswers(mutuallyExclusive, answers, ctx) {
     Object.assign(mutuallyExclusive.properties, { required: false });
     const mutuallyExclusiveAnswer = new Answer({
       ...mutuallyExclusive,
       id: `${mutuallyExclusive.id}-exclusive`,
       type: "Checkbox",
-      options: [mutuallyExclusive.mutuallyExclusiveOption],
+      options: filter({mutuallyExclusive: true}, mutuallyExclusive.options)
     });
-
     return concat(
-      this.buildAnswers([mutuallyExclusive], ctx),
+      this.buildAnswers(answers, ctx),
       mutuallyExclusiveAnswer
     );
   }
