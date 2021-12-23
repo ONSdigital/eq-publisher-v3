@@ -267,18 +267,16 @@ describe("Group", () => {
         routing_rules: [
           {
             block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-            when: [
-              {
-                "==": [
-                  {
-                    identifier:
-                      "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                    source: "Answer",
-                  },
-                  "Wait I can get more?",
-                ],
-              },
-            ],
+            when: {
+              "==": [
+                {
+                  identifier:
+                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  source: "Answer",
+                },
+                "Wait I can get more?",
+              ],
+            },
           },
           {
             group: "confirmation-group",
@@ -329,18 +327,16 @@ describe("Group", () => {
         routing_rules: [
           {
             block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-            when: [
-              {
-                "==": [
-                  {
-                    identifier:
-                      "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                    source: "Answer",
-                  },
-                  "Wait I can get more?",
-                ],
-              },
-            ],
+            when: {
+              "==": [
+                {
+                  identifier:
+                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                  source: "Answer",
+                },
+                "Wait I can get more?",
+              ],
+            },
           },
           {
             group: "confirmation-group",
@@ -397,18 +393,16 @@ describe("Group", () => {
       const expectedRunnerRouting = [
         {
           block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-          when: [
-            {
-              "==": [
-                {
-                  identifier:
-                    "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
-                  source: "Answer",
-                },
-                "Wait I can get more?",
-              ],
-            },
-          ],
+          when: {
+            "==": [
+              {
+                identifier:
+                  "answerconfirmation-answer-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+                source: "Answer",
+              },
+              "Wait I can get more?",
+            ],
+          },
         },
         {
           group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",

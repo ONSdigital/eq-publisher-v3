@@ -138,4 +138,40 @@ describe("Should build a runner representation of a binary expression", () => {
       });
     });
   });
+
+  describe("With checkbox answers", () => {
+    it("Excepts a checkbox count of answer and returns the correct object", () => {
+      const expression = {
+        secondaryCondition: "Equal",
+        left: {
+          answerId: "1",
+          type: "Answer",
+        },
+        condition: "CountOf",
+        right: {
+          customValue: {
+            number: 5,
+          },
+        },
+      };
+
+      const runnerExpression = checkValidRoutingType(expression, {
+        questionnaireJson,
+      });
+
+      expect(runnerExpression).toMatchObject({
+        "==": [
+          {
+            count: [
+              {
+                source: "Answer",
+                identifier: "answer1",
+              },
+            ],
+          },
+          5,
+        ],
+      });
+    });
+  });
 });
