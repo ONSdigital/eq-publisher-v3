@@ -25,7 +25,10 @@ const getOptionValues = (optionIds, questionnaire) => {
   }
 };
 
-const buildAnswerObject = ({ left, condition, right }, ctx) => {
+const buildAnswerObject = (
+  { left, condition, secondaryCondition, right },
+  ctx
+) => {
   const returnVal = [
     {
       identifier: `answer${left.answerId}`,
@@ -37,6 +40,26 @@ const buildAnswerObject = ({ left, condition, right }, ctx) => {
     returnVal.push(null);
 
     const finalVal = { [routingConditionConversion(condition)]: returnVal };
+
+    return finalVal;
+  }
+
+  if (condition === "CountOf") {
+    const countOfObject = [
+      {
+        count: [
+          {
+            identifier: `answer${left.answerId}`,
+            source: left.type,
+          },
+        ],
+      },
+      right.customValue.number,
+    ];
+
+    const finalVal = {
+      [routingConditionConversion(secondaryCondition)]: countOfObject,
+    };
 
     return finalVal;
   }
