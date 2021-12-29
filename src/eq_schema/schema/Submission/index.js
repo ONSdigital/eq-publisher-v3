@@ -10,7 +10,7 @@ const reverseContent = (ctx) =>
 
 class Submission {
   constructor(submission, ctx) {
-    this.id = "post-submission-block";
+    this.id = `submission${submission.id}`;
     this.confirmation_email = submission.emailConfirmation;
     this.feedback = submission.feedback;
     this.view_response = submission.viewPrintAnswers;
