@@ -23,11 +23,13 @@ class Questionnaire {
     this.language = "en";
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
-    this.data_version = "0.0.3";
+    this.data_version = "0.0.1";
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
-    this.legal_basis = contentMap[legalBasisCode];
+    if(contentMap[legalBasisCode]) {
+      this.legal_basis = contentMap[legalBasisCode];
+    }
 
     this.title = questionnaireJson.title;
 

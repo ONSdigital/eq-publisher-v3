@@ -18,18 +18,6 @@ const getAllAnswers = (questionnaire) =>
       compact(flatMap(folder.pages, (page) => page.answers))
     )
   );
-const transformTypes = [
-  "Currency",
-  "Date",
-  "DateRange",
-  "Number",
-  "Unit",
-  "Text",
-  "Text_Optional",
-];
-
-const answerThatCanBeTransformed = (answerType) =>
-  transformTypes.some((e) => e.includes(answerType));
 
 const getAnswer = (ctx, answerId) =>
   getAllAnswers(ctx.questionnaireJson)
@@ -47,15 +35,19 @@ const PIPE_TYPES = {
     },
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type,
-    getFallback: ({
-      properties: { fallback: { enabled, start, end } = {} } = {},
-    }) => (enabled ? { from: start, to: end } : null),
+    getFallback: ({ properties, id, type, advancedProperties }) => {
+      if (!(type==="DateRange") || !advancedProperties) {return null}
+      if (!properties || !properties.fallback || !properties.fallback.enabled) {return null}
+      return {
+        source: "metadata", 
+        identifier: id.endsWith("from") ? properties.fallback.start : properties.fallback.end}
+      },
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
-    render: ({ key, fallbackKey }) =>
-      fallbackKey ? `${fallbackKey}` : `${key}`,
+    render: ({ key }) => `${key}`,
     getType: ({ type }) => type,
+    getFallback: ({fallbackKey}) => (fallbackKey ? {source: "metadata", identifier: fallbackKey} : null)
   },
   variable: {
     render: () => `%(total)s`,
@@ -90,45 +82,30 @@ const getPipedData = (store) => (element, ctx) => {
 
   const answerType = pipeConfig.getType(entity);
 
-  const canBePiped = answerThatCanBeTransformed(answerType);
-  const fallback = piped === "answers" ? pipeConfig.getFallback(entity) : null;
-  const metaFallback = {
-    key: entity.key,
-    fallbackKey: entity.fallbackKey,
-  };
+  const fallback = pipeConfig.getFallback({...entity, ...elementData});
+
   let placeholder;
 
-  if (canBePiped) {
-    let dateFormat, unitType;
+  let dateFormat, unitType;
 
-    if (entity.properties) {
-      dateFormat = entity.properties.format;
-      unitType = entity.properties.unit;
-    }
-
-    placeholder = placeholderObjectBuilder(
-      piped,
-      entity.key || output,
-      dateFormat,
-      unitType,
-      fallback,
-      metaFallback,
-      answerType
-    );
-  } else {
-    placeholder = {
-      placeholder: removeDash(output),
-      value: {
-        source: piped,
-        identifier: entity.key || output,
-      },
-    };
+  if (entity.properties) {
+    dateFormat = entity.properties.format;
+    unitType = entity.properties.unit;
   }
+
+  placeholder = placeholderObjectBuilder(
+    piped,
+    entity.key || output,
+    dateFormat,
+    unitType,
+    fallback,
+    answerType
+  );
 
   store.placeholders = [...store.placeholders, placeholder];
 
   return `{${
-    typeof output === "string" ? removeDash(output) : removeDash(output.key)
+    removeDash(output)
   }}`;
 };
 

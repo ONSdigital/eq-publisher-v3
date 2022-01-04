@@ -19,6 +19,7 @@ describe("Introduction", () => {
   beforeEach(() => {
     apiData = {
       id: "1",
+      title: "<p>You are completing this for <span data-piped=\"metadata\" data-id=\"ru_name\">ru_name</span> (<span data-piped=\"metadata\" data-id=\"trad_as\">trad_as</span>)</p>",
       description: `<ul><li>Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. </li><li>You can provide info estimates if actual figures aren’t available.</li><li>We will treat your data securely and confidentially.</li><li>${piping}</li></ul>`,
       legalBasis: "NOTICE_2",
       secondaryTitle: `<p>Information you need ${piping}</p>`,
@@ -37,12 +38,31 @@ describe("Introduction", () => {
         }
       ],
       tertiaryTitle: `<p>How we use your data ${piping}</p>`,
-      tertiaryDescription: `<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li><li>${piping}</li></ul>`
+      tertiaryDescription: `<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li><li>${piping}</li></ul>`,
+      contactDetailsPhoneNumber: "0300 1234 931",
+      contactDetailsEmailAddress: "surveys@ons.gov.uk",
+      contactDetailsEmailSubject: "Change of details",
+      contactDetailsIncludeRuRef: true,
     };
     context = {
       questionnaireJson: {
-        metadata: [{ id: "1", key: "some_metadata" }]
-      }
+        metadata: [
+          { id: "1", 
+          key: "some_metadata" },
+          {
+            id: "ru_name",
+            key: "ru_name",
+            alias: "Ru Name",
+            type: "Text",
+          },
+          {
+            id: "trad_as",
+            key: "trad_as",
+            alias: "Ru Name",
+            type: "Text_Optional",
+          },
+        ],
+      },
     };
   });
 
@@ -56,18 +76,76 @@ describe("Introduction", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.primary_content).toMatchObject([
       {
+        id: "primary",
+        title: {
+          text: "You are completing this for {ru_name} ({trad_as})",
+          placeholders: [
+            {
+              placeholder: "ru_name",
+              value: {
+                source: "metadata",
+                identifier: "ru_name",
+              },
+            },
+            {
+              placeholder: "trad_as",
+              value: {
+                source: "metadata",
+                identifier: "trad_as",
+              },
+            },
+          ],
+        },
+        contents: [
+          {
+            description: {
+              text: "If the company details or structure have changed contact us on {telephone_number_link} or email {email_link}",
+              placeholders: [
+                {
+                  placeholder: "telephone_number_link",
+                  transforms: [
+                    {
+                      transform: "telephone_number_link",
+                      arguments: {
+                        telephone_number: "0300 1234 931",
+                      },
+                    },
+                  ],
+                },
+                {
+                  placeholder: "email_link",
+                  transforms: [
+                    {
+                      transform: "email_link",
+                      arguments: {
+                        email_address: "surveys@ons.gov.uk",
+                        email_subject: "Change of details",
+                        email_subject_append: {
+                          identifier: "ru_ref",
+                          source: "metadata",
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
         contents: [
           {
             list: [
               "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. ",
               "You can provide info estimates if actual figures aren&#x2019;t available.",
               "We will treat your data securely and confidentially.",
-              createPipedFormat("some_metadata", "metadata")
-            ]
-          }
+              createPipedFormat("some_metadata", "metadata"),
+            ],
+          },
         ],
-        id: "primary"
-      }
+        id: "description",
+      },
     ]);
   });
 

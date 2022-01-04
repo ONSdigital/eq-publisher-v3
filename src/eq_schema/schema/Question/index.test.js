@@ -1,5 +1,5 @@
-const { omit, set, last } = require("lodash/fp");
-
+const { set, last, cloneDeep } = require("lodash/fp");
+const { remove } = require("lodash");
 const { DATE, DATE_RANGE, NUMBER } = require("../../../constants/answerTypes");
 
 const Question = require(".");
@@ -428,6 +428,7 @@ describe("Question", () => {
         {
           type: DATE_RANGE,
           id: "1",
+          advancedProperties: true,
           properties: { required: true },
           validation,
           childAnswers: [
@@ -648,12 +649,13 @@ describe("Question", () => {
             {
               id: "2",
               label: "Option 2"
+            },
+            {
+              id: "3",
+              label: "Mutually exclusive",
+              mutuallyExclusive: true,
             }
-          ],
-          mutuallyExclusiveOption: {
-            id: "3",
-            label: "Mutually exclusive"
-          }
+          ]
         }
       ];
     });
@@ -666,20 +668,11 @@ describe("Question", () => {
     });
 
     it("should have a question type of general when no mutually exclusive option", () => {
+      const newAnswers = cloneDeep(answers) 
+      remove(newAnswers[0].options, {mutuallyExclusive: true})
       const question = new Question(
         createQuestionJSON({
-          answers: [omit("mutuallyExclusiveOption", answers[0])]
-        })
-      );
-      expect(question).toMatchObject({
-        type: "General"
-      });
-    });
-
-    it("should have a question type of general when mutually exclusive option is null", () => {
-      const question = new Question(
-        createQuestionJSON({
-          answers: [set("mutuallyExclusiveOption", null, answers[0])]
+          answers: newAnswers
         })
       );
       expect(question).toMatchObject({
@@ -746,43 +739,6 @@ describe("Question", () => {
 
     it("should have a single option in the mutually exclusive answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
-      expect(last(question.answers).options).toEqual([
-        {
-          label: "Mutually exclusive",
-          value: "Mutually exclusive"
-        }
-      ]);
-    });
-
-    it("should have a single option in mutually exclusive answer when another additionalAnswerOption is present", () => {
-      const question = new Question(
-        createQuestionJSON({
-          answers: [
-            set(
-              "type",
-              "Radio",
-              set(
-                "options",
-                [
-                  {
-                    option: {
-                      id: "4",
-                      label: "additionalAnswer option",
-                      additionalAnswer: {
-                        id: "2",
-                        type: "TextField",
-                        properties: { required: true }
-                      }
-                    }
-                  }
-                ],
-                answers[0]
-              )
-            )
-          ]
-        })
-      );
-
       expect(last(question.answers).options).toEqual([
         {
           label: "Mutually exclusive",

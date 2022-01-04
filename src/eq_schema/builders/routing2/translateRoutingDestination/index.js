@@ -60,9 +60,13 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
     };
   } else if (logical === "NextPage") {
     return getNextPageDestination(pageId, ctx);
-  } else {
-    throw new Error(`${logical} is not a valid destination type`);
   }
+
+  if (logical === "EndOfCurrentSection") {
+    return { section: "End" };
+  }
+
+  throw new Error(`${logical} is not a valid destination type`);
 };
 
 const translateRoutingDestination = (destination, pageId, ctx) => {

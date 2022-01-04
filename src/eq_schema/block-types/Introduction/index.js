@@ -12,10 +12,15 @@ const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 const reverseContent = ctx =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
+const buildContactDetails = require("../../builders/contactDetails");
 class Introduction {
   constructor(
     {
       title,
+      contactDetailsPhoneNumber,
+      contactDetailsEmailAddress,
+      contactDetailsEmailSubject,
+      contactDetailsIncludeRuRef,
       description,
       secondaryTitle,
       secondaryDescription,
@@ -31,8 +36,17 @@ class Introduction {
       {
         id: "primary",
         title: this.buildTitle(title, ctx),
-        contents: this.buildContents(description, ctx)
-      }
+        contents: buildContactDetails(
+          contactDetailsPhoneNumber,
+          contactDetailsEmailAddress,
+          contactDetailsEmailSubject,
+          contactDetailsIncludeRuRef
+        ),
+      },
+      {
+        id: "description",
+        contents: this.buildContents(description, ctx),
+      },
     ];
     this.preview_content = {
       id: "preview",
@@ -45,23 +59,24 @@ class Introduction {
           contents: this.buildContents(description, ctx)
         }))
     };
-
-    this.secondary_content = [
-      {
-        id: "secondary-content",
-        contents: [
-          {
-            title: this.buildTitle(tertiaryTitle, ctx)
-          }
-        ]
-      }
-    ];
-    if (tertiaryDescription) {
-      const mergeContents = [
-        ...this.secondary_content[0].contents,
-        ...this.buildContents(tertiaryDescription, ctx)
+    if(tertiaryTitle || tertiaryDescription) {
+      this.secondary_content = [
+        {
+          id: "secondary-content",
+          contents: [
+            {
+              title: this.buildTitle(tertiaryTitle, ctx) || ""
+            }
+          ]
+        }
       ];
-      this.secondary_content[0].contents = mergeContents;
+      if (tertiaryDescription) {
+        const mergeContents = [
+          ...this.secondary_content[0].contents,
+          ...this.buildContents(tertiaryDescription, ctx)
+        ];
+        this.secondary_content[0].contents = mergeContents;
+      }
     }
   }
 

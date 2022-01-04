@@ -7,7 +7,7 @@ const {
   DATE,
   UNIT,
   DURATION,
-  TEXTAREA
+  TEXTAREA,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 
@@ -27,7 +27,7 @@ class Answer {
     if (answer.description) {
       this.description = answer.description;
     }
-    
+
     if (answer.qCode) {
       this.q_code = answer.qCode;
     }
@@ -59,7 +59,7 @@ class Answer {
       }
     }
 
-    if (!isNil(answer.validation)) {
+    if (answer.advancedProperties && !isNil(answer.validation)) {
       if ([NUMBER, CURRENCY, PERCENTAGE, UNIT].includes(answer.type)) {
         const { minValue, maxValue } = answer.validation;
 
@@ -98,7 +98,7 @@ class Answer {
     }
 
     if (!isNil(answer.options)) {
-      this.options = answer.options.map(option =>
+      this.options = answer.options.map((option) =>
         Answer.buildOption(option, answer)
       );
     }
@@ -118,7 +118,7 @@ class Answer {
 
     this[validationType] = {
       ...comparator,
-      exclusive: !validationRule.inclusive
+      exclusive: !validationRule.inclusive,
     };
   }
 
@@ -133,9 +133,9 @@ class Answer {
     if (isNil(comparator)) {
       return;
     }
-    
-    if(validationRule.entityType === "Custom" && validationRule.custom) {
-      comparator = { value: validationRule.custom.substring(0,10) }
+
+    if (validationRule.entityType === "Custom" && validationRule.custom) {
+      comparator = { value: validationRule.custom.substring(0, 10) };
     }
 
     const { offset, relativePosition } = validationRule;
@@ -146,8 +146,8 @@ class Answer {
     return {
       ...comparator,
       offset_by: {
-        [offsetUnit]: offsetValue
-      }
+        [offsetUnit]: offsetValue,
+      },
     };
   }
 
@@ -156,7 +156,7 @@ class Answer {
       entityType = "Custom",
       custom,
       previousAnswer,
-      metadata
+      metadata,
     } = validationRule;
     if (entityType === "Custom") {
       if (isNil(custom)) {
@@ -174,8 +174,8 @@ class Answer {
       return {
         value: {
           source: "answers",
-          identifier: `answer${previousAnswer}`
-        }
+          identifier: `answer${previousAnswer}`,
+        },
       };
     }
 
@@ -187,8 +187,8 @@ class Answer {
       return {
         value: {
           source: "metadata",
-          identifier: getMetadata(ctx, metadata).key
-        }
+          identifier: getMetadata(ctx, metadata).key,
+        },
       };
     }
     return;
@@ -196,11 +196,11 @@ class Answer {
 
   static buildOption(
     { label, description, additionalAnswer, qCode: q_code },
-    { properties }
+    { properties, type }
   ) {
     const option = {
       label,
-      value: label
+      value: label,
     };
 
     if (q_code) {
@@ -214,8 +214,12 @@ class Answer {
       option.detail_answer = {
         ...pick(additionalAnswer, ["label", "type"]),
         id: `answer${additionalAnswer.id}`,
-        mandatory: properties.required
+        mandatory: properties.required,
       };
+
+      if (additionalAnswer.qCode && type !== "Checkbox") {
+        option.detail_answer.q_code = additionalAnswer.qCode;
+      }
     }
     return option;
   }

@@ -4,7 +4,9 @@ const { replace } = require("lodash/fp");
 
 const isPlainText = elem => typeof elem === "string" && !elem.startsWith("<");
 
-const getInnerHTML = elem => (isPlainText(elem) ? elem : cheerio(elem).html());
+const startsWithLink = elem => typeof elem === "string" && elem.startsWith("<a");
+
+const getInnerHTML = elem => (isPlainText(elem) || startsWithLink(elem) ) ? elem : cheerio(elem).html();
 
 const removeDash = elem => replace(/-/g, "_", elem);
 
