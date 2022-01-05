@@ -43,7 +43,6 @@ const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
 ) => {
-  console.log("left", left);
   const returnVal = [
     {
       source: checkType(left.type),
