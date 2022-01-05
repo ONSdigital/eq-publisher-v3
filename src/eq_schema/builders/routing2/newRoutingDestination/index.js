@@ -25,14 +25,29 @@ const getOptionValues = (optionIds, questionnaire) => {
   }
 };
 
+// May need to build this out to support other types.
+// In Schema examples i've found metadata as well.
+const checkType = (type) => {
+  if (!type) {
+    return null;
+  }
+
+  if (type === "Answer") {
+    return "answers";
+  }
+
+  return null;
+};
+
 const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
 ) => {
+  console.log("left", left);
   const returnVal = [
     {
+      source: checkType(left.type),
       identifier: `answer${left.answerId}`,
-      source: left.type,
     },
   ];
 
@@ -49,8 +64,8 @@ const buildAnswerObject = (
       {
         count: [
           {
+            source: checkType(left.type),
             identifier: `answer${left.answerId}`,
-            source: left.type,
           },
         ],
       },
