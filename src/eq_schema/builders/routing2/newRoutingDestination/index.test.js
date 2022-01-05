@@ -102,7 +102,7 @@ describe("Should build a runner representation of a binary expression", () => {
         "==": [
           {
             identifier: "answer1",
-            source: "Answer",
+            source: "answers",
           },
           5,
         ],
@@ -131,7 +131,7 @@ describe("Should build a runner representation of a binary expression", () => {
         "==": [
           {
             identifier: "answer1",
-            source: "Answer",
+            source: "answers",
           },
           null,
         ],
@@ -164,7 +164,7 @@ describe("Should build a runner representation of a binary expression", () => {
           {
             count: [
               {
-                source: "Answer",
+                source: "answers",
                 identifier: "answer1",
               },
             ],
