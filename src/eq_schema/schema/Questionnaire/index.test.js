@@ -45,6 +45,13 @@ describe("Questionnaire", () => {
         ],
         metadata: [],
         publishDetails: [{ surveyId: "874" }],
+        submission: {
+          id: "123",
+          furtherContent: "<p>Test</p>",
+          viewPrintAnswers: true,
+          emailConfirmation: true,
+          feedback: true,
+        },
       },
       questionnaire
     );
@@ -296,5 +303,4 @@ describe("Questionnaire", () => {
       "default"
     );
   });
-
 });
