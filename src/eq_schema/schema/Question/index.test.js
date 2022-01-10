@@ -6,7 +6,7 @@ const Question = require(".");
 const Answer = require("../Answer");
 
 describe("Question", () => {
-  const createQuestionJSON = options =>
+  const createQuestionJSON = (options) =>
     Object.assign(
       {
         id: 1,
@@ -17,10 +17,10 @@ describe("Question", () => {
           {
             id: "1",
             properties: {
-              required: true
-            }
-          }
-        ]
+              required: true,
+            },
+          },
+        ],
       },
       options
     );
@@ -32,10 +32,10 @@ describe("Question", () => {
         placeholder,
         value: {
           identifier: placeholder,
-          source
-        }
-      }
-    ]
+          source,
+        },
+      },
+    ],
   });
 
   it("should construct a valid eQ runner question from an author question", () => {
@@ -45,19 +45,19 @@ describe("Question", () => {
       id: "question1",
       title: "question title",
       type: "General",
-      answers: [expect.any(Answer)]
+      answers: [expect.any(Answer)],
     });
   });
 
   it("should handle HTML values", () => {
     const question = new Question(
       createQuestionJSON({
-        title: "<p>question title</p>"
+        title: "<p>question title</p>",
       })
     );
 
     expect(question).toMatchObject({
-      title: "question title"
+      title: "question title",
     });
   });
 
@@ -67,7 +67,7 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             description: "<h2>hello world</h2>",
-            descriptionEnabled: true
+            descriptionEnabled: true,
           })
         );
         expect(question.description).toBeDefined();
@@ -97,7 +97,7 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             guidance: "<h2>hello world</h2>",
-            guidanceEnabled: true
+            guidanceEnabled: true,
           })
         );
         expect(question.guidance).toBeDefined();
@@ -128,7 +128,7 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "definition label",
             definitionContent: "<p>definition content</p>",
-            definitionEnabled: true
+            definitionEnabled: true,
           })
         );
         expect(question.definitions).toBeDefined();
@@ -138,7 +138,7 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "definition label",
             definitionContent: "",
-            definitionEnabled: true
+            definitionEnabled: true,
           })
         );
         expect(question.definitions).toBeDefined();
@@ -148,7 +148,7 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "",
             definitionContent: "<p>definition content</p>",
-            definitionEnabled: true
+            definitionEnabled: true,
           })
         );
         expect(question.definitions).toBeDefined();
@@ -161,7 +161,7 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "",
             definitionContent: "",
-            definitionEnabled: false
+            definitionEnabled: false,
           })
         );
         expect(question.definitions).toBeUndefined();
@@ -173,7 +173,7 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             definitionLabel: "",
-            definitionContent: ""
+            definitionContent: "",
           })
         );
         expect(question.definitions).toBeUndefined();
@@ -188,7 +188,7 @@ describe("Question", () => {
           createQuestionJSON({
             additionalInfoLabel: "additionalInfo label",
             additionalInfoContent: "<p>additionalInfo content</p>",
-            additionalInfoEnabled: true
+            additionalInfoEnabled: true,
           })
         );
         expect(last(question.answers).guidance).toBeDefined();
@@ -201,7 +201,7 @@ describe("Question", () => {
           createQuestionJSON({
             additionalInfoLabel: "additionalInfo label",
             additionalInfoContent: "",
-            additionalInfoEnabled: true
+            additionalInfoEnabled: true,
           })
         );
         expect(last(question.answers).guidance).toBeDefined();
@@ -214,7 +214,7 @@ describe("Question", () => {
           createQuestionJSON({
             additionalInfoLabel: "",
             additionalInfoContent: "<p>additionalInfo content</p>",
-            additionalInfoEnabled: true
+            additionalInfoEnabled: true,
           })
         );
         expect(last(question.answers).guidance).toBeDefined();
@@ -231,7 +231,7 @@ describe("Question", () => {
                 additionalInfoLabel: "Additional info",
                 additionalInfoContent: "<p>Additional info content</p>",
                 additionalInfoEnabled: true,
-                answers: []
+                answers: [],
               })
             )
         ).toThrow(/no answers/);
@@ -244,7 +244,7 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "",
             definitionContent: "",
-            additionalInfoEnabled: false
+            additionalInfoEnabled: false,
           })
         );
         expect(last(question.answers).guidance).toBeUndefined();
@@ -256,7 +256,7 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             definitionLabel: "",
-            definitionContent: ""
+            definitionContent: "",
           })
         );
         expect(last(question.answers).guidance).toBeUndefined();
@@ -274,9 +274,9 @@ describe("Question", () => {
           custom: "2017-02-17",
           offset: {
             value: 4,
-            unit: "Days"
+            unit: "Days",
           },
-          relativePosition: "Before"
+          relativePosition: "Before",
         },
         latestDate: {
           id: "2",
@@ -284,26 +284,26 @@ describe("Question", () => {
           custom: "2018-02-17",
           offset: {
             value: 10,
-            unit: "Years"
+            unit: "Years",
           },
-          relativePosition: "After"
+          relativePosition: "After",
         },
         minDuration: {
           id: "3",
           enabled: true,
           duration: {
             value: 13,
-            unit: "Days"
-          }
+            unit: "Days",
+          },
         },
         maxDuration: {
           id: "4",
           enabled: true,
           duration: {
             value: 2,
-            unit: "Months"
-          }
-        }
+            unit: "Months",
+          },
+        },
       };
     });
 
@@ -315,8 +315,8 @@ describe("Question", () => {
           label: "Period from",
           secondaryLabel: "Period to",
           properties: { required: true },
-          validation
-        }
+          validation,
+        },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
@@ -327,15 +327,15 @@ describe("Question", () => {
             label: "Period from",
             type: DATE,
             id: "answeranswer1from",
-            mandatory: true
+            mandatory: true,
           },
           {
             label: "Period to",
             type: DATE,
             id: "answeranswer1to",
-            mandatory: true
-          }
-        ]
+            mandatory: true,
+          },
+        ],
       });
     });
 
@@ -348,16 +348,16 @@ describe("Question", () => {
           validation,
           childAnswers: [
             { id: "1from", label: "Period from" },
-            { id: "1to", label: "Period to" }
-          ]
+            { id: "1to", label: "Period to" },
+          ],
         },
-        { type: "TextField", id: "2" }
+        { type: "TextField", id: "2" },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
       expect(question.answers).not.toContainEqual(
         expect.objectContaining({
-          type: "TextField"
+          type: "TextField",
         })
       );
     });
@@ -372,7 +372,7 @@ describe("Question", () => {
           options: [
             {
               id: "1",
-              label: "Option 1"
+              label: "Option 1",
             },
             {
               id: "2",
@@ -380,11 +380,11 @@ describe("Question", () => {
               additionalAnswer: {
                 id: "3",
                 type: "TextField",
-                properties: { required: true }
-              }
-            }
-          ]
-        }
+                properties: { required: true },
+              },
+            },
+          ],
+        },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
@@ -393,8 +393,8 @@ describe("Question", () => {
         detail_answer: {
           id: "answer3",
           mandatory: true,
-          type: "TextField"
-        }
+          type: "TextField",
+        },
       });
     });
 
@@ -408,18 +408,18 @@ describe("Question", () => {
           options: [
             {
               id: "1",
-              label: "Option 1"
-            }
+              label: "Option 1",
+            },
           ],
-          other: null
-        }
+          other: null,
+        },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
       expect(question.answers).toEqual([
         expect.objectContaining({
-          type: "Checkbox"
-        })
+          type: "Checkbox",
+        }),
       ]);
     });
 
@@ -433,9 +433,9 @@ describe("Question", () => {
           validation,
           childAnswers: [
             { id: "1from", label: "Period from" },
-            { id: "1to", label: "Period to" }
-          ]
-        }
+            { id: "1to", label: "Period to" },
+          ],
+        },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
@@ -444,9 +444,9 @@ describe("Question", () => {
           minimum: {
             value: "2017-02-17",
             offset_by: {
-              days: -4
-            }
-          }
+              days: -4,
+            },
+          },
         })
       );
       expect(question.answers[1]).toEqual(
@@ -454,23 +454,23 @@ describe("Question", () => {
           maximum: {
             value: "2018-02-17",
             offset_by: {
-              years: 10
-            }
-          }
+              years: 10,
+            },
+          },
         })
       );
       expect(question.period_limits).toEqual(
         expect.objectContaining({
           minimum: {
-            days: 13
-          }
+            days: 13,
+          },
         })
       );
       expect(question.period_limits).toEqual(
         expect.objectContaining({
           maximum: {
-            months: 2
-          }
+            months: 2,
+          },
         })
       );
     });
@@ -484,9 +484,9 @@ describe("Question", () => {
           validation,
           childAnswers: [
             { id: "1from", label: "Period from" },
-            { id: "1to", label: "Period to" }
-          ]
-        }
+            { id: "1to", label: "Period to" },
+          ],
+        },
       ];
       answers[0].validation.earliestDate.enabled = false;
       answers[0].validation.latestDate.enabled = false;
@@ -499,9 +499,9 @@ describe("Question", () => {
           minimum: {
             value: "2017-02-17",
             offset_by: {
-              days: -4
-            }
-          }
+              days: -4,
+            },
+          },
         })
       );
       expect(question.answers[1]).toEqual(
@@ -509,23 +509,23 @@ describe("Question", () => {
           maximum: {
             value: "2018-02-17",
             offset_by: {
-              years: 10
-            }
-          }
+              years: 10,
+            },
+          },
         })
       );
       expect(question.period_limits).toEqual(
         expect.not.objectContaining({
           minimum: {
-            days: 13
-          }
+            days: 13,
+          },
         })
       );
       expect(question.period_limits).toEqual(
         expect.not.objectContaining({
           maximum: {
-            months: 2
-          }
+            months: 2,
+          },
         })
       );
     });
@@ -541,20 +541,20 @@ describe("Question", () => {
           secondaryQCode: "456",
           childAnswers: [
             { id: "1from", label: "Period from" },
-            { id: "1to", label: "Period to" }
-          ]
-        }
+            { id: "1to", label: "Period to" },
+          ],
+        },
       ];
       const question = new Question(createQuestionJSON({ answers }));
 
       expect(question.answers[0]).toEqual(
         expect.not.objectContaining({
-          qCode: "123"
+          qCode: "123",
         })
       );
       expect(question.answers[1]).toEqual(
         expect.not.objectContaining({
-          qCode: "456"
+          qCode: "456",
         })
       );
     });
@@ -569,21 +569,23 @@ describe("Question", () => {
     ) => ({
       questionnaireJson: {
         metadata,
-        sections: [{
-          folders: [
-            {
-              id: "folder-1",
-              pages: [{ answers: [{ id: `1`, type: "Text" }] }]
-            }
-          ],
-        }]
-      }
+        sections: [
+          {
+            folders: [
+              {
+                id: "folder-1",
+                pages: [{ answers: [{ id: `1`, type: "Text" }] }],
+              },
+            ],
+          },
+        ],
+      },
     });
 
     it("should handle piped values in title", () => {
       const question = new Question(
         createQuestionJSON({
-          title: createPipe()
+          title: createPipe(),
         }),
         createContext()
       );
@@ -596,13 +598,13 @@ describe("Question", () => {
           guidanceEnabled: true,
           guidance: `<p>${createPipe({
             id: 123,
-            pipeType: "metadata"
-          })}</p><p>hello</p>`
+            pipeType: "metadata",
+          })}</p><p>hello</p>`,
         }),
         createContext()
       );
       expect(question.guidance.contents[0]).toEqual({
-        description: createPipedFormat("my_metadata", "metadata")
+        description: createPipedFormat("my_metadata", "metadata"),
       });
     });
 
@@ -610,7 +612,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           description: `<p>foo</p><p>bar</p>`,
-          descriptionEnabled: true
+          descriptionEnabled: true,
         }),
         createContext()
       );
@@ -622,13 +624,13 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           description: `${createPipe()}`,
-          descriptionEnabled: true
+          descriptionEnabled: true,
         }),
         createContext()
       );
-      expect(question.description).toEqual(
-        [createPipedFormat("answer1", "answers")]
-      );
+      expect(question.description).toEqual([
+        createPipedFormat("answer1", "answers"),
+      ]);
     });
   });
 
@@ -644,7 +646,7 @@ describe("Question", () => {
           options: [
             {
               id: "1",
-              label: "Option 1"
+              label: "Option 1",
             },
             {
               id: "2",
@@ -663,7 +665,7 @@ describe("Question", () => {
     it("should have a question type of mutually exclusive", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(question).toMatchObject({
-        type: "MutuallyExclusive"
+        type: "MutuallyExclusive",
       });
     });
 
@@ -676,7 +678,7 @@ describe("Question", () => {
         })
       );
       expect(question).toMatchObject({
-        type: "General"
+        type: "General",
       });
     });
 
@@ -688,14 +690,14 @@ describe("Question", () => {
     it("should have checkbox answer as last answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers)).toMatchObject({
-        type: "Checkbox"
+        type: "Checkbox",
       });
     });
 
     it("should have unique answer id for the last answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers)).toMatchObject({
-        id: "answer1-exclusive"
+        id: "answer1-exclusive",
       });
     });
 
@@ -712,11 +714,11 @@ describe("Question", () => {
     it("should set mandatory on exclusive child answers to false", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(question).toMatchObject({
-        mandatory: true
+        mandatory: true,
       });
-      question.answers.map(answer => {
+      question.answers.map((answer) => {
         expect(answer).toMatchObject({
-          mandatory: false
+          mandatory: false,
         });
       });
     });
@@ -724,16 +726,16 @@ describe("Question", () => {
     it("should have a checkbox answer as last answer when radio answer is used", () => {
       const question = new Question(
         createQuestionJSON({
-          answers: [set("type", "Radio", answers[0])]
+          answers: [set("type", "Radio", answers[0])],
         })
       );
       expect(question.answers).toEqual([
         expect.objectContaining({
-          type: "Radio"
+          type: "Radio",
         }),
         expect.objectContaining({
-          type: "Checkbox"
-        })
+          type: "Checkbox",
+        }),
       ]);
     });
 
@@ -742,8 +744,8 @@ describe("Question", () => {
       expect(last(question.answers).options).toEqual([
         {
           label: "Mutually exclusive",
-          value: "Mutually exclusive"
-        }
+          value: "Mutually exclusive",
+        },
       ]);
     });
   });
@@ -756,14 +758,14 @@ describe("Question", () => {
         id: "foo",
         entityType: "Custom",
         condition: "Equal",
-        custom: 5
+        custom: 5,
       };
     });
 
     it("should change the type to Calculated when there is a group validation", () => {
       const question = new Question(
         createQuestionJSON({
-          totalValidation: validation
+          totalValidation: validation,
         })
       );
 
@@ -775,12 +777,24 @@ describe("Question", () => {
       validation.enabled = false;
       const question = new Question(
         createQuestionJSON({
-          totalValidation: validation
+          totalValidation: validation,
         })
       );
 
       expect(question.type).toEqual("General");
       expect(question.calculations).not.toBeDefined();
+    });
+
+    it("should change handle unanswered validaton and custom validation when allowUnanswered is false", () => {
+      validation.allowUnanswered = true;
+
+      const question = new Question(
+        createQuestionJSON({
+          totalValidation: validation,
+        })
+      );
+
+      expect(question.calculations).toHaveLength(2);
     });
 
     it("should show all answers", () => {
@@ -789,18 +803,18 @@ describe("Question", () => {
           totalValidation: validation,
           answers: [
             { id: "1", type: NUMBER, properties: {} },
-            { id: "2", type: NUMBER, properties: {} }
-          ]
+            { id: "2", type: NUMBER, properties: {} },
+          ],
         })
       );
 
-      expect(question.answers.map(a => a.id)).toEqual(["answer1", "answer2"]);
+      expect(question.answers.map((a) => a.id)).toEqual(["answer1", "answer2"]);
     });
 
     it("should always output the calculation type as sum", () => {
       const question = new Question(
         createQuestionJSON({
-          totalValidation: validation
+          totalValidation: validation,
         })
       );
       expect(question.calculations[0].calculation_type).toEqual("sum");
@@ -812,14 +826,14 @@ describe("Question", () => {
           totalValidation: validation,
           answers: [
             { id: "1", type: NUMBER, properties: {} },
-            { id: "2", type: NUMBER, properties: {} }
-          ]
+            { id: "2", type: NUMBER, properties: {} },
+          ],
         })
       );
 
       expect(question.calculations[0].answers_to_calculate).toEqual([
         "answer1",
-        "answer2"
+        "answer2",
       ]);
     });
 
@@ -829,12 +843,12 @@ describe("Question", () => {
         { author: "GreaterOrEqual", runner: ["greater than", "equals"] },
         { author: "Equal", runner: ["equals"] },
         { author: "LessOrEqual", runner: ["less than", "equals"] },
-        { author: "LessThan", runner: ["less than"] }
+        { author: "LessThan", runner: ["less than"] },
       ].forEach(({ author, runner }) => {
         validation.condition = author;
         const question = new Question(
           createQuestionJSON({
-            totalValidation: validation
+            totalValidation: validation,
           })
         );
         expect(question.calculations[0].conditions).toEqual(runner);
@@ -847,7 +861,7 @@ describe("Question", () => {
       validation.previousAnswer = { id: 20 };
       const question = new Question(
         createQuestionJSON({
-          totalValidation: validation
+          totalValidation: validation,
         })
       );
       expect(question.calculations[0].value).toEqual(10);
@@ -860,7 +874,7 @@ describe("Question", () => {
       validation.previousAnswer = { id: 20 };
       const question = new Question(
         createQuestionJSON({
-          totalValidation: validation
+          totalValidation: validation,
         })
       );
       expect(question.calculations[0].value).not.toBeDefined();

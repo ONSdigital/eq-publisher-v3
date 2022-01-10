@@ -5,7 +5,7 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePipeContent
+  reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
@@ -24,8 +24,8 @@ const findMutuallyExclusive = flow(
   find(findMutualOption),
 )
 
-const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
-const reversePipe = ctx =>
+const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
 
 class Question {
@@ -51,8 +51,8 @@ class Question {
       this.definitions = [
         {
           title: question.definitionLabel,
-          ...reversePipe(ctx)(question.definitionContent)
-        }
+          ...reversePipe(ctx)(question.definitionContent),
+        },
       ];
     }
     const dateRange = findDateRange(question);
@@ -61,15 +61,14 @@ class Question {
     if (dateRange) {
       this.type = DATE_RANGE;
       this.answers = this.buildDateRangeAnswers(dateRange);
-      const {
-        earliestDate,
-        latestDate,
-        minDuration,
-        maxDuration
-      } = dateRange.validation;
+      const { earliestDate, latestDate, minDuration, maxDuration } =
+        dateRange.validation;
       if (dateRange.advancedProperties) {
         if (earliestDate.enabled || latestDate.enabled) {
-          this.answers[0].minimum = Answer.buildDateValidation(earliestDate, ctx);
+          this.answers[0].minimum = Answer.buildDateValidation(
+            earliestDate,
+            ctx
+          );
           this.answers[1].maximum = Answer.buildDateValidation(latestDate, ctx);
         }
 
@@ -96,9 +95,12 @@ class Question {
     } else if (question.totalValidation && question.totalValidation.enabled) {
       this.type = "Calculated";
       this.answers = this.buildAnswers(question.answers, ctx);
-      this.calculations = [
-        this.buildCalculation(question.totalValidation, question.answers)
-      ];
+      this.calculations = question.totalValidation.allowUnanswered
+        ? [
+            this.buildUnansweredCalculation(question.answers),
+            this.buildCalculation(question.totalValidation, question.answers),
+          ]
+        : [this.buildCalculation(question.totalValidation, question.answers)];
     } else {
       this.type = "General";
       this.answers = this.buildAnswers(question.answers, ctx);
@@ -117,7 +119,7 @@ class Question {
       last(this.answers).guidance = {
         show_guidance: question.additionalInfoLabel,
         hide_guidance: question.additionalInfoLabel,
-        ...reversePipe(ctx)(question.additionalInfoContent)
+        ...reversePipe(ctx)(question.additionalInfoContent),
       };
     }
   }
@@ -136,12 +138,12 @@ class Question {
     const commonAnswerDef = {
       id: `answer${answer.id}`,
       type: DATE,
-      mandatory: get("properties.required", answer)
+      mandatory: get("properties.required", answer),
     };
     const dateFrom = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}from`,
-      label: answer.label
+      label: answer.label,
     };
     if (answer.qCode) {
       dateFrom.q_code = answer.qCode;
@@ -149,7 +151,7 @@ class Question {
     const dateTo = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}to`,
-      label: answer.secondaryLabel
+      label: answer.secondaryLabel,
     };
     if (answer.secondaryQCode) {
       dateTo.q_code = answer.secondaryQCode;
@@ -181,7 +183,7 @@ class Question {
       GreaterOrEqual: [GREATER_THAN, EQUALS],
       Equal: [EQUALS],
       LessOrEqual: [LESS_THAN, EQUALS],
-      LessThan: [LESS_THAN]
+      LessThan: [LESS_THAN],
     };
 
     const rightSide =
@@ -191,9 +193,18 @@ class Question {
 
     return {
       calculation_type: "sum",
-      answers_to_calculate: answers.map(a => `answer${a.id}`),
+      answers_to_calculate: answers.map((a) => `answer${a.id}`),
       conditions: AUTHOR_TO_RUNNER_CONDITIONS[totalValidation.condition],
-      ...rightSide
+      ...rightSide,
+    };
+  }
+
+  buildUnansweredCalculation(answers) {
+    return {
+      calculation_type: "sum",
+      answers_to_calculate: answers.map((a) => `answer${a.id}`),
+      conditions: ["equals"],
+      value: 0,
     };
   }
 }
