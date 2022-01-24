@@ -15,7 +15,7 @@ const removeDash = (elem) => replace(/-/g, "_", elem);
 const unescapePiping = (value) =>
   replace(
     /{{([^}}]+)}}/g,
-    (_, match) => `{{${replace(/&apos;/g, /&#39;/, match)}}}`,
+    (_, match) => `{{${replace(/&apos;/g, "'", match)}}}`,
     value
   );
 
