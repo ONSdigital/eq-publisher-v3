@@ -8,15 +8,14 @@ const {
 const reverseContent = (ctx) =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
-class Submission {
-  constructor(submission, ctx) {
-    this.id = `submission${submission.id}`;
-    this.confirmation_email = submission.emailConfirmation;
-    this.feedback = submission.feedback;
-    this.view_response = submission.viewPrintAnswers;
+class PostSubmission {
+  constructor(postSubmission, ctx) {
+    this.confirmation_email = postSubmission.emailConfirmation;
+    this.feedback = postSubmission.feedback;
+    this.view_response = postSubmission.viewPrintAnswers;
     this.guidance = {
       id: "guidance",
-      contents: [...this.buildContents(submission.furtherContent, ctx)],
+      contents: [...this.buildContents(postSubmission.furtherContent, ctx)],
     };
   }
 
@@ -25,4 +24,4 @@ class Submission {
   }
 }
 
-module.exports = Submission;
+module.exports = PostSubmission;

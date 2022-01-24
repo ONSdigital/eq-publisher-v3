@@ -1,6 +1,6 @@
-const Submission = require(".");
+const PostSubmission = require(".");
 
-describe("Submission", () => {
+describe("Post Submission", () => {
   let apiData, context;
 
   beforeEach(() => {
@@ -15,9 +15,8 @@ describe("Submission", () => {
   });
 
   it("should set the correct data", () => {
-    const submission = new Submission(apiData, context);
-    expect(submission.id).toEqual("submission1");
-    expect(submission.guidance).toEqual({
+    const postSubmission = new PostSubmission(apiData, context);
+    expect(postSubmission.guidance).toEqual({
       id: "guidance",
       contents: [
         {
@@ -25,8 +24,8 @@ describe("Submission", () => {
         },
       ],
     });
-    expect(submission.feedback).toBeTruthy();
-    expect(submission.view_response).toBeTruthy();
-    expect(submission.confirmation_email).toBeTruthy();
+    expect(postSubmission.feedback).toBeTruthy();
+    expect(postSubmission.view_response).toBeTruthy();
+    expect(postSubmission.confirmation_email).toBeTruthy();
   });
 });

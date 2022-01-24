@@ -8,7 +8,7 @@ const { contentMap } = require("../../../constants/legalBases");
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
-const Submission = require("../Submission");
+const PostSubmission = require("../PostSubmission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
@@ -49,7 +49,7 @@ class Questionnaire {
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
-    this.post_submission = this.buildSubmission(
+    this.post_submission = this.buildPostSubmission(
       questionnaireJson.submission,
       ctx
     );
@@ -105,8 +105,8 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildSubmission(submission, ctx) {
-    return new Submission(submission, ctx);
+  buildPostSubmission(postSubmission, ctx) {
+    return new PostSubmission(postSubmission, ctx);
   }
 }
 
