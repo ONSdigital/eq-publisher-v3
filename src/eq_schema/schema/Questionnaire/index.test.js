@@ -198,6 +198,10 @@ describe("Questionnaire", () => {
           name: "ru_name",
           type: "string",
         },
+        {
+          name: "ru_ref",
+          type: "string",
+        },
       ],
     });
   });
@@ -235,6 +239,10 @@ describe("Questionnaire", () => {
       },
       {
         name: "ru_name",
+        type: "string",
+      },
+      {
+        name: "ru_ref",
         type: "string",
       },
       {
@@ -277,6 +285,10 @@ describe("Questionnaire", () => {
       },
       {
         name: "ru_name",
+        type: "string",
+      },
+      {
+        name: "ru_ref",
         type: "string",
       },
     ]);
