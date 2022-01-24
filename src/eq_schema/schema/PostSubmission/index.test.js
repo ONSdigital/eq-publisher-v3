@@ -17,7 +17,6 @@ describe("Post Submission", () => {
   it("should set the correct data", () => {
     const postSubmission = new PostSubmission(apiData, context);
     expect(postSubmission.guidance).toEqual({
-      id: "guidance",
       contents: [
         {
           description: "Test",

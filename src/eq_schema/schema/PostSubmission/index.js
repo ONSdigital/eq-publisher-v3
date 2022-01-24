@@ -14,7 +14,6 @@ class PostSubmission {
     this.feedback = postSubmission.feedback;
     this.view_response = postSubmission.viewPrintAnswers;
     this.guidance = {
-      id: "guidance",
       contents: [...this.buildContents(postSubmission.furtherContent, ctx)],
     };
   }
