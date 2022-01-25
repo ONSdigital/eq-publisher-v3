@@ -19,6 +19,9 @@ const unescapePiping = (value) =>
     value
   );
 
+// ! This version works correctly but may break other code
+// const unescapePiping = (value) => replace(/&apos;/g, `&#39;`, value);
+
 const getInnerHTMLWithPiping = (elem) => {
   if (!elem) {
     return;
