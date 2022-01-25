@@ -12,15 +12,7 @@ const getInnerHTML = (elem) =>
 
 const removeDash = (elem) => replace(/-/g, "_", elem);
 
-const unescapePiping = (value) =>
-  replace(
-    /{{([^}}]+)}}/g,
-    (_, match) => `{{${replace(/&apos;/g, "'", match)}}}`,
-    value
-  );
-
-// ! This version works correctly but may break other code
-// const unescapePiping = (value) => replace(/&apos;/g, `&#39;`, value);
+const unescapePiping = (value) => replace(/&apos;/g, `&#39;`, value);
 
 const getInnerHTMLWithPiping = (elem) => {
   if (!elem) {
