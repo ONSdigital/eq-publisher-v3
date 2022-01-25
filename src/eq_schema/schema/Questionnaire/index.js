@@ -102,7 +102,7 @@ class Questionnaire {
       .map(({ key, type }) => ({
         name: key,
         type: type === "Date" ? "date" : "string",
-        optional: type === "Text_Optional" ? true : undefined,
+        optional: type === "Text_Optional" || undefined,
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
