@@ -264,6 +264,65 @@ describe("Questionnaire", () => {
     ]);
   });
 
+  it("should set optional property for optional text", () => {
+    const questionnaireJson = createQuestionnaireJSON({
+      metadata: [
+        {
+          key: "example_date",
+          type: "Date",
+        },
+        {
+          key: "example_text",
+          type: "Text_Optional",
+        },
+        {
+          key: "example_region",
+          type: "Region",
+        },
+        {
+          key: "example_language",
+          type: "Language",
+        },
+      ],
+    });
+
+    expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
+      {
+        name: "user_id",
+        type: "string",
+      },
+      {
+        name: "period_id",
+        type: "string",
+      },
+      {
+        name: "ru_name",
+        type: "string",
+      },
+      {
+        name: "ru_ref",
+        type: "string",
+      },
+      {
+        name: "example_date",
+        type: "date",
+      },
+      {
+        name: "example_text",
+        type: "string",
+        optional: true,
+      },
+      {
+        name: "example_region",
+        type: "string",
+      },
+      {
+        name: "example_language",
+        type: "string",
+      },
+    ]);
+  });
+
   it("should not overwrite the default metadata", () => {
     const questionnaireJson = createQuestionnaireJSON({
       metadata: [
