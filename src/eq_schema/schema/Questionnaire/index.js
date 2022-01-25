@@ -7,6 +7,8 @@ const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents } = require("../../../utils/builders");
 
+const validThemes = require("../../../constants/validThemes");
+
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
@@ -17,7 +19,6 @@ const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
 
 const getTheme = (previewTheme) => {
-  const validThemes = ["default", "northernireland"];
   if (validThemes.includes(previewTheme)) {
     return previewTheme;
   } else {
