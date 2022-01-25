@@ -3,13 +3,13 @@ const { isEmpty, reject, flatten, uniqWith, isEqual } = require("lodash");
 const {
   buildAuthorConfirmationQuestion,
 } = require("../../builders/confirmationPage/ConfirmationPage");
-const { buildTitle } = require("../../../utils/builders");
+const { buildContents } = require("../../../utils/builders");
 
 class Group {
   constructor(title, section, ctx) {
     this.id = `group${section.id}`;
     if (title) {
-      this.title = buildTitle(title, ctx);
+      this.title = buildContents(title, ctx);
     }
     this.blocks = this.buildBlocks(section, ctx);
 

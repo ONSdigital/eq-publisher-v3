@@ -5,6 +5,8 @@ const {
 
 const { contentMap } = require("../../../constants/legalBases");
 
+const { buildContents } = require("../../../utils/builders");
+
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
@@ -32,9 +34,9 @@ class Questionnaire {
       this.legal_basis = contentMap[legalBasisCode];
     }
 
-    this.title = questionnaireJson.title;
-
     const ctx = this.createContext(questionnaireJson);
+
+    this.title = buildContents(questionnaireJson.title, ctx);
 
     this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson);
 

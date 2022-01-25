@@ -11,6 +11,8 @@ const {
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 
+const { buildContents } = require("../../../utils/builders");
+
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
 
@@ -21,11 +23,11 @@ class Answer {
     this.type = answer.type;
 
     if (answer.label) {
-      this.label = answer.label;
+      this.label = buildContents(answer.label, ctx);
     }
 
     if (answer.description) {
-      this.description = answer.description;
+      this.description = buildContents(answer.description, ctx);
     }
 
     if (answer.qCode) {
@@ -103,7 +105,7 @@ class Answer {
 
     if (!isNil(answer.options)) {
       this.options = answer.options.map((option) =>
-        Answer.buildOption(option, answer)
+        Answer.buildOption(option, answer, ctx)
       );
     }
   }
@@ -200,11 +202,12 @@ class Answer {
 
   static buildOption(
     { label, description, additionalAnswer, qCode: q_code },
-    { properties, type }
+    { properties, type },
+    ctx
   ) {
     const option = {
-      label,
-      value: label,
+      label: buildContents(label, ctx),
+      value: buildContents(label, ctx),
     };
 
     if (q_code) {
@@ -212,7 +215,7 @@ class Answer {
     }
 
     if (description) {
-      option.description = description;
+      option.description = buildContents(description, ctx);
     }
     if (additionalAnswer) {
       option.detail_answer = {
