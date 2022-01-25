@@ -355,7 +355,14 @@ describe("Questionnaire", () => {
 
   it("should allow setting northern ireland theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
-      theme: "northernireland",
+      themeSettings: {
+        previewTheme: "northernireland",
+        themes: [
+          {
+            shortName: "northernireland",
+          },
+        ],
+      },
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
@@ -366,7 +373,32 @@ describe("Questionnaire", () => {
 
   it("should allow setting default theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
-      theme: "default",
+      themeSettings: {
+        previewTheme: "default",
+        themes: [
+          {
+            shortName: "default",
+          },
+        ],
+      },
+    });
+
+    expect(new Questionnaire(questionnaireJson)).toHaveProperty(
+      "theme",
+      "default"
+    );
+  });
+
+  it("should set default theme if theme is invalid", () => {
+    const questionnaireJson = createQuestionnaireJSON({
+      themeSettings: {
+        previewTheme: "invalidtheme",
+        themes: [
+          {
+            shortName: "invalidtheme",
+          },
+        ],
+      },
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
