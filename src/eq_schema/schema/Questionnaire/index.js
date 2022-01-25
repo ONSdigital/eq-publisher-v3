@@ -16,6 +16,15 @@ const QuestionnaireFlow = require("../QuestionnaireFlow");
 const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
 
+const getTheme = (previewTheme) => {
+  const validThemes = ["default", "northernireland"];
+  if (validThemes.includes(previewTheme)) {
+    return previewTheme;
+  } else {
+    return "default";
+  }
+};
+
 class Questionnaire {
   constructor(questionnaireJson) {
     const { surveyId } = questionnaireJson;
@@ -44,7 +53,7 @@ class Questionnaire {
 
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
-    this.theme = questionnaireJson.theme;
+    this.theme = getTheme(questionnaireJson.themeSettings.previewTheme);
 
     this.navigation = {
       visible: questionnaireJson.navigation,
