@@ -5,13 +5,15 @@ const contentMap = {
     "Notice is given under sections 2 and 3 of the Statistics of Trade Act 1947.",
   NOTICE_3:
     "Notice is given under sections 3 and 4 of the Statistics of Trade Act 1947.",
-  VOLUNTARY: null
+  NOTICE_NI:
+    "Notice is given under article 5 of the Statistics of Trade and Employment (Northern Ireland) Order 1988.",
+  VOLUNTARY: null,
 };
 
 module.exports.types = Object.keys(contentMap).reduce(
   (hash, key) => ({
     ...hash,
-    [key]: key
+    [key]: key,
   }),
   {}
 );

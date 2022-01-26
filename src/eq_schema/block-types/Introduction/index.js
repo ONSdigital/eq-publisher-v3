@@ -2,14 +2,14 @@ const { flow } = require("lodash");
 const convertPipes = require("../../../utils/convertPipes");
 const {
   wrapContents,
-  reversePipeContent
+  reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
-const processPipe = ctx => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const reverseContent = ctx =>
+const reverseContent = (ctx) =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
 const buildContactDetails = require("../../builders/contactDetails");
@@ -26,7 +26,7 @@ class Introduction {
       secondaryDescription,
       collapsibles,
       tertiaryTitle,
-      tertiaryDescription
+      tertiaryDescription,
     },
     ctx
   ) {
@@ -53,27 +53,27 @@ class Introduction {
       title: this.buildTitle(secondaryTitle, ctx),
       contents: this.buildContents(secondaryDescription, ctx),
       questions: collapsibles
-        .filter(collapsible => collapsible.title && collapsible.description)
+        .filter((collapsible) => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
           question: this.buildTitle(title, ctx),
-          contents: this.buildContents(description, ctx)
-        }))
+          contents: this.buildContents(description, ctx),
+        })),
     };
-    if(tertiaryTitle || tertiaryDescription) {
+    if (tertiaryTitle || tertiaryDescription) {
       this.secondary_content = [
         {
           id: "secondary-content",
           contents: [
             {
-              title: this.buildTitle(tertiaryTitle, ctx) || ""
-            }
-          ]
-        }
+              title: this.buildTitle(tertiaryTitle, ctx) || "",
+            },
+          ],
+        },
       ];
       if (tertiaryDescription) {
         const mergeContents = [
           ...this.secondary_content[0].contents,
-          ...this.buildContents(tertiaryDescription, ctx)
+          ...this.buildContents(tertiaryDescription, ctx),
         ];
         this.secondary_content[0].contents = mergeContents;
       }

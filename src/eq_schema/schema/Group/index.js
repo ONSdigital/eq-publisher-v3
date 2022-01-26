@@ -3,18 +3,22 @@ const { isEmpty, reject, flatten, uniqWith, isEqual } = require("lodash");
 const {
   buildAuthorConfirmationQuestion,
 } = require("../../builders/confirmationPage/ConfirmationPage");
+const { buildContents } = require("../../../utils/builders");
 
 class Group {
   constructor(title, section, ctx) {
     this.id = `group${section.id}`;
     if (title) {
-      this.title = title;
+      this.title = buildContents(title, ctx);
     }
     this.blocks = this.buildBlocks(section, ctx);
 
     if (!isEmpty(ctx.routingGotos)) {
       this.filterContext(this.id, ctx);
-      const skipConditions = uniqWith(this.buildSkipConditions(this.id, ctx), isEqual) ;
+      const skipConditions = uniqWith(
+        this.buildSkipConditions(this.id, ctx),
+        isEqual
+      );
 
       if (!isEmpty(skipConditions)) {
         this.skip_conditions = skipConditions;
@@ -25,14 +29,14 @@ class Group {
   filterContext(currentId, ctx) {
     ctx.routingGotos = reject(
       ctx.routingGotos,
-      rule => rule.group === currentId
+      (rule) => rule.group === currentId
     );
   }
 
   buildSkipConditions(currentId, ctx) {
-    return reject(ctx.routingGotos, goto => goto.groupId === currentId).map(
+    return reject(ctx.routingGotos, (goto) => goto.groupId === currentId).map(
       ({ when }) => ({
-        when
+        when,
       })
     );
   }
@@ -44,7 +48,12 @@ class Group {
         if (page.confirmation) {
           return [
             block,
-            buildAuthorConfirmationQuestion(page, section.id, page.routing, ctx),
+            buildAuthorConfirmationQuestion(
+              page,
+              section.id,
+              page.routing,
+              ctx
+            ),
           ];
         }
         return block;

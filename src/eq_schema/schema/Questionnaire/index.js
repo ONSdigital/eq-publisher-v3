@@ -5,14 +5,26 @@ const {
 
 const { contentMap } = require("../../../constants/legalBases");
 
+const { buildContents } = require("../../../utils/builders");
+
+const validThemes = require("../../../constants/validThemes");
+
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
-const Submission = require("../Submission");
+const PostSubmission = require("../PostSubmission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
   themes && themes.find((theme) => theme && theme.shortName === previewTheme);
+
+const getTheme = (previewTheme) => {
+  if (validThemes.includes(previewTheme)) {
+    return previewTheme;
+  } else {
+    return "default";
+  }
+};
 
 class Questionnaire {
   constructor(questionnaireJson) {
@@ -32,9 +44,9 @@ class Questionnaire {
       this.legal_basis = contentMap[legalBasisCode];
     }
 
-    this.title = questionnaireJson.title;
-
     const ctx = this.createContext(questionnaireJson);
+
+    this.title = buildContents(questionnaireJson.title, ctx);
 
     this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson);
 
@@ -42,14 +54,14 @@ class Questionnaire {
 
     this.buildIntroduction(questionnaireJson.introduction, ctx);
 
-    this.theme = questionnaireJson.theme;
+    this.theme = getTheme(questionnaireJson.themeSettings.previewTheme);
 
     this.navigation = {
       visible: questionnaireJson.navigation,
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
-    this.post_submission = this.buildSubmission(
+    this.post_submission = this.buildPostSubmission(
       questionnaireJson.submission,
       ctx
     );
@@ -100,13 +112,14 @@ class Questionnaire {
       .map(({ key, type }) => ({
         name: key,
         type: type === "Date" ? "date" : "string",
+        optional: type === "Text_Optional" || undefined,
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildSubmission(submission, ctx) {
-    return new Submission(submission, ctx);
+  buildPostSubmission(postSubmission, ctx) {
+    return new PostSubmission(postSubmission, ctx);
   }
 }
 

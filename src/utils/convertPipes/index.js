@@ -36,18 +36,26 @@ const PIPE_TYPES = {
     render: ({ id }) => `answer${id}`,
     getType: ({ type }) => type,
     getFallback: ({ properties, id, type, advancedProperties }) => {
-      if (!(type==="DateRange") || !advancedProperties) {return null}
-      if (!properties || !properties.fallback || !properties.fallback.enabled) {return null}
+      if (!(type === "DateRange") || !advancedProperties) {
+        return null;
+      }
+      if (!properties || !properties.fallback || !properties.fallback.enabled) {
+        return null;
+      }
       return {
-        source: "metadata", 
-        identifier: id.endsWith("from") ? properties.fallback.start : properties.fallback.end}
-      },
+        source: "metadata",
+        identifier: id.endsWith("from")
+          ? properties.fallback.start
+          : properties.fallback.end,
+      };
+    },
   },
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
     render: ({ key }) => `${key}`,
     getType: ({ type }) => type,
-    getFallback: ({fallbackKey}) => (fallbackKey ? {source: "metadata", identifier: fallbackKey} : null)
+    getFallback: ({ fallbackKey }) =>
+      fallbackKey ? { source: "metadata", identifier: fallbackKey } : null,
   },
   variable: {
     render: () => `%(total)s`,
@@ -82,7 +90,7 @@ const getPipedData = (store) => (element, ctx) => {
 
   const answerType = pipeConfig.getType(entity);
 
-  const fallback = pipeConfig.getFallback({...entity, ...elementData});
+  const fallback = pipeConfig.getFallback({ ...entity, ...elementData });
 
   let placeholder;
 
@@ -104,9 +112,7 @@ const getPipedData = (store) => (element, ctx) => {
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${
-    removeDash(output)
-  }}`;
+  return `{${removeDash(output)}}`;
 };
 
 const convertPipes = (ctx) => (html) => {

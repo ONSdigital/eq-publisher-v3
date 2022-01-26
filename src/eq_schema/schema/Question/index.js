@@ -16,13 +16,10 @@ const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
 const findMutualOption = flow(
   get("options"),
-  find({mutuallyExclusive: true})
-)
+  find({ mutuallyExclusive: true })
+);
 
-const findMutuallyExclusive = flow(
-  get("answers"),
-  find(findMutualOption),
-)
+const findMutuallyExclusive = flow(get("answers"), find(findMutualOption));
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 const reversePipe = (ctx) =>
@@ -50,7 +47,7 @@ class Question {
     ) {
       this.definitions = [
         {
-          title: question.definitionLabel,
+          title: processPipe(ctx)(question.definitionLabel),
           ...reversePipe(ctx)(question.definitionContent),
         },
       ];
@@ -90,7 +87,11 @@ class Question {
     } else if (mutuallyExclusive) {
       this.type = "MutuallyExclusive";
       this.mandatory = get("properties.required", mutuallyExclusive);
-      this.answers = this.buildMutuallyExclusiveAnswers(mutuallyExclusive, question.answers, ctx);
+      this.answers = this.buildMutuallyExclusiveAnswers(
+        mutuallyExclusive,
+        question.answers,
+        ctx
+      );
       delete this.answers[1].label;
     } else if (question.totalValidation && question.totalValidation.enabled) {
       this.type = "Calculated";
@@ -117,20 +118,20 @@ class Question {
       }
 
       last(this.answers).guidance = {
-        show_guidance: question.additionalInfoLabel,
-        hide_guidance: question.additionalInfoLabel,
+        show_guidance: processPipe(ctx)(question.additionalInfoLabel),
+        hide_guidance: processPipe(ctx)(question.additionalInfoLabel),
         ...reversePipe(ctx)(question.additionalInfoContent),
       };
     }
   }
 
   buildAnswers(answers, ctx) {
-    return answers.map(answer => {
+    return answers.map((answer) => {
       const tempAnswer = cloneDeep(answer);
-      if(tempAnswer.options) {
-        remove(tempAnswer.options, {mutuallyExclusive: true})
+      if (tempAnswer.options) {
+        remove(tempAnswer.options, { mutuallyExclusive: true });
       }
-      return new Answer(tempAnswer, ctx)
+      return new Answer(tempAnswer, ctx);
     });
   }
 
@@ -165,12 +166,9 @@ class Question {
       ...mutuallyExclusive,
       id: `${mutuallyExclusive.id}-exclusive`,
       type: "Checkbox",
-      options: filter({mutuallyExclusive: true}, mutuallyExclusive.options)
+      options: filter({ mutuallyExclusive: true }, mutuallyExclusive.options),
     });
-    return concat(
-      this.buildAnswers(answers, ctx),
-      mutuallyExclusiveAnswer
-    );
+    return concat(this.buildAnswers(answers, ctx), mutuallyExclusiveAnswer);
   }
 
   buildCalculation(totalValidation, answers) {
