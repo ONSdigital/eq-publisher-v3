@@ -30,7 +30,8 @@ const placeholderObjectBuilder = (
   dateFormat,
   unitType,
   fallback,
-  AnswerType
+  AnswerType,
+  metadata
 ) => {
   let valueSource;
   let argumentList;
@@ -60,7 +61,14 @@ const placeholderObjectBuilder = (
     }
   }
 
-  if (!fallback && identifier === "trad_as") {
+  const checkMetadata = (metadata) => {
+    const result = metadata.some(
+      (metadataObject) => metadataObject.key === "trad_as"
+    );
+    return result;
+  };
+
+  if ((!fallback && identifier === "trad_as") || !checkMetadata(metadata)) {
     placeHolder = {
       placeholder: removeDash(identifier),
       transforms: [
