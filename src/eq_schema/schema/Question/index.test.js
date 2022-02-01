@@ -650,15 +650,15 @@ describe("Question", () => {
             },
             {
               id: "2",
-              label: "Option 2"
+              label: "Option 2",
             },
             {
               id: "3",
               label: "Mutually exclusive",
               mutuallyExclusive: true,
-            }
-          ]
-        }
+            },
+          ],
+        },
       ];
     });
 
@@ -670,11 +670,11 @@ describe("Question", () => {
     });
 
     it("should have a question type of general when no mutually exclusive option", () => {
-      const newAnswers = cloneDeep(answers) 
-      remove(newAnswers[0].options, {mutuallyExclusive: true})
+      const newAnswers = cloneDeep(answers);
+      remove(newAnswers[0].options, { mutuallyExclusive: true });
       const question = new Question(
         createQuestionJSON({
-          answers: newAnswers
+          answers: newAnswers,
         })
       );
       expect(question).toMatchObject({
@@ -871,12 +871,13 @@ describe("Question", () => {
     it("should set the answer_id to the previous answer when entityType is PreviousAnswer", () => {
       validation.entityType = "PreviousAnswer";
       validation.custom = 10;
-      validation.previousAnswer = { id: 20 };
+      validation.previousAnswer = 20;
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
         })
       );
+
       expect(question.calculations[0].value).not.toBeDefined();
       expect(question.calculations[0].answer_id).toEqual("answer20");
     });
