@@ -187,7 +187,14 @@ class Question {
     const rightSide =
       totalValidation.entityType === "Custom"
         ? { value: totalValidation.custom }
-        : { answer_id: `answer${totalValidation.previousAnswer.id}` };
+        : { answer_id: `answer${totalValidation.previousAnswer}` };
+
+    console.log("boom", {
+      calculation_type: "sum",
+      answers_to_calculate: answers.map((a) => `answer${a.id}`),
+      conditions: AUTHOR_TO_RUNNER_CONDITIONS[totalValidation.condition],
+      ...rightSide,
+    });
 
     return {
       calculation_type: "sum",
