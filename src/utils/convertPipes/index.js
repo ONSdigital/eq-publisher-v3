@@ -51,16 +51,7 @@ const PIPE_TYPES = {
     },
   },
   metadata: {
-    retrieve: ({ id }, ctx) =>
-      getMetadata(ctx, id.toString()) !== undefined
-        ? getMetadata(ctx, id.toString())
-        : {
-            id: "1",
-            key: "ru_name",
-            alias: "Ru Name",
-            type: "Text",
-            textValue: "ESSENTIAL ENTERPRISE LTD.",
-          },
+    retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
     render: ({ key }) => `${key}`,
     getType: ({ type }) => type,
     getFallback: ({ fallbackKey }) =>
@@ -116,8 +107,7 @@ const getPipedData = (store) => (element, ctx) => {
     dateFormat,
     unitType,
     fallback,
-    answerType,
-    ctx.questionnaireJson.metadata
+    answerType
   );
 
   store.placeholders = [...store.placeholders, placeholder];

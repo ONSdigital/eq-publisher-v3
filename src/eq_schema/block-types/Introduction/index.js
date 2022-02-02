@@ -13,10 +13,11 @@ const reverseContent = (ctx) =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
 const buildContactDetails = require("../../builders/contactDetails");
+const { buildIntroductionTitle } = require("../../../utils/builders");
+
 class Introduction {
   constructor(
     {
-      title,
       contactDetailsPhoneNumber,
       contactDetailsEmailAddress,
       contactDetailsEmailSubject,
@@ -35,7 +36,7 @@ class Introduction {
     this.primary_content = [
       {
         id: "primary",
-        title: this.buildTitle(title, ctx),
+        title: buildIntroductionTitle(),
         contents: buildContactDetails(
           contactDetailsPhoneNumber,
           contactDetailsEmailAddress,

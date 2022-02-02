@@ -30,8 +30,7 @@ const placeholderObjectBuilder = (
   dateFormat,
   unitType,
   fallback,
-  AnswerType,
-  metadata
+  AnswerType
 ) => {
   let valueSource;
   let argumentList;
@@ -61,39 +60,7 @@ const placeholderObjectBuilder = (
     }
   }
 
-  const checkMetadata = (metadata) => {
-    const result = metadata.some(
-      (metadataObject) => metadataObject.key === "trad_as"
-    );
-    return result;
-  };
-
-  if ((!fallback && identifier === "trad_as") || !checkMetadata(metadata)) {
-    placeHolder = {
-      placeholder: removeDash(identifier),
-      transforms: [
-        {
-          transform: "first_non_empty_item",
-          arguments: {
-            items: [valueSource, { source: "metadata", identifier: "ru_name" }],
-          },
-        },
-      ],
-    };
-
-    if ([AnswerType] in TRANSFORM_MAP) {
-      placeHolder.transforms.push({
-        transform: TRANSFORM_MAP[AnswerType].format,
-        arguments: {
-          [TRANSFORM_MAP[AnswerType].transformKey]: {
-            source: "previous_transform",
-          },
-          ...argumentList,
-        },
-      });
-    }
-    return placeHolder;
-  } else if (fallback) {
+  if (fallback) {
     placeHolder = {
       placeholder: removeDash(identifier),
       transforms: [
