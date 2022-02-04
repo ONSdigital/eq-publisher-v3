@@ -80,12 +80,12 @@ const buildAnswerObject = (
 
   if (right.type === "SelectedOptions") {
     const optionValues = [
+      condition !== authorConditions.UNANSWERED
+        ? getOptionValues(right.optionIds, ctx.questionnaireJson)
+        : null,
       {
         identifier: `answer${left.answerId}`,
-        values:
-          condition !== authorConditions.UNANSWERED
-            ? getOptionValues(right.optionIds, ctx.questionnaireJson)
-            : null,
+        source: checkType(left.type),
       },
     ];
 
