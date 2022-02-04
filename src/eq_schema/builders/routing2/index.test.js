@@ -72,9 +72,10 @@ describe("Routing2", () => {
           and: [
             {
               "any-in": [
+                ["red", "white"],
                 {
                   identifier: "answer2",
-                  values: ["red", "white"],
+                  source: "answers",
                 },
               ],
             },
@@ -106,9 +107,10 @@ describe("Routing2", () => {
           and: [
             {
               "any-in": [
+                ["red", "white"],
                 {
                   identifier: "answer2",
-                  values: ["red", "white"],
+                  source: "answers",
                 },
               ],
             },
@@ -179,9 +181,10 @@ describe("Routing2", () => {
           or: [
             {
               "any-in": [
+                ["red", "white"],
                 {
                   identifier: "answer1",
-                  values: ["red", "white"],
+                  source: "answers",
                 },
               ],
             },
@@ -194,9 +197,10 @@ describe("Routing2", () => {
           or: [
             {
               "any-in": [
+                ["red", "white"],
                 {
                   identifier: "answer2",
-                  values: ["red", "white"],
+                  source: "answers",
                 },
               ],
             },
