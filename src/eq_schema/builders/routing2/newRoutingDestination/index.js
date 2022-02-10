@@ -10,6 +10,7 @@ const getOptionsFromQuestionaire = (questionnaire) => {
     flatMap(section.folders, "pages")
   );
   const answers = flatMap(pages, "answers");
+
   return flatMap(filter(answers, "options"), "options");
 };
 
@@ -25,8 +26,6 @@ const getOptionValues = (optionIds, questionnaire) => {
   }
 };
 
-// May need to build this out to support other types.
-// In Schema examples i've found metadata as well.
 const checkType = (type) => {
   if (!type) {
     return null;
@@ -37,6 +36,31 @@ const checkType = (type) => {
   }
 
   return null;
+};
+
+const mutuallyExclusiveId = (left, right, ctx) => {
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, (folder) =>
+      flatMap(folder.pages, (page) =>
+        flatMap(page.answers, (answer) => {
+          const options = answer.options ? answer.options : [];
+
+          if (options.length !== 0) {
+            options.map((option) => {
+              if (
+                option.id === right.optionIds[0] &&
+                option.mutuallyExclusive
+              ) {
+                option.id = `${option.id}-exclusive`;
+                left.answerId = `${left.answerId}-exclusive`;
+                right.optionIds[0] = `${right.optionIds[0]}-exclusive`;
+              }
+            });
+          }
+        })
+      )
+    )
+  );
 };
 
 const buildAnswerObject = (
@@ -79,6 +103,8 @@ const buildAnswerObject = (
   }
 
   if (right.type === "SelectedOptions") {
+    mutuallyExclusiveId(left, right, ctx);
+
     const optionValues = [
       condition !== authorConditions.UNANSWERED
         ? getOptionValues(right.optionIds, ctx.questionnaireJson)
@@ -91,7 +117,7 @@ const buildAnswerObject = (
 
     if (condition === "NotAnyOf") {
       const SelectedOptions = {
-        [routingConditionConversion(condition)]: { "any-in": optionValues },
+        [routingConditionConversion(condition)]: [{ in: optionValues }],
       };
 
       return SelectedOptions;
