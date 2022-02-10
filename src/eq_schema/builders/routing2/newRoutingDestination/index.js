@@ -117,7 +117,7 @@ const buildAnswerObject = (
 
     if (condition === "NotAnyOf") {
       const SelectedOptions = {
-        [routingConditionConversion(condition)]: [{ in: optionValues }],
+        [routingConditionConversion(condition)]: [{ "any-in": optionValues }],
       };
 
       return SelectedOptions;
