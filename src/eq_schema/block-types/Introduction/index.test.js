@@ -11,15 +11,16 @@ describe("Introduction", () => {
         placeholder,
         value: {
           identifier: placeholder,
-          source
-        }
-      }
-    ]
+          source,
+        },
+      },
+    ],
   });
   beforeEach(() => {
     apiData = {
       id: "1",
-      title: "<p>You are completing this for <span data-piped=\"metadata\" data-id=\"ru_name\">ru_name</span> (<span data-piped=\"metadata\" data-id=\"trad_as\">trad_as</span>)</p>",
+      title:
+        '<p>You are completing this for <span data-piped="metadata" data-id="ru_name">ru_name</span> (<span data-piped="metadata" data-id="trad_as">trad_as</span>)</p>',
       description: `<ul><li>Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. </li><li>You can provide info estimates if actual figures aren’t available.</li><li>We will treat your data securely and confidentially.</li><li>${piping}</li></ul>`,
       legalBasis: "NOTICE_2",
       secondaryTitle: `<p>Information you need ${piping}</p>`,
@@ -29,13 +30,13 @@ describe("Introduction", () => {
         {
           id: "d45bf1dd-f286-40ca-b6a2-fe0014574c36",
           title: "<p>Hello</p>",
-          description: `<p>World ${piping}</p>`
+          description: `<p>World ${piping}</p>`,
         },
         {
           id: "1e7e5ecd-6f4c-4219-9893-6efdeea36ad0",
           title: "<p>Collapsible</p>",
-          description: "<p>Description</p>"
-        }
+          description: "<p>Description</p>",
+        },
       ],
       tertiaryTitle: `<p>How we use your data ${piping}</p>`,
       tertiaryDescription: `<ul><li>You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.</li><li>The information you provide contributes to Gross Domestic Product (GDP).</li><li>${piping}</li></ul>`,
@@ -47,8 +48,7 @@ describe("Introduction", () => {
     context = {
       questionnaireJson: {
         metadata: [
-          { id: "1", 
-          key: "some_metadata" },
+          { id: "1", key: "some_metadata" },
           {
             id: "ru_name",
             key: "ru_name",
@@ -78,20 +78,33 @@ describe("Introduction", () => {
       {
         id: "primary",
         title: {
-          text: "You are completing this for {ru_name} ({trad_as})",
+          text: "You are completing this for {trad_as} ({ru_name})",
           placeholders: [
+            {
+              placeholder: "trad_as",
+              transforms: [
+                {
+                  transform: "first_non_empty_item",
+                  arguments: {
+                    items: [
+                      {
+                        source: "metadata",
+                        identifier: "trad_as",
+                      },
+                      {
+                        source: "metadata",
+                        identifier: "ru_name",
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
             {
               placeholder: "ru_name",
               value: {
                 source: "metadata",
                 identifier: "ru_name",
-              },
-            },
-            {
-              placeholder: "trad_as",
-              value: {
-                source: "metadata",
-                identifier: "trad_as",
               },
             },
           ],
@@ -155,8 +168,8 @@ describe("Introduction", () => {
       contents: [
         {
           description:
-            "You can select the dates of the period you are reporting for, if the given dates are not appropriate."
-        }
+            "You can select the dates of the period you are reporting for, if the given dates are not appropriate.",
+        },
       ],
       id: "preview",
       questions: expect.any(Array),
@@ -167,11 +180,11 @@ describe("Introduction", () => {
             placeholder: "some_metadata",
             value: {
               identifier: "some_metadata",
-              source: "metadata"
-            }
-          }
-        ]
-      }
+              source: "metadata",
+            },
+          },
+        ],
+      },
     });
   });
 
@@ -188,19 +201,19 @@ describe("Introduction", () => {
                   placeholder: "some_metadata",
                   value: {
                     identifier: "some_metadata",
-                    source: "metadata"
-                  }
-                }
-              ]
-            }
-          }
+                    source: "metadata",
+                  },
+                },
+              ],
+            },
+          },
         ],
-        question: "Hello"
+        question: "Hello",
       },
       {
         contents: [{ description: "Description" }],
-        question: "Collapsible"
-      }
+        question: "Collapsible",
+      },
     ]);
   });
 
@@ -209,25 +222,25 @@ describe("Introduction", () => {
       {
         id: "d45bf1dd-f286-40ca-b6a2-fe0014574c36",
         title: "<p>Hello</p>",
-        description: "<p>World</p>"
+        description: "<p>World</p>",
       },
       {
         id: "d45bf1dd-f286-40ca-b6a2-fe0014574c36",
         title: "<p>Hello</p>",
-        description: ""
+        description: "",
       },
       {
         id: "d45bf1dd-f286-40ca-b6a2-fe0014574c36",
         title: "",
-        description: "<p>Description</p>"
-      }
+        description: "<p>Description</p>",
+      },
     ];
     const introduction = new Introduction(apiData, context);
     expect(introduction.preview_content.questions).toMatchObject([
       {
         contents: [{ description: "World" }],
-        question: "Hello"
-      }
+        question: "Hello",
+      },
     ]);
   });
 
@@ -245,21 +258,21 @@ describe("Introduction", () => {
                   placeholder: "some_metadata",
                   value: {
                     identifier: "some_metadata",
-                    source: "metadata"
-                  }
-                }
-              ]
-            }
+                    source: "metadata",
+                  },
+                },
+              ],
+            },
           },
           {
             list: [
               "You cannot appeal your selection. Your business was selected to give us a comprehensive view of the UK economy.",
               "The information you provide contributes to Gross Domestic Product (GDP).",
-              createPipedFormat("some_metadata", "metadata")
-            ]
-          }
-        ]
-      }
+              createPipedFormat("some_metadata", "metadata"),
+            ],
+          },
+        ],
+      },
     ]);
   });
 });

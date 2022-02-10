@@ -32,33 +32,31 @@ const placeholderObjectBuilder = (
   fallback,
   AnswerType
 ) => {
-
   let valueSource;
   let argumentList;
   let placeHolder;
 
-  if (["metadata","answers"].includes(source)) {
+  if (["metadata", "answers"].includes(source)) {
     valueSource = {
       source,
-      identifier
-    }
-  };
+      identifier,
+    };
+  }
 
-  if ([AnswerType]in(TRANSFORM_MAP)) {
-    if (["Date","DateRange"].includes(AnswerType)) {
-      argumentList={
-        "date_format" : DATE_FORMAT_MAP[dateFormat ? dateFormat : "dd/mm/yyyy" ]
-      }
+  if ([AnswerType] in TRANSFORM_MAP) {
+    if (["Date", "DateRange"].includes(AnswerType)) {
+      argumentList = {
+        date_format: DATE_FORMAT_MAP[dateFormat ? dateFormat : "dd/mm/yyyy"],
+      };
     }
-    if (["Number","Currency"].includes(AnswerType)) {
-      argumentList={
-      }
+    if (["Number", "Currency"].includes(AnswerType)) {
+      argumentList = {};
     }
     if (["Unit"].includes(AnswerType)) {
-      argumentList={
+      argumentList = {
         // leaving here until unit added to runner
         // "unit": unitConversion[unitType]
-      }
+      };
     }
   }
 
@@ -69,42 +67,44 @@ const placeholderObjectBuilder = (
         {
           transform: "first_non_empty_item",
           arguments: {
-            items: [
-              valueSource,
-              fallback
-            ]
-          }
+            items: [valueSource, fallback],
+          },
         },
-      ]
+      ],
+    };
+    if ([AnswerType] in TRANSFORM_MAP) {
+      placeHolder.transforms.push({
+        transform: TRANSFORM_MAP[AnswerType].format,
+        arguments: {
+          [TRANSFORM_MAP[AnswerType].transformKey]: {
+            source: "previous_transform",
+          },
+          ...argumentList,
+        },
+      });
     }
-    if ([AnswerType]in(TRANSFORM_MAP)) {
-      placeHolder.transforms.push(
-        {
-          transform: TRANSFORM_MAP[AnswerType].format,
-          arguments: { [TRANSFORM_MAP[AnswerType].transformKey] : { source: "previous_transform" }, ...argumentList }
-        }
-      )
-    }
-    return placeHolder
+    return placeHolder;
   }
 
-  if ([AnswerType]in(TRANSFORM_MAP)) {
+  if ([AnswerType] in TRANSFORM_MAP) {
     return {
       placeholder: removeDash(identifier),
       transforms: [
         {
           transform: TRANSFORM_MAP[AnswerType].format,
-          arguments: { [TRANSFORM_MAP[AnswerType].transformKey]: valueSource, ...argumentList }
+          arguments: {
+            [TRANSFORM_MAP[AnswerType].transformKey]: valueSource,
+            ...argumentList,
+          },
         },
-      ]
-    }
+      ],
+    };
   }
 
   return {
     placeholder: removeDash(identifier),
     value: valueSource,
   };
-
 };
 
 module.exports = {
