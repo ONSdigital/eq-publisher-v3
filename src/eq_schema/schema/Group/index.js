@@ -6,10 +6,10 @@ const {
 const { buildContents } = require("../../../utils/builders");
 
 class Group {
-  constructor(title, section, ctx) {
+  constructor(section, ctx) {
     this.id = `group${section.id}`;
-    if (title) {
-      this.title = buildContents(title, ctx);
+    if (section.summaryTitle) {
+      this.title = buildContents(section.summaryTitle, ctx);
     }
     this.blocks = this.buildBlocks(section, ctx);
 

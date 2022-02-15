@@ -16,6 +16,7 @@ describe("Group", () => {
         title: "Folder 1",
         introductionTitle: "",
         introductionContent: "",
+        summaryTitle: "Folder 1",
         pages: [
           {
             id: "2",
@@ -29,7 +30,7 @@ describe("Group", () => {
 
   it("should build valid runner Group from Author section", () => {
     let groupJSON = createGroupJSON();
-    const group = new Group(groupJSON.title, groupJSON, createCtx());
+    const group = new Group(groupJSON, createCtx());
 
     expect(group).toMatchObject({
       id: "group1",
@@ -42,21 +43,21 @@ describe("Group", () => {
     const createGroupsJSON = () => [
       {
         id: 1,
-        title: "Group 1",
+        summaryTitle: "Group 1",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
       },
       {
         id: 2,
-        title: "Group 2",
+        summaryTitle: "Group 2",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
       },
       {
         id: 3,
-        title: "Group 3",
+        summaryTitle: "Group 3",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
@@ -81,7 +82,7 @@ describe("Group", () => {
       });
 
       const runnerJson = groupsJson.map(
-        (group) => new Group(group.title, group, ctx)
+        (group) => new Group(group, ctx)
       );
 
       const expectedrunnerJson = [
@@ -136,7 +137,7 @@ describe("Group", () => {
       });
 
       const runnerJson = groupsJson.map(
-        (group) => new Group(group.title, group, ctx)
+        (group) => new Group(group, ctx)
       );
 
       const expectedrunnerJson = [
@@ -233,7 +234,6 @@ describe("Group", () => {
       const ctx = ctxGenerator(null);
 
       const resultantJson = new Group(
-        "Section 1",
         ctx.questionnaireJson.sections[0].folders[0],
         ctx
       );
@@ -293,7 +293,6 @@ describe("Group", () => {
       ctx.questionnaireJson.sections[0].folders[0].pages[0].confirmation.qCode =
         "123";
       const resultantJson = new Group(
-        "Section 1",
         ctx.questionnaireJson.sections[0].folders[0],
         ctx
       );
@@ -387,7 +386,6 @@ describe("Group", () => {
       const ctx = ctxGenerator(null, routing);
 
       const resultantJson = new Group(
-        "Group Title",
         ctx.questionnaireJson.sections[0].folders[0],
         ctx
       );
@@ -459,7 +457,7 @@ describe("Group", () => {
       };
 
       const folder = ctx.questionnaireJson.sections[0].folders[0];
-      const resultantJson = new Group(folder.title, folder, ctx);
+      const resultantJson = new Group(folder, ctx);
       expect(resultantJson.blocks[1].question.description).toEqual([
         `{{ answers[&#39;answer${folder.pages[0].answers[0].id}&#39;]|format_unordered_list }}`,
       ]);
