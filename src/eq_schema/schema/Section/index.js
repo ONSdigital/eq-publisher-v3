@@ -6,7 +6,7 @@ const translateDisplayConditions = require("../../builders/expressionGroup");
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
-    if (ctx.questionnaireJson.navigation || ctx.questionnaireJson.hub) {
+    if (section.title) {
       this.title = getText(section.title);
     }
     if ("showOnHub" in section) {
