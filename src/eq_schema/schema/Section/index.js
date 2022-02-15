@@ -27,7 +27,7 @@ class Section {
     );
 
     this.groups = [
-      new Group(getText(section.title), { ...section, pages }, ctx),
+      new Group({ ...section, pages }, ctx),
     ];
 
     if (section.introductionTitle && section.introductionContent) {
