@@ -52,7 +52,11 @@ class Questionnaire {
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
 
-    this.buildIntroduction(questionnaireJson.introduction, ctx);
+    this.buildIntroduction(
+      questionnaireJson.introduction,
+      questionnaireJson.hubIntroduction,
+      ctx
+    );
 
     this.theme = getTheme(questionnaireJson.themeSettings.previewTheme);
 
@@ -78,7 +82,7 @@ class Questionnaire {
     return new QuestionnaireFlow(questionnaireJson);
   }
 
-  buildIntroduction(introduction, ctx) {
+  buildIntroduction(introduction, hubIntroduction, ctx) {
     if (!introduction) {
       return;
     }
@@ -87,7 +91,7 @@ class Questionnaire {
       {
         id: `section${introduction.id}`,
         title: "Introduction",
-        show_on_hub: false,
+        show_on_hub: hubIntroduction,
         groups: [
           {
             id: `group${introduction.id}`,
