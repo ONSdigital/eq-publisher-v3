@@ -26,9 +26,7 @@ class Section {
       )
     );
 
-    this.groups = [
-      new Group({ ...section, pages }, ctx),
-    ];
+    this.groups = [new Group({ ...section, pages }, ctx)];
 
     if (section.introductionTitle && section.introductionContent) {
       // Add introduction page if present
@@ -46,12 +44,10 @@ class Section {
       this.enabled = translateDisplayConditions(section.displayConditions, ctx);
     }
 
-    if(section.sectionSummary) {
-      this.summary = {
-        show_on_completion: section.sectionSummary,
-        collapsible: section.collapsibleSummary,
-      }
-    }
+    this.summary = {
+      show_on_completion: section.sectionSummary,
+      collapsible: section.collapsibleSummary,
+    };
   }
 }
 
