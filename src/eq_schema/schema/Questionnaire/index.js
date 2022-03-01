@@ -1,6 +1,6 @@
 const {
   DEFAULT_METADATA,
-  DEFAULT_METADATA_NAMES,
+  DEFAULT_METADATA_NAMES
 } = require("../../../constants/metadata");
 
 const { contentMap } = require("../../../constants/legalBases");
@@ -16,9 +16,9 @@ const PostSubmission = require("../PostSubmission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
-  themes && themes.find((theme) => theme && theme.shortName === previewTheme);
+  themes && themes.find(theme => theme && theme.shortName === previewTheme);
 
-const getTheme = (previewTheme) => {
+const getTheme = previewTheme => {
   if (validThemes.includes(previewTheme)) {
     return previewTheme;
   } else {
@@ -57,7 +57,7 @@ class Questionnaire {
     this.theme = getTheme(questionnaireJson.themeSettings.previewTheme);
 
     this.navigation = {
-      visible: questionnaireJson.navigation,
+      visible: questionnaireJson.navigation
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
@@ -70,7 +70,7 @@ class Questionnaire {
   createContext(questionnaireJson) {
     return {
       routingGotos: [],
-      questionnaireJson,
+      questionnaireJson
     };
   }
 
@@ -92,18 +92,18 @@ class Questionnaire {
           {
             id: `group${introduction.id}`,
             title: "Introduction",
-            blocks: [new Introduction(introduction, ctx)],
-          },
-        ],
+            blocks: [new Introduction(introduction, ctx)]
+          }
+        ]
       },
-      ...this.sections,
+      ...this.sections
     ];
 
     this.sections = newSections;
   }
 
   buildSections(sections, ctx) {
-    return sections.map((section) => new Section(section, ctx));
+    return sections.map(section => new Section(section, ctx));
   }
 
   buildMetadata(metadata) {
@@ -112,10 +112,14 @@ class Questionnaire {
       .map(({ key, type }) => ({
         name: key,
         type: type === "Date" ? "date" : "string",
-        optional: type === "Text_Optional" || undefined,
+        optional: type === "Text_Optional" || undefined
       }));
 
     return [...DEFAULT_METADATA, ...userMetadata];
+  }
+
+  buildSubmission(submission, ctx) {
+    return new submission(submission, ctx);
   }
 
   buildPostSubmission(postSubmission, ctx) {
