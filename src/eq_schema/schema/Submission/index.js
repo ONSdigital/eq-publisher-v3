@@ -1,7 +1,7 @@
 class Submission {
   constructor(postSubmission) {
     this.button = "Submit";
-    if (postSubmission.viewPrintAnswers === true) {
+    if (postSubmission.viewPrintAnswers) {
       this.guidance =
         "You will have the opportunity to view, save or print a copy of your answers after submitting this survey.";
     }
