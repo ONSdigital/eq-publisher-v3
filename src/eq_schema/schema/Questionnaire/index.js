@@ -13,6 +13,7 @@ const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
 const PostSubmission = require("../PostSubmission");
+const Submission = require("../Submission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
 const getPreviewTheme = ({ previewTheme, themes }) =>
@@ -65,12 +66,9 @@ class Questionnaire {
       questionnaireJson.submission,
       ctx
     );
-    
-    this.submission = this.buildSubmission(
-      questionnaireJson.submission,
-      ctx
-    );
 
+    this.submission = this.buildSubmission(questionnaireJson.submission);
+  }
   createContext(questionnaireJson) {
     return {
       routingGotos: [],
@@ -122,8 +120,8 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildSubmission(postSubmission, ctx) {
-    return new submission(postSubmission, ctx);
+  buildSubmission(postSubmission) {
+    return new Submission(postSubmission);
   }
 
   buildPostSubmission(postSubmission, ctx) {

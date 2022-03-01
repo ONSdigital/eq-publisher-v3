@@ -1,8 +1,7 @@
 const Submission = require(".");
 
-describe("Post Submission", () => {
-  let context;
-
+describe("Submission", () => {
+  let submission;
   beforeEach(() => {
     submission = {
       id: "07b92a18-180c-4c35-9e94-aa6df9cdee6b",
@@ -12,15 +11,13 @@ describe("Post Submission", () => {
       emailConfirmation: true,
       feedback: true
     };
-
-    context = apiData;
   });
 
   it("should set the correct data", () => {
-    const submission = new Submission(submission, context);
+    const renderSubmission = new Submission(submission);
 
-    expect(submission.button).toBeTruthy();
-    expect(submission.title).toBeTruthy();
-    expect(submission.warning).toBeTruthy();
+    expect(renderSubmission.button).toBeTruthy();
+    expect(renderSubmission.title).toBeTruthy();
+    expect(renderSubmission.warning).toBeTruthy();
   });
 });

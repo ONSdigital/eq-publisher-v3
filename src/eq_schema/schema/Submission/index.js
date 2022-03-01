@@ -1,5 +1,5 @@
 class Submission {
-  constructor(postSubmission, ctx) {
+  constructor(postSubmission) {
     this.button = "Submit";
     if (postSubmission.viewPrintAnswers === true) {
       this.guidance =
