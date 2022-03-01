@@ -23,8 +23,6 @@ if (postSubmission.viewPrintAnswers === false) {
     class Submission {
         constructor(submission, ctx) {
           this.button = "Submit";
-          this.guidance =
-            "You will have the opportunity to view, save or print a copy of your answers after submitting this survey.";
           this.title = "Submit your questionnaire";
           this.warning = "You cannot view your answers after submission";
         }
