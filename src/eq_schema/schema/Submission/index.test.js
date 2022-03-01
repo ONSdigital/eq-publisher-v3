@@ -16,7 +16,6 @@ describe("Post Submission", () => {
 
   it("should set the correct data", () => {
     const submission = new Submission(apiData, context);
-    expect(submission.guidance).toEqual({
 
     expect(submission.button).toBeTruthy();
     expect(submission.title).toBeTruthy();
