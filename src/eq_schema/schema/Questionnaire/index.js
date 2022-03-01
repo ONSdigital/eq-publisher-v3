@@ -87,7 +87,7 @@ class Questionnaire {
       {
         id: `section${introduction.id}`,
         title: "Introduction",
-        show_on_hub: false,
+        show_on_hub: introduction.showOnHub,
         groups: [
           {
             id: `group${introduction.id}`,
