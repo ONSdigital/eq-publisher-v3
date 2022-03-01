@@ -30,13 +30,6 @@ if (postSubmission.viewPrintAnswers === false) {
         }
 }
 
-class Submission {
-  constructor(submission, ctx) {
-    this.button = "Submit";
-    this.title = "Submit your questionnaire";
-    this.warning = "You cannot view your answers after submission";
-  }
-
   buildContents(description, ctx) {
     return reverseContent(ctx)(description).content;
   }
