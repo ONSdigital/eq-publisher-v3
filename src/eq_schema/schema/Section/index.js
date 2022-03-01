@@ -6,7 +6,7 @@ const translateDisplayConditions = require("../../builders/expressionGroup");
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
-    if (section.title) {
+    if (ctx.questionnaireJson.navigation || ctx.questionnaireJson.hub) {
       this.title = getText(section.title);
     }
     if ("showOnHub" in section) {
@@ -27,7 +27,7 @@ class Section {
     );
 
     this.groups = [
-      new Group({ ...section, pages }, ctx),
+      new Group(getText(section.title), { ...section, pages }, ctx),
     ];
 
     if (section.introductionTitle && section.introductionContent) {
@@ -46,12 +46,10 @@ class Section {
       this.enabled = translateDisplayConditions(section.displayConditions, ctx);
     }
 
-    if(section.sectionSummary) {
-      this.summary = {
-        show_on_completion: section.sectionSummary,
-        collapsible: section.collapsibleSummary,
-      }
-    }
+    this.summary = {
+      show_on_completion: section.sectionSummary,
+      collapsible: section.collapsibleSummary,
+    };
   }
 }
 
