@@ -65,7 +65,11 @@ class Questionnaire {
       questionnaireJson.submission,
       ctx
     );
-  }
+    
+    this.submission = this.buildSubmission(
+      questionnaireJson.submission,
+      ctx
+    );
 
   createContext(questionnaireJson) {
     return {
@@ -118,8 +122,8 @@ class Questionnaire {
     return [...DEFAULT_METADATA, ...userMetadata];
   }
 
-  buildSubmission(submission, ctx) {
-    return new submission(submission, ctx);
+  buildSubmission(postSubmission, ctx) {
+    return new submission(postSubmission, ctx);
   }
 
   buildPostSubmission(postSubmission, ctx) {
