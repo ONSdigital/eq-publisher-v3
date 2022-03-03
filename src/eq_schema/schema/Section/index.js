@@ -45,8 +45,8 @@ class Section {
     }
 
     this.summary = {
-      show_on_completion: section.sectionSummary,
-      collapsible: section.collapsibleSummary,
+      show_on_completion: section.sectionSummary || false,
+      collapsible: section.collapsibleSummary || false,
     };
   }
 }
