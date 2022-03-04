@@ -5,7 +5,7 @@ const { replace } = require("lodash/fp");
 const isPlainText = (elem) => typeof elem === "string" && !elem.startsWith("<");
 
 const startsWithLink = (elem) =>
-  typeof elem === "string" && elem.startsWith("<a");
+  typeof elem === "string" && (elem.startsWith("<a") || elem.startsWith("<strong>")) ;
 
 const getInnerHTML = (elem) =>
   isPlainText(elem) || startsWithLink(elem) ? elem : cheerio(elem).html();

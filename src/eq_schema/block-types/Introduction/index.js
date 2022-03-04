@@ -25,6 +25,7 @@ class Introduction {
       description,
       secondaryTitle,
       secondaryDescription,
+      additionalGuidancePanel,
       collapsibles,
       tertiaryTitle,
       tertiaryDescription,
@@ -33,7 +34,8 @@ class Introduction {
   ) {
     this.id = "introduction-block";
     this.type = "Introduction";
-    this.primary_content = [
+    this.primary_content = []
+    this.primary_content.push(
       {
         id: "primary",
         title: buildIntroductionTitle(),
@@ -43,12 +45,26 @@ class Introduction {
           contactDetailsEmailSubject,
           contactDetailsIncludeRuRef
         ),
-      },
+      }
+    );
+    if(additionalGuidancePanel) {
+      this.primary_content.push(
+        {
+          id: "additional_guidance",
+          contents: {
+            guidance: {
+              contents: this.buildContents(additionalGuidancePanel, ctx),
+            },
+          },
+        }
+      );
+    }
+    this.primary_content.push(
       {
         id: "description",
         contents: this.buildContents(description, ctx),
       },
-    ];
+    );
     this.preview_content = {
       id: "preview",
       title: this.buildTitle(secondaryTitle, ctx),
