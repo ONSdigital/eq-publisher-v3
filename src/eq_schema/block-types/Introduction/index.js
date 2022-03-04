@@ -51,11 +51,11 @@ class Introduction {
       this.primary_content.push(
         {
           id: "additional_guidance",
-          contents: {
+          contents: [{
             guidance: {
               contents: this.buildContents(additionalGuidancePanel, ctx),
             },
-          },
+          }],
         }
       );
     }
