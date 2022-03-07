@@ -53,7 +53,7 @@ class Questionnaire {
 
     this.sections = this.buildSections(questionnaireJson.sections, ctx);
 
-    if (ctx.hub) {
+    if (questionnaireJson.hub) {
       this.buildIntroduction(questionnaireJson.introduction, ctx);
     } else {
       this.buildIntroductionInsideFirstSection(
