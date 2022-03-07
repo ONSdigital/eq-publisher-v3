@@ -50,7 +50,7 @@ class Introduction {
     if(additionalGuidancePanel) {
       this.primary_content.push(
         {
-          id: "additional_guidance",
+          id: "additional-guidance",
           contents: [{
             guidance: {
               contents: this.buildContents(additionalGuidancePanel, ctx),
