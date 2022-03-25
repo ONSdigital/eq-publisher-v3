@@ -13,10 +13,10 @@ class AddBlock {
     this.cancel_text = "Don’t need to add this item"
     const listAnswers = find(ctx.questionnaireJson.collectionLists.lists, { id: page.listId }).answers
     this.question = {
-        id: `add-block-question-${page.id}`,
-        type: "General",
-        title: processPipe(ctx)(page.addItemTitle),
-        answers: this.buildAnswers(listAnswers, ctx)
+      id: `add-block-question-${page.id}`,
+      type: "General",
+      title: processPipe(ctx)(page.addItemTitle),
+      answers: this.buildAnswers(listAnswers, ctx)
     }
   }
 
