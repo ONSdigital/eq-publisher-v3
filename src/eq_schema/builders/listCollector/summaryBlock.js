@@ -1,4 +1,4 @@
-const { find } = require("lodash");
+const { find, filter } = require("lodash");
 
 class SummaryBlock {
   constructor(page, ctx) {
@@ -24,7 +24,7 @@ class SummaryBlock {
   }
 
   buildList(answers) {
-    return answers.map((answer) => ({
+    return filter(answers, { type: "TextField" }).map((answer) => ({
       source: "answers",
       identifier: `answer${answer.id}`
     }));
