@@ -38,6 +38,8 @@ const checkType = (type) => {
   return null;
 };
 
+console.log("test");
+
 const mutuallyExclusiveId = (left, right, ctx) => {
   flatMap(ctx.questionnaireJson.sections, (section) =>
     flatMap(section.folders, (folder) =>
