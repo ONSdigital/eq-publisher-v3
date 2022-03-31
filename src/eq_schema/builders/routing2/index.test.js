@@ -8,7 +8,7 @@ describe("Routing2", () => {
     routingGotos = [];
     ctx = {
       questionnaireJson,
-      routingGotos
+      routingGotos,
     };
   });
   it("should translate a complex example with 'And' correctly", () => {
@@ -21,20 +21,20 @@ describe("Routing2", () => {
               {
                 left: {
                   answerId: "1",
-                  type: "Answer"
+                  type: "Answer",
                 },
                 condition: "Equal",
                 right: {
                   customValue: {
-                    number: 5
-                  }
-                }
-              }
-            ]
+                    number: 5,
+                  },
+                },
+              },
+            ],
           },
           destination: {
-            logical: "NextPage"
-          }
+            logical: "NextPage",
+          },
         },
         {
           expressionGroup: {
@@ -43,27 +43,24 @@ describe("Routing2", () => {
               {
                 left: {
                   answerId: "2",
-                  type: "Answer"
+                  type: "Answer",
                 },
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                  
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "EndOfQuestionnaire"
-          }
-        }
+            logical: "EndOfQuestionnaire",
+          },
+        },
       ],
       else: {
-        pageId: "3"
-      }
+        pageId: "3",
+      },
     };
 
     const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
@@ -71,46 +68,58 @@ describe("Routing2", () => {
       {
         group: "confirmation-group",
         groupId: "group1",
-        when: [
-          {
-            condition: "equals any",
-            id: "answer2",
-            values: ["red", "white"]
-          }
-        ]
-      }
+        when: {
+          and: [
+            {
+              "any-in": [
+                ["red", "white"],
+                {
+                  identifier: "answer2",
+                  source: "answers",
+                },
+              ],
+            },
+          ],
+        },
+      },
     ]);
 
     expect(runnerRouting).toMatchObject([
       {
-        goto: {
-          block: "block2",
-          when: [
+        block: "block2",
+        when: {
+          and: [
             {
-              id: "answer1",
-              condition: "equals",
-              value: 5
-            }
-          ]
-        }
+              "==": [
+                {
+                  identifier: "answer1",
+                  source: "answers",
+                },
+                5,
+              ],
+            },
+          ],
+        },
       },
       {
-        goto: {
-          group: "confirmation-group",
-          when: [
+        group: "confirmation-group",
+        when: {
+          and: [
             {
-              id: "answer2",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+              "any-in": [
+                ["red", "white"],
+                {
+                  identifier: "answer2",
+                  source: "answers",
+                },
+              ],
+            },
+          ],
+        },
       },
       {
-        goto: {
-          block: "block3"
-        }
-      }
+        block: "block3",
+      },
     ]);
   });
 
@@ -129,16 +138,14 @@ describe("Routing2", () => {
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "NextPage"
-          }
+            logical: "NextPage",
+          },
         },
         {
           expressionGroup: {
@@ -152,53 +159,57 @@ describe("Routing2", () => {
                 condition: "OneOf",
                 right: {
                   type: "SelectedOptions",
-                  optionIds: [
-                    "123", "456"
-                  ]
-                }
-              }
-            ]
+                  optionIds: ["123", "456"],
+                },
+              },
+            ],
           },
           destination: {
-            logical: "EndOfQuestionnaire"
-          }
-        }
+            logical: "EndOfQuestionnaire",
+          },
+        },
       ],
       else: {
-        pageId: "3"
-      }
+        pageId: "3",
+      },
     };
     const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
     expect(runnerRouting).toMatchObject([
       {
-        goto: {
-          block: "block2",
-          when: [
+        block: "block2",
+        when: {
+          or: [
             {
-              id: "answer1",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+              "any-in": [
+                ["red", "white"],
+                {
+                  identifier: "answer1",
+                  source: "answers",
+                },
+              ],
+            },
+          ],
+        },
       },
       {
-        goto: {
-          group: "confirmation-group",
-          when: [
+        group: "confirmation-group",
+        when: {
+          or: [
             {
-              id: "answer2",
-              condition: "equals any",
-              values: ["red", "white"]
-            }
-          ]
-        }
+              "any-in": [
+                ["red", "white"],
+                {
+                  identifier: "answer2",
+                  source: "answers",
+                },
+              ],
+            },
+          ],
+        },
       },
       {
-        goto: {
-          block: "block3"
-        }
-      }
+        block: "block3",
+      },
     ]);
   });
 });

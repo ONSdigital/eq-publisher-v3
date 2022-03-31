@@ -1,27 +1,27 @@
-const conditionConverter = require("../../../utils/convertRoutingConditions");
+const skipConditionConversion = require("../../../utils/skipConditionConversion");
 const { flatMap, filter } = require("lodash");
 
 const authorConditions = {
-  UNANSWERED: "Unanswered"
+  UNANSWERED: "Unanswered",
 };
 
 const getOptionsFromQuestionaire = (questionnaire) => {
-  const pages = flatMap(questionnaire.sections, section =>
-    flatMap(section.folders, 'pages')
+  const pages = flatMap(questionnaire.sections, (section) =>
+    flatMap(section.folders, "pages")
   );
-  const answers = flatMap(pages, 'answers')
-  return flatMap(filter(answers, 'options'), 'options')
-}
+  const answers = flatMap(pages, "answers");
+  return flatMap(filter(answers, "options"), "options");
+};
 
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
-  return optionIds.map((id) => filter(options, { id })[0].label)
-}
+  return optionIds.map((id) => filter(options, { id })[0].label);
+};
 
 const buildAnswerBinaryExpression = ({ left, condition, right }, ctx) => {
   const returnVal = {
     id: `answer${left.answerId}`,
-    condition: conditionConverter(condition)
+    condition: skipConditionConversion(condition),
   };
 
   if (condition === authorConditions.UNANSWERED) {
@@ -29,7 +29,7 @@ const buildAnswerBinaryExpression = ({ left, condition, right }, ctx) => {
   }
 
   if (right.type === "SelectedOptions") {
-    returnVal.values = getOptionValues(right.optionIds, ctx.questionnaireJson)
+    returnVal.values = getOptionValues(right.optionIds, ctx.questionnaireJson);
   } else {
     returnVal.value = right.customValue.number;
   }

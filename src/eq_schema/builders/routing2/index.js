@@ -1,8 +1,9 @@
-const translateBinaryExpression = require("../translateBinaryExpression");
+const checkValidRoutingType = require("./newRoutingDestination");
 const translateRoutingDestination = require("./translateRoutingDestination");
 const { flatMap } = require("lodash");
-const { AND } = require("../../../constants/routingOperators");
+const { AND, OR } = require("../../../constants/routingOperators");
 
+//TODO: Duplication of some code here
 const addRuleToContext = (goto, groupId, ctx) => {
   const destinationType = Object.keys(goto);
 
@@ -11,42 +12,57 @@ const addRuleToContext = (goto, groupId, ctx) => {
   }
 };
 
-module.exports = (routing, pageId, groupId, ctx) => {
-  const rules = flatMap(routing.rules, rule => {
+const buildRunnerRules = (rules, pageId, ctx, groupId) => {
+  const builtRunnerRules = flatMap(rules, (rule) => {
     let runnerRules;
-
     const destination = translateRoutingDestination(
       rule.destination,
       pageId,
       ctx
     );
-    if (rule.expressionGroup.operator === AND) {
-      const when = rule.expressionGroup.expressions.map(expression =>
-        translateBinaryExpression(expression, ctx)
+
+    const { expressions, operator } = rule.expressionGroup;
+
+    if (operator === AND || operator === OR) {
+      const when = expressions.map((expression) =>
+        checkValidRoutingType(expression, ctx)
       );
+
       runnerRules = [
         {
-          goto: {
-            ...destination,
-            when
-          }
-        }
+          ...destination,
+          when: { [operator.toLowerCase()]: when },
+        },
       ];
     } else {
-      runnerRules = rule.expressionGroup.expressions.map(expression => {
-        return {
-          goto: {
-            ...destination,
-            when: [translateBinaryExpression(expression, ctx)]
-          }
-        };
-      });
+      const when = expressions.map((expression) =>
+        checkValidRoutingType(expression, ctx)
+      );
+
+      runnerRules = [
+        {
+          ...destination,
+          when: when[0],
+        },
+      ];
     }
-    runnerRules.map(expression => {
-      addRuleToContext(expression.goto, groupId, ctx);
+
+    runnerRules.map((expression) => {
+      addRuleToContext(expression, groupId, ctx);
     });
+
     return runnerRules;
   });
+
+  return builtRunnerRules;
+};
+
+module.exports = (routing, pageId, groupId, ctx) => {
+  const { rules } = routing;
+
+  const runnerRules = buildRunnerRules(rules, pageId, ctx, groupId);
+
   const destination = translateRoutingDestination(routing.else, pageId, ctx);
-  return [...rules, { goto: destination }];
+
+  return [...runnerRules, { ...destination }];
 };

@@ -54,18 +54,19 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
         ? "summary-group"
         : "confirmation-group",
     };
-  }
-
-  if (logical === "NextPage") {
+  } else if (logical === "EndOfCurrentSection") {
+    return {
+      section: "End",
+    };
+  } else if (logical === "NextPage") {
     return getNextPageDestination(pageId, ctx);
-  } 
+  }
 
   if (logical === "EndOfCurrentSection") {
-    return { section: "End"}
+    return { section: "End" };
   }
-  
-  throw new Error(`${logical} is not a valid destination type`);
 
+  throw new Error(`${logical} is not a valid destination type`);
 };
 
 const translateRoutingDestination = (destination, pageId, ctx) => {
