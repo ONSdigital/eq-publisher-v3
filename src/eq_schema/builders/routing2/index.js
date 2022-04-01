@@ -57,12 +57,42 @@ const buildRunnerRules = (rules, pageId, ctx, groupId) => {
   return builtRunnerRules;
 };
 
-module.exports = (routing, pageId, groupId, ctx) => {
-  const { rules } = routing;
+const buildSkipConditionRules = (routing, ctx) => {
+  const skipCondition = routing.reduce((acc, route) => {
+    const { expressions, operator } = route;
 
-  const runnerRules = buildRunnerRules(rules, pageId, ctx, groupId);
+    if (expressions.length > 1) {
+      const skipRules = expressions.map((expression) => {
+        return checkValidRoutingType(expression, ctx);
+      });
 
-  const destination = translateRoutingDestination(routing.else, pageId, ctx);
+      return {
+        when: { [operator.toLowerCase()]: skipRules },
+      };
+    } else {
+      const when = expressions.reduce((acc, expression) => {
+        return checkValidRoutingType(expression, ctx);
+      }, {});
 
-  return [...runnerRules, { ...destination }];
+      return { when: when };
+    }
+  }, {});
+
+  return skipCondition;
+};
+
+module.exports = (routing, pageId, groupId, type, ctx) => {
+  if (type === "routing") {
+    const { rules } = routing;
+
+    const runnerRules = buildRunnerRules(rules, pageId, ctx, groupId);
+
+    const destination = translateRoutingDestination(routing.else, pageId, ctx);
+
+    return [...runnerRules, { ...destination }];
+  } else {
+    const skipConditions = buildSkipConditionRules(routing, ctx);
+
+    return skipConditions;
+  }
 };
