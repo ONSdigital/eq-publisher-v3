@@ -63,7 +63,13 @@ describe("Routing2", () => {
       },
     };
 
-    const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "routing",
+      ctx
+    );
     expect(ctx.routingGotos).toMatchObject([
       {
         group: "confirmation-group",
@@ -173,7 +179,13 @@ describe("Routing2", () => {
         pageId: "3",
       },
     };
-    const runnerRouting = translateAuthorRouting(authorRouting, "1", "1", ctx);
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "routing",
+      ctx
+    );
     expect(runnerRouting).toMatchObject([
       {
         block: "block2",

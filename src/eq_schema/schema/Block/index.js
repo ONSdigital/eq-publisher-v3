@@ -8,7 +8,7 @@ const {
 } = require("../../../utils/compoundFunctions");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
-const translateAuthorSkipconditions = require("../../builders/expressionGroup");
+
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
