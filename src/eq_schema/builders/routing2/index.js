@@ -89,7 +89,7 @@ module.exports = (routing, pageId, groupId, type, ctx) => {
     const destination = translateRoutingDestination(routing.else, pageId, ctx);
 
     return [...runnerRules, { ...destination }];
-  } else if (tyoe === "skip") {
+  } else if (type === "skip") {
     const skipConditions = buildSkipConditionRules(routing, ctx);
 
     return skipConditions;
