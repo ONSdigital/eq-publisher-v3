@@ -81,6 +81,12 @@ const buildSkipConditionRules = (routing, ctx) => {
 };
 
 module.exports = (routing, pageId, groupId, type, ctx) => {
+  if (!type) {
+    throw new Error(
+      "No type provided. Don't know if it's a skip or route rule."
+    );
+  }
+
   if (type === "routing") {
     const { rules } = routing;
 

@@ -225,3 +225,442 @@ describe("Routing2", () => {
     ]);
   });
 });
+
+describe("Testing Skip Condition Logic", () => {
+  let routingGotos, ctx;
+  beforeEach(() => {
+    routingGotos = [];
+    ctx = {
+      questionnaireJson,
+      routingGotos,
+    };
+  });
+
+  it("should translate a skip condition correctly for a number comparison", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            right: {
+              customValue: {
+                number: 1,
+              },
+              type: "Custom",
+            },
+            condition: "Equal",
+            left: {
+              answerId: "b712c8a0-e706-4754-90c1-57e5c7827d53",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "==": [
+          {
+            source: "answers",
+            identifier: "answerb712c8a0-e706-4754-90c1-57e5c7827d53",
+          },
+          1,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition  equality comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "Equal",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "==": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition  non equality comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "NotEqual",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "!=": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition  greater or equality comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "GreaterOrEqual",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        ">=": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition  less than or equality comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "LessOrEqual",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "<=": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition more than comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "GreaterThan",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        ">": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition less than comparison correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: "LessThan",
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "<": [
+          {
+            count: [
+              {
+                source: "answers",
+                identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              },
+            ],
+          },
+          3,
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition checkbox any of correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            right: {
+              customValue: {
+                number: 3,
+              },
+              type: "SelectedOptions",
+              optionIds: ["123", "456"],
+            },
+            condition: "AnyOf",
+            left: {
+              answerId: "2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+              type: "Answer",
+            },
+            id: "2630ce0d-2c97-4b81-804b-083b1b4ba21b",
+          },
+        ],
+        operator: "And",
+        id: "ae2dcb59-c51e-4d98-88f5-f7cb5e878851",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        "any-in": [
+          ["red", "white"],
+          {
+            identifier: "answer2ff2ad6c-04ec-45c6-bff1-6a441abb6685",
+            source: "answers",
+          },
+        ],
+      },
+    });
+  });
+
+  it("should translate a skip condition checkbox not any of correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            right: {
+              type: "SelectedOptions",
+              optionIds: ["123", "456"],
+            },
+            condition: "NotAnyOf",
+            left: {
+              answerId: "56f21ba7-96e8-4e95-815b-f38806c243a5",
+              type: "Answer",
+            },
+            id: "e820f8cb-15d3-4178-a66c-a410620dd476",
+          },
+        ],
+        operator: "And",
+        id: "200010d0-c045-4383-8d49-c65359cfc2b4",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        not: [
+          {
+            "any-in": [
+              ["red", "white"],
+              {
+                identifier: "answer56f21ba7-96e8-4e95-815b-f38806c243a5",
+                source: "answers",
+              },
+            ],
+          },
+        ],
+      },
+    });
+  });
+});
