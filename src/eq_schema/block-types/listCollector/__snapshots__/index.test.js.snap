@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Add Block should build the Add block 1`] = `
+AddBlock {
+  "cancel_text": "Don’t need to add this item",
+  "id": "add-block-listcollector-1",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "id": "add-block-question-listcollector-1",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListAddQuestion",
+}
+`;
+
+exports[`Edit Block should build the Edit block 1`] = `
+EditBlock {
+  "cancel_text": "Don’t need to edit this item",
+  "id": "edit-block-listcollector-1",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "id": "edit-block-question-listcollector-1",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListEditQuestion",
+}
+`;
+
+exports[`Remove Block should build the remove block 1`] = `
+RemoveBlock {
+  "cancel_text": "Don’t need to remove this item?",
+  "id": "remove-block-listcollector-1",
+  "question": Object {
+    "answers": Array [
+      Object {
+        "id": "remove-confirmation-listcollector-1",
+        "mandatory": true,
+        "options": Array [
+          Object {
+            "action": Object {
+              "type": "RemoveListItemAndAnswers",
+            },
+            "label": "Yes",
+            "value": "Yes",
+          },
+          Object {
+            "label": "No",
+            "value": "No",
+          },
+        ],
+        "type": "Radio",
+      },
+    ],
+    "id": "remove-block-question-listcollector-1",
+    "title": "Are you sure you want to remove this item?",
+    "type": "General",
+    "warning": "All of the information about this item will be deleted",
+  },
+  "type": "ListRemoveQuestion",
+}
+`;
+
+exports[`Summary Block should build the Summary block 1`] = `
+SummaryBlock {
+  "item_title": Object {
+    "placeholders": Array [
+      Object {
+        "placeholder": "item-text-listcollector-1",
+        "transforms": Array [
+          Object {
+            "arguments": Object {
+              "delimiter": "&nbsp;",
+              "list_to_concatenate": Array [],
+            },
+            "transform": "concatenate_list",
+          },
+        ],
+      },
+    ],
+    "text": "{item-text-listcollector-1}",
+  },
+  "title": "Summary",
+}
+`;
+
+exports[`list collector question should build valid list collector question 1`] = `
+ListCollectorQuestion {
+  "answers": Array [
+    Object {
+      "id": "add-another-listcollector-1",
+      "mandatory": true,
+      "options": Array [
+        Object {
+          "action": Object {
+            "type": "RedirectToListAddBlock",
+          },
+          "label": "Yes",
+          "value": "Yes",
+        },
+        Object {
+          "label": "No",
+          "value": "No",
+        },
+      ],
+      "type": "Radio",
+    },
+  ],
+  "id": "list-collector-question-listcollector-1",
+  "title": "Add another",
+  "type": "General",
+}
+`;

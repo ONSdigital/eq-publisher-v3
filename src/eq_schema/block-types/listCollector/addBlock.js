@@ -8,6 +8,7 @@ const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class AddBlock {
   constructor(page, ctx) {
+    console.log(ctx.questionnaireJson.collectionLists)
     this.id = `add-block-${page.id}`
     this.type = "ListAddQuestion"
     this.cancel_text = "Don’t need to add this item"

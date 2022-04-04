@@ -18,7 +18,7 @@ const {
   EditBlock,
   RemoveBlock,
   SummaryBlock
-} = require("../../builders/listCollector")
+} = require("../../block-types/listCollector")
 
 const pageTypeMappings = {
   QuestionPage: "Question",
