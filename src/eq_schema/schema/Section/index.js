@@ -2,7 +2,9 @@ const Group = require("../Group");
 const { getText } = require("../../../utils/HTMLUtils");
 const { buildIntroBlock } = require("../Block");
 const { flatMap } = require("lodash");
-const translateDisplayConditions = require("../../builders/expressionGroup");
+
+const translateRoutingAndSkipRules = require("../../builders/routing2");
+
 class Section {
   constructor(section, ctx) {
     this.id = `section${section.id}`;
@@ -41,7 +43,15 @@ class Section {
     }
 
     if (section.displayConditions) {
-      this.enabled = translateDisplayConditions(section.displayConditions, ctx);
+      const type = "display";
+
+      this.enabled = translateRoutingAndSkipRules(
+        section.displayConditions,
+        "",
+        "",
+        type,
+        ctx
+      );
     }
 
     this.summary = {
