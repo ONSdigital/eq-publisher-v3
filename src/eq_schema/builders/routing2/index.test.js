@@ -663,4 +663,75 @@ describe("Testing Skip Condition Logic", () => {
       },
     });
   });
+
+  it("should translate a skip condition checkbox with an or Radio / checkbox option correctly.", () => {
+    const authorRouting = [
+      {
+        expressions: [
+          {
+            secondaryCondition: null,
+            right: {
+              type: "SelectedOptions",
+              optionIds: ["123"],
+            },
+            condition: "OneOf",
+            left: {
+              answerId: "27b51b6f-3ada-4b8c-88db-33e21e13172f",
+              type: "Answer",
+            },
+            id: "a2008e59-f979-416d-9324-bf3e43256778",
+          },
+        ],
+        operator: "And",
+        id: "385e7fa3-bd2b-42ab-ab62-82d79ec4bf96",
+      },
+      {
+        expressions: [
+          {
+            right: {},
+            condition: "Unanswered",
+            left: {
+              answerId: "27b51b6f-3ada-4b8c-88db-33e21e13172f",
+              type: "Answer",
+            },
+            id: "1dac9a90-b54f-41b2-9c63-1bda527d4481",
+          },
+        ],
+        operator: "And",
+        id: "61ec6722-3ce6-454f-9e1a-4ef8ebe4dd47",
+      },
+    ];
+
+    const runnerRouting = translateAuthorRouting(
+      authorRouting,
+      "1",
+      "1",
+      "skip",
+      ctx
+    );
+    expect(runnerRouting).toMatchObject({
+      when: {
+        or: [
+          {
+            "any-in": [
+              ["red"],
+              {
+                identifier: "answer27b51b6f-3ada-4b8c-88db-33e21e13172f",
+                source: "answers",
+              },
+            ],
+          },
+          {
+            "==": [
+              {
+                source: "answers",
+                identifier: "answer27b51b6f-3ada-4b8c-88db-33e21e13172f",
+              },
+              null,
+            ],
+          },
+        ],
+      },
+    });
+  });
 });
