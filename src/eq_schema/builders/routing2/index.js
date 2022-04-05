@@ -2,9 +2,6 @@ const checkValidRoutingType = require("./newRoutingDestination");
 const translateRoutingDestination = require("./translateRoutingDestination");
 const { flatMap } = require("lodash");
 const { AND, OR } = require("../../../constants/routingOperators");
-const {
-  extendingDifferentTypeKindMessage,
-} = require("graphql/validation/rules/PossibleTypeExtensions");
 
 const addRuleToContext = (goto, groupId, ctx) => {
   const destinationType = Object.keys(goto);
