@@ -7,8 +7,8 @@ const {
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 
-const translateAuthorRouting = require("../../builders/routing2");
-const translateAuthorSkipconditions = require("../../builders/expressionGroup");
+const translateRoutingAndSkipRules = require("../../builders/routing2");
+
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
@@ -33,17 +33,26 @@ class Block {
     this.id = `block${page.id}`;
     this.type = this.convertPageType(page.pageType);
     this.buildPages(page, ctx);
+    let type;
     if (page.routing && isNil(page.confirmation)) {
-      this.routing_rules = translateAuthorRouting(
+      type = "routing";
+
+      this.routing_rules = translateRoutingAndSkipRules(
         page.routing,
         page.id,
         groupId,
+        type,
         ctx
       );
     }
     if (page.skipConditions) {
-      this.skip_conditions = translateAuthorSkipconditions(
+      type = "skip";
+
+      this.skip_conditions = translateRoutingAndSkipRules(
         page.skipConditions,
+        page.id,
+        groupId,
+        type,
         ctx
       );
     }
