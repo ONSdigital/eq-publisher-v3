@@ -56,8 +56,8 @@ const buildRunnerRules = (rules, pageId, ctx, groupId) => {
   return builtRunnerRules;
 };
 
-const buildSkipConditionRules = (routing, ctx) => {
-  const createSkipConditionNonOR = (routing) => {
+const buildSkipAndDisplayConditions = (routing, ctx) => {
+  const createSkipOrDisplayNonOr = (routing) => {
     return routing.reduce((acc, route) => {
       const { expressions, operator } = route;
 
@@ -107,7 +107,7 @@ const buildSkipConditionRules = (routing, ctx) => {
     return { when: { or: skips } };
   }
 
-  const skipCondition = createSkipConditionNonOR(routing);
+  const skipCondition = createSkipOrDisplayNonOr(routing);
 
   return skipCondition;
 };
@@ -127,8 +127,8 @@ module.exports = (routing, pageId, groupId, type, ctx) => {
     const destination = translateRoutingDestination(routing.else, pageId, ctx);
 
     return [...runnerRules, { ...destination }];
-  } else if (type === "skip") {
-    const skipConditions = buildSkipConditionRules(routing, ctx);
+  } else if (type === "skip" || type === "display") {
+    const skipConditions = buildSkipAndDisplayConditions(routing, ctx);
 
     return skipConditions;
   }

@@ -132,14 +132,17 @@ describe("Section", () => {
       const section = new Section(sectionJSON, createCtx());
 
       expect(section.enabled).toBeTruthy();
-      expect(section.enabled[0]).toMatchObject({
-        when: [
-          {
-            id: "answer43881b52-bdb2-450e-ac05-0326c39cedcf",
-            condition: "greater than",
-            value: 0,
-          },
-        ],
+
+      expect(section.enabled).toMatchObject({
+        when: {
+          ">": [
+            {
+              identifier: "answer43881b52-bdb2-450e-ac05-0326c39cedcf",
+              source: "answers",
+            },
+            0,
+          ],
+        },
       });
     });
 
