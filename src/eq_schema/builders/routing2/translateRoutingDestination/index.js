@@ -48,7 +48,7 @@ const getNextPageDestination = (pageId, ctx) => {
 };
 
 const getLogicalDestination = (pageId, { logical }, ctx) => {
- if (logical === "EndOfCurrentSection") {
+  if (logical === "EndOfCurrentSection") {
     return {
       section: "End",
     };
