@@ -48,13 +48,7 @@ const getNextPageDestination = (pageId, ctx) => {
 };
 
 const getLogicalDestination = (pageId, { logical }, ctx) => {
-  if (logical === "EndOfQuestionnaire") {
-    return {
-      group: get(ctx.questionnaireJson, "summary")
-        ? "summary-group"
-        : "confirmation-group",
-    };
-  } else if (logical === "EndOfCurrentSection") {
+ if (logical === "EndOfCurrentSection") {
     return {
       section: "End",
     };
@@ -62,9 +56,6 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
     return getNextPageDestination(pageId, ctx);
   }
 
-  if (logical === "EndOfCurrentSection") {
-    return { section: "End" };
-  }
 
   throw new Error(`${logical} is not a valid destination type`);
 };

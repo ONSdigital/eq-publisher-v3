@@ -61,26 +61,6 @@ describe("Translation of a routing destination", () => {
     ).toMatchObject({ group: "summary-group" });
   });
 
-  it("should translate a end of questionnaire destination as summary", () => {
-    const authorDestination = {
-      logical: "EndOfQuestionnaire",
-    };
-    expect(
-      translateRoutingDestination(authorDestination, "3", {
-        questionnaireJson: questionnaireJsonWithSummary,
-      })
-    ).toMatchObject({ group: "summary-group" });
-  });
-
-  it("should translate a end of questionnaire destination as confirmation-group", () => {
-    const authorDestination = {
-      logical: "EndOfQuestionnaire",
-    };
-    expect(
-      translateRoutingDestination(authorDestination, "1", { questionnaireJson })
-    ).toMatchObject({ group: "confirmation-group" });
-  });
-
   it("should fail if not provided any destinations", () => {
     const authorDestination = {};
 

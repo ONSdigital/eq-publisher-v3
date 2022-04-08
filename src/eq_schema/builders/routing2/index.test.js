@@ -54,7 +54,7 @@ describe("Routing2", () => {
             ],
           },
           destination: {
-            logical: "EndOfQuestionnaire",
+            logical: "EndOfCurrentSection",
           },
         },
       ],
@@ -70,25 +70,6 @@ describe("Routing2", () => {
       "routing",
       ctx
     );
-    expect(ctx.routingGotos).toMatchObject([
-      {
-        group: "confirmation-group",
-        groupId: "group1",
-        when: {
-          and: [
-            {
-              "any-in": [
-                ["red", "white"],
-                {
-                  identifier: "answer2",
-                  source: "answers",
-                },
-              ],
-            },
-          ],
-        },
-      },
-    ]);
 
     expect(runnerRouting).toMatchObject([
       {
@@ -108,7 +89,7 @@ describe("Routing2", () => {
         },
       },
       {
-        group: "confirmation-group",
+        section: "End",
         when: {
           and: [
             {
@@ -171,7 +152,7 @@ describe("Routing2", () => {
             ],
           },
           destination: {
-            logical: "EndOfQuestionnaire",
+            logical: "EndOfCurrentSection",
           },
         },
       ],
@@ -204,7 +185,7 @@ describe("Routing2", () => {
         },
       },
       {
-        group: "confirmation-group",
+        section: "End",
         when: {
           or: [
             {

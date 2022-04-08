@@ -377,7 +377,7 @@ describe("Group", () => {
         else: {
           section: null,
           page: null,
-          logical: "EndOfQuestionnaire",
+          logical: "EndOfCurrentSection",
         },
       };
 
@@ -419,7 +419,7 @@ describe("Group", () => {
           },
         },
         {
-          group: "confirmation-group",
+          section: "End",
         },
       ];
 
