@@ -405,19 +405,15 @@ describe("Group", () => {
         {
           group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
           when: {
-            and: [
-              {
-                "==": [
-                  {
-                    identifier: "answer1",
-                    source: "answers",
-                  },
-                  "5",
-                ],
-              },
-            ],
+              "==": [
+                {
+                  identifier: "answer1",
+                  source: "answers",
+                },
+                "5",
+              ],
+            },
           },
-        },
         {
           section: "End",
         },

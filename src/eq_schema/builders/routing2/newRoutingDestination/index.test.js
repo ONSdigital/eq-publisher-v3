@@ -39,12 +39,12 @@ describe("Should build a runner representation of a binary expression", () => {
       });
 
       expect(runnerExpression).toMatchObject({
-        "any-in": [
-          ["red"],
+        "in": [
           {
             identifier: "answer1",
             source: "answers",
           },
+          ["red"],
         ],
       });
     });
@@ -73,12 +73,12 @@ describe("Should build a runner representation of a binary expression", () => {
         questionnaireJson,
       });
       expect(runnerExpression).toMatchObject({
-        "any-in": [
-          ["red", "white"],
+        "in": [
           {
             identifier: "answer1",
             source: "answers",
           },
+          ["red", "white"],
         ],
       });
     });

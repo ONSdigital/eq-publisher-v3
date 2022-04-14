@@ -22,7 +22,7 @@ const buildRunnerRules = (rules, pageId, ctx, groupId) => {
 
     const { expressions, operator } = rule.expressionGroup;
 
-    if (operator === AND || operator === OR) {
+    if ((operator === AND || operator === OR) && (expressions.length > 1)) {
       const when = expressions.map((expression) =>
         checkValidRoutingType(expression, ctx)
       );
