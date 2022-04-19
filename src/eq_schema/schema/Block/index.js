@@ -12,10 +12,18 @@ const translateRoutingAndSkipRules = require("../../builders/routing2");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
+const { 
+  ListCollectorQuestion, 
+  AddBlock,
+  EditBlock,
+  RemoveBlock,
+  SummaryBlock
+} = require("../../block-types/listCollector")
 
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
+  ListCollectorPage: "ListCollector"
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
@@ -84,6 +92,14 @@ class Block {
         answers_to_calculate: page.summaryAnswers.map((o) => `answer${o}`),
         title: processPipe(ctx)(page.totalTitle),
       };
+    }
+    if (page.pageType === "ListCollectorPage") {
+      this.for_list = page.listId
+      this.question = new ListCollectorQuestion(page, ctx)
+      this.add_block = new AddBlock(page, ctx)
+      this.edit_block = new EditBlock(page, ctx)
+      this.remove_block = new RemoveBlock(page)
+      this.summary = new SummaryBlock(page, ctx)
     }
   }
 
