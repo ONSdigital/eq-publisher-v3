@@ -123,6 +123,15 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
+    if (condition === "OneOf") {
+      const swapOptionValues = [optionValues[0], optionValues[1]] = [optionValues[1], optionValues[0]];
+      const SelectedOptions = {
+        [routingConditionConversion(condition)]: swapOptionValues,
+      };
+
+      return SelectedOptions;
+    }
+
     const SelectedOptions = {
       [routingConditionConversion(condition)]: optionValues,
     };

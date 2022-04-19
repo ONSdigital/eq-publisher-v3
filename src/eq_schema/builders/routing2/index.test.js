@@ -30,16 +30,6 @@ describe("Routing2", () => {
                   },
                 },
               },
-            ],
-          },
-          destination: {
-            logical: "NextPage",
-          },
-        },
-        {
-          expressionGroup: {
-            operator: AND,
-            expressions: [
               {
                 left: {
                   answerId: "2",
@@ -54,7 +44,7 @@ describe("Routing2", () => {
             ],
           },
           destination: {
-            logical: "EndOfCurrentSection",
+            logical: "NextPage",
           },
         },
       ],
@@ -85,20 +75,13 @@ describe("Routing2", () => {
                 5,
               ],
             },
-          ],
-        },
-      },
-      {
-        section: "End",
-        when: {
-          and: [
             {
-              "any-in": [
-                ["red", "white"],
+              "in": [
                 {
                   identifier: "answer2",
                   source: "answers",
                 },
+                ["red", "white"],
               ],
             },
           ],
@@ -128,16 +111,6 @@ describe("Routing2", () => {
                   optionIds: ["123", "456"],
                 },
               },
-            ],
-          },
-          destination: {
-            logical: "NextPage",
-          },
-        },
-        {
-          expressionGroup: {
-            operator: OR,
-            expressions: [
               {
                 left: {
                   answerId: "2",
@@ -152,7 +125,7 @@ describe("Routing2", () => {
             ],
           },
           destination: {
-            logical: "EndOfCurrentSection",
+            logical: "NextPage",
           },
         },
       ],
@@ -173,28 +146,21 @@ describe("Routing2", () => {
         when: {
           or: [
             {
-              "any-in": [
-                ["red", "white"],
+              "in": [
                 {
                   identifier: "answer1",
                   source: "answers",
                 },
+                ["red", "white"],
               ],
             },
-          ],
-        },
-      },
-      {
-        section: "End",
-        when: {
-          or: [
             {
-              "any-in": [
-                ["red", "white"],
+              "in": [
                 {
                   identifier: "answer2",
                   source: "answers",
                 },
+                ["red", "white"],
               ],
             },
           ],
@@ -694,12 +660,12 @@ describe("Testing Skip Condition Logic", () => {
       when: {
         or: [
           {
-            "any-in": [
-              ["red"],
+            "in": [
               {
                 identifier: "answer27b51b6f-3ada-4b8c-88db-33e21e13172f",
                 source: "answers",
               },
+              ["red"],
             ],
           },
           {
