@@ -7,7 +7,7 @@ const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
 
 const isPipeableType = (answer) => {
-  const notPipeableAnswerTypes = ["TextArea", "Radio", "CheckBox"];
+  const notPipeableAnswerTypes = ["TextArea", "CheckBox"];
   const { type } = answer;
   return !includes(notPipeableAnswerTypes, type);
 };
