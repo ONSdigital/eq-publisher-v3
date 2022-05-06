@@ -405,15 +405,15 @@ describe("Group", () => {
         {
           group: "groupuu1d-iuhiuwfew-fewfewfewdsf-dsf-4",
           when: {
-              "==": [
-                {
-                  identifier: "answer1",
-                  source: "answers",
-                },
-                "5",
-              ],
-            },
+            "==": [
+              {
+                identifier: "answer1",
+                source: "answers",
+              },
+              "5",
+            ],
           },
+        },
         {
           section: "End",
         },
@@ -456,7 +456,21 @@ describe("Group", () => {
       const folder = ctx.questionnaireJson.sections[0].folders[0];
       const resultantJson = new Group(folder, ctx);
       expect(resultantJson.blocks[1].question.description).toEqual([
-        `{{ answers[&#39;answer${folder.pages[0].answers[0].id}&#39;]|format_unordered_list }}`,
+        {
+          text: "{checkboxAnswers}",
+          placeholders: [{
+            placeholder: "checkboxAnswers",
+            transforms: [{
+              arguments: {
+                list_to_format: {
+                  identifier: "answer6",
+                  source: "answers",
+                },
+              },
+              transform: "format_list",
+            }],
+          }]
+        }
       ]);
     });
   });

@@ -47,6 +47,26 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
     },
   };
 
+  const checkBoxTransform = [{
+    text: "{checkboxAnswers}",
+    placeholders: [
+      {
+        placeholder: "checkboxAnswers",
+        transforms: [
+          {
+            transform: "format_list",
+            arguments: {
+              list_to_format: {
+                source: "answers",
+                identifier: `answer${page.answers[0].id}`
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }]
+
   if (!routing) {
     routing = {
       id: "default-rule-set",
@@ -63,10 +83,7 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
     id: `confirmation-page-for-${page.id}`,
     title: page.confirmation.title,
     descriptionEnabled: true,
-    description:
-      page.answers[0].type === CHECKBOX
-        ? `{{ answers['answer${page.answers[0].id}']|format_unordered_list }}`
-        : null,
+    description: null,
     pageType: "ConfirmationQuestion",
     routing,
     answers: [confirmationAnswerObject],
@@ -83,7 +100,12 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
     confirmationAnswerObject.qCode = page.confirmation.qCode;
   }
 
-  return new Block(confirmationQuestionObject, groupId, ctx);
+  const confirmationQuestionBlock = new Block(confirmationQuestionObject, groupId, ctx);
+  if (page.answers[0].type === CHECKBOX ) {
+    confirmationQuestionBlock.question.description = checkBoxTransform;
+  }
+  
+  return confirmationQuestionBlock;
 };
 
 module.exports = {
