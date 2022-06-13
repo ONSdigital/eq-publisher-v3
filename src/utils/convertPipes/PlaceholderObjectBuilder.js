@@ -4,9 +4,11 @@ const {
   FORMAT_CURRENCY,
   FORMAT_DATE,
   FORMAT_NUMBER,
+  FORMAT_CHECKBOX,
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
-  // FORMAT_UNIT,
+  CHECKBOX_TRANSFORMATION,
+  FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
 
@@ -21,6 +23,7 @@ const TRANSFORM_MAP = {
   Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
+  Checkbox: { format: FORMAT_CHECKBOX, transformKey: CHECKBOX_TRANSFORMATION },
   // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
@@ -51,6 +54,11 @@ const placeholderObjectBuilder = (
     }
     if (["Number", "Currency"].includes(AnswerType)) {
       argumentList = {};
+    }
+    if (["Checkbox"].includes(AnswerType)) {
+      argumentList = {
+        delimiter: ",&nbsp;"
+      };
     }
     if (["Unit"].includes(AnswerType)) {
       argumentList = {
