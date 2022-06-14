@@ -91,7 +91,6 @@ const createContext = (metadata = []) => ({
                   },
                 ],
               },
-              {},
             ],
           },
         ],
@@ -275,14 +274,8 @@ describe("convertPipes", () => {
                   source: "answers"
                 }
               }
-
-
             )
           ),
-
-
-
-
         );
       });
 
