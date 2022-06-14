@@ -31,7 +31,7 @@ const placeholderObjectBuilder = (
   source,
   identifier,
   dateFormat,
-  // unitType,
+  unitType,
   fallback,
   AnswerType
 ) => {
