@@ -32,9 +32,8 @@ const createTransformation = (
   ],
 });
 
-
 const createCheckboxTransformation = (
-  { placeholder, source, argument, transform },
+  { placeholder, transform },
   extra
 ) => ({
   placeholder,
@@ -267,8 +266,6 @@ describe("convertPipes", () => {
             "{answer7}",
             createCheckboxTransformation({
               placeholder: "answer7",
-              source: "answers",
-              argument: "",
               transform: "concatenate_list",
             },
               {
