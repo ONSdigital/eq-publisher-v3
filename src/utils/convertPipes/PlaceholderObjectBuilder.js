@@ -8,7 +8,7 @@ const {
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
   CHECKBOX_TRANSFORMATION,
-  FORMAT_UNIT,
+  // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
 
@@ -31,7 +31,7 @@ const placeholderObjectBuilder = (
   source,
   identifier,
   dateFormat,
-  unitType,
+  // unitType,
   fallback,
   AnswerType
 ) => {
