@@ -32,6 +32,21 @@ const createTransformation = (
   ],
 });
 
+const createCheckboxTransformation = (
+  { placeholder, transform },
+  extra
+) => ({
+  placeholder,
+  transforms: [
+    {
+      arguments: {
+        ...extra,
+      },
+      transform,
+    },
+  ],
+});
+
 const createWrapper = (text, ...args) => ({
   text,
   placeholders: [...args],
@@ -57,9 +72,25 @@ const createContext = (metadata = []) => ({
                   },
                   { id: `5`, type: "Number" },
                   { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
+                  {
+                    "id": `7`, "type": "Checkbox",
+                    "options": [
+                      {
+                        id: `AppleId`,
+                        label: "Apples"
+                      },
+                      {
+                        id: `PearId`,
+                        label: "Pears"
+                      },
+                      {
+                        id: `OrangeId`,
+                        label: "Oranges"
+                      }
+                    ]
+                  },
                 ],
               },
-              {},
             ],
           },
         ],
@@ -226,6 +257,28 @@ describe("convertPipes", () => {
           )
         );
       });
+
+      it("should format Checkbox answers with `format_checkbox`", () => {
+        const html = createPipe({ id: "7" });
+        expect(convertPipes(createContext())(html)).toEqual(
+          createWrapper(
+            "{answer7}",
+            createCheckboxTransformation({
+              placeholder: "answer7",
+              transform: "concatenate_list",
+            },
+              {
+                delimiter: ",&nbsp;",
+                list_to_concatenate: {
+                  identifier: "answer7",
+                  source: "answers"
+                }
+              }
+            )
+          ),
+        );
+      });
+
 
       // Put in when Unit in runner
       // it("should format Unit answers with `unit`", () => {
