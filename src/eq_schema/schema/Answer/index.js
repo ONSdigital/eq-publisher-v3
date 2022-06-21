@@ -8,10 +8,14 @@ const {
   UNIT,
   DURATION,
   TEXTAREA,
+  CHECKBOX,
+  RADIO,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 
 const { buildContents } = require("../../../utils/builders");
+
+const multipleChoiceAnswers = [CHECKBOX, RADIO];
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
@@ -75,7 +79,10 @@ class Answer {
       }
     }
 
-    if (has(answer, "properties.decimals") && answer.type !== "Checkbox") {
+    if (
+      has(answer, "properties.decimals") &&
+      !multipleChoiceAnswers.includes(answer.type)
+    ) {
       this.decimal_places = answer.properties.decimals;
     }
 
@@ -103,10 +110,7 @@ class Answer {
       }
     }
 
-    if (
-      !isNil(answer.options) &&
-      (answer.type === "Checkbox" || answer.type === "Radio")
-    ) {
+    if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
       this.options = answer.options.map((option) =>
         Answer.buildOption(option, answer, ctx)
       );
