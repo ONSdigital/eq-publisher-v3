@@ -75,7 +75,7 @@ class Answer {
       }
     }
 
-    if (has(answer, "properties.decimals")) {
+    if (has(answer, "properties.decimals") && answer.type !== "Checkbox") {
       this.decimal_places = answer.properties.decimals;
     }
 
@@ -103,7 +103,10 @@ class Answer {
       }
     }
 
-    if (!isNil(answer.options)) {
+    if (
+      !isNil(answer.options) &&
+      (answer.type === "Checkbox" || answer.type === "Radio")
+    ) {
       this.options = answer.options.map((option) =>
         Answer.buildOption(option, answer, ctx)
       );
