@@ -868,8 +868,15 @@ describe("Answer", () => {
     });
 
     it("should add options even if empty array", () => {
-      const answer = new Answer(createAnswerJSON({ options: [] }));
+      const answer = new Answer(createAnswerJSON({ type: RADIO, options: [] }));
       expect(answer.options).toEqual([]);
+    });
+
+    it("should not add options to non-multiple choice answers", () => {
+      const answer = new Answer(
+        createAnswerJSON({ type: PERCENTAGE, options: [] })
+      );
+      expect(answer.options).toBeUndefined();
     });
   });
 
