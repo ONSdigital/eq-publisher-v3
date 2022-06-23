@@ -115,7 +115,7 @@ const getPipedData = (store) => (element, ctx) => {
   return `{${removeDash(output)}}`;
 };
 
-const convertPipes = (ctx) => (html) => {
+const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
   if (!html) {
     return html;
   }
@@ -132,7 +132,7 @@ const convertPipes = (ctx) => (html) => {
     $elem.replaceWith(getPipedData(store)($elem, ctx));
   });
 
-  store.text = unescapePiping($.html());
+  store.text = unescapePiping($.html(), isMultipleChoiceValue);
 
   if (!store.placeholders.length) {
     return store.text;

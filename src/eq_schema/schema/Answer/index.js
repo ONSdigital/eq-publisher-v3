@@ -207,7 +207,7 @@ class Answer {
   ) {
     const option = {
       label: buildContents(label, ctx),
-      value: buildContents(label, ctx),
+      value: buildContents(label, ctx, true),
     };
 
     if (q_code) {
