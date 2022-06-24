@@ -3,10 +3,11 @@ const convertPipes = require("../convertPipes");
 
 const { getInnerHTMLWithPiping } = require("../HTMLUtils");
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue) =>
+  flow(convertPipes(ctx, isMultipleChoiceValue), getInnerHTMLWithPiping);
 
-const buildContents = (title, ctx) => {
-  return processPipe(ctx)(title);
+const buildContents = (title, ctx, isMultipleChoiceValue) => {
+  return processPipe(ctx, isMultipleChoiceValue)(title);
 };
 
 const buildIntroductionTitle = () => {

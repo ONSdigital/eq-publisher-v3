@@ -5,14 +5,23 @@ const { replace } = require("lodash/fp");
 const isPlainText = (elem) => typeof elem === "string" && !elem.startsWith("<");
 
 const startsWithLink = (elem) =>
-  typeof elem === "string" && (elem.startsWith("<a") || elem.startsWith("<strong>")) ;
+  typeof elem === "string" &&
+  (elem.startsWith("<a") || elem.startsWith("<strong>"));
 
 const getInnerHTML = (elem) =>
   isPlainText(elem) || startsWithLink(elem) ? elem : cheerio(elem).html();
 
 const removeDash = (elem) => replace(/-/g, "_", elem);
 
-const unescapePiping = (value) => replace(/&apos;/g, `&#39;`, value);
+const unescapePiping = (value, isMultipleChoiceValue) => {
+  let updatedValue;
+  if (!isMultipleChoiceValue) {
+    updatedValue = replace(/&apos;/g, `&#39;`, value);
+  } else {
+    updatedValue = replace(/&apos;/g, `'`, value);
+  }
+  return updatedValue;
+};
 
 const getInnerHTMLWithPiping = (elem) => {
   if (!elem) {
