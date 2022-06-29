@@ -24,6 +24,24 @@ const getAnswer = (ctx, answerId) =>
     .filter((answer) => isPipeableType(answer))
     .find((answer) => answer.id === answerId);
 
+const getAllCalculatedSummaries = (questionnaire) =>
+flatMap(questionnaire.sections, (section) =>
+  flatMap(section.folders, (folder) =>
+    compact(
+      flatMap(
+        folder.pages,
+        (page) => page.pageType === "CalculatedSummaryPage" && page
+      )
+    )
+  )
+);
+  
+  // TODO: Change to pageId from answerId
+  const getCalculatedSummary = (ctx, pageId) =>
+    getAllCalculatedSummaries(ctx.questionnaireJson).find(
+      (page) => page.id === pageId
+    );
+
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id, type }, ctx) => {
@@ -58,7 +76,13 @@ const PIPE_TYPES = {
       fallbackKey ? { source: "metadata", identifier: fallbackKey } : null,
   },
   variable: {
-    render: () => `%(total)s`,
+    retrieve: ({ id }, ctx) => {
+      return getCalculatedSummary(ctx, id);
+    },
+    getType: ({ type }) => type,
+    render: ({ id }) => `block${id}`,
+    getFallback: ({ fallbackKey }) =>
+      fallbackKey ? { source: "CalculatedSummary", identifier: fallbackKey } : null,
   },
 };
 
@@ -70,14 +94,16 @@ const getPipedData = (store) => (element, ctx) => {
   const { piped, ...elementData } = element.data();
   const pipeConfig = PIPE_TYPES[piped];
 
-  if (piped === "variable") {
-    return pipeConfig.render();
-  }
+  // if (piped === "variable") {
+  //   return pipeConfig.render();
+  // }
   if (!pipeConfig) {
     return "";
   }
 
   const entity = pipeConfig.retrieve(elementData, ctx);
+
+  console.log('entity :>> ', entity);
 
   if (!entity) {
     return "";
@@ -109,6 +135,8 @@ const getPipedData = (store) => (element, ctx) => {
     fallback,
     answerType
   );
+
+  console.log('placeholder :>> ', placeholder);
 
   store.placeholders = [...store.placeholders, placeholder];
 
