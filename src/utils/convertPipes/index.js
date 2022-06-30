@@ -82,7 +82,7 @@ const PIPE_TYPES = {
     getType: ({ type }) => type,
     render: ({ id }) => `block${id}`,
     getFallback: ({ fallbackKey }) =>
-      fallbackKey ? { source: "CalculatedSummary", identifier: fallbackKey } : null,
+      fallbackKey ? { source: "calculated_summary", identifier: fallbackKey } : null,
   },
 };
 
@@ -94,9 +94,10 @@ const getPipedData = (store) => (element, ctx) => {
   const { piped, ...elementData } = element.data();
   const pipeConfig = PIPE_TYPES[piped];
 
-  // if (piped === "variable") {
-  //   return pipeConfig.render();
-  // }
+  if (piped === "variable" && element.data().id === "total") {
+    return `%(total)s`
+  }
+
   if (!pipeConfig) {
     return "";
   }
