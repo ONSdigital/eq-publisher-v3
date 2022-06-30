@@ -52,7 +52,7 @@ const placeholderObjectBuilder = (
 
   if (source === "variable") {
     valueSource = {
-      source: "CalculatedSummary",
+      source: "calculated_summary",
       identifier,
     };
   }
