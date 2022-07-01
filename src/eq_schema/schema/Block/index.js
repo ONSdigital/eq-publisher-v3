@@ -17,13 +17,15 @@ const {
   AddBlock,
   EditBlock,
   RemoveBlock,
-  SummaryBlock
+  SummaryBlock,
+  DrivingQuestion,
 } = require("../../block-types/listCollector")
 
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
-  ListCollectorPage: "ListCollector"
+  ListCollectorPage: "ListCollector",
+  DrivingQuestionPage: "ListCollectorDrivingQuestion"
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
@@ -100,6 +102,12 @@ class Block {
       this.edit_block = new EditBlock(page, ctx)
       this.remove_block = new RemoveBlock(page)
       this.summary = new SummaryBlock(page, ctx)
+    }
+    if (page.pageType === "DrivingQuestionPage") {
+      this.id = `block-driving${page.id}`;
+      this.for_list = page.listId
+      this.question = new DrivingQuestion(page, ctx)
+      this.routing_rules = DrivingQuestion.routingRules(page)
     }
   }
 
