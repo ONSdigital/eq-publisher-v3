@@ -107,7 +107,7 @@ class Block {
       this.id = `block-driving${page.id}`;
       this.for_list = page.listId
       this.question = new DrivingQuestion(page, ctx)
-      this.routing_rules = DrivingQuestion.routingRules(page)
+      this.routing_rules = DrivingQuestion.routingRules(page, ctx)
     }
   }
 
