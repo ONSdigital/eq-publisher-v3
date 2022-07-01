@@ -91,6 +91,10 @@ const createContext = (metadata = []) => ({
                   },
                 ],
               },
+              {
+                id: 'calc1',
+                pageType: "CalculatedSummaryPage", 
+              },
             ],
           },
         ],
@@ -320,6 +324,29 @@ describe("convertPipes", () => {
       const html = createPipe({ pipeType: "metadata" });
       const metadata = [{ id: "456", key: "my_metadata", type: "Text" }];
       expect(convertPipes(createContext(metadata))(html)).toEqual("");
+    });
+
+    describe("Variable pipes", () => {
+      it("should convert a variable with unique id to the correct pipe format", () => {
+        const html = createPipe({ id: "calc1", pipeType: "variable"});
+        expect(convertPipes(createContext())(html)).toEqual(
+          createWrapper(
+            "{blockcalc1}",
+            createPlaceholders({
+              placeholder: "blockcalc1",
+              source: "calculated_summary",
+            })
+          )
+        );
+      });
+
+      it("should convert a variable with id as total to the correct pipe format", () => {
+        const html = createPipe({ id: "total", pipeType: "variable"});
+        expect(convertPipes(createContext())(html)).toEqual(
+          "%(total)s"
+        );
+      });
+
     });
 
     describe("formatting", () => {

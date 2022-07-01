@@ -36,11 +36,10 @@ flatMap(questionnaire.sections, (section) =>
   )
 );
   
-  // TODO: Change to pageId from answerId
-  const getCalculatedSummary = (ctx, pageId) =>
-    getAllCalculatedSummaries(ctx.questionnaireJson).find(
-      (page) => page.id === pageId
-    );
+const getCalculatedSummary = (ctx, pageId) =>
+getAllCalculatedSummaries(ctx.questionnaireJson).find(
+    (page) => page.id === pageId
+  );
 
 const PIPE_TYPES = {
   answers: {
