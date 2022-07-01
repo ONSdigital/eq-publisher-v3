@@ -9,6 +9,7 @@ const DATE_RANGE = "DateRange";
 const PERCENTAGE = "Percentage";
 const UNIT = "Unit";
 const DURATION = "Duration";
+const MUTUALLY_EXCLUSIVE = "MutuallyExclusive";
 
 module.exports = {
   CHECKBOX,
@@ -21,5 +22,6 @@ module.exports = {
   DATE_RANGE,
   PERCENTAGE,
   UNIT,
-  DURATION
+  DURATION,
+  MUTUALLY_EXCLUSIVE,
 };
