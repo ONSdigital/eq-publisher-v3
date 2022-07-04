@@ -56,6 +56,22 @@ class Group {
             ),
           ];
         }
+        if (page.pageType === "ListCollectorPage") {
+          const drivingBlock = {
+            ...page, 
+            pageType: "DrivingQuestionPage",
+          }
+          delete drivingBlock.routing
+          delete drivingBlock.skipConditions
+          return [
+            new Block(
+              drivingBlock, 
+              section.id, 
+              ctx
+            ),
+            block
+          ]
+        }
         return block;
       })
     );
