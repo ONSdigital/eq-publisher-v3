@@ -1,5 +1,5 @@
-const { find, get, flow, concat, last, filter } = require("lodash/fp");
-const { set, remove, cloneDeep, isArguments } = require("lodash");
+const { find, get, flow, concat, last } = require("lodash/fp");
+const { set, remove, cloneDeep } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -15,7 +15,6 @@ const {
   DATE_RANGE,
   MUTUALLY_EXCLUSIVE,
 } = require("../../../constants/answerTypes");
-const e = require("express");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
