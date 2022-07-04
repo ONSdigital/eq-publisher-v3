@@ -1,5 +1,6 @@
 const routingConditionConversion = require("../../../../utils/routingConditionConversion");
 const { flatMap, filter } = require("lodash");
+const { MUTUALLY_EXCLUSIVE } = require("../../../../constants/answerTypes");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
@@ -43,19 +44,8 @@ const mutuallyExclusiveId = (left, right, ctx) => {
     flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
         flatMap(page.answers, (answer) => {
-          const options = answer.options ? answer.options : [];
-
-          if (options.length !== 0) {
-            options.map((option) => {
-              if (
-                option.id === right.optionIds[0] &&
-                option.mutuallyExclusive
-              ) {
-                option.id = `${option.id}-exclusive`;
-                left.answerId = `${left.answerId}-exclusive`;
-                right.optionIds[0] = `${right.optionIds[0]}-exclusive`;
-              }
-            });
+          if (answer.type === MUTUALLY_EXCLUSIVE) {
+            answer.id = `${answer.id}-exclusive`;
           }
         })
       )
@@ -124,7 +114,10 @@ const buildAnswerObject = (
     }
 
     if (condition === "OneOf") {
-      const swapOptionValues = [optionValues[0], optionValues[1]] = [optionValues[1], optionValues[0]];
+      const swapOptionValues = ([optionValues[0], optionValues[1]] = [
+        optionValues[1],
+        optionValues[0],
+      ]);
       const SelectedOptions = {
         [routingConditionConversion(condition)]: swapOptionValues,
       };
