@@ -12,7 +12,6 @@ const NUMBER_TRANSFORMATION = "number";
 const CHECKBOX_TRANSFORMATION = "list_to_concatenate";
 const PERCENTAGE_TRANSFORMATION = "value";
 
-
 module.exports = {
   formatPlaceholder,
   FORMAT_CURRENCY,

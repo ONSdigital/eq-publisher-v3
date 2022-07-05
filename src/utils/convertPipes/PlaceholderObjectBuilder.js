@@ -26,7 +26,10 @@ const TRANSFORM_MAP = {
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   Checkbox: { format: FORMAT_CHECKBOX, transformKey: CHECKBOX_TRANSFORMATION },
-  Percentage: { format: FORMAT_PERCENTAGE, transformKey: PERCENTAGE_TRANSFORMATION },
+  Percentage: {
+    format: FORMAT_PERCENTAGE,
+    transformKey: PERCENTAGE_TRANSFORMATION,
+  },
   // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
@@ -41,7 +44,6 @@ const placeholderObjectBuilder = (
   let valueSource;
   let argumentList;
   let placeHolder;
-
 
   if (["metadata", "answers"].includes(source)) {
     valueSource = {
@@ -68,7 +70,7 @@ const placeholderObjectBuilder = (
     }
     if (["Checkbox"].includes(AnswerType)) {
       argumentList = {
-        delimiter: ",&nbsp;"
+        delimiter: ",&nbsp;",
       };
     }
     if (["Unit"].includes(AnswerType)) {

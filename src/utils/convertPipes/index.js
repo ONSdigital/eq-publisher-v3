@@ -25,19 +25,19 @@ const getAnswer = (ctx, answerId) =>
     .find((answer) => answer.id === answerId);
 
 const getAllCalculatedSummaries = (questionnaire) =>
-flatMap(questionnaire.sections, (section) =>
-  flatMap(section.folders, (folder) =>
-    compact(
-      flatMap(
-        folder.pages,
-        (page) => page.pageType === "CalculatedSummaryPage" && page
+  flatMap(questionnaire.sections, (section) =>
+    flatMap(section.folders, (folder) =>
+      compact(
+        flatMap(
+          folder.pages,
+          (page) => page.pageType === "CalculatedSummaryPage" && page
+        )
       )
     )
-  )
-);
-  
+  );
+
 const getCalculatedSummary = (ctx, pageId) =>
-getAllCalculatedSummaries(ctx.questionnaireJson).find(
+  getAllCalculatedSummaries(ctx.questionnaireJson).find(
     (page) => page.id === pageId
   );
 
@@ -81,7 +81,9 @@ const PIPE_TYPES = {
     getType: ({ type }) => type,
     render: ({ id }) => `block${id}`,
     getFallback: ({ fallbackKey }) =>
-      fallbackKey ? { source: "calculated_summary", identifier: fallbackKey } : null,
+      fallbackKey
+        ? { source: "calculated_summary", identifier: fallbackKey }
+        : null,
   },
 };
 
@@ -94,7 +96,7 @@ const getPipedData = (store) => (element, ctx) => {
   const pipeConfig = PIPE_TYPES[piped];
 
   if (piped === "variable" && element.data().id === "total") {
-    return `%(total)s`
+    return `%(total)s`;
   }
 
   if (!pipeConfig) {
@@ -102,7 +104,6 @@ const getPipedData = (store) => (element, ctx) => {
   }
 
   const entity = pipeConfig.retrieve(elementData, ctx);
-
 
   if (!entity) {
     return "";
@@ -134,7 +135,6 @@ const getPipedData = (store) => (element, ctx) => {
     fallback,
     answerType
   );
-
 
   store.placeholders = [...store.placeholders, placeholder];
 
