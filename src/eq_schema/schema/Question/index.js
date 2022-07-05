@@ -88,15 +88,6 @@ class Question {
           );
         }
       }
-    } else if (mutuallyExclusive) {
-      this.type = "MutuallyExclusive";
-      this.mandatory = get("properties.required", mutuallyExclusive);
-      this.answers = this.buildMutuallyExclusiveAnswers(
-        mutuallyExclusive,
-        question.answers,
-        ctx
-      );
-      delete this.answers[1].label;
     } else if (
       question.answers.some((answer) => answer.type === MUTUALLY_EXCLUSIVE)
     ) {

@@ -639,23 +639,27 @@ describe("Question", () => {
     beforeEach(() => {
       answers = [
         {
-          type: "Checkbox",
           id: "1",
-          label: "test",
-          properties: { required: true },
+          type: "Number",
+          label: "Number",
+          properties: { required: false, decimals: 0 },
+        },
+        {
+          id: "2",
+          type: "MutuallyExclusive",
+          properties: { required: false },
           options: [
             {
-              id: "1",
-              label: "Option 1",
+              id: "option-1",
+              label: "Exclusive option 1",
             },
             {
-              id: "2",
-              label: "Option 2",
+              id: "option-2",
+              label: "Exclusive option 2",
             },
             {
-              id: "3",
-              label: "Mutually exclusive",
-              mutuallyExclusive: true,
+              id: "option-3",
+              label: "Exclusive option 3",
             },
           ],
         },
@@ -671,7 +675,7 @@ describe("Question", () => {
 
     it("should have a question type of general when no mutually exclusive option", () => {
       const newAnswers = cloneDeep(answers);
-      remove(newAnswers[0].options, { mutuallyExclusive: true });
+      remove(newAnswers, { type: "MutuallyExclusive" });
       const question = new Question(
         createQuestionJSON({
           answers: newAnswers,
@@ -687,17 +691,37 @@ describe("Question", () => {
       expect(question.answers).toHaveLength(2);
     });
 
-    it("should have checkbox answer as last answer", () => {
+    it("should have checkbox answer as last answer if there is only one mutually exclusive option", () => {
+      // Sets mutually exclusive answer to only have one option
+      answers[1].options = [
+        {
+          id: "option-1",
+          label: "Exclusive option 1",
+        },
+      ];
       const question = new Question(createQuestionJSON({ answers }));
+      question.answers[1].options = [
+        {
+          id: "option-1",
+          label: "Exclusive option 1",
+        },
+      ];
       expect(last(question.answers)).toMatchObject({
         type: "Checkbox",
+      });
+    });
+
+    it("should have radio answer as last answer if there is more than one mutually exclusive option", () => {
+      const question = new Question(createQuestionJSON({ answers }));
+      expect(last(question.answers)).toMatchObject({
+        type: "Radio",
       });
     });
 
     it("should have unique answer id for the last answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers)).toMatchObject({
-        id: "answer1-exclusive",
+        id: "answer2-exclusive",
       });
     });
 
@@ -711,22 +735,42 @@ describe("Question", () => {
       expect(question).not.toHaveProperty("label");
     });
 
-    it("should set mandatory on exclusive child answers to false", () => {
-      const question = new Question(createQuestionJSON({ answers }));
-      expect(question).toMatchObject({
-        mandatory: true,
-      });
-      question.answers.map((answer) => {
-        expect(answer).toMatchObject({
-          mandatory: false,
-        });
-      });
-    });
+    // TODO: This test can be edited after confirmation on mandatory and mutually exclusive requirements
+    // it("should set mandatory on exclusive child answers to false", () => {
+    //   const question = new Question(createQuestionJSON({ answers }));
+    //   expect(question).toMatchObject({
+    //     mandatory: true,
+    //   });
+    //   question.answers.map((answer) => {
+    //     expect(answer).toMatchObject({
+    //       mandatory: false,
+    //     });
+    //   });
+    // });
 
     it("should have a checkbox answer as last answer when radio answer is used", () => {
+      answers[1].options = [
+        {
+          id: "option-1",
+          label: "Exclusive option 1",
+        },
+      ];
+      // Changes the answer at position 0's type to Radio
+      const convertedRadioAnswer = set("type", "Radio", answers[0]);
+      convertedRadioAnswer.options = [
+        {
+          id: "1",
+          label: "Option 1",
+        },
+        {
+          id: "2",
+          label: "Option 2",
+        },
+      ];
+
       const question = new Question(
         createQuestionJSON({
-          answers: [set("type", "Radio", answers[0])],
+          answers: [convertedRadioAnswer, answers[1]],
         })
       );
       expect(question.answers).toEqual([
@@ -739,12 +783,20 @@ describe("Question", () => {
       ]);
     });
 
-    it("should have a single option in the mutually exclusive answer", () => {
+    it("should have a multiple options in the mutually exclusive answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers).options).toEqual([
         {
-          label: "Mutually exclusive",
-          value: "Mutually exclusive",
+          label: "Exclusive option 1",
+          value: "Exclusive option 1",
+        },
+        {
+          label: "Exclusive option 2",
+          value: "Exclusive option 2",
+        },
+        {
+          label: "Exclusive option 3",
+          value: "Exclusive option 3",
         },
       ]);
     });
