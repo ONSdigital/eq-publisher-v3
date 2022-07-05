@@ -94,6 +94,7 @@ const createContext = (metadata = []) => ({
               {
                 id: 'calc1',
                 pageType: "CalculatedSummaryPage", 
+                type: "Number"
               },
             ],
           },
@@ -332,9 +333,11 @@ describe("convertPipes", () => {
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{blockcalc1}",
-            createPlaceholders({
+            createTransformation({
               placeholder: "blockcalc1",
               source: "calculated_summary",
+              argument: "number",
+              transform: "format_number",
             })
           )
         );

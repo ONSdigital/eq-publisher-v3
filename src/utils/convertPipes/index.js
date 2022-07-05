@@ -103,7 +103,6 @@ const getPipedData = (store) => (element, ctx) => {
 
   const entity = pipeConfig.retrieve(elementData, ctx);
 
-  console.log('entity :>> ', entity);
 
   if (!entity) {
     return "";
@@ -136,7 +135,6 @@ const getPipedData = (store) => (element, ctx) => {
     answerType
   );
 
-  console.log('placeholder :>> ', placeholder);
 
   store.placeholders = [...store.placeholders, placeholder];
 
