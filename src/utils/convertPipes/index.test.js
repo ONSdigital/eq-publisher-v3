@@ -32,10 +32,7 @@ const createTransformation = (
   ],
 });
 
-const createCheckboxTransformation = (
-  { placeholder, transform },
-  extra
-) => ({
+const createCheckboxTransformation = ({ placeholder, transform }, extra) => ({
   placeholder,
   transforms: [
     {
@@ -73,23 +70,29 @@ const createContext = (metadata = []) => ({
                   { id: `5`, type: "Number" },
                   { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
                   {
-                    "id": `7`, "type": "Checkbox",
-                    "options": [
+                    id: `7`,
+                    type: "Checkbox",
+                    options: [
                       {
                         id: `AppleId`,
-                        label: "Apples"
+                        label: "Apples",
                       },
                       {
                         id: `PearId`,
-                        label: "Pears"
+                        label: "Pears",
                       },
                       {
                         id: `OrangeId`,
-                        label: "Oranges"
-                      }
-                    ]
+                        label: "Oranges",
+                      },
+                    ],
                   },
                 ],
+              },
+              {
+                id: "calc1",
+                pageType: "CalculatedSummaryPage",
+                type: "Number",
               },
             ],
           },
@@ -263,22 +266,22 @@ describe("convertPipes", () => {
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{answer7}",
-            createCheckboxTransformation({
-              placeholder: "answer7",
-              transform: "concatenate_list",
-            },
+            createCheckboxTransformation(
+              {
+                placeholder: "answer7",
+                transform: "concatenate_list",
+              },
               {
                 delimiter: ",&nbsp;",
                 list_to_concatenate: {
                   identifier: "answer7",
-                  source: "answers"
-                }
+                  source: "answers",
+                },
               }
             )
-          ),
+          )
         );
       });
-
 
       // Put in when Unit in runner
       // it("should format Unit answers with `unit`", () => {
@@ -320,6 +323,28 @@ describe("convertPipes", () => {
       const html = createPipe({ pipeType: "metadata" });
       const metadata = [{ id: "456", key: "my_metadata", type: "Text" }];
       expect(convertPipes(createContext(metadata))(html)).toEqual("");
+    });
+
+    describe("Variable pipes", () => {
+      it("should convert a variable with unique id to the correct pipe format", () => {
+        const html = createPipe({ id: "calc1", pipeType: "variable" });
+        expect(convertPipes(createContext())(html)).toEqual(
+          createWrapper(
+            "{blockcalc1}",
+            createTransformation({
+              placeholder: "blockcalc1",
+              source: "calculated_summary",
+              argument: "number",
+              transform: "format_number",
+            })
+          )
+        );
+      });
+
+      it("should convert a variable with id as total to the correct pipe format", () => {
+        const html = createPipe({ id: "total", pipeType: "variable" });
+        expect(convertPipes(createContext())(html)).toEqual("%(total)s");
+      });
     });
 
     describe("formatting", () => {

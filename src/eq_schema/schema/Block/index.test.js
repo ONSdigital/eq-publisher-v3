@@ -173,7 +173,7 @@ describe("Block", () => {
       const calculatedPageGraphql = {
         id: "1",
         title:
-          '<p>Hi is your total <span data-piped="variable"data-id="1">[Total]</span></p>',
+          '<p>Hi is your total <span data-piped="variable"data-id="total">[Total]</span></p>',
         pageType: "CalculatedSummaryPage",
         totalTitle: "<p>Bye</p>",
         summaryAnswers: ["1", "2", "3"]
