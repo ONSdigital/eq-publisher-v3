@@ -736,7 +736,7 @@ describe("Question", () => {
     });
 
     // TODO: This test can be edited after confirmation on mandatory and mutually exclusive requirements
-    it("should set mandatory on exclusive child answers to false", () => {
+    // it("should set mandatory on exclusive child answers to false", () => {
     //   const question = new Question(createQuestionJSON({ answers }));
     //   expect(question).toMatchObject({
     //     mandatory: true,
@@ -783,7 +783,7 @@ describe("Question", () => {
       ]);
     });
 
-    it("should have multiple options in the mutually exclusive answer", () => {
+    it("should have a multiple options in the mutually exclusive answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers).options).toEqual([
         {
