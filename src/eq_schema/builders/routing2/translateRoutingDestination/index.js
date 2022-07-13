@@ -1,8 +1,13 @@
 const { flatMap, get, findIndex, isNil } = require("lodash");
+const { getPageById } = require("../../../../utils/functions/pageGetters");
 
 const getAbsoluteDestination = (destination, ctx) => {
-  if (destination.pageId) {
+  const page = getPageById(ctx, destination.pageId);
+  if (destination.pageId && page.pageType !== "ListCollectorPage") {
     return { block: `block${destination.pageId}` };
+  }
+  if (destination.pageId && page.pageType === "ListCollectorPage") {
+    return { block: `block-driving${destination.pageId}` };
   }
 
   // Get first folder in the section when routing to sections
@@ -55,7 +60,6 @@ const getLogicalDestination = (pageId, { logical }, ctx) => {
   } else if (logical === "NextPage") {
     return getNextPageDestination(pageId, ctx);
   }
-
 
   throw new Error(`${logical} is not a valid destination type`);
 };
