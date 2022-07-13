@@ -6,10 +6,21 @@ const {
 
 describe("Translation of a routing destination", () => {
   it("should translate an absolute destination to another Page", () => {
+    const ctx = {
+      questionnaireJson: {
+        sections: [{ folders: [{ pages: [{ id: "2" }] }] }],
+      },
+    };
     const authorDestination = {
       pageId: "2",
     };
-    expect(translateRoutingDestination(authorDestination)).toMatchObject({
+    expect(
+      translateRoutingDestination(
+        authorDestination,
+        authorDestination.pageId,
+        ctx
+      )
+    ).toMatchObject({
       block: "block2",
     });
   });
