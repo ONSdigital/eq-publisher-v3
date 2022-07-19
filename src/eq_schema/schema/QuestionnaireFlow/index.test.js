@@ -25,19 +25,6 @@ describe("questionnaire_flow", () => {
     });
   });
 
-  it("should build linear questionnaire_flow with summary and collapsible", () => {
-    questionnaire.collapsibleSummary = true
-    hub = new questionnaireFlow(questionnaire);
-    expect(hub).toMatchObject({
-      type: "Linear",
-      options: {
-        summary:{
-          collapsible:true
-        }
-      }
-    });
-  });
-
   it("should build hub questionnaire_flow with no mandatory sections", () => {
     questionnaire.hub = true
     hub = new questionnaireFlow(questionnaire);
