@@ -3,14 +3,9 @@ const { isEmpty, reject, flatten, uniqWith, isEqual } = require("lodash");
 const {
   buildAuthorConfirmationQuestion,
 } = require("../../builders/confirmationPage/ConfirmationPage");
-const { buildContents } = require("../../../utils/builders");
-
 class Group {
   constructor(section, ctx) {
     this.id = `group${section.id}`;
-    if (section.summaryTitle) {
-      this.title = buildContents(section.summaryTitle, ctx);
-    }
     this.blocks = this.buildBlocks(section, ctx);
 
     if (!isEmpty(ctx.routingGotos)) {

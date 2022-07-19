@@ -16,7 +16,6 @@ describe("Group", () => {
         title: "Folder 1",
         introductionTitle: "",
         introductionContent: "",
-        summaryTitle: "Folder 1",
         pages: [
           {
             id: "2",
@@ -34,7 +33,6 @@ describe("Group", () => {
 
     expect(group).toMatchObject({
       id: "group1",
-      title: "Folder 1",
       blocks: [expect.any(Block)],
     });
   });
@@ -43,21 +41,18 @@ describe("Group", () => {
     const createGroupsJSON = () => [
       {
         id: 1,
-        summaryTitle: "Group 1",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
       },
       {
         id: 2,
-        summaryTitle: "Group 2",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
       },
       {
         id: 3,
-        summaryTitle: "Group 3",
         pages: [],
         introductionTitle: "",
         introductionContent: "",
@@ -86,10 +81,9 @@ describe("Group", () => {
       );
 
       const expectedrunnerJson = [
-        { id: "group1", title: "Group 1", blocks: [] },
+        { id: "group1", blocks: [] },
         {
           id: "group2",
-          title: "Group 2",
           blocks: [],
           skip_conditions: [
             { when: { id: "answer1", condition: "equals", value: "Goto End" } },
@@ -97,7 +91,6 @@ describe("Group", () => {
         },
         {
           id: "group3",
-          title: "Group 3",
           blocks: [],
           skip_conditions: [
             { when: { id: "answer1", condition: "equals", value: "Goto End" } },
@@ -141,10 +134,9 @@ describe("Group", () => {
       );
 
       const expectedrunnerJson = [
-        { id: "group1", title: "Group 1", blocks: [] },
+        { id: "group1", blocks: [] },
         {
           id: "group2",
-          title: "Group 2",
           blocks: [],
           skip_conditions: [
             { when: { id: "answer1", condition: "equals", value: "Goto End" } },
@@ -159,7 +151,6 @@ describe("Group", () => {
         },
         {
           id: "group3",
-          title: "Group 3",
           blocks: [],
           skip_conditions: [
             { when: { id: "answer1", condition: "equals", value: "Goto End" } },
