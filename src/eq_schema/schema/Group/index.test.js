@@ -448,9 +448,9 @@ describe("Group", () => {
       const resultantJson = new Group(folder, ctx);
       expect(resultantJson.blocks[1].question.description).toEqual([
         {
-          text: "{checkboxAnswers}",
+          text: "{checkbox_answers}",
           placeholders: [{
-            placeholder: "checkboxAnswers",
+            placeholder: "checkbox_answers",
             transforms: [{
               arguments: {
                 list_to_format: {
