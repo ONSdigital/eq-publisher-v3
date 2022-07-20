@@ -48,10 +48,10 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
   };
 
   const checkBoxTransform = [{
-    text: "{checkboxAnswers}",
+    text: "{checkbox_answers}",
     placeholders: [
       {
-        placeholder: "checkboxAnswers",
+        placeholder: "checkbox_answers",
         transforms: [
           {
             transform: "format_list",
