@@ -112,15 +112,18 @@ class Answer {
 
     if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
       if (answer.type === RADIO) {
-         answer.options.map((option) => (option.dynamicAnswer === true)
-         &&
-         (this.dynamic_options = Answer.buildDynamicAnswer(option) )
+        answer.options.map(
+          (option) =>
+            option.dynamicAnswer === true &&
+            (this.dynamic_options = Answer.buildDynamicOption(option))
         );
       }
-      this.options = answer.options.map((option) =>
-        Answer.buildOption(option, answer, ctx)
-      );
-      
+      this.options = [];
+      answer.options.forEach((option) => {
+        if (!option.dynamicAnswer) {
+          this.options.push(Answer.buildOption(option, answer, ctx));
+        }
+      });
     }
   }
 
@@ -214,20 +217,17 @@ class Answer {
     return;
   }
 
-  static buildDynamicAnswer(
-    { dynamicAnswerID}
-  ) {
-
+  static buildDynamicOption({ dynamicAnswerID }) {
     const DynamicOption = {
       values: {
         source: "answers",
         identifier: `answer${dynamicAnswerID}`,
       },
       transform: {
-        "option-label-from-value": ["self", `answer${dynamicAnswerID}`]
-      }
+        "option-label-from-value": ["self", `answer${dynamicAnswerID}`],
+      },
     };
-    return DynamicOption
+    return DynamicOption;
   }
 
   static buildOption(
