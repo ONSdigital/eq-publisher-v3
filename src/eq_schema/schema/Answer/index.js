@@ -111,9 +111,16 @@ class Answer {
     }
 
     if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
+      if (answer.type === RADIO) {
+         answer.options.map((option) => (option.dynamicAnswer === true)
+         &&
+         (this.dynamic_options = Answer.buildDynamicAnswer(option) )
+        );
+      }
       this.options = answer.options.map((option) =>
         Answer.buildOption(option, answer, ctx)
       );
+      
     }
   }
 
@@ -205,6 +212,22 @@ class Answer {
       };
     }
     return;
+  }
+
+  static buildDynamicAnswer(
+    { dynamicAnswerID}
+  ) {
+
+    const DynamicOption = {
+      value: {
+        source: "answers",
+        identifier: `answer${dynamicAnswerID}`,
+      },
+      transform: {
+        option_label_from_value: ["self", `answer${dynamicAnswerID}`]
+      }
+    };
+    return DynamicOption
   }
 
   static buildOption(
