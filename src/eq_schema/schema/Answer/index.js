@@ -219,12 +219,12 @@ class Answer {
   ) {
 
     const DynamicOption = {
-      value: {
+      values: {
         source: "answers",
         identifier: `answer${dynamicAnswerID}`,
       },
       transform: {
-        option_label_from_value: ["self", `answer${dynamicAnswerID}`]
+        "option-label-from-value": ["self", `answer${dynamicAnswerID}`]
       }
     };
     return DynamicOption
