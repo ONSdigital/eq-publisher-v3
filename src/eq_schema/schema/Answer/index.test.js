@@ -807,22 +807,23 @@ describe("Answer", () => {
   });
 
   describe("converting dynamic option", () => {
-    const answer = new Answer(
-      createAnswerJSON({
-        type: RADIO,
-        options: [
-          {
-            id: 1,
-            label: "Option one",
-            description: "A short description",
-            dynamicAnswer: true,
-            dynamicAnswerID: 3,
-          },
-        ],
-      })
-    );
+  
 
     it("it should format dynamic options correctly", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: RADIO,
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+              description: "A short description",
+              dynamicAnswer: true,
+              dynamicAnswerID: 3,
+            },
+          ],
+        })
+      );
       expect(answer.dynamic_options).toMatchObject({
         values: {
           source: "answers",
