@@ -818,11 +818,6 @@ describe("Answer", () => {
             dynamicAnswer: true,
             dynamicAnswerID: 3,
           },
-          {
-            id: 2,
-            label: "Option two",
-            description: "Another description",
-          },
         ],
       })
     );
@@ -837,6 +832,53 @@ describe("Answer", () => {
           "option-label-from-value": ["self", "answer3"],
         },
       });
+    });
+
+    it("should add a dynamic option as well as normal options for radio answers", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: RADIO,
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+            },
+            {
+              id: 2,
+              label: "Option two",
+              description: "Another description",
+              dynamicAnswer: true,
+              dynamicAnswerID: 4,
+            },
+            {
+              id: 3,
+              label: "Option three",
+              description: "A short description",
+            },
+          ],
+        })
+      );
+      expect(answer.dynamic_options).toEqual({
+        values: {
+          source: "answers",
+          identifier: "answer4",
+        },
+        transform: {
+          "option-label-from-value": ["self", "answer4"],
+        },
+      });
+
+      expect(answer.options).toEqual([
+        {
+          label: "Option one",
+          value: "Option one",
+        },
+        {
+          label: "Option three",
+          value: "Option three",
+          description: "A short description",
+        },
+      ]);
     });
   });
 
