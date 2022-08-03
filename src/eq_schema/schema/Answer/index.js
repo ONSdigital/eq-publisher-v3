@@ -114,7 +114,7 @@ class Answer {
       if (answer.type === RADIO) {
         answer.options.map(
           (option) =>
-            option.dynamicAnswer === true &&
+            option.dynamicAnswer &&
             (this.dynamic_options = Answer.buildDynamicOption(option))
         );
       }
