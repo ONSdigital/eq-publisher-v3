@@ -806,6 +806,40 @@ describe("Answer", () => {
     });
   });
 
+  describe("converting dynamic option", () => {
+    const answer = new Answer(
+      createAnswerJSON({
+        type: RADIO,
+        options: [
+          {
+            id: 1,
+            label: "Option one",
+            description: "A short description",
+            dynamicAnswer: true,
+            dynamicAnswerID: 3,
+          },
+          {
+            id: 2,
+            label: "Option two",
+            description: "Another description",
+          },
+        ],
+      })
+    );
+
+    it("it should format dynamic options correctly", () => {
+      expect(answer.dynamic_options).toMatchObject({
+        values: {
+          source: "answers",
+          identifier: "answer3",
+        },
+        transform: {
+          "option-label-from-value": ["self", "answer3"],
+        },
+      });
+    });
+  });
+
   describe("converting options", () => {
     it("should not add options for basic answer types", () => {
       const answer = new Answer(createAnswerJSON());
