@@ -806,6 +806,83 @@ describe("Answer", () => {
     });
   });
 
+  describe("converting dynamic option", () => {
+  
+
+    it("it should format dynamic options correctly", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: RADIO,
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+              description: "A short description",
+              dynamicAnswer: true,
+              dynamicAnswerID: 3,
+            },
+          ],
+        })
+      );
+      expect(answer.dynamic_options).toMatchObject({
+        values: {
+          source: "answers",
+          identifier: "answer3",
+        },
+        transform: {
+          "option-label-from-value": ["self", "answer3"],
+        },
+      });
+    });
+
+    it("should add a dynamic option as well as normal options for radio answers", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: RADIO,
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+            },
+            {
+              id: 2,
+              label: "Option two",
+              description: "Another description",
+              dynamicAnswer: true,
+              dynamicAnswerID: 4,
+            },
+            {
+              id: 3,
+              label: "Option three",
+              description: "A short description",
+            },
+          ],
+        })
+      );
+      expect(answer.dynamic_options).toEqual({
+        values: {
+          source: "answers",
+          identifier: "answer4",
+        },
+        transform: {
+          "option-label-from-value": ["self", "answer4"],
+        },
+      });
+
+      expect(answer.options).toEqual([
+        {
+          label: "Option one",
+          value: "Option one",
+        },
+        {
+          label: "Option three",
+          value: "Option three",
+          description: "A short description",
+        },
+      ]);
+    });
+  });
+
   describe("converting options", () => {
     it("should not add options for basic answer types", () => {
       const answer = new Answer(createAnswerJSON());

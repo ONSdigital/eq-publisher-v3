@@ -111,9 +111,19 @@ class Answer {
     }
 
     if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
-      this.options = answer.options.map((option) =>
-        Answer.buildOption(option, answer, ctx)
-      );
+      if (answer.type === RADIO) {
+        answer.options.map(
+          (option) =>
+            option.dynamicAnswer &&
+            (this.dynamic_options = Answer.buildDynamicOption(option))
+        );
+      }
+      this.options = [];
+      answer.options.forEach((option) => {
+        if (!option.dynamicAnswer) {
+          this.options.push(Answer.buildOption(option, answer, ctx));
+        }
+      });
     }
   }
 
@@ -205,6 +215,19 @@ class Answer {
       };
     }
     return;
+  }
+
+  static buildDynamicOption({ dynamicAnswerID }) {
+    const DynamicOption = {
+      values: {
+        source: "answers",
+        identifier: `answer${dynamicAnswerID}`,
+      },
+      transform: {
+        "option-label-from-value": ["self", `answer${dynamicAnswerID}`],
+      },
+    };
+    return DynamicOption;
   }
 
   static buildOption(
