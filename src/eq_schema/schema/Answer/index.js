@@ -10,12 +10,13 @@ const {
   TEXTAREA,
   CHECKBOX,
   RADIO,
+  MUTUALLY_EXCLUSIVE,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 
 const { buildContents } = require("../../../utils/builders");
 
-const multipleChoiceAnswers = [CHECKBOX, RADIO];
+const multipleChoiceAnswers = [CHECKBOX, RADIO, MUTUALLY_EXCLUSIVE];
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);

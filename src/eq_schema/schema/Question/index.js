@@ -1,4 +1,4 @@
-const { find, get, flow, concat, last, filter } = require("lodash/fp");
+const { find, get, flow, concat, last } = require("lodash/fp");
 const { set, remove, cloneDeep } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
@@ -10,7 +10,11 @@ const {
 
 const Answer = require("../Answer");
 
-const { DATE, DATE_RANGE } = require("../../../constants/answerTypes");
+const {
+  DATE,
+  DATE_RANGE,
+  MUTUALLY_EXCLUSIVE,
+} = require("../../../constants/answerTypes");
 
 const findDateRange = flow(get("answers"), find({ type: DATE_RANGE }));
 
@@ -84,15 +88,16 @@ class Question {
           );
         }
       }
-    } else if (mutuallyExclusive) {
+    } else if (
+      question.answers.some((answer) => answer.type === MUTUALLY_EXCLUSIVE)
+    ) {
       this.type = "MutuallyExclusive";
-      this.mandatory = get("properties.required", mutuallyExclusive);
+      this.mandatory = false;
       this.answers = this.buildMutuallyExclusiveAnswers(
         mutuallyExclusive,
         question.answers,
         ctx
       );
-      delete this.answers[1].label;
     } else if (question.totalValidation && question.totalValidation.enabled) {
       this.type = "Calculated";
       this.answers = this.buildAnswers(question.answers, ctx);
@@ -161,13 +166,34 @@ class Question {
   }
 
   buildMutuallyExclusiveAnswers(mutuallyExclusive, answers, ctx) {
-    Object.assign(mutuallyExclusive.properties, { required: false });
-    const mutuallyExclusiveAnswer = new Answer({
-      ...mutuallyExclusive,
-      id: `${mutuallyExclusive.id}-exclusive`,
-      type: "Checkbox",
-      options: filter({ mutuallyExclusive: true }, mutuallyExclusive.options),
+    let mutuallyExclusiveAnswer;
+    answers.forEach((answer) => {
+      if (answer.type === MUTUALLY_EXCLUSIVE && answer.options.length === 1) {
+        answers = answers.filter(
+          (answer) => answer.type !== MUTUALLY_EXCLUSIVE
+        );
+        mutuallyExclusiveAnswer = new Answer({
+          ...answer,
+          id: `${answer.id}-exclusive`,
+          type: "Checkbox",
+        });
+      } else if (
+        answer.type === MUTUALLY_EXCLUSIVE &&
+        answer.options.length > 1
+      ) {
+        answers = answers.filter(
+          (answer) => answer.type !== MUTUALLY_EXCLUSIVE
+        );
+        mutuallyExclusiveAnswer = new Answer({
+          ...answer,
+          id: `${answer.id}-exclusive`,
+          type: "Radio",
+        });
+      } else {
+        return;
+      }
     });
+
     return concat(this.buildAnswers(answers, ctx), mutuallyExclusiveAnswer);
   }
 
