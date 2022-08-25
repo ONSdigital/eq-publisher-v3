@@ -92,7 +92,7 @@ class Question {
       question.answers.some((answer) => answer.type === MUTUALLY_EXCLUSIVE)
     ) {
       this.type = "MutuallyExclusive";
-      this.mandatory = false;
+      this.mandatory = question.answers[0].properties.required;
       this.answers = this.buildMutuallyExclusiveAnswers(
         mutuallyExclusive,
         question.answers,
@@ -168,6 +168,7 @@ class Question {
   buildMutuallyExclusiveAnswers(mutuallyExclusive, answers, ctx) {
     let mutuallyExclusiveAnswer;
     answers.forEach((answer) => {
+      answer.properties.required = false;
       if (answer.type === MUTUALLY_EXCLUSIVE && answer.options.length === 1) {
         answers = answers.filter(
           (answer) => answer.type !== MUTUALLY_EXCLUSIVE
