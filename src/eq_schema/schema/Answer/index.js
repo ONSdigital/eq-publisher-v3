@@ -235,7 +235,7 @@ class Answer {
     { properties, type },
     ctx
   ) {
-    const newLabel = label.replace(/[^a-zA-Z0-9]/g, "");
+    const newLabel = label.replace(/[^a-zA-Z0-9 ]/g, "");
 
     const option = {
       label: buildContents(label, ctx),
