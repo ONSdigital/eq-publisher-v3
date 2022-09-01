@@ -235,9 +235,12 @@ class Answer {
     { properties, type },
     ctx
   ) {
+    const newLabel = label.replace(/[-£@!$%^&*()_+|~=`{}[\]:";'<>?,./]/g, "");
+
+    console.log("newLabel :>> ", newLabel);
     const option = {
       label: buildContents(label, ctx),
-      value: buildContents(label, ctx, true),
+      value: newLabel,
     };
 
     if (q_code) {
