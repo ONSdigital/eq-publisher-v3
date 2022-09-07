@@ -13,6 +13,7 @@ const {
   MUTUALLY_EXCLUSIVE,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
+const { getValueSource } = require("../../builders/valueSource")
 
 const { buildContents } = require("../../../utils/builders");
 
@@ -70,8 +71,8 @@ class Answer {
       if ([NUMBER, CURRENCY, PERCENTAGE, UNIT].includes(answer.type)) {
         const { minValue, maxValue } = answer.validation;
 
-        this.buildNumberValidation(minValue, "minimum");
-        this.buildNumberValidation(maxValue, "maximum");
+        this.buildNumberValidation(minValue, "minimum", ctx);
+        this.buildNumberValidation(maxValue, "maximum", ctx);
       } else if (answer.type === DATE) {
         const { earliestDate, latestDate } = answer.validation;
 
@@ -128,13 +129,13 @@ class Answer {
     }
   }
 
-  buildNumberValidation(validationRule, validationType) {
+  buildNumberValidation(validationRule, validationType, ctx) {
     const { enabled } = validationRule;
     if (!enabled) {
       return;
     }
 
-    const comparator = Answer.buildComparator(validationRule);
+    const comparator = Answer.buildComparator(validationRule, ctx);
 
     if (isNil(comparator)) {
       return;
@@ -196,10 +197,7 @@ class Answer {
         return;
       }
       return {
-        value: {
-          source: "answers",
-          identifier: `answer${previousAnswer}`,
-        },
+        value: getValueSource(ctx, previousAnswer),
       };
     }
 

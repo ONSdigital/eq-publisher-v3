@@ -9,6 +9,7 @@ const {
 } = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
+const { getValueSource } = require("../../builders/valueSource")
 
 const {
   DATE,
@@ -104,9 +105,9 @@ class Question {
       this.calculations = question.totalValidation.allowUnanswered
         ? [
             this.buildUnansweredCalculation(question.answers),
-            this.buildCalculation(question.totalValidation, question.answers),
+            this.buildCalculation(question.totalValidation, question.answers, ctx),
           ]
-        : [this.buildCalculation(question.totalValidation, question.answers)];
+        : [this.buildCalculation(question.totalValidation, question.answers, ctx)];
     } else {
       this.type = "General";
       this.answers = this.buildAnswers(question.answers, ctx);
@@ -198,7 +199,7 @@ class Question {
     return concat(this.buildAnswers(answers, ctx), mutuallyExclusiveAnswer);
   }
 
-  buildCalculation(totalValidation, answers) {
+  buildCalculation(totalValidation, answers, ctx) {
     const GREATER_THAN = "greater than";
     const LESS_THAN = "less than";
     const EQUALS = "equals";
@@ -214,7 +215,7 @@ class Question {
     const rightSide =
       totalValidation.entityType === "Custom"
         ? { value: totalValidation.custom }
-        : { answer_id: `answer${totalValidation.previousAnswer}` };
+        : { value: getValueSource(ctx, totalValidation.previousAnswer)} ;
 
     return {
       calculation_type: "sum",

@@ -24,7 +24,23 @@ describe("Question", () => {
       },
       options
     );
-
+  const ctx = {
+    questionnaireJson: {
+      sections: [{
+        folders: [{
+          pages: [{
+            id: "123",
+            pageType: "QuestionPage",
+            answers: [
+              {
+                id: "20"
+              }
+            ]
+          }]
+        }]
+      }]
+    }
+  }
   const createPipedFormat = (placeholder, source) => ({
     text: `{${placeholder}}`,
     placeholders: [
@@ -923,15 +939,14 @@ describe("Question", () => {
     it("should set the answer_id to the previous answer when entityType is PreviousAnswer", () => {
       validation.entityType = "PreviousAnswer";
       validation.custom = 10;
-      validation.previousAnswer = 20;
+      validation.previousAnswer = "20";
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
         })
-      );
-
-      expect(question.calculations[0].value).not.toBeDefined();
-      expect(question.calculations[0].answer_id).toEqual("answer20");
+      , ctx);
+      expect(question.calculations[0].value.identifier).toEqual("answer20");
+      expect(question.calculations[0].value.source).toEqual("answers");
     });
   });
 });
