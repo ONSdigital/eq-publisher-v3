@@ -19,15 +19,12 @@ const getValueSource = (ctx, sourceId) => {
         source: "calculated_summary"
       }
     }
-    else {
-      return {
-        identifier: `answer${sourceId}`,
-        source: "answers"
-      }
-    }
   }
-  return {};
-}
+  return {
+    identifier: `answer${sourceId}`,
+    source: "answers"
+  }
+};
 
 module.exports = { 
     getValueSource 
