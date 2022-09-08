@@ -41,13 +41,13 @@ describe("Question", () => {
       }]
     }
   }
-  const createPipedFormat = (placeholder, source) => ({
+  const createPipedFormat = (placeholder, identifier, source) => ({
     text: `{${placeholder}}`,
     placeholders: [
       {
         placeholder,
         value: {
-          identifier: placeholder,
+          identifier: identifier,
           source,
         },
       },
@@ -605,7 +605,7 @@ describe("Question", () => {
         }),
         createContext()
       );
-      expect(question.title).toEqual(createPipedFormat("answer1", "answers"));
+      expect(question.title).toEqual(createPipedFormat("1", "answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
@@ -620,7 +620,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.guidance.contents[0]).toEqual({
-        description: createPipedFormat("my_metadata", "metadata"),
+        description: createPipedFormat("my_metadata", "my_metadata", "metadata"),
       });
     });
 
@@ -645,7 +645,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual([
-        createPipedFormat("answer1", "answers"),
+        createPipedFormat("1", "answer1", "answers"),
       ]);
     });
   });

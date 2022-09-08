@@ -15,13 +15,13 @@ describe("Block", () => {
       block
     );
 
-  const createPipedFormat = (placeholder, source) => ({
+  const createPipedFormat = (placeholder, identifier, source) => ({
     text: `{${placeholder}}`,
     placeholders: [
       {
         placeholder,
         value: {
-          identifier: placeholder,
+          identifier: identifier,
           source
         }
       }
@@ -139,7 +139,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("answer1", "answers")
+        createPipedFormat("1", "answer1", "answers")
       );
     });
 
@@ -152,7 +152,7 @@ describe("Block", () => {
       );
 
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("answer1", "answers")
+        createPipedFormat("1", "answer1", "answers")
       );
     });
 
@@ -164,7 +164,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.contents[0].list).toEqual([
-        createPipedFormat("answer1", "answers"),
+        createPipedFormat("1", "answer1", "answers"),
         "Some Value"
       ]);
     });
