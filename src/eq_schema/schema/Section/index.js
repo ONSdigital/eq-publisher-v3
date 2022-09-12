@@ -24,9 +24,7 @@ class Section {
     if (section.title) {
       this.title = getText(section.title);
     }
-    if ("showOnHub" in section) {
-      this.show_on_hub = section.showOnHub;
-    }
+   
     const pages = flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
         folder.skipConditions
@@ -50,6 +48,10 @@ class Section {
         return Section.buildItem(item, pages, ctx);
       });
       this.summary.items = items;
+    }
+
+    if ("showOnHub" in section) {
+      this.show_on_hub = section.showOnHub;
     }
 
     this.groups = [new Group({ ...section, pages }, ctx)];
