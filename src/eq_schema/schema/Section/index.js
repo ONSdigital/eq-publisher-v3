@@ -1,12 +1,25 @@
 const Group = require("../Group");
+const convertPipes = require("../../../utils/convertPipes");
+const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
 const { buildIntroBlock } = require("../Block");
 const { flatMap } = require("lodash");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
+const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
+const getListCollectorQuestion = (pages, item) => {
+  const title = [];
+  pages.find((page) => {
+    if (page.listId === item.id) {
+      title.push(page.addItemTitle);
+    }
+  });
+  return title;
+};
 class Section {
-  constructor(section, ctx) {
+  constructor(section, collectonLists, ctx) {
     this.id = `section${section.id}`;
     if (section.title) {
       this.title = getText(section.title);
@@ -27,6 +40,17 @@ class Section {
           : page
       )
     );
+
+    this.summary = {
+      show_on_completion: section.sectionSummary || false,
+      collapsible: false,
+    };
+    if (collectonLists) {
+      const items = collectonLists.lists.map((item) => {
+        return Section.buildItem(item, pages, ctx);
+      });
+      this.summary.items = items;
+    }
 
     this.groups = [new Group({ ...section, pages }, ctx)];
 
@@ -53,11 +77,21 @@ class Section {
         ctx
       );
     }
+  }
 
-    this.summary = {
-      show_on_completion: section.sectionSummary || false,
-      collapsible: false,
+  static buildItem(item, pages, ctx) {
+    const ListCollectorsSummmary = {
+      type: "List",
+      for_list: item.listName,
+      title: {
+        text: processPipe(ctx)(getListCollectorQuestion(pages, item)[0]),
+        // to do : need to get the right list id for the list item
+        //considaer if the id is the same fr 2 diff listcollector pages
+      },
+      add_link_text: "Add item to this list",
+      empty_list_text: "There are no items",
     };
+    return ListCollectorsSummmary;
   }
 }
 

@@ -51,7 +51,7 @@ class Questionnaire {
 
     this.questionnaire_flow = this.buildQuestionnaireFlow(questionnaireJson);
 
-    this.sections = this.buildSections(questionnaireJson.sections, ctx);
+    this.sections = this.buildSections(questionnaireJson.sections, questionnaireJson.collectionLists, ctx);
 
     if (questionnaireJson.hub) {
       this.buildIntroduction(questionnaireJson.introduction, ctx);
@@ -123,8 +123,8 @@ class Questionnaire {
     this.sections[0].groups.unshift(introBlock);
   }
 
-  buildSections(sections, ctx) {
-    return sections.map((section) => new Section(section, ctx));
+  buildSections(sections, collectionLists, ctx) {
+    return sections.map((section) => new Section(section, collectionLists, ctx));
   }
 
   buildMetadata(metadata) {
