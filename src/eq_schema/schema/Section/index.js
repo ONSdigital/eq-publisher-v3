@@ -46,8 +46,6 @@ class Section {
     };
     console.log('ctx :>> ', ctx);
     if (ctx.questionnaireJson.collectionLists) {
-      //CHECK IF THE  SECONTION CONTAINS A LIST COLLECTOR AND RETURN THE ID AND FO IT FROM THERE????????
-
       const items = ctx.questionnaireJson.collectionLists.lists.map((item) => {
         return Section.buildItem(item, pages, ctx);
       });
@@ -90,8 +88,6 @@ class Section {
       type: "List",
       for_list: item.id,
       title:  processPipe(ctx)(getListCollectorQuestion(pages, item)[0]),
-        // to do : need to get the right list id for the list item
-        //considaer if the id is the same fr 2 diff listcollector pages
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
     };
