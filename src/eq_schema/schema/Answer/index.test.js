@@ -42,6 +42,17 @@ describe("Answer", () => {
           textValue: "ESSENTIAL ENTERPRISE LTD.",
         },
       ],
+      sections: [{
+        folders: [{
+          pages: [{
+            id: "123",
+            pageType: "QuestionPage",
+            answers: [{
+                id: "3"
+              }]
+          }]
+        }]
+      }]
     },
   });
 
@@ -277,7 +288,8 @@ describe("Answer", () => {
                 enabled: false,
               },
             },
-          })
+          }),
+          createContextJSON()
         );
         expect(answer.minimum).toMatchObject({
           value: { source: "answers", identifier: "answer3" },
@@ -301,7 +313,8 @@ describe("Answer", () => {
                 previousAnswer: "3",
               },
             },
-          })
+          }),
+          createContextJSON()
         );
         expect(answer.maximum).toMatchObject({
           value: { source: "answers", identifier: "answer3" },
@@ -409,7 +422,8 @@ describe("Answer", () => {
                 enabled: false,
               },
             },
-          })
+          }),
+          createContextJSON()
         );
 
         expect(answer.minimum).toMatchObject({
@@ -593,7 +607,8 @@ describe("Answer", () => {
                 enabled: false,
               },
             },
-          })
+          }),
+          createContextJSON()
         );
         expect(answer.maximum).toMatchObject({
           value: {

@@ -13,6 +13,7 @@ const {
   // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
+const { getValueSource } = require("../../eq_schema/builders/valueSource")
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
@@ -35,17 +36,23 @@ const TRANSFORM_MAP = {
 
 const placeholderObjectBuilder = (
   source,
+  placeholderName,
   identifier,
   dateFormat,
   unitType,
   fallback,
-  AnswerType
+  AnswerType,
+  ctx
 ) => {
   let valueSource;
   let argumentList;
   let placeHolder;
 
-  if (["metadata", "answers"].includes(source)) {
+  if (source === "answers") {
+    valueSource = getValueSource(ctx, identifier);
+  }
+
+  if (source === "metadata") {
     valueSource = {
       source,
       identifier,
@@ -83,7 +90,7 @@ const placeholderObjectBuilder = (
 
   if (fallback) {
     placeHolder = {
-      placeholder: removeDash(identifier),
+      placeholder: removeDash(placeholderName),
       transforms: [
         {
           transform: "first_non_empty_item",
@@ -109,7 +116,7 @@ const placeholderObjectBuilder = (
 
   if ([AnswerType] in TRANSFORM_MAP) {
     return {
-      placeholder: removeDash(identifier),
+      placeholder: removeDash(placeholderName),
       transforms: [
         {
           transform: TRANSFORM_MAP[AnswerType].format,
@@ -123,7 +130,7 @@ const placeholderObjectBuilder = (
   }
 
   return {
-    placeholder: removeDash(identifier),
+    placeholder: removeDash(placeholderName),
     value: valueSource,
   };
 };

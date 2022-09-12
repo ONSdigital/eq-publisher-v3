@@ -50,7 +50,8 @@ const PIPE_TYPES = {
       }
       return getAnswer(ctx, tempId);
     },
-    render: ({ id }) => `answer${id}`,
+    render: ({ id }) => id,
+    placeholder: ({ id }) => id,
     getType: ({ type }) => type,
     getFallback: ({ properties, id, type, advancedProperties }) => {
       if (!(type === "DateRange") || !advancedProperties) {
@@ -70,6 +71,7 @@ const PIPE_TYPES = {
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
     render: ({ key }) => `${key}`,
+    placeholder: ({ key }) => `${key}`,
     getType: ({ type }) => type,
     getFallback: ({ fallbackKey }) =>
       fallbackKey ? { source: "metadata", identifier: fallbackKey } : null,
@@ -80,6 +82,7 @@ const PIPE_TYPES = {
     },
     getType: ({ type }) => type,
     render: ({ id }) => `block${id}`,
+    placeholder: ({ id }) => `block${id}`,
     getFallback: ({ fallbackKey }) =>
       fallbackKey
         ? { source: "calculated_summary", identifier: fallbackKey }
@@ -109,10 +112,15 @@ const getPipedData = (store) => (element, ctx) => {
     return "";
   }
 
-  const output =
+  const placeholderName =
+    elementData.type === "DateRange"
+      ? pipeConfig.placeholder(elementData)
+      : pipeConfig.placeholder(entity);
+
+  const identifier =
     elementData.type === "DateRange"
       ? pipeConfig.render(elementData)
-      : pipeConfig.render(entity);
+      : pipeConfig.render(entity); 
 
   const answerType = pipeConfig.getType(entity);
 
@@ -129,16 +137,18 @@ const getPipedData = (store) => (element, ctx) => {
 
   placeholder = placeholderObjectBuilder(
     piped,
-    entity.key || output,
+    placeholderName,
+    identifier,
     dateFormat,
     unitType,
     fallback,
-    answerType
+    answerType,
+    ctx
   );
 
   store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${removeDash(output)}}`;
+  return `{${removeDash(placeholderName)}}`;
 };
 
 const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
