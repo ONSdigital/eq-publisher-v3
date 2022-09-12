@@ -21,7 +21,7 @@ describe("Block", () => {
       {
         placeholder,
         value: {
-          identifier: identifier,
+          identifier,
           source
         }
       }

@@ -22,7 +22,7 @@ const createTransformation = (
     {
       arguments: {
         [argument]: {
-          identifier: identifier,
+          identifier,
           source,
         },
         ...extra,
