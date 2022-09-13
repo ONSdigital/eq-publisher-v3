@@ -48,7 +48,7 @@ class Section {
     if (listCollectorPages.length > 0) {
       const items = listCollectorPages.map((listCollectorPage) => {
         return Section.buildItem(
-          listCollectorPage.id,
+          listCollectorPage.listId,
           listCollectorPage.addItemTitle,
           ctx
         );
@@ -88,10 +88,10 @@ class Section {
     }
   }
 
-  static buildItem(item, listCollectorTitle, ctx) {
+  static buildItem(itemId, listCollectorTitle, ctx) {
     const ListCollectorsSummmary = {
       type: "List",
-      for_list: item,
+      for_list: itemId,
       title: processPipe(ctx)(listCollectorTitle),
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
