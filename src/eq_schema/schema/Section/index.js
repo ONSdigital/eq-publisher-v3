@@ -7,17 +7,8 @@ const { buildIntroBlock } = require("../Block");
 const { flatMap } = require("lodash");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
-const getListCollectorQuestion = (pages, item) => {
-  const title = [];
-  pages.find((page) => {
-    if (page.listId === item.id) {
-      title.push(page.addItemTitle);
-    }
-  });
-  return title;
-};
+const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class Section {
   constructor(section, ctx) {
@@ -25,7 +16,7 @@ class Section {
     if (section.title) {
       this.title = getText(section.title);
     }
-   
+
     const pages = flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
         folder.skipConditions
@@ -44,11 +35,25 @@ class Section {
       show_on_completion: section.sectionSummary || false,
       collapsible: false,
     };
-    console.log('ctx :>> ', ctx);
-    if (ctx.questionnaireJson.collectionLists) {
-      const items = ctx.questionnaireJson.collectionLists.lists.map((item) => {
-        return Section.buildItem(item, pages, ctx);
+
+    const listCollectorPages = [];
+    section.folders.forEach((folder) => {
+      folder.pages.forEach((page) => {
+        if (page.pageType === "ListCollectorPage") {
+          listCollectorPages.push(page);
+        }
       });
+    });
+
+    if (listCollectorPages.length > 0) {
+      const items = listCollectorPages.map((listCollectorPage) => {
+        return Section.buildItem(
+          listCollectorPage.id,
+          listCollectorPage.addItemTitle,
+          ctx
+        );
+      });
+
       this.summary.items = items;
     }
 
@@ -83,11 +88,11 @@ class Section {
     }
   }
 
-  static buildItem(item, pages, ctx) {
+  static buildItem(item, listCollectorTitle, ctx) {
     const ListCollectorsSummmary = {
       type: "List",
-      for_list: item.id,
-      title:  processPipe(ctx)(getListCollectorQuestion(pages, item)[0]),
+      for_list: item,
+      title: processPipe(ctx)(listCollectorTitle),
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
     };
