@@ -154,4 +154,82 @@ describe("Section", () => {
       expect(section.enabled).toBeFalsy();
     });
   });
+
+  describe("Section Summary ", () => {
+    const listCollectorSection = {
+      id: "1",
+      title: "Section 1",
+      folders: [
+        {
+          id: "folder-1",
+          pages: [
+            {
+              id: "2",
+              listId: "3",
+              pageType: "ListCollectorPage",
+              addItemTitle: "<p>What is the name of this person</p>",
+            },
+          ],
+        },
+      ],
+      sectionSummary: true,
+    };
+    const createListCollectorCtx = () => ({
+      routingGotos: [],
+      questionnaireJson: {
+        navigation: true,
+        sections: [
+          {
+            id: "1",
+            title: "Section 1",
+            folders: [
+              {
+                id: "folder-1",
+                pages: [
+                  {
+                    id: "2",
+                    listId: "3",
+                    pageType: "ListCollectorPage",
+                    addItemTitle: "<p>What is the name of this person</p>",
+                  },
+                ],
+              },
+            ],
+            sectionSummary: true,
+          },
+        ],
+        collectionLists: {
+          id: "list1",
+          lists: [
+            {
+              id: "3",
+              answers: [],
+            },
+          ],
+        },
+      },
+    });
+
+    it("Should add summary if there is a list collector page", () => {
+      const section = new Section(
+        listCollectorSection,
+        createListCollectorCtx()
+      );
+      expect(section).toMatchObject({
+        id: "section1",
+        summary: {
+          show_on_completion: true,
+          items: [
+            {
+              type: "List",
+              for_list: "3",
+              title: "What is the name of this person",
+              add_link_text: "Add item to this list",
+              empty_list_text: "There are no items",
+            },
+          ],
+        },
+      });
+    });
+  });
 });
