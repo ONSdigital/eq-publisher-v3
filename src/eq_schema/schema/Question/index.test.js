@@ -16,6 +16,7 @@ describe("Question", () => {
         answers: [
           {
             id: "1",
+            label: "A1",
             properties: {
               required: true,
             },
@@ -605,7 +606,7 @@ describe("Question", () => {
         }),
         createContext()
       );
-      expect(question.title).toEqual(createPipedFormat("1", "answer1", "answers"));
+      expect(question.title).toEqual(createPipedFormat("untitled_answer", "answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
@@ -645,7 +646,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual([
-        createPipedFormat("1", "answer1", "answers"),
+        createPipedFormat("untitled_answer", "answer1", "answers"),
       ]);
     });
   });

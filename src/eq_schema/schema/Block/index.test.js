@@ -139,7 +139,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("1", "answer1", "answers")
+        createPipedFormat("untitled_answer", "answer1", "answers")
       );
     });
 
@@ -152,7 +152,7 @@ describe("Block", () => {
       );
 
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("1", "answer1", "answers")
+        createPipedFormat("untitled_answer", "answer1", "answers")
       );
     });
 
@@ -164,7 +164,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.contents[0].list).toEqual([
-        createPipedFormat("1", "answer1", "answers"),
+        createPipedFormat("untitled_answer", "answer1", "answers"),
         "Some Value"
       ]);
     });
