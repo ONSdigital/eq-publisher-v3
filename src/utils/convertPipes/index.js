@@ -151,7 +151,7 @@ const getPipedData = (store) => (element, ctx) => {
     answerType,
     ctx
   );
-  // console.log("placeholder is..." + JSON.stringify(placeholder));
+
   store.placeholders = [...store.placeholders, placeholder];
 
   return `{${removeDash(placeholderName)}}`;
