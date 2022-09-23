@@ -56,25 +56,28 @@ const PIPE_TYPES = {
     getFallback: ({ properties, id, type, options, advancedProperties }) => {
       if (type === "Radio" && options) {
         const dynamicOption = find(options, { dynamicAnswer: true });
-        if (dynamicOption) {
+        if (dynamicOption && dynamicOption.dynamicAnswerID) {
           return {
             source: "answers",
             identifier: `answer${dynamicOption.dynamicAnswerID}`,
           };
         }
       }
-      if (!(type === "DateRange") || !advancedProperties) {
-        return null;
+      if (
+        type === "DateRange" &&
+        advancedProperties &&
+        properties &&
+        properties.fallback &&
+        properties.fallback.enabled
+      ) {
+        return {
+          source: "metadata",
+          identifier: id.endsWith("from")
+            ? properties.fallback.start
+            : properties.fallback.end,
+        };
       }
-      if (!properties || !properties.fallback || !properties.fallback.enabled) {
-        return null;
-      }
-      return {
-        source: "metadata",
-        identifier: id.endsWith("from")
-          ? properties.fallback.start
-          : properties.fallback.end,
-      };
+      return null;
     },
   },
   metadata: {
