@@ -59,18 +59,20 @@ const createContext = (metadata = []) => ({
             pages: [
               {
                 answers: [
-                  { id: `1`, type: "Text" },
-                  { id: `2`, type: "Currency" },
-                  { id: `3`, type: "DateRange" },
+                  { id: `1`, label: "Question One", type: "Text" },
+                  { id: `2`, label: "", type: "Currency" },
+                  { id: `3`, label: "!It's Q3?", type: "DateRange" },
                   {
                     id: `4`,
+                    label: "#Q4Don'tDoIt", 
                     type: "Date",
                     properties: { format: "dd/mm/yyyy" },
                   },
-                  { id: `5`, type: "Number" },
-                  { id: `6`, type: "Unit", properties: { unit: "Kilometres" } },
+                  { id: `5`, label: "label of excellence", type: "Number" },
+                  { id: `6`, label: "BACWards 6q", type: "Unit", properties: { unit: "Kilometres" } },
                   {
                     id: `7`,
+                    label: "Q7 Checkbox Options?",
                     type: "Checkbox",
                     options: [
                       {
@@ -141,9 +143,9 @@ describe("convertPipes", () => {
       const html = createPipe();
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "{1}",
+          "{Question_One}",
           createPlaceholders({
-            placeholder: "1",
+            placeholder: "Question_One",
             identifier: "answer1",
             source: "answers",
           })
@@ -158,14 +160,14 @@ describe("convertPipes", () => {
 
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "{1}{2}",
+          "{Question_One}{untitled_answer}",
           createPlaceholders({
-            placeholder: "1",
+            placeholder: "Question_One",
             identifier: "answer1",
             source: "answers",
           }),
           createTransformation({
-            placeholder: "2",
+            placeholder: "untitled_answer",
             identifier:  "answer2",
             source: "answers",
             argument: "number",
@@ -182,14 +184,14 @@ describe("convertPipes", () => {
 
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "hello {1}{2} world",
+          "hello {Question_One}{untitled_answer} world",
           createPlaceholders({
-            placeholder: "1",
+            placeholder: "Question_One",
             identifier: "answer1",
             source: "answers",
           }),
           createTransformation({
-            placeholder: "2",
+            placeholder: "untitled_answer",
             identifier: "answer2",
             source: "answers",
             argument: "number",
@@ -204,10 +206,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "3" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{3}",
+            "{Its_Q3}",
             createTransformation(
               {
-                placeholder: "3",
+                placeholder: "Its_Q3",
                 identifier: "answer3",
                 source: "answers",
                 argument: "date_to_format",
@@ -223,10 +225,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "4" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{4}",
+            "{Q4DontDoIt}",
             createTransformation(
               {
-                placeholder: "4",
+                placeholder: "Q4DontDoIt",
                 identifier: "answer4",
                 source: "answers",
                 argument: "date_to_format",
@@ -242,9 +244,9 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "2" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{2}",
+            "{untitled_answer}",
             createTransformation({
-              placeholder: "2",
+              placeholder: "untitled_answer",
               identifier: "answer2",
               source: "answers",
               argument: "number",
@@ -258,9 +260,9 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "5" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{5}",
+            "{label_of_excellence}",
             createTransformation({
-              placeholder: "5",
+              placeholder: "label_of_excellence",
               identifier: "answer5",
               source: "answers",
               argument: "number",
@@ -274,10 +276,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "7" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{7}",
+            "{Q7_Checkbox_Options}",
             createCheckboxTransformation(
               {
-                placeholder: "7",
+                placeholder: "Q7_Checkbox_Options",
                 transform: "concatenate_list",
               },
               {
