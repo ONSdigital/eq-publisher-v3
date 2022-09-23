@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { flatMap, includes, compact } = require("lodash");
+const { flatMap, includes, compact, find } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
 const { placeholderObjectBuilder } = require("./PlaceholderObjectBuilder");
 
@@ -54,11 +54,14 @@ const PIPE_TYPES = {
     placeholder: ({ id }) => id,
     getType: ({ type }) => type,
     getFallback: ({ properties, id, type, options, advancedProperties }) => {
-      if (type === "Radio" && options[0].dynamicAnswer) {
-        return {
-          source: "answers",
-          identifier: `answer${options[0].dynamicAnswerID}`,
-        };
+      if (type === "Radio" && options) {
+        const dynamicOption = find(options, { dynamicAnswer: true });
+        if (dynamicOption) {
+          return {
+            source: "answers",
+            identifier: `answer${dynamicOption.dynamicAnswerID}`,
+          };
+        }
       }
       if (!(type === "DateRange") || !advancedProperties) {
         return null;
@@ -151,7 +154,7 @@ const getPipedData = (store) => (element, ctx) => {
     answerType,
     ctx
   );
-
+  console.log("placeholder is..." + JSON.stringify(placeholder));
   store.placeholders = [...store.placeholders, placeholder];
 
   return `{${removeDash(placeholderName)}}`;
