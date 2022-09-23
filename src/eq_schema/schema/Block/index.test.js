@@ -124,7 +124,7 @@ describe("Block", () => {
           folders: [
             {
               id: "folder-1",
-              pages: [{ answers: [{ id: `1`, type: "Text" }] }]
+              pages: [{ answers: [{ id: `1`, label: "Answer 1", type: "Text" }] }]
             }
           ],
         }]
@@ -139,7 +139,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("untitled_answer", "answer1", "answers")
+        createPipedFormat("Answer_1", "answer1", "answers")
       );
     });
 
@@ -152,7 +152,7 @@ describe("Block", () => {
       );
 
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("untitled_answer", "answer1", "answers")
+        createPipedFormat("Answer_1", "answer1", "answers")
       );
     });
 
@@ -164,7 +164,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.contents[0].list).toEqual([
-        createPipedFormat("untitled_answer", "answer1", "answers"),
+        createPipedFormat("Answer_1", "answer1", "answers"),
         "Some Value"
       ]);
     });

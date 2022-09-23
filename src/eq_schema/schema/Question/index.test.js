@@ -16,7 +16,6 @@ describe("Question", () => {
         answers: [
           {
             id: "1",
-            label: "A1",
             properties: {
               required: true,
             },
@@ -591,7 +590,7 @@ describe("Question", () => {
             folders: [
               {
                 id: "folder-1",
-                pages: [{ answers: [{ id: `1`, label: "A1", type: "Text" }] }],
+                pages: [{ answers: [{ id: `1`, label: "A label?", type: "Text" }] }],
               },
             ],
           },
@@ -606,7 +605,7 @@ describe("Question", () => {
         }),
         createContext()
       );
-      expect(question.title).toEqual(createPipedFormat("A1", "answer1", "answers"));
+      expect(question.title).toEqual(createPipedFormat("A_label", "answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
@@ -646,7 +645,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual([
-        createPipedFormat("A1", "answer1", "answers"),
+        createPipedFormat("A_label", "answer1", "answers"),
       ]);
     });
   });
