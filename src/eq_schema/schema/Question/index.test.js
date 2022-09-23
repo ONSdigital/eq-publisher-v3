@@ -591,7 +591,7 @@ describe("Question", () => {
             folders: [
               {
                 id: "folder-1",
-                pages: [{ answers: [{ id: `1`, type: "Text" }] }],
+                pages: [{ answers: [{ id: `1`, label: "A1", type: "Text" }] }],
               },
             ],
           },
@@ -606,7 +606,7 @@ describe("Question", () => {
         }),
         createContext()
       );
-      expect(question.title).toEqual(createPipedFormat("untitled_answer", "answer1", "answers"));
+      expect(question.title).toEqual(createPipedFormat("A1", "answer1", "answers"));
     });
 
     it("should handle piped values in guidance", () => {
@@ -646,7 +646,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual([
-        createPipedFormat("untitled_answer", "answer1", "answers"),
+        createPipedFormat("A1", "answer1", "answers"),
       ]);
     });
   });
