@@ -53,7 +53,13 @@ const PIPE_TYPES = {
     render: ({ id }) => id,
     placeholder: ({ id }) => id,
     getType: ({ type }) => type,
-    getFallback: ({ properties, id, type, advancedProperties }) => {
+    getFallback: ({ properties, id, type, options, advancedProperties }) => {
+      if (type === "Radio" && options[0].dynamicAnswer) {
+        return {
+          source: "answers",
+          identifier: "answer" + options[0].dynamicAnswerID,
+        };
+      }
       if (!(type === "DateRange") || !advancedProperties) {
         return null;
       }
@@ -120,7 +126,7 @@ const getPipedData = (store) => (element, ctx) => {
   const identifier =
     elementData.type === "DateRange"
       ? pipeConfig.render(elementData)
-      : pipeConfig.render(entity); 
+      : pipeConfig.render(entity);
 
   const answerType = pipeConfig.getType(entity);
 
