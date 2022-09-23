@@ -57,7 +57,7 @@ const PIPE_TYPES = {
       if (type === "Radio" && options[0].dynamicAnswer) {
         return {
           source: "answers",
-          identifier: "answer" + options[0].dynamicAnswerID,
+          identifier: `answer${options[0].dynamicAnswerID}`,
         };
       }
       if (!(type === "DateRange") || !advancedProperties) {
@@ -151,7 +151,7 @@ const getPipedData = (store) => (element, ctx) => {
     answerType,
     ctx
   );
-
+  // console.log("placeholder is..." + JSON.stringify(placeholder));
   store.placeholders = [...store.placeholders, placeholder];
 
   return `{${removeDash(placeholderName)}}`;
