@@ -76,7 +76,9 @@ describe("Group", () => {
         ],
       });
 
-      const runnerJson = groupsJson.map((group) => new Group(group, ctx));
+      const runnerJson = groupsJson.map(
+        (group) => new Group(group, ctx)
+      );
 
       const expectedrunnerJson = [
         { id: "group1", blocks: [] },
@@ -127,7 +129,9 @@ describe("Group", () => {
         ],
       });
 
-      const runnerJson = groupsJson.map((group) => new Group(group, ctx));
+      const runnerJson = groupsJson.map(
+        (group) => new Group(group, ctx)
+      );
 
       const expectedrunnerJson = [
         { id: "group1", blocks: [] },
@@ -239,12 +243,12 @@ describe("Group", () => {
               options: [
                 {
                   label: "Oh yes.",
-                  value: "Oh yes",
+                  value: "Oh yes.",
                   description: "Positive",
                 },
                 {
                   label: "Wait I can get more?",
-                  value: "Wait I can get more",
+                  value: "Wait I can get more?",
                   description: "Negative",
                 },
               ],
@@ -298,12 +302,12 @@ describe("Group", () => {
               options: [
                 {
                   label: "Oh yes.",
-                  value: "Oh yes",
+                  value: "Oh yes.",
                   description: "Positive",
                 },
                 {
                   label: "Wait I can get more?",
-                  value: "Wait I can get more",
+                  value: "Wait I can get more?",
                   description: "Negative",
                 },
               ],
@@ -445,23 +449,19 @@ describe("Group", () => {
       expect(resultantJson.blocks[1].question.description).toEqual([
         {
           text: "{checkbox_answers}",
-          placeholders: [
-            {
-              placeholder: "checkbox_answers",
-              transforms: [
-                {
-                  arguments: {
-                    list_to_format: {
-                      identifier: "answer6",
-                      source: "answers",
-                    },
-                  },
-                  transform: "format_list",
+          placeholders: [{
+            placeholder: "checkbox_answers",
+            transforms: [{
+              arguments: {
+                list_to_format: {
+                  identifier: "answer6",
+                  source: "answers",
                 },
-              ],
-            },
-          ],
-        },
+              },
+              transform: "format_list",
+            }],
+          }]
+        }
       ]);
     });
   });
