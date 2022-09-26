@@ -87,6 +87,24 @@ const createContext = (metadata = []) => ({
                       },
                     ],
                   },
+                  {
+                    id: `8`,
+                    type: "Radio",
+                    options: [
+                      {
+                        id: `AppleId`,
+                        label: "Apples",
+                      },
+                      {
+                        id: `PearId`,
+                        label: "Pears",
+                      },
+                      {
+                        id: `OrangeId`,
+                        label: "Oranges",
+                      },
+                    ],
+                  },
                 ],
               },
               {
@@ -166,7 +184,7 @@ describe("convertPipes", () => {
           }),
           createTransformation({
             placeholder: "2",
-            identifier:  "answer2",
+            identifier: "answer2",
             source: "answers",
             argument: "number",
             transform: "format_currency",
@@ -288,6 +306,20 @@ describe("convertPipes", () => {
                 },
               }
             )
+          )
+        );
+      });
+
+      it("should pipe radio answers", () => {
+        const html = createPipe({ id: "8" });
+        expect(convertPipes(createContext())(html)).toEqual(
+          createWrapper(
+            "{8}",
+            createPlaceholders({
+              placeholder: "8",
+              identifier: "answer8",
+              source: "answers",
+            })
           )
         );
       });
