@@ -51,7 +51,17 @@ const PIPE_TYPES = {
       return getAnswer(ctx, tempId);
     },
     render: ({ id }) => id,
-    placeholder: ({ id }) => id,
+    placeholder: ({ label }) => {
+      if (label) {
+        var formattedLabel = label;
+        formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
+        formattedLabel = formattedLabel.replace(/ /g, "_");
+        return formattedLabel
+      }
+      else {
+        return 'untitled_answer';
+      }
+    },
     getType: ({ type }) => type,
     getFallback: ({ properties, id, type, options, advancedProperties }) => {
       if (type === "Radio" && options) {
