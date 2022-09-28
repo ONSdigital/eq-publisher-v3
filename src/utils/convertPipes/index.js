@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { flatMap, includes, compact } = require("lodash");
+const { flatMap, includes, compact, find } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
 const { placeholderObjectBuilder } = require("./PlaceholderObjectBuilder");
 
@@ -63,19 +63,31 @@ const PIPE_TYPES = {
       }
     },
     getType: ({ type }) => type,
-    getFallback: ({ properties, id, type, advancedProperties }) => {
-      if (!(type === "DateRange") || !advancedProperties) {
-        return null;
+    getFallback: ({ properties, id, type, options, advancedProperties }) => {
+      if (type === "Radio" && options) {
+        const dynamicOption = find(options, { dynamicAnswer: true });
+        if (dynamicOption && dynamicOption.dynamicAnswerID) {
+          return {
+            source: "answers",
+            identifier: `answer${dynamicOption.dynamicAnswerID}`,
+          };
+        }
       }
-      if (!properties || !properties.fallback || !properties.fallback.enabled) {
-        return null;
+      if (
+        type === "DateRange" &&
+        advancedProperties &&
+        properties &&
+        properties.fallback &&
+        properties.fallback.enabled
+      ) {
+        return {
+          source: "metadata",
+          identifier: id.endsWith("from")
+            ? properties.fallback.start
+            : properties.fallback.end,
+        };
       }
-      return {
-        source: "metadata",
-        identifier: id.endsWith("from")
-          ? properties.fallback.start
-          : properties.fallback.end,
-      };
+      return null;
     },
   },
   metadata: {
@@ -130,7 +142,7 @@ const getPipedData = (store) => (element, ctx) => {
   const identifier =
     elementData.type === "DateRange"
       ? pipeConfig.render(elementData)
-      : pipeConfig.render(entity); 
+      : pipeConfig.render(entity);
 
   const answerType = pipeConfig.getType(entity);
 

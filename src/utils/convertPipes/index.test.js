@@ -32,7 +32,7 @@ const createTransformation = (
   ],
 });
 
-const createCheckboxTransformation = ({ placeholder, transform }, extra) => ({
+const createAlternateTransformation = ({ placeholder, transform }, extra) => ({
   placeholder,
   transforms: [
     {
@@ -64,12 +64,17 @@ const createContext = (metadata = []) => ({
                   { id: `3`, label: "!It's Q3?", type: "DateRange" },
                   {
                     id: `4`,
-                    label: "#Q4Don'tDoIt", 
+                    label: "#Q4Don'tDoIt",
                     type: "Date",
                     properties: { format: "dd/mm/yyyy" },
                   },
                   { id: `5`, label: "label of excellence", type: "Number" },
-                  { id: `6`, label: "BACWards 6q", type: "Unit", properties: { unit: "Kilometres" } },
+                  {
+                    id: `6`,
+                    label: "BACWards 6q",
+                    type: "Unit",
+                    properties: { unit: "Kilometres" },
+                  },
                   {
                     id: `7`,
                     label: "Q7 Checkbox Options?",
@@ -86,6 +91,18 @@ const createContext = (metadata = []) => ({
                       {
                         id: `OrangeId`,
                         label: "Oranges",
+                      },
+                    ],
+                  },
+                  {
+                    id: `8`,
+                    type: "Radio",
+                    label: "Q8 Radio Options",
+                    options: [
+                      {
+                        id: `FavouriteFruit`,
+                        dynamicAnswer: true,
+                        dynamicAnswerID: `7`,
                       },
                     ],
                   },
@@ -168,7 +185,7 @@ describe("convertPipes", () => {
           }),
           createTransformation({
             placeholder: "untitled_answer",
-            identifier:  "answer2",
+            identifier: "answer2",
             source: "answers",
             argument: "number",
             transform: "format_currency",
@@ -277,7 +294,7 @@ describe("convertPipes", () => {
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
             "{Q7_Checkbox_Options}",
-            createCheckboxTransformation(
+            createAlternateTransformation(
               {
                 placeholder: "Q7_Checkbox_Options",
                 transform: "concatenate_list",
@@ -288,6 +305,27 @@ describe("convertPipes", () => {
                   identifier: "answer7",
                   source: "answers",
                 },
+              }
+            )
+          )
+        );
+      });
+
+      it("should pipe dynamic radio answers", () => {
+        const html = createPipe({ id: "8" });
+        expect(convertPipes(createContext())(html)).toEqual(
+          createWrapper(
+            "{Q8_Radio_Options}",
+            createAlternateTransformation(
+              {
+                placeholder: "Q8_Radio_Options",
+                transform: "first_non_empty_item",
+              },
+              {
+                items: [
+                  { source: "answers", identifier: "answer8" },
+                  { source: "answers", identifier: "answer7" },
+                ],
               }
             )
           )
