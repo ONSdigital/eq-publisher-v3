@@ -235,7 +235,7 @@ class Answer {
     ctx
   ) {
     const option = {
-      label: buildContents(label, ctx),
+      label: buildContents(label, ctx, true),
       value: buildContents(label, ctx, true),
     };
 

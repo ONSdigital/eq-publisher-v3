@@ -18,7 +18,7 @@ const unescapePiping = (value, isMultipleChoiceValue) => {
   if (!isMultipleChoiceValue) {
     updatedValue = replace(/&apos;/g, `&#39;`, value);
   } else {
-    updatedValue = replace(/&apos;/g, `'`, value);
+    updatedValue = replace(/&apos;/g, `\u2019`, value);
   }
   return updatedValue;
 };
