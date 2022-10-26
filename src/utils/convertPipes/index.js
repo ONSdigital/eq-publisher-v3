@@ -63,7 +63,7 @@ const PIPE_TYPES = {
           return "untitled_answer";
         }
       };
-
+      // The placeholders will now be 'label' and 'secondaryLabel' values, hence different for the piped date range values.
       if (type === "DateRange") {
         return id.endsWith("from")
           ? formatter(label)
