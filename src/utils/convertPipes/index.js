@@ -52,6 +52,7 @@ const PIPE_TYPES = {
     },
     render: ({ id }) => id,
     placeholder: ({ label, secondaryLabel, type, id }) => {
+      // Define a new function to format labels
       const formatter = (l) => {
         if (l) {
           var formattedLabel = l;
@@ -145,6 +146,7 @@ const getPipedData = (store) => (element, ctx) => {
 
   const { label } = entity;
   const { secondaryLabel } = entity;
+  // Create a new element consisting of both 'label' and 'secondaryLabel' along with 'elementData' for 'DateRange' answer types
   const dateRangeElement = { ...elementData, label, secondaryLabel };
 
   const placeholderName =
