@@ -144,6 +144,7 @@ const getPipedData = (store) => (element, ctx) => {
     return "";
   }
 
+  // Extract 'label' and 'secondaryLabel' values from 'entity'
   const { label, secondaryLabel } = entity;
   // Create a new element consisting of both 'label' and 'secondaryLabel' along with 'elementData' for 'DateRange' answer types
   const dateRangeElement = { ...elementData, label, secondaryLabel };
