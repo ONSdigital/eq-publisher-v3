@@ -220,13 +220,15 @@ describe("convertPipes", () => {
 
     describe("formatting", () => {
       it("should format Date Range answers with `format_date`", () => {
-        const html = createPipe({ id: "3" });
+        const html = createPipe({
+          id: "3",
+        });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{Its_Q3}",
+            "{untitled_answer}",
             createTransformation(
               {
-                placeholder: "Its_Q3",
+                placeholder: "untitled_answer",
                 identifier: "answer3",
                 source: "answers",
                 argument: "date_to_format",
