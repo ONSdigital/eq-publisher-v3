@@ -51,15 +51,24 @@ const PIPE_TYPES = {
       return getAnswer(ctx, tempId);
     },
     render: ({ id }) => id,
-    placeholder: ({ label }) => {
-      if (label) {
-        var formattedLabel = label;
-        formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
-        formattedLabel = formattedLabel.replace(/ /g, "_");
-        return formattedLabel
-      }
-      else {
-        return 'untitled_answer';
+    placeholder: ({ label, secondaryLabel, type, id }) => {
+      const formatter = (l) => {
+        if (l) {
+          var formattedLabel = l;
+          formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
+          formattedLabel = formattedLabel.replace(/ /g, "_");
+          return formattedLabel;
+        } else {
+          return "untitled_answer";
+        }
+      };
+
+      if (type === "DateRange") {
+        return id.endsWith("from")
+          ? formatter(label)
+          : formatter(secondaryLabel);
+      } else {
+        return formatter(label);
       }
     },
     getType: ({ type }) => type,
@@ -134,9 +143,13 @@ const getPipedData = (store) => (element, ctx) => {
     return "";
   }
 
+  const { label } = entity;
+  const { secondaryLabel } = entity;
+  const dateRangeElement = { ...elementData, label, secondaryLabel };
+
   const placeholderName =
     elementData.type === "DateRange"
-      ? pipeConfig.placeholder(elementData)
+      ? pipeConfig.placeholder(dateRangeElement)
       : pipeConfig.placeholder(entity);
 
   const identifier =
