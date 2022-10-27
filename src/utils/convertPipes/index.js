@@ -41,6 +41,18 @@ const getCalculatedSummary = (ctx, pageId) =>
     (page) => page.id === pageId
   );
 
+// Define a new function to format labels
+const formatter = (label) => {
+  if (label) {
+    var formattedLabel = label;
+    formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
+    formattedLabel = formattedLabel.replace(/ /g, "_");
+    return formattedLabel;
+  } else {
+    return "untitled_answer";
+  }
+};
+
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id, type }, ctx) => {
@@ -52,17 +64,6 @@ const PIPE_TYPES = {
     },
     render: ({ id }) => id,
     placeholder: ({ label, secondaryLabel, type, id }) => {
-      // Define a new function to format labels
-      const formatter = (l) => {
-        if (l) {
-          var formattedLabel = l;
-          formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
-          formattedLabel = formattedLabel.replace(/ /g, "_");
-          return formattedLabel;
-        } else {
-          return "untitled_answer";
-        }
-      };
       // The placeholders will now be 'label' and 'secondaryLabel' values, hence different for the piped date range values.
       if (type === "DateRange") {
         return id.endsWith("from")
