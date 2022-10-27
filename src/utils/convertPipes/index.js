@@ -41,6 +41,18 @@ const getCalculatedSummary = (ctx, pageId) =>
     (page) => page.id === pageId
   );
 
+// Define a new function to format labels
+const formatter = (label) => {
+  if (label) {
+    var formattedLabel = label;
+    formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
+    formattedLabel = formattedLabel.replace(/ /g, "_");
+    return formattedLabel;
+  } else {
+    return "untitled_answer";
+  }
+};
+
 const PIPE_TYPES = {
   answers: {
     retrieve: ({ id, type }, ctx) => {
@@ -51,15 +63,14 @@ const PIPE_TYPES = {
       return getAnswer(ctx, tempId);
     },
     render: ({ id }) => id,
-    placeholder: ({ label }) => {
-      if (label) {
-        var formattedLabel = label;
-        formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
-        formattedLabel = formattedLabel.replace(/ /g, "_");
-        return formattedLabel
-      }
-      else {
-        return 'untitled_answer';
+    placeholder: ({ label, secondaryLabel, type, id }) => {
+      // The placeholders will now be 'label' and 'secondaryLabel' values, hence different for the piped date range values.
+      if (type === "DateRange") {
+        return id.endsWith("from")
+          ? formatter(label)
+          : formatter(secondaryLabel);
+      } else {
+        return formatter(label);
       }
     },
     getType: ({ type }) => type,
@@ -134,9 +145,14 @@ const getPipedData = (store) => (element, ctx) => {
     return "";
   }
 
+  // Extract 'label' and 'secondaryLabel' values from 'entity'
+  const { label, secondaryLabel } = entity;
+  // Create a new element consisting of both 'label' and 'secondaryLabel' along with 'elementData' for 'DateRange' answer types
+  const dateRangeElement = { ...elementData, label, secondaryLabel };
+
   const placeholderName =
     elementData.type === "DateRange"
-      ? pipeConfig.placeholder(elementData)
+      ? pipeConfig.placeholder(dateRangeElement)
       : pipeConfig.placeholder(entity);
 
   const identifier =
