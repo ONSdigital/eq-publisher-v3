@@ -171,14 +171,19 @@ class Question {
     answers.forEach((answer) => {
       answer.properties.required = false;
       if (answer.type === MUTUALLY_EXCLUSIVE && answer.options.length === 1) {
+
         answers = answers.filter(
           (answer) => answer.type !== MUTUALLY_EXCLUSIVE
         );
-        mutuallyExclusiveAnswer = new Answer({
+        const tempAnswer = {
           ...answer,
           id: `${answer.id}-exclusive`,
           type: "Checkbox",
-        });
+        }
+        tempAnswer.options[0].qCode = answer.qCode
+        delete tempAnswer.qCode
+        mutuallyExclusiveAnswer = new Answer(tempAnswer);
+
       } else if (
         answer.type === MUTUALLY_EXCLUSIVE &&
         answer.options.length > 1
