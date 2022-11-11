@@ -47,7 +47,7 @@ const formatter = (label) => {
     var formattedLabel = label;
     formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
     formattedLabel = formattedLabel.replace(/ /g, "_");
-    return formattedLabel;
+    return formattedLabel.toLowerCase();
   } else {
     return "untitled_answer";
   }

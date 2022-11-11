@@ -4,13 +4,13 @@ const Question = require("../Question");
 const ctx = {};
 
 describe("Block", () => {
-  const createBlockJSON = block =>
+  const createBlockJSON = (block) =>
     Object.assign(
       {
         id: 1,
         pageType: "QuestionPage",
         type: "General",
-        answers: []
+        answers: [],
       },
       block
     );
@@ -22,10 +22,10 @@ describe("Block", () => {
         placeholder,
         value: {
           identifier,
-          source
-        }
-      }
-    ]
+          source,
+        },
+      },
+    ],
   });
 
   it("should build valid runner Block from Author page", () => {
@@ -33,7 +33,7 @@ describe("Block", () => {
 
     expect(block).toMatchObject({
       // id: "block1",
-      question: expect.any(Question)
+      question: expect.any(Question),
     });
   });
 
@@ -48,9 +48,9 @@ describe("Block", () => {
       createBlockJSON({
         confirmation: {
           id: "2",
-          title: "<p>Are you sure?</p>"
+          title: "<p>Are you sure?</p>",
         },
-        routing: { id: "2" }
+        routing: { id: "2" },
       }),
       ctx
     );
@@ -81,12 +81,12 @@ describe("Block", () => {
     const questionnaire = {
       sections: [
         {
-          pages: [{ id: "1" }, { id: "2" }]
+          pages: [{ id: "1" }, { id: "2" }],
         },
         {
-          pages: [{ id: "3" }, { id: "4" }]
-        }
-      ]
+          pages: [{ id: "3" }, { id: "4" }],
+        },
+      ],
     };
 
     it("should return true if is a last page", () => {
@@ -104,14 +104,14 @@ describe("Block", () => {
     const createPipeInText = ({
       id = 1,
       text = "foo",
-      pipeType = "answers"
+      pipeType = "answers",
     } = {}) => `<span data-piped="${pipeType}" data-id="${id}">${text}</span>`;
 
     const createPipeInHtml = ({
       id = 1,
       text = "foo",
       pipeType = "answers",
-      element = "h2"
+      element = "h2",
     } = {}) =>
       `<${element}><span data-piped="${pipeType}" data-id="${id}">${text}</span></${element}>`;
 
@@ -120,15 +120,19 @@ describe("Block", () => {
     ) => ({
       questionnaireJson: {
         metadata,
-        sections: [{
-          folders: [
-            {
-              id: "folder-1",
-              pages: [{ answers: [{ id: `1`, label: "Answer 1", type: "Text" }] }]
-            }
-          ],
-        }]
-      }
+        sections: [
+          {
+            folders: [
+              {
+                id: "folder-1",
+                pages: [
+                  { answers: [{ id: `1`, label: "Answer 1", type: "Text" }] },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     });
 
     it("should handle piped values in title", () => {
@@ -139,7 +143,7 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("Answer_1", "answer1", "answers")
+        createPipedFormat("answer_1", "answer1", "answers")
       );
     });
 
@@ -152,7 +156,7 @@ describe("Block", () => {
       );
 
       expect(introBlock.content.title).toEqual(
-        createPipedFormat("Answer_1", "answer1", "answers")
+        createPipedFormat("answer_1", "answer1", "answers")
       );
     });
 
@@ -164,8 +168,8 @@ describe("Block", () => {
         createContext()
       );
       expect(introBlock.content.contents[0].list).toEqual([
-        createPipedFormat("Answer_1", "answer1", "answers"),
-        "Some Value"
+        createPipedFormat("answer_1", "answer1", "answers"),
+        "Some Value",
       ]);
     });
 
@@ -176,18 +180,18 @@ describe("Block", () => {
           '<p>Hi is your total <span data-piped="variable"data-id="total">[Total]</span></p>',
         pageType: "CalculatedSummaryPage",
         totalTitle: "<p>Bye</p>",
-        summaryAnswers: ["1", "2", "3"]
+        summaryAnswers: ["1", "2", "3"],
       };
       const block = new Block(calculatedPageGraphql, ctx);
       expect(block).toMatchObject({
         calculation: {
           answers_to_calculate: ["answer1", "answer2", "answer3"],
           calculation_type: "sum",
-          title: "Bye"
+          title: "Bye",
         },
         // id: "block1",
         title: "Hi is your total %(total)s",
-        type: "CalculatedSummary"
+        type: "CalculatedSummary",
       });
     });
   });

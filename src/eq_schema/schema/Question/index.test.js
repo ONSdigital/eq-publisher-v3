@@ -26,21 +26,27 @@ describe("Question", () => {
     );
   const ctx = {
     questionnaireJson: {
-      sections: [{
-        folders: [{
-          pages: [{
-            id: "123",
-            pageType: "QuestionPage",
-            answers: [
-              {
-                id: "20"
-              }
-            ]
-          }]
-        }]
-      }]
-    }
-  }
+      sections: [
+        {
+          folders: [
+            {
+              pages: [
+                {
+                  id: "123",
+                  pageType: "QuestionPage",
+                  answers: [
+                    {
+                      id: "20",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
   const createPipedFormat = (placeholder, identifier, source) => ({
     text: `{${placeholder}}`,
     placeholders: [
@@ -590,7 +596,9 @@ describe("Question", () => {
             folders: [
               {
                 id: "folder-1",
-                pages: [{ answers: [{ id: `1`, label: "A label?", type: "Text" }] }],
+                pages: [
+                  { answers: [{ id: `1`, label: "A label?", type: "Text" }] },
+                ],
               },
             ],
           },
@@ -605,7 +613,9 @@ describe("Question", () => {
         }),
         createContext()
       );
-      expect(question.title).toEqual(createPipedFormat("A_label", "answer1", "answers"));
+      expect(question.title).toEqual(
+        createPipedFormat("a_label", "answer1", "answers")
+      );
     });
 
     it("should handle piped values in guidance", () => {
@@ -620,7 +630,11 @@ describe("Question", () => {
         createContext()
       );
       expect(question.guidance.contents[0]).toEqual({
-        description: createPipedFormat("my_metadata", "my_metadata", "metadata"),
+        description: createPipedFormat(
+          "my_metadata",
+          "my_metadata",
+          "metadata"
+        ),
       });
     });
 
@@ -645,7 +659,7 @@ describe("Question", () => {
         createContext()
       );
       expect(question.description).toEqual([
-        createPipedFormat("A_label", "answer1", "answers"),
+        createPipedFormat("a_label", "answer1", "answers"),
       ]);
     });
   });
@@ -943,8 +957,9 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
-      , ctx);
+        }),
+        ctx
+      );
       expect(question.calculations[0].value.identifier).toEqual("answer20");
       expect(question.calculations[0].value.source).toEqual("answers");
     });
