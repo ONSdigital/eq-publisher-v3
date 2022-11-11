@@ -160,9 +160,9 @@ describe("convertPipes", () => {
       const html = createPipe();
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "{Question_One}",
+          "{question_one}",
           createPlaceholders({
-            placeholder: "Question_One",
+            placeholder: "question_one",
             identifier: "answer1",
             source: "answers",
           })
@@ -177,9 +177,9 @@ describe("convertPipes", () => {
 
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "{Question_One}{untitled_answer}",
+          "{question_one}{untitled_answer}",
           createPlaceholders({
-            placeholder: "Question_One",
+            placeholder: "question_one",
             identifier: "answer1",
             source: "answers",
           }),
@@ -201,9 +201,9 @@ describe("convertPipes", () => {
 
       expect(convertPipes(createContext())(html)).toEqual(
         createWrapper(
-          "hello {Question_One}{untitled_answer} world",
+          "hello {question_one}{untitled_answer} world",
           createPlaceholders({
-            placeholder: "Question_One",
+            placeholder: "question_one",
             identifier: "answer1",
             source: "answers",
           }),
@@ -244,10 +244,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "4" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{Q4DontDoIt}",
+            "{q4dontdoit}",
             createTransformation(
               {
-                placeholder: "Q4DontDoIt",
+                placeholder: "q4dontdoit",
                 identifier: "answer4",
                 source: "answers",
                 argument: "date_to_format",
@@ -295,10 +295,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "7" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{Q7_Checkbox_Options}",
+            "{q7_checkbox_options}",
             createAlternateTransformation(
               {
-                placeholder: "Q7_Checkbox_Options",
+                placeholder: "q7_checkbox_options",
                 transform: "concatenate_list",
               },
               {
@@ -317,10 +317,10 @@ describe("convertPipes", () => {
         const html = createPipe({ id: "8" });
         expect(convertPipes(createContext())(html)).toEqual(
           createWrapper(
-            "{Q8_Radio_Options}",
+            "{q8_radio_options}",
             createAlternateTransformation(
               {
-                placeholder: "Q8_Radio_Options",
+                placeholder: "q8_radio_options",
                 transform: "first_non_empty_item",
               },
               {
