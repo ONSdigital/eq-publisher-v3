@@ -5,6 +5,13 @@ const { flatMap, find, findIndex } = require("lodash");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
+const {
+  wrapContents,
+  reversePipeContent,
+} = require("../../../utils/compoundFunctions");
+const reversePipe = (ctx) =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
+
 const getAllPageIds = (questionnaire) =>
   flatMap(questionnaire.sections, (section) =>
     flatMap(section.folders, (folder) =>
@@ -30,6 +37,11 @@ class DrivingQuestion {
     this.id = `question-driving-${page.id}`
     this.type = "General"
     this.title = processPipe(ctx)(page.drivingQuestion)
+
+    if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
+      this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
+    }
+
     this.answers = [{
       "id": `answer-driving-${page.id}`,
       "mandatory": true,
