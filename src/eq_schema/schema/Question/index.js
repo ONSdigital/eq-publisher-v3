@@ -9,7 +9,7 @@ const {
 } = require("../../../utils/compoundFunctions");
 
 const Answer = require("../Answer");
-const { getValueSource } = require("../../builders/valueSource")
+const { getValueSource } = require("../../builders/valueSource");
 
 const {
   DATE,
@@ -105,9 +105,19 @@ class Question {
       this.calculations = question.totalValidation.allowUnanswered
         ? [
             this.buildUnansweredCalculation(question.answers),
-            this.buildCalculation(question.totalValidation, question.answers, ctx),
+            this.buildCalculation(
+              question.totalValidation,
+              question.answers,
+              ctx
+            ),
           ]
-        : [this.buildCalculation(question.totalValidation, question.answers, ctx)];
+        : [
+            this.buildCalculation(
+              question.totalValidation,
+              question.answers,
+              ctx
+            ),
+          ];
     } else {
       this.type = "General";
       this.answers = this.buildAnswers(question.answers, ctx);
@@ -170,20 +180,20 @@ class Question {
     let mutuallyExclusiveAnswer;
     answers.forEach((answer) => {
       answer.properties.required = false;
-      if (answer.type === MUTUALLY_EXCLUSIVE && answer.options.length === 1) {
 
+      if (answer.type === MUTUALLY_EXCLUSIVE && answer.options.length === 1) {
         answers = answers.filter(
           (answer) => answer.type !== MUTUALLY_EXCLUSIVE
         );
         const tempAnswer = {
           ...answer,
-          id: `${answer.id}-exclusive`,
+          id: this.buildMutuallyExclusiveId(answer.id),
           type: "Checkbox",
-        }
-        tempAnswer.options[0].qCode = answer.qCode
-        delete tempAnswer.qCode
+        };
+        tempAnswer.options[0].qCode = answer.qCode;
+        delete tempAnswer.qCode;
         mutuallyExclusiveAnswer = new Answer(tempAnswer);
-
+        // console.log(mutuallyExclusiveAnswer.id)
       } else if (
         answer.type === MUTUALLY_EXCLUSIVE &&
         answer.options.length > 1
@@ -193,7 +203,7 @@ class Question {
         );
         mutuallyExclusiveAnswer = new Answer({
           ...answer,
-          id: `${answer.id}-exclusive`,
+          id: this.buildMutuallyExclusiveId(answer.id),
           type: "Radio",
         });
       } else {
@@ -202,6 +212,18 @@ class Question {
     });
 
     return concat(this.buildAnswers(answers, ctx), mutuallyExclusiveAnswer);
+  }
+
+  buildMutuallyExclusiveId(answerId) {
+    let looping = true;
+    while (looping) {
+      if (answerId.endsWith("-exclusive-exclusive")) {
+        answerId = answerId.slice(0, -10);
+      } else {
+        looping = false;
+        return answerId;
+      }
+    }
   }
 
   buildCalculation(totalValidation, answers, ctx) {
@@ -220,7 +242,7 @@ class Question {
     const rightSide =
       totalValidation.entityType === "Custom"
         ? { value: totalValidation.custom }
-        : { value: getValueSource(ctx, totalValidation.previousAnswer)} ;
+        : { value: getValueSource(ctx, totalValidation.previousAnswer) };
 
     return {
       calculation_type: "sum",
