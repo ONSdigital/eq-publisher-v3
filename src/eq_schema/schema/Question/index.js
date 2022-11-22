@@ -219,9 +219,13 @@ class Question {
     while (looping) {
       if (answerId.endsWith("-exclusive-exclusive")) {
         answerId = answerId.slice(0, -10);
-      } else {
+      } else if (answerId.endsWith("-exclusive") && !(answerId.endsWith("-exclusive-exclusive"))) {
+          looping = false
+          return answerId
+      }
+      else {
         looping = false;
-        return answerId;
+        return `${answerId}-exclusive`
       }
     }
   }
