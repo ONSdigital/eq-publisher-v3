@@ -187,13 +187,11 @@ class Question {
         );
         const tempAnswer = {
           ...answer,
-          id: this.buildMutuallyExclusiveId(answer.id),
           type: "Checkbox",
         };
         tempAnswer.options[0].qCode = answer.qCode;
         delete tempAnswer.qCode;
         mutuallyExclusiveAnswer = new Answer(tempAnswer);
-        // console.log(mutuallyExclusiveAnswer.id)
       } else if (
         answer.type === MUTUALLY_EXCLUSIVE &&
         answer.options.length > 1
@@ -203,7 +201,6 @@ class Question {
         );
         mutuallyExclusiveAnswer = new Answer({
           ...answer,
-          id: this.buildMutuallyExclusiveId(answer.id),
           type: "Radio",
         });
       } else {
@@ -212,28 +209,6 @@ class Question {
     });
 
     return concat(this.buildAnswers(answers, ctx), mutuallyExclusiveAnswer);
-  }
-
-  //This function fixes the bug where -exclusive gets appended multiple times to the end of an answer id
-  //If there are multiple -exclusive it will keep removing the extra -exclusive until there is only 1 left on the end of the answer id and then it exits the loop
-  //Otherwise, if there is no -exclusive at the end of the answer id it will add one on 
-
-  buildMutuallyExclusiveId(answerId) {
-    let looping = true;
-    while (looping) {
-      if (answerId.endsWith("-exclusive-exclusive")) {
-        answerId = answerId.slice(0, -10);
-      } else if (
-        answerId.endsWith("-exclusive") &&
-        !answerId.endsWith("-exclusive-exclusive")
-      ) {
-        looping = false;
-        return answerId;
-      } else {
-        looping = false;
-        return `${answerId}-exclusive`;
-      }
-    }
   }
 
   buildCalculation(totalValidation, answers, ctx) {

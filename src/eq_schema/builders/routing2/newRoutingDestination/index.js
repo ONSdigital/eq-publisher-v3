@@ -1,6 +1,5 @@
 const routingConditionConversion = require("../../../../utils/routingConditionConversion");
 const { flatMap, filter } = require("lodash");
-const { MUTUALLY_EXCLUSIVE } = require("../../../../constants/answerTypes");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
@@ -37,20 +36,6 @@ const checkType = (type) => {
   }
 
   return null;
-};
-
-const mutuallyExclusiveId = (left, right, ctx) => {
-  flatMap(ctx.questionnaireJson.sections, (section) =>
-    flatMap(section.folders, (folder) =>
-      flatMap(folder.pages, (page) =>
-        flatMap(page.answers, (answer) => {
-          if (answer.type === MUTUALLY_EXCLUSIVE) {
-            answer.id = `${answer.id}-exclusive`;
-          }
-        })
-      )
-    )
-  );
 };
 
 const buildAnswerObject = (
@@ -93,8 +78,6 @@ const buildAnswerObject = (
   }
 
   if (right.type === "SelectedOptions") {
-    mutuallyExclusiveId(left, right, ctx);
-
     const optionValues = [
       condition !== authorConditions.UNANSWERED
         ? getOptionValues(right.optionIds, ctx.questionnaireJson)
