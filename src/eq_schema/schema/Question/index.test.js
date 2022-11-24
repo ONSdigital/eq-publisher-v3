@@ -751,7 +751,7 @@ describe("Question", () => {
     it("should have unique answer id for the last answer", () => {
       const question = new Question(createQuestionJSON({ answers }));
       expect(last(question.answers)).toMatchObject({
-        id: "answer2-exclusive",
+        id: "answer2",
       });
     });
 
