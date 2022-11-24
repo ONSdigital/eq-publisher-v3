@@ -1,4 +1,5 @@
 const { find, filter } = require("lodash");
+const { TEXTFIELD, RADIO, CHECKBOX } = require("../../../constants/answerTypes");
 
 class SummaryBlock {
   constructor(page, ctx) {
@@ -24,7 +25,7 @@ class SummaryBlock {
   }
 
   buildList(answers) {
-    return filter(answers, { type: "TextField" }).map((answer) => ({
+    return filter(answers, (answer) => [TEXTFIELD, RADIO, CHECKBOX].includes(answer.type)).map((answer) => ({
       source: "answers",
       identifier: `answer${answer.id}`
     }));
