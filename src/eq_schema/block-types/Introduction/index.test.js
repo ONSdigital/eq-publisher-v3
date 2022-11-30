@@ -78,27 +78,20 @@ describe("Introduction", () => {
       {
         id: "primary",
         title: {
-          text: "You are completing this for {ru_name} {conditional_trad_as}",
+          text: "You are completing this for {ru_name} ({trad_as})",
           placeholders: [
-            {
-              placeholder: "conditional_trad_as",
-              transforms: [
-                {
-                  arguments: {
-                    trad_as: {
-                      source: "metadata",
-                      identifier: "trad_as",
-                    },
-                  },
-                  transform: "conditional_trad_as",
-                },
-              ],
-            },
             {
               placeholder: "ru_name",
               value: {
                 source: "metadata",
                 identifier: "ru_name",
+              },
+            },
+            {
+              placeholder: "trad_as",
+              value: {
+                identifier: "trad_as",
+                source: "metadata",
               },
             },
           ],
