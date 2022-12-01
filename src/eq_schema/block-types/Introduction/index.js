@@ -13,11 +13,11 @@ const reverseContent = (ctx) =>
   flow(wrapContents("content"), reversePipeContent(ctx));
 
 const buildContactDetails = require("../../builders/contactDetails");
-const { buildIntroductionTitle } = require("../../../utils/builders");
 
 class Introduction {
   constructor(
     {
+      title,
       contactDetailsPhoneNumber,
       contactDetailsEmailAddress,
       contactDetailsEmailSubject,
@@ -34,37 +34,33 @@ class Introduction {
   ) {
     this.id = "introduction-block";
     this.type = "Introduction";
-    this.primary_content = []
-    this.primary_content.push(
-      {
-        id: "primary",
-        title: buildIntroductionTitle(),
-        contents: buildContactDetails(
-          contactDetailsPhoneNumber,
-          contactDetailsEmailAddress,
-          contactDetailsEmailSubject,
-          contactDetailsIncludeRuRef
-        ),
-      }
-    );
-    if(additionalGuidancePanel) {
-      this.primary_content.push(
-        {
-          id: "additional-guidance",
-          contents: [{
+    this.primary_content = [];
+    this.primary_content.push({
+      id: "primary",
+      title: processPipe(ctx)(title),
+      contents: buildContactDetails(
+        contactDetailsPhoneNumber,
+        contactDetailsEmailAddress,
+        contactDetailsEmailSubject,
+        contactDetailsIncludeRuRef
+      ),
+    });
+    if (additionalGuidancePanel) {
+      this.primary_content.push({
+        id: "additional-guidance",
+        contents: [
+          {
             guidance: {
               contents: this.buildContents(additionalGuidancePanel, ctx),
             },
-          }],
-        }
-      );
+          },
+        ],
+      });
     }
-    this.primary_content.push(
-      {
-        id: "description",
-        contents: this.buildContents(description, ctx),
-      },
-    );
+    this.primary_content.push({
+      id: "description",
+      contents: this.buildContents(description, ctx),
+    });
     this.preview_content = {
       id: "preview",
       title: this.buildTitle(secondaryTitle, ctx),
