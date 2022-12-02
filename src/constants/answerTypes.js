@@ -9,6 +9,7 @@ const DATE_RANGE = "DateRange";
 const PERCENTAGE = "Percentage";
 const UNIT = "Unit";
 const DURATION = "Duration";
+const SELECT = "Select";
 const MUTUALLY_EXCLUSIVE = "MutuallyExclusive";
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   PERCENTAGE,
   UNIT,
   DURATION,
+  SELECT,
   MUTUALLY_EXCLUSIVE,
 };
