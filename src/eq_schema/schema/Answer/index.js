@@ -11,6 +11,7 @@ const {
   CHECKBOX,
   RADIO,
   SELECT,
+  DROPDOWN,
   MUTUALLY_EXCLUSIVE,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
@@ -25,7 +26,7 @@ const getMetadata = (ctx, metadataId) =>
 
 const getAnswerType = (answerType) => {
   if (answerType === SELECT) {
-    return "Dropdown";
+    return DROPDOWN;
   }
   return answerType;
 };

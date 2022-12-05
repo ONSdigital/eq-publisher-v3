@@ -10,6 +10,7 @@ const PERCENTAGE = "Percentage";
 const UNIT = "Unit";
 const DURATION = "Duration";
 const SELECT = "Select";
+const DROPDOWN = "Dropdown";
 const MUTUALLY_EXCLUSIVE = "MutuallyExclusive";
 
 module.exports = {
@@ -25,5 +26,6 @@ module.exports = {
   UNIT,
   DURATION,
   SELECT,
+  DROPDOWN,
   MUTUALLY_EXCLUSIVE,
 };
