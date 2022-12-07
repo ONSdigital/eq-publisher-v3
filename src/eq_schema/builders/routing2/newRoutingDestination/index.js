@@ -52,7 +52,7 @@ const buildAnswerObject = (
   if (right.type === "DateValue") {
     returnVal = [
       {
-        date: returnVal[0],
+        date: [returnVal[0]],
       },
     ];
   }
@@ -126,6 +126,7 @@ const buildAnswerObject = (
       routingConditionConversion(condition) === "<"
         ? -1 * right.dateValue.offset
         : right.dateValue.offset;
+
     const dateValueRouting = {
       date: [
         "now",
@@ -134,6 +135,7 @@ const buildAnswerObject = (
         },
       ],
     };
+
     returnVal.push(dateValueRouting);
   } else {
     if (condition !== authorConditions.UNANSWERED) {
