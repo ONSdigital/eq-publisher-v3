@@ -21,6 +21,8 @@ const {
   DrivingQuestion,
 } = require("../../block-types/listCollector")
 
+const { getValueSource } = require("../../builders/valueSource")
+
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
@@ -91,7 +93,7 @@ class Block {
       this.type = "CalculatedSummary";
       this.calculation = {
         calculation_type: "sum",
-        answers_to_calculate: page.summaryAnswers.map((o) => `answer${o}`),
+        answers_to_calculate: page.summaryAnswers.map((answerId) => getValueSource(ctx, answerId).identifier),
         title: processPipe(ctx)(page.totalTitle),
       };
     }
