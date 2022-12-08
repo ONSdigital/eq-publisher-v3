@@ -89,6 +89,9 @@ class Block {
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
+      if (page.pageDescription) {
+        this.page_title = `${page.pageDescription} - ${ctx.questionnaireJson.title}`;
+      };
       this.calculation = {
         calculation_type: "sum",
         answers_to_calculate: page.summaryAnswers.map((o) => `answer${o}`),
@@ -100,7 +103,7 @@ class Block {
       this.question = new ListCollectorQuestion(page, ctx)
       this.add_block = new AddBlock(page, ctx)
       this.edit_block = new EditBlock(page, ctx)
-      this.remove_block = new RemoveBlock(page)
+      this.remove_block = new RemoveBlock(page, ctx)
       this.summary = new SummaryBlock(page, ctx)
     }
     if (page.pageType === "DrivingQuestionPage") {

@@ -16,6 +16,7 @@ class AddBlock {
       id: `add-block-question-${page.id}`,
       type: "General",
       title: processPipe(ctx)(page.addItemTitle),
+      page_title: `${page.addItemPageDescription} - ${ctx.questionnaireJson.title}`,
       answers: this.buildAnswers(listAnswers, ctx)
     }
   }

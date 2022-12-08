@@ -18,12 +18,13 @@ describe("Section", () => {
             ],
           },
         ],
+        pageDescription: "Section 1 Page Title"
       },
       options
     );
   const createCtx = (options = {}) => ({
     routingGotos: [],
-    questionnaireJson: { navigation: true },
+    questionnaireJson: { navigation: true, title: "Test Questionnaire" },
     ...options,
   });
 
@@ -33,6 +34,7 @@ describe("Section", () => {
     expect(section).toMatchObject({
       id: "section1",
       title: "Section 1",
+      page_title: "Section 1 Page Title - Test Questionnaire",
       groups: [
         {
           id: "group1",
@@ -159,6 +161,7 @@ describe("Section", () => {
     const listCollectorSection = {
       id: "1",
       title: "Section 1",
+      pageDescription: "Section 1 Page Title",
       folders: [
         {
           id: "folder-1",
@@ -182,6 +185,7 @@ describe("Section", () => {
           {
             id: "1",
             title: "Section 1",
+            page_title: "Section 1 Page Title - Test Questionnaire",
             folders: [
               {
                 id: "folder-1",
