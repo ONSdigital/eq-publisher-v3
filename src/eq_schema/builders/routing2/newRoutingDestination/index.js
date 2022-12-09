@@ -123,7 +123,7 @@ const buildAnswerObject = (
     return SelectedOptions;
   } else if (right.type === "DateValue") {
     const offsetValue =
-      routingConditionConversion(condition) === "<"
+      right.dateValue.offsetDirection === "Before"
         ? -1 * right.dateValue.offset
         : right.dateValue.offset;
 
