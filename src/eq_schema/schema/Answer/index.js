@@ -10,23 +10,32 @@ const {
   TEXTAREA,
   CHECKBOX,
   RADIO,
+  SELECT,
+  DROPDOWN,
   MUTUALLY_EXCLUSIVE,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
-const { getValueSource } = require("../../builders/valueSource")
+const { getValueSource } = require("../../builders/valueSource");
 
 const { buildContents } = require("../../../utils/builders");
 
-const multipleChoiceAnswers = [CHECKBOX, RADIO, MUTUALLY_EXCLUSIVE];
+const multipleChoiceAnswers = [CHECKBOX, RADIO, SELECT, MUTUALLY_EXCLUSIVE];
 
 const getMetadata = (ctx, metadataId) =>
   ctx.questionnaireJson.metadata.find(({ id }) => id === metadataId);
+
+const getAnswerType = (answerType) => {
+  if (answerType === SELECT) {
+    return DROPDOWN;
+  }
+  return answerType;
+};
 
 class Answer {
   constructor(answer, ctx) {
     this.id = `answer${answer.id}`;
     this.mandatory = answer.properties.required;
-    this.type = answer.type;
+    this.type = getAnswerType(answer.type);
 
     if (answer.label) {
       this.label = buildContents(answer.label, ctx);

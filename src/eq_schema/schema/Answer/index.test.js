@@ -9,6 +9,8 @@ const {
   UNIT,
   DURATION,
   TEXTAREA,
+  SELECT,
+  DROPDOWN,
 } = require("../../../constants/answerTypes");
 const { CENTIMETER, unitConversion } = require("../../../constants/units");
 
@@ -42,17 +44,25 @@ describe("Answer", () => {
           textValue: "ESSENTIAL ENTERPRISE LTD.",
         },
       ],
-      sections: [{
-        folders: [{
-          pages: [{
-            id: "123",
-            pageType: "QuestionPage",
-            answers: [{
-                id: "3"
-              }]
-          }]
-        }]
-      }]
+      sections: [
+        {
+          folders: [
+            {
+              pages: [
+                {
+                  id: "123",
+                  pageType: "QuestionPage",
+                  answers: [
+                    {
+                      id: "3",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
   });
 
@@ -141,6 +151,11 @@ describe("Answer", () => {
       })
     );
     expect(yearDate.type).toBe("YearDate");
+  });
+
+  it("should convert Author select type to dropdown type", () => {
+    const answer = new Answer(createAnswerJSON({ type: SELECT }));
+    expect(answer.type).toBe(DROPDOWN);
   });
 
   it("should set maxLength property for textarea types", () => {
@@ -822,8 +837,6 @@ describe("Answer", () => {
   });
 
   describe("converting dynamic option", () => {
-  
-
     it("it should format dynamic options correctly", () => {
       const answer = new Answer(
         createAnswerJSON({
