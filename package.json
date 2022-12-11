@@ -20,7 +20,7 @@
     "cheerio": "latest",
     "dotenv": "^8.2.0",
     "eslint-config-eq-author": "^2.0.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-pino-logger": "latest",
     "graphql": "latest",
     "helmet": "latest",
