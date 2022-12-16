@@ -42,12 +42,20 @@ const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
 ) => {
-  const returnVal = [
+  let returnVal = [
     {
       source: checkType(left.type),
       identifier: `answer${left.answerId}`,
     },
   ];
+
+  if (right.type === "DateValue") {
+    returnVal = [
+      {
+        date: [returnVal[0]],
+      },
+    ];
+  }
 
   if (right === null) {
     returnVal.push(null);
@@ -113,6 +121,22 @@ const buildAnswerObject = (
     };
 
     return SelectedOptions;
+  } else if (right.type === "DateValue") {
+    const offsetValue =
+      right.dateValue.offsetDirection === "Before"
+        ? -1 * right.dateValue.offset
+        : right.dateValue.offset;
+
+    const dateValueRouting = {
+      date: [
+        "now",
+        {
+          years: offsetValue,
+        },
+      ],
+    };
+
+    returnVal.push(dateValueRouting);
   } else {
     if (condition !== authorConditions.UNANSWERED) {
       returnVal.push(right.customValue.number);
