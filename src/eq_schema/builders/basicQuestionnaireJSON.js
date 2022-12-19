@@ -2,6 +2,15 @@ const questionnaireJson = {
   id: "1",
   title: "Basic Questionnaire JSON",
   summary: false,
+  metadata: [
+    {
+      id: "metadata-1",
+      key: "ru_name",
+      alias: "Ru Name",
+      type: "Text",
+      textValue: "ESSENTIAL ENTERPRISE LTD.",
+    },
+  ],
   sections: [
     {
       id: "1",
@@ -21,9 +30,9 @@ const questionnaireJson = {
                 {
                   id: "1",
                   type: "Currency",
-                  label: "Answer 1"
-                }
-              ]
+                  label: "Answer 1",
+                },
+              ],
             },
             {
               id: "2",
@@ -35,13 +44,13 @@ const questionnaireJson = {
                 {
                   id: "2",
                   type: "Number",
-                  label: "Answer 2"
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  label: "Answer 2",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       id: "2",
@@ -61,7 +70,7 @@ const questionnaireJson = {
                 {
                   id: "3",
                   type: "Number",
-                  label: "Answer 3"
+                  label: "Answer 3",
                 },
                 {
                   id: "4",
@@ -74,16 +83,16 @@ const questionnaireJson = {
                     {
                       id: "456",
                       label: "white",
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 const questionnaireJsonWithSummary = {
