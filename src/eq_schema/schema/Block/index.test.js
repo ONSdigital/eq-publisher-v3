@@ -183,7 +183,6 @@ describe("Block", () => {
         summaryAnswers: ["1", "2", "3"],
       };
       const block = new Block(calculatedPageGraphql, ctx);
-      console.log(block);
       expect(block).toMatchObject({
         calculation: {
           operation: {
