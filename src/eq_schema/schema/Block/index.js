@@ -98,7 +98,7 @@ class Block {
       };
     }
     if (page.pageType === "ListCollectorPage") {
-      this.for_list = getList(ctx, page.listId).listname
+      this.for_list = getList(ctx, page.listId).listName
       this.question = new ListCollectorQuestion(page, ctx)
       this.add_block = new AddBlock(page, ctx)
       this.edit_block = new EditBlock(page, ctx)
@@ -107,7 +107,7 @@ class Block {
     }
     if (page.pageType === "DrivingQuestionPage") {
       this.id = `block-driving${page.id}`;
-      this.for_list = getList(ctx, page.listId).listname
+      this.for_list = getList(ctx, page.listId).listName
       this.question = new DrivingQuestion(page, ctx)
       this.routing_rules = DrivingQuestion.routingRules(page, ctx)
     }
