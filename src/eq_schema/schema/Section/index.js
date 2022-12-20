@@ -35,10 +35,10 @@ class Section {
     if (section.repeatingSection) {
       const list = find(
         ctx.questionnaireJson.collectionLists.lists,
-        { id: section.repeatingSectionlistId },
+        { id: section.repeatingSectionListId },
       )
       this.repeat = {
-        for_list: section.repeatingSectionlistId,
+        for_list: section.repeatingSectionListId,
       };
 
       this.repeat.title = {
