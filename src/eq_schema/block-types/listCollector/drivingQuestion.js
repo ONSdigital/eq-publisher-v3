@@ -2,6 +2,7 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { flatMap, find, findIndex } = require("lodash");
+const { getList } = require("../../../utils/functions/listGetters")
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -41,7 +42,8 @@ class DrivingQuestion {
     if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
       this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
     }
-
+    
+    const list = getList(ctx, page.listId)
     this.answers = [{
       "id": `answer-driving-${page.id}`,
       "mandatory": true,
@@ -54,7 +56,7 @@ class DrivingQuestion {
             "type": "RedirectToListAddBlock",
             "params": {
               "block_id": `add-block-${page.id}`,
-              "list_name": page.listId
+              "list_name": list.listName
             }
           }
         },

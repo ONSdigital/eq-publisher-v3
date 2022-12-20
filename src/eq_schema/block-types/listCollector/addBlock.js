@@ -1,8 +1,9 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
-const { remove, cloneDeep, find } = require("lodash");
+const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
+const { getList } = require("../../../utils/functions/listGetters")
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -11,7 +12,7 @@ class AddBlock {
     this.id = `add-block-${page.id}`
     this.type = "ListAddQuestion"
     this.cancel_text = "Don’t need to add this item"
-    const listAnswers = find(ctx.questionnaireJson.collectionLists.lists, { id: page.listId }).answers
+    const listAnswers = getList(ctx, page.listId).answers
     this.question = {
       id: `add-block-question-${page.id}`,
       type: "General",

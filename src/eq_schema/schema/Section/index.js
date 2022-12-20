@@ -3,8 +3,9 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
+const { getList } = require("../../../utils/functions/listGetters")
 const { buildIntroBlock } = require("../Block");
-const { flatMap, filter, find } = require("lodash");
+const { flatMap, filter } = require("lodash");
 const { TEXTFIELD, RADIO, CHECKBOX } = require("../../../constants/answerTypes");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
@@ -33,12 +34,9 @@ class Section {
     );
 
     if (section.repeatingSection) {
-      const list = find(
-        ctx.questionnaireJson.collectionLists.lists,
-        { id: section.repeatingSectionListId },
-      )
+      const list = getList(ctx, section.repeatingSectionListId)
       this.repeat = {
-        for_list: section.repeatingSectionListId,
+        for_list: list.listName,
       };
 
       this.repeat.title = {
@@ -127,7 +125,7 @@ class Section {
   static buildItem(itemId, listCollectorTitle, ctx) {
     const ListCollectorsSummmary = {
       type: "List",
-      for_list: itemId,
+      for_list: getList(ctx, itemId).listName,
       title: processPipe(ctx)(listCollectorTitle),
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",

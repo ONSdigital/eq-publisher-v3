@@ -38,6 +38,8 @@ const reversePipe = (ctx) =>
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
 
+const { getList } = require("../../../utils/functions/listGetters")
+
 class Block {
   constructor(page, groupId, ctx) {
     this.id = `block${page.id}`;
@@ -96,7 +98,7 @@ class Block {
       };
     }
     if (page.pageType === "ListCollectorPage") {
-      this.for_list = page.listId
+      this.for_list = getList(ctx, page.listId).listname
       this.question = new ListCollectorQuestion(page, ctx)
       this.add_block = new AddBlock(page, ctx)
       this.edit_block = new EditBlock(page, ctx)
@@ -105,7 +107,7 @@ class Block {
     }
     if (page.pageType === "DrivingQuestionPage") {
       this.id = `block-driving${page.id}`;
-      this.for_list = page.listId
+      this.for_list = getList(ctx, page.listId).listname
       this.question = new DrivingQuestion(page, ctx)
       this.routing_rules = DrivingQuestion.routingRules(page, ctx)
     }
