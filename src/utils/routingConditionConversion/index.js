@@ -10,6 +10,7 @@ const routingConditionConversions = {
   NotAnyOf: "not",
   Unanswered: "==",
   OneOf: "in",
+  Matches: "==",
 };
 
 const routingConditionConversion = (conditionString) => {

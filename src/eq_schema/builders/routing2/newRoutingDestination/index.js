@@ -1,4 +1,8 @@
 const routingConditionConversion = require("../../../../utils/routingConditionConversion");
+const {
+  getMetadataKey,
+} = require("../../../../utils/contentUtils/getMetadataKey");
+
 const { flatMap, filter } = require("lodash");
 
 const authorConditions = {
@@ -33,6 +37,10 @@ const checkType = (type) => {
 
   if (type === "Answer") {
     return "answers";
+  }
+
+  if (type === "Metadata") {
+    return "metadata";
   }
 
   return null;
@@ -150,9 +158,23 @@ const buildAnswerObject = (
   return finalVal;
 };
 
+const buildMetadataObject = (expression, ctx) => {
+  const { condition, left, right } = expression;
+  const returnValue = [
+    {
+      source: checkType(left.type),
+      identifier: getMetadataKey(ctx, left.metadataId),
+    },
+    right.customValue.text,
+  ];
+  return { [routingConditionConversion(condition)]: returnValue };
+};
+
 const checkValidRoutingType = (expression, ctx) => {
   if (expression.left.type === "Answer") {
     return buildAnswerObject(expression, ctx);
+  } else if (expression.left.type === "Metadata") {
+    return buildMetadataObject(expression, ctx);
   } else {
     throw new Error(
       `${expression.left.type} is not a valid routing answer type`
