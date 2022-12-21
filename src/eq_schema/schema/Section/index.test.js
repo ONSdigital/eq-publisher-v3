@@ -204,6 +204,7 @@ describe("Section", () => {
             {
               id: "3",
               answers: [],
+              listName: "test3"
             },
           ],
         },
@@ -222,7 +223,7 @@ describe("Section", () => {
           items: [
             {
               type: "List",
-              for_list: "3",
+              for_list: "test3",
               title: "What is the name of this person",
               add_link_text: "Add item to this list",
               empty_list_text: "There are no items",

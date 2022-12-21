@@ -1,10 +1,11 @@
-const { find, filter } = require("lodash");
-const { TEXTFIELD, RADIO, CHECKBOX } = require("../../../constants/answerTypes");
+const { filter } = require("lodash");
+const { TEXTFIELD, RADIO, CHECKBOX, SELECT } = require("../../../constants/answerTypes");
+const { getList } = require("../../../utils/functions/listGetters")
 
 class SummaryBlock {
   constructor(page, ctx) {
     this.title = "Summary"
-    const listAnswers = find(ctx.questionnaireJson.collectionLists.lists, { id: page.listId }).answers
+    const listAnswers = getList(ctx, page.listId).answers
     this.item_title = {
       text: `{item-text-${page.id}}`,
       placeholders: [
@@ -25,7 +26,7 @@ class SummaryBlock {
   }
 
   buildList(answers) {
-    return filter(answers, (answer) => [TEXTFIELD, RADIO, CHECKBOX].includes(answer.type)).map((answer) => ({
+    return filter(answers, (answer) => [TEXTFIELD, RADIO, CHECKBOX, SELECT].includes(answer.type)).map((answer) => ({
       source: "answers",
       identifier: `answer${answer.id}`
     }));

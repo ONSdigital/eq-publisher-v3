@@ -3,8 +3,10 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
+const { getList } = require("../../../utils/functions/listGetters")
 const { buildIntroBlock } = require("../Block");
-const { flatMap } = require("lodash");
+const { flatMap, filter } = require("lodash");
+const { TEXTFIELD, RADIO, CHECKBOX, SELECT } = require("../../../constants/answerTypes");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
@@ -21,15 +23,40 @@ class Section {
       flatMap(folder.pages, (page) =>
         folder.skipConditions
           ? {
-              ...page,
-              skipConditions: [
-                ...folder.skipConditions,
-                ...(page.skipConditions || []),
-              ],
-            }
+            ...page,
+            skipConditions: [
+              ...folder.skipConditions,
+              ...(page.skipConditions || []),
+            ],
+          }
           : page
       )
     );
+
+    if (section.repeatingSection) {
+      const list = getList(ctx, section.repeatingSectionListId)
+      this.repeat = {
+        for_list: list.listName,
+      };
+
+      this.repeat.title = {
+        text: `{item-text-${section.id}}`,
+        placeholders: [
+          {
+            placeholder: `item-text-${section.id}`,
+            transforms: [
+              {
+                arguments: {
+                  delimiter: "&nbsp;",
+                  list_to_concatenate: this.buildList(list.answers)
+                },
+                transform: "concatenate_list"
+              }
+            ]
+          }
+        ]
+      }
+    };
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
@@ -88,10 +115,17 @@ class Section {
     }
   }
 
+  buildList(answers) {
+    return filter(answers, (answer) => [TEXTFIELD, RADIO, CHECKBOX, SELECT].includes(answer.type)).map((answer) => ({
+      source: "answers",
+      identifier: `answer${answer.id}`
+    }));
+  };
+
   static buildItem(itemId, listCollectorTitle, ctx) {
     const ListCollectorsSummmary = {
       type: "List",
-      for_list: itemId,
+      for_list: getList(ctx, itemId).listName,
       title: processPipe(ctx)(listCollectorTitle),
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
