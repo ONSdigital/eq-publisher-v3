@@ -12,20 +12,20 @@ const translateRoutingAndSkipRules = require("../../builders/routing2");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
 const Question = require("../Question");
-const { 
-  ListCollectorQuestion, 
+const {
+  ListCollectorQuestion,
   AddBlock,
   EditBlock,
   RemoveBlock,
   SummaryBlock,
   DrivingQuestion,
-} = require("../../block-types/listCollector")
+} = require("../../block-types/listCollector");
 
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
   ListCollectorPage: "ListCollector",
-  DrivingQuestionPage: "ListCollectorDrivingQuestion"
+  DrivingQuestionPage: "ListCollectorDrivingQuestion",
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
@@ -37,6 +37,8 @@ const reversePipe = (ctx) =>
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
+
+const { getList } = require("../../../utils/functions/listGetters")
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -93,24 +95,28 @@ class Block {
         this.page_title = `${page.pageDescription} - ${ctx.questionnaireJson.title}`;
       };
       this.calculation = {
-        calculation_type: "sum",
-        answers_to_calculate: page.summaryAnswers.map((o) => `answer${o}`),
+        operation: {
+          "+": page.summaryAnswers.map((o) => ({
+            source: "answers",
+            identifier: `answer${o}`,
+          })),
+        },
         title: processPipe(ctx)(page.totalTitle),
       };
     }
     if (page.pageType === "ListCollectorPage") {
-      this.for_list = page.listId
-      this.question = new ListCollectorQuestion(page, ctx)
-      this.add_block = new AddBlock(page, ctx)
-      this.edit_block = new EditBlock(page, ctx)
-      this.remove_block = new RemoveBlock(page, ctx)
-      this.summary = new SummaryBlock(page, ctx)
+      this.for_list = getList(ctx, page.listId).listName;
+      this.question = new ListCollectorQuestion(page, ctx);
+      this.add_block = new AddBlock(page, ctx);
+      this.edit_block = new EditBlock(page, ctx);
+      this.remove_block = new RemoveBlock(page, ctx);
+      this.summary = new SummaryBlock(page, ctx);
     }
     if (page.pageType === "DrivingQuestionPage") {
       this.id = `block-driving${page.id}`;
-      this.for_list = page.listId
-      this.question = new DrivingQuestion(page, ctx)
-      this.routing_rules = DrivingQuestion.routingRules(page, ctx)
+      this.for_list = getList(ctx, page.listId).listName;
+      this.question = new DrivingQuestion(page, ctx);
+      this.routing_rules = DrivingQuestion.routingRules(page, ctx);
     }
   }
 

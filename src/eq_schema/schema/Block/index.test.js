@@ -185,11 +185,16 @@ describe("Block", () => {
       const block = new Block(calculatedPageGraphql, ctx);
       expect(block).toMatchObject({
         calculation: {
-          answers_to_calculate: ["answer1", "answer2", "answer3"],
-          calculation_type: "sum",
+          operation: {
+            "+": [
+              { source: "answers", identifier: "answer1" },
+              { source: "answers", identifier: "answer2" },
+              { source: "answers", identifier: "answer3" },
+            ],
+          },
           title: "Bye",
         },
-        // id: "block1",
+        id: "block1",
         title: "Hi is your total %(total)s",
         type: "CalculatedSummary",
       });

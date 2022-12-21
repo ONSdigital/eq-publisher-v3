@@ -1,8 +1,9 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
-const { remove, cloneDeep, find } = require("lodash");
+const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
+const { getList } = require("../../../utils/functions/listGetters")
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -11,7 +12,7 @@ class EditBlock {
     this.id = `edit-block-${page.id}`
     this.type = "ListEditQuestion"
     this.cancel_text = "Don’t need to edit this item"
-    const listAnswers = find(ctx.questionnaireJson.collectionLists.lists, { id: page.listId }).answers
+    const listAnswers = getList(ctx, page.listId).answers
     this.question = {
       id: `edit-block-question-${page.id}`,
       type: "General",

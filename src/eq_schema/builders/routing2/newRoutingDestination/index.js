@@ -1,4 +1,8 @@
 const routingConditionConversion = require("../../../../utils/routingConditionConversion");
+const {
+  getMetadataKey,
+} = require("../../../../utils/contentUtils/getMetadataKey");
+
 const { flatMap, filter } = require("lodash");
 
 const authorConditions = {
@@ -35,6 +39,10 @@ const checkType = (type) => {
     return "answers";
   }
 
+  if (type === "Metadata") {
+    return "metadata";
+  }
+
   return null;
 };
 
@@ -42,12 +50,20 @@ const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
 ) => {
-  const returnVal = [
+  let returnVal = [
     {
       source: checkType(left.type),
       identifier: `answer${left.answerId}`,
     },
   ];
+
+  if (right.type === "DateValue") {
+    returnVal = [
+      {
+        date: [returnVal[0]],
+      },
+    ];
+  }
 
   if (right === null) {
     returnVal.push(null);
@@ -113,6 +129,22 @@ const buildAnswerObject = (
     };
 
     return SelectedOptions;
+  } else if (right.type === "DateValue") {
+    const offsetValue =
+      right.dateValue.offsetDirection === "Before"
+        ? -1 * right.dateValue.offset
+        : right.dateValue.offset;
+
+    const dateValueRouting = {
+      date: [
+        "now",
+        {
+          years: offsetValue,
+        },
+      ],
+    };
+
+    returnVal.push(dateValueRouting);
   } else {
     if (condition !== authorConditions.UNANSWERED) {
       returnVal.push(right.customValue.number);
@@ -126,9 +158,23 @@ const buildAnswerObject = (
   return finalVal;
 };
 
+const buildMetadataObject = (expression, ctx) => {
+  const { condition, left, right } = expression;
+  const returnValue = [
+    {
+      source: checkType(left.type),
+      identifier: getMetadataKey(ctx, left.metadataId),
+    },
+    right.customValue.text,
+  ];
+  return { [routingConditionConversion(condition)]: returnValue };
+};
+
 const checkValidRoutingType = (expression, ctx) => {
   if (expression.left.type === "Answer") {
     return buildAnswerObject(expression, ctx);
+  } else if (expression.left.type === "Metadata") {
+    return buildMetadataObject(expression, ctx);
   } else {
     throw new Error(
       `${expression.left.type} is not a valid routing answer type`
