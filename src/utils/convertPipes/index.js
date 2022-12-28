@@ -12,12 +12,19 @@ const isPipeableType = (answer) => {
   return !includes(notPipeableAnswerTypes, type);
 };
 
-const getAllAnswers = (questionnaire) =>
+const getAnswers = (questionnaire) =>
   flatMap(questionnaire.sections, (section) =>
     flatMap(section.folders, (folder) =>
       compact(flatMap(folder.pages, (page) => page.answers))
     )
   );
+
+const getListAnswers = (questionnaire) =>
+  flatMap(questionnaire.collectionLists.lists, (list) => compact(list.answers));
+
+const getAllAnswers = (questionnaire) => {
+  return [...getAnswers(questionnaire), ...getListAnswers(questionnaire)]
+}
 
 const getAnswer = (ctx, answerId) =>
   getAllAnswers(ctx.questionnaireJson)
