@@ -136,7 +136,7 @@ const parseHTML = (html) => {
   return cheerio.load(html)("body");
 };
 
-const getPipedData = (store) => (element, ctx) => {
+const getPipedData = (store) => (element, ctx, conditionalTradAs) => {
   const { piped, ...elementData } = element.data();
   const pipeConfig = PIPE_TYPES[piped];
 
@@ -190,7 +190,8 @@ const getPipedData = (store) => (element, ctx) => {
     unitType,
     fallback,
     answerType,
-    ctx
+    ctx,
+    conditionalTradAs
   );
 
   store.placeholders = [...store.placeholders, placeholder];
@@ -209,10 +210,14 @@ const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
   };
 
   const $ = parseHTML(html);
+  const conditionalTradAs = $.text().contains("(trad_as)");
+  // if($.text().contains("(trad_as)")) {
+  //   conditionalTradAs = true;
+  // }
 
   $.find("[data-piped]").each((index, element) => {
     const $elem = cheerio(element);
-    $elem.replaceWith(getPipedData(store)($elem, ctx));
+    $elem.replaceWith(getPipedData(store)($elem, ctx, conditionalTradAs));
   });
 
   store.text = unescapePiping($.html(), isMultipleChoiceValue);
