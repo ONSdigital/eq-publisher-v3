@@ -210,7 +210,8 @@ const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
   };
 
   const $ = parseHTML(html);
-  const conditionalTradAs = $.text().includes("(trad_as)");
+  const conditionalTradAs =
+    $.text().includes("(trad_as)") || $.text().includes("([Trad As])");
 
   $.find("[data-piped]").each((index, element) => {
     const $elem = cheerio(element);
