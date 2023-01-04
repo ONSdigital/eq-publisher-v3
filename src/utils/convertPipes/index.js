@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { flatMap, includes, compact, find } = require("lodash");
+const { flatMap, includes, compact, find, get } = require("lodash");
 const { unescapePiping, removeDash } = require("../HTMLUtils");
 const { placeholderObjectBuilder } = require("./PlaceholderObjectBuilder");
 
@@ -12,12 +12,21 @@ const isPipeableType = (answer) => {
   return !includes(notPipeableAnswerTypes, type);
 };
 
-const getAllAnswers = (questionnaire) =>
+const getAnswers = (questionnaire) =>
   flatMap(questionnaire.sections, (section) =>
     flatMap(section.folders, (folder) =>
       compact(flatMap(folder.pages, (page) => page.answers))
     )
   );
+
+const getListAnswers = (questionnaire) =>
+  flatMap(get(questionnaire, "collectionLists.lists", []), (list) =>
+    compact(list.answers)
+  );
+
+const getAllAnswers = (questionnaire) => {
+  return [...getAnswers(questionnaire), ...getListAnswers(questionnaire)];
+};
 
 const getAnswer = (ctx, answerId) =>
   getAllAnswers(ctx.questionnaireJson)
