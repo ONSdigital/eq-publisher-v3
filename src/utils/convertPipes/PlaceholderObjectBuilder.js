@@ -13,7 +13,7 @@ const {
   // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
-const { getValueSource } = require("../../eq_schema/builders/valueSource")
+const { getValueSource } = require("../../eq_schema/builders/valueSource");
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
@@ -42,7 +42,8 @@ const placeholderObjectBuilder = (
   unitType,
   fallback,
   AnswerType,
-  ctx
+  ctx,
+  conditionalTradAs
 ) => {
   let valueSource;
   let argumentList;
@@ -64,6 +65,22 @@ const placeholderObjectBuilder = (
       source: "calculated_summary",
       identifier,
     };
+  }
+
+  if (conditionalTradAs && placeholderName === "trad_as") {
+    placeHolder = {
+      placeholder: removeDash(placeholderName),
+      transforms: [
+        {
+          transform: "conditional_trad_as",
+          arguments: {
+            trad_as: valueSource,
+          },
+        },
+      ],
+    };
+
+    return placeHolder;
   }
 
   if ([AnswerType] in TRANSFORM_MAP) {
