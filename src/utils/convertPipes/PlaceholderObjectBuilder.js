@@ -67,7 +67,7 @@ const placeholderObjectBuilder = (
     };
   }
 
-  if (conditionalTradAs) {
+  if (conditionalTradAs && placeholderName === "trad_as") {
     placeHolder = {
       placeholder: removeDash(placeholderName),
       transforms: [
