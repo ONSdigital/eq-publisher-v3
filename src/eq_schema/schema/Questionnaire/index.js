@@ -37,7 +37,7 @@ class Questionnaire {
     this.language = "en";
     this.mime_type = "application/json/ons/eq";
     this.schema_version = "0.0.1";
-    this.data_version = "0.0.1";
+    this.data_version = questionnaireJson.dataVersionThree ? "0.0.3" : "0.0.1";
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
