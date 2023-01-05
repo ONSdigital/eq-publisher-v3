@@ -4,6 +4,7 @@ exports[`Add Block should build the Add block 1`] = `
 AddBlock {
   "cancel_text": "Don’t need to add this item",
   "id": "add-block-listcollector-1",
+  "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
       Answer {
@@ -13,7 +14,6 @@ AddBlock {
       },
     ],
     "id": "add-block-question-listcollector-1",
-    "page_title": "Add item page title - Test Questionnaire",
     "title": "Enter details",
     "type": "General",
   },
@@ -25,6 +25,7 @@ exports[`Edit Block should build the Edit block 1`] = `
 EditBlock {
   "cancel_text": "Don’t need to edit this item",
   "id": "edit-block-listcollector-1",
+  "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
       Answer {
@@ -34,7 +35,6 @@ EditBlock {
       },
     ],
     "id": "edit-block-question-listcollector-1",
-    "page_title": "Add item page title - Test Questionnaire",
     "title": "Enter details",
     "type": "General",
   },
@@ -68,7 +68,6 @@ RemoveBlock {
       },
     ],
     "id": "remove-block-question-listcollector-1",
-    "page_title": "Are you sure you want to remove this item? - Test Questionnaire",
     "title": "Are you sure you want to remove this item?",
     "type": "General",
     "warning": "All of the information about this item will be deleted",
@@ -123,7 +122,6 @@ ListCollectorQuestion {
     },
   ],
   "id": "list-collector-question-listcollector-1",
-  "page_title": "Add another page title - Test Questionnaire",
   "title": "Add another",
   "type": "General",
 }

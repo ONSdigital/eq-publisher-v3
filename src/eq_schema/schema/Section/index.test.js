@@ -24,7 +24,7 @@ describe("Section", () => {
     );
   const createCtx = (options = {}) => ({
     routingGotos: [],
-    questionnaireJson: { navigation: true, title: "Test Questionnaire" },
+    questionnaireJson: { navigation: true },
     ...options,
   });
 
@@ -34,7 +34,6 @@ describe("Section", () => {
     expect(section).toMatchObject({
       id: "section1",
       title: "Section 1",
-      page_title: "Section 1 Page Title - Test Questionnaire",
       groups: [
         {
           id: "group1",

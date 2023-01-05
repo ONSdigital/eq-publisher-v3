@@ -9,9 +9,6 @@ class ListCollectorQuestion {
     this.id = `list-collector-question-${page.id}`
     this.type = "General"
     this.title = processPipe(ctx)(page.anotherTitle)
-    if (page.anotherPageDescription) {
-      this.page_title = `${page.anotherPageDescription} - ${ctx.questionnaireJson.title}`
-    };
     this.answers = [{
       "id": `add-another-${page.id}`,
       "mandatory": true,

@@ -11,13 +11,13 @@ class EditBlock {
   constructor(page, ctx) {
     this.id = `edit-block-${page.id}`
     this.type = "ListEditQuestion"
+    this.page_title = page.addItemPageDescription
     this.cancel_text = "Don’t need to edit this item"
     const listAnswers = getList(ctx, page.listId).answers
     this.question = {
       id: `edit-block-question-${page.id}`,
       type: "General",
       title: processPipe(ctx)(page.addItemTitle),
-      page_title: `${page.addItemPageDescription} - ${ctx.questionnaireJson.title}`,
       answers: this.buildAnswers(listAnswers, ctx)
     }
   }

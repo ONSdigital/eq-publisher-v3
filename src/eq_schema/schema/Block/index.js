@@ -88,12 +88,15 @@ class Block {
     ) {
       this.question = new Question(page, ctx);
     }
+    if (page.pageType === "ListCollectorPage") {
+      this.page_title = page.anotherPageDescription
+    }
+    else {
+      this.page_title = page.pageDescription
+    }
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
-      if (page.pageDescription) {
-        this.page_title = `${page.pageDescription} - ${ctx.questionnaireJson.title}`;
-      };
       this.calculation = {
         operation: {
           "+": page.summaryAnswers.map((o) => ({

@@ -34,7 +34,6 @@ class Introduction {
   ) {
     this.id = "introduction-block";
     this.type = "Introduction";
-    this.page_title = `Introduction - ${ctx.questionnaireJson.title}`
     this.primary_content = [];
     this.primary_content.push({
       id: "primary",

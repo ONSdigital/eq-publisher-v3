@@ -18,9 +18,6 @@ class Section {
     if (section.title) {
       this.title = getText(section.title);
     }
-    if (section.pageDescription) {
-      this.page_title = `${section.pageDescription} - ${ctx.questionnaireJson.title}`;
-    }
 
     const pages = flatMap(section.folders, (folder) =>
       flatMap(folder.pages, (page) =>
@@ -63,6 +60,7 @@ class Section {
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
+      page_title: section.pageDescription,
       collapsible: false,
     };
 
