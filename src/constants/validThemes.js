@@ -1,3 +1,3 @@
-const validThemes = ["default", "northernireland"];
+const validThemes = ["default", "northernireland", "orr"];
 
 module.exports = validThemes;
