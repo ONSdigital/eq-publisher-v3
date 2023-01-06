@@ -48,8 +48,8 @@ class Answer {
     if (answer.qCode) {
       if (
         !ctx ||
-        ctx.questionnaireJson.dataVersionThree ||
-        (!ctx.questionnaireJson.dataVersionThree && answer.type !== CHECKBOX)
+        ctx.questionnaireJson.dataVersion === "3" ||
+        (ctx.questionnaireJson.dataVersion !== "3" && answer.type !== CHECKBOX)
       ) {
         this.q_code = answer.qCode;
       }
@@ -257,8 +257,8 @@ class Answer {
     if (q_code) {
       if (
         !ctx ||
-        !ctx.questionnaireJson.dataVersionThree ||
-        (ctx.questionnaireJson.dataVersionThree && type !== CHECKBOX)
+        ctx.questionnaireJson.dataVersion !== "3" ||
+        (ctx.questionnaireJson.dataVersion === 3 && type !== CHECKBOX)
       ) {
         option.q_code = q_code;
       }
