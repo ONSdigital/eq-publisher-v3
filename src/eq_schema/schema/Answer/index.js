@@ -47,6 +47,7 @@ class Answer {
 
     if (answer.qCode) {
       if (
+        !ctx ||
         ctx.questionnaireJson.dataVersionThree ||
         (!ctx.questionnaireJson.dataVersionThree && answer.type !== CHECKBOX)
       ) {
@@ -255,6 +256,7 @@ class Answer {
 
     if (q_code) {
       if (
+        !ctx ||
         !ctx.questionnaireJson.dataVersionThree ||
         (ctx.questionnaireJson.dataVersionThree && type !== CHECKBOX)
       ) {
