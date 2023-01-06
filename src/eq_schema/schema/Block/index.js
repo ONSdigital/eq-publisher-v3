@@ -96,7 +96,7 @@ class Block {
     }
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);
-      this.page_title = processPipe(ctx)(page.title);
+      this.page_title = page.pageDescription || processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
       this.calculation = {
         operation: {
