@@ -33,8 +33,9 @@ describe("Answer", () => {
     ...answer,
   });
 
-  const createContextJSON = () => ({
+  const createContextJSON = (args) => ({
     questionnaireJson: {
+      dataVersion: "1",
       metadata: [
         {
           id: "test_ref",
@@ -63,6 +64,7 @@ describe("Answer", () => {
           ],
         },
       ],
+      ...args,
     },
   });
 
@@ -1038,6 +1040,89 @@ describe("Answer", () => {
     );
     expect(answer.options[0].q_code).toBe("1");
     expect(answer.options[1].q_code).toBe("2");
+  });
+
+  describe("Data version", () => {
+    it("should contain a qCode if data version is not 3 and type is checkbox option", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: CHECKBOX,
+          qCode: "answer-1",
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+              description: null,
+              qCode: "option-1",
+            },
+            {
+              id: 2,
+              label: "Option two",
+              description: null,
+              qCode: "option-2",
+            },
+          ],
+        }),
+        createContextJSON()
+      );
+      expect(answer.q_code).toBeUndefined();
+      expect(answer.options[0].q_code).toBe("option-1");
+      expect(answer.options[1].q_code).toBe("option-2");
+    });
+
+    it("should contain a qCode if data version is 3 and type is checkbox answer", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: CHECKBOX,
+          qCode: "answer-1",
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+              description: null,
+              qCode: "option-1",
+            },
+            {
+              id: 2,
+              label: "Option two",
+              description: null,
+              qCode: "option-2",
+            },
+          ],
+        }),
+        createContextJSON({ dataVersion: "3" })
+      );
+      expect(answer.q_code).toBe("answer-1");
+      expect(answer.options[0].q_code).toBeUndefined();
+      expect(answer.options[1].q_code).toBeUndefined();
+    });
+
+    it("should contain a qCode if data version is 3 and type is radio answer", () => {
+      const answer = new Answer(
+        createAnswerJSON({
+          type: CHECKBOX,
+          qCode: "answer-1",
+          options: [
+            {
+              id: 1,
+              label: "Option one",
+              description: null,
+              qCode: "option-1",
+            },
+            {
+              id: 2,
+              label: "Option two",
+              description: null,
+              qCode: "option-2",
+            },
+          ],
+        }),
+        createContextJSON({ dataVersion: "3" })
+      );
+      expect(answer.q_code).toBe("answer-1");
+      expect(answer.options[0].q_code).toBeUndefined();
+      expect(answer.options[1].q_code).toBeUndefined();
+    });
   });
 
   describe("creating checkbox/radio answers with additionalAnswers", () => {
