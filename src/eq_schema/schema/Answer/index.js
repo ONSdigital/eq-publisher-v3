@@ -46,7 +46,13 @@ class Answer {
     }
 
     if (answer.qCode) {
-      this.q_code = answer.qCode;
+      if (
+        !ctx ||
+        ctx.questionnaireJson.dataVersion === "3" ||
+        (ctx.questionnaireJson.dataVersion !== "3" && answer.type !== CHECKBOX)
+      ) {
+        this.q_code = answer.qCode;
+      }
     }
 
     if (answer.type === UNIT) {
@@ -249,7 +255,9 @@ class Answer {
     };
 
     if (q_code) {
-      option.q_code = q_code;
+      if (!ctx || ctx.questionnaireJson.dataVersion !== "3") {
+        option.q_code = q_code;
+      }
     }
 
     if (description) {

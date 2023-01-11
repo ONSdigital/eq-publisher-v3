@@ -17,6 +17,7 @@ describe("Questionnaire", () => {
         summary: true,
         hub: false,
         surveyId: "123",
+        dataVersion: 1,
         themeSettings: {
           id: "1",
           previewTheme: "default",
@@ -80,6 +81,21 @@ describe("Questionnaire", () => {
   it("should include survey_id", () => {
     expect(questionnaire).toMatchObject({
       survey_id: "123",
+    });
+  });
+
+  it("should set data_version to 0.0.1 when questionnaireJson dataVersion is not 3", () => {
+    expect(questionnaire).toMatchObject({
+      data_version: "0.0.1",
+    });
+  });
+
+  it("should set data_version to 0.0.3 when questionnaireJson dataVersion is 3", () => {
+    const questionnaire = new Questionnaire(
+      createQuestionnaireJSON({ dataVersion: "3" })
+    );
+    expect(questionnaire).toMatchObject({
+      data_version: "0.0.3",
     });
   });
 
