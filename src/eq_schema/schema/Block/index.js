@@ -88,9 +88,15 @@ class Block {
     ) {
       this.question = new Question(page, ctx);
     }
+    if (page.pageType === "ListCollectorPage") {
+      this.page_title = page.anotherPageDescription
+    }
+    else {
+      this.page_title = page.pageDescription
+    }
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);
-      this.page_title = processPipe(ctx)(page.title);
+      this.page_title = page.pageDescription || processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
       this.calculation = {
         operation: {
@@ -107,7 +113,7 @@ class Block {
       this.question = new ListCollectorQuestion(page, ctx);
       this.add_block = new AddBlock(page, ctx);
       this.edit_block = new EditBlock(page, ctx);
-      this.remove_block = new RemoveBlock(page);
+      this.remove_block = new RemoveBlock(page, ctx);
       this.summary = new SummaryBlock(page, ctx);
     }
     if (page.pageType === "DrivingQuestionPage") {
