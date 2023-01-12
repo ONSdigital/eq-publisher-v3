@@ -45,12 +45,8 @@ class Answer {
       this.description = buildContents(answer.description, ctx);
     }
 
-    if (answer.qCode) {
-      if (
-        !ctx ||
-        ctx.questionnaireJson.dataVersion === "3" ||
-        (ctx.questionnaireJson.dataVersion !== "3" && answer.type !== CHECKBOX)
-      ) {
+    if (!ctx || (answer.qCode && ctx.questionnaireJson.dataVersion !== "3")) {
+      if (answer.type !== CHECKBOX) {
         this.q_code = answer.qCode;
       }
     }

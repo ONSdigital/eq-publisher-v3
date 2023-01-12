@@ -191,7 +191,7 @@ class Question {
         };
         tempAnswer.options[0].qCode = answer.qCode;
         delete tempAnswer.qCode;
-        mutuallyExclusiveAnswer = new Answer(tempAnswer);
+        mutuallyExclusiveAnswer = new Answer(tempAnswer, ctx);
       } else if (
         answer.type === MUTUALLY_EXCLUSIVE &&
         answer.options.length > 1
@@ -199,10 +199,13 @@ class Question {
         answers = answers.filter(
           (answer) => answer.type !== MUTUALLY_EXCLUSIVE
         );
-        mutuallyExclusiveAnswer = new Answer({
-          ...answer,
-          type: "Radio",
-        });
+        mutuallyExclusiveAnswer = new Answer(
+          {
+            ...answer,
+            type: "Radio",
+          },
+          ctx
+        );
       } else {
         return;
       }
