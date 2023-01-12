@@ -267,8 +267,10 @@ class Answer {
       };
 
       // TODO: Check answer code structure for additional answers
-      if (additionalAnswer.qCode && type !== "Checkbox") {
-        option.detail_answer.q_code = additionalAnswer.qCode;
+      if (ctx.questionnaireJson.dataVersion !== "3") {
+        if (additionalAnswer.qCode && type !== "Checkbox") {
+          option.detail_answer.q_code = additionalAnswer.qCode;
+        }
       }
     }
     return option;

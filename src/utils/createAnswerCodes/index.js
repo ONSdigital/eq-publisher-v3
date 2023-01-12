@@ -36,11 +36,21 @@ const createAnswerCodes = (questionnaireJson) => {
         code: answer.qCode,
       });
       answer.options.forEach((option) => {
-        answerCodes.push({
-          answer_id: `answer${answer.id}`,
-          answer_value: option.value !== null ? option.value : option.label,
-          code: answer.qCode,
-        });
+        // If the option is not an additional answer, output answer code for the option
+        if (option.additionalAnswer === null) {
+          answerCodes.push({
+            answer_id: `answer${answer.id}`,
+            answer_value: option.value !== null ? option.value : option.label,
+            code: answer.qCode,
+          });
+        }
+        // If the option is an additional answer, output answer code for the additional answer
+        else {
+          answerCodes.push({
+            answer_id: `answer${option.additionalAnswer.id}`,
+            code: option.additionalAnswer.qCode,
+          });
+        }
       });
     }
     // Date range answers output an answer code for the from value, and an answer code for the to value
