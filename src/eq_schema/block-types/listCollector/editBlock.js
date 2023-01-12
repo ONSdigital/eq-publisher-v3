@@ -11,6 +11,7 @@ class EditBlock {
   constructor(page, ctx) {
     this.id = `edit-block-${page.id}`
     this.type = "ListEditQuestion"
+    this.page_title = page.addItemPageDescription
     this.cancel_text = "Don’t need to edit this item"
     const listAnswers = getList(ctx, page.listId).answers
     this.question = {
