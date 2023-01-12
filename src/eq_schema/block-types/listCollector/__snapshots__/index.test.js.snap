@@ -4,7 +4,6 @@ exports[`Add Block should build the Add block 1`] = `
 AddBlock {
   "cancel_text": "Don’t need to add this item",
   "id": "add-block-listcollector-1",
-  "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
       Answer {
@@ -25,7 +24,6 @@ exports[`Edit Block should build the Edit block 1`] = `
 EditBlock {
   "cancel_text": "Don’t need to edit this item",
   "id": "edit-block-listcollector-1",
-  "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
       Answer {

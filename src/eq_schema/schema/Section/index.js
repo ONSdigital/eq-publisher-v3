@@ -60,7 +60,6 @@ class Section {
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
-      page_title: section.pageDescription,
       collapsible: false,
     };
 

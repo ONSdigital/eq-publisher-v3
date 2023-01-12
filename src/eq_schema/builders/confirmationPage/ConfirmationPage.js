@@ -82,7 +82,6 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
   const confirmationQuestionObject = {
     id: `confirmation-page-for-${page.id}`,
     title: page.confirmation.title,
-    pageDescription: page.confirmation.pageDescription,
     descriptionEnabled: true,
     description: null,
     pageType: "ConfirmationQuestion",
