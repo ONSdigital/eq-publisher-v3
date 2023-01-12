@@ -27,28 +27,28 @@ const createAnswerCodes = (questionnaireJson) => {
   answers.forEach((answer) => {
     if ([RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)) {
       answerCodes.push({
-        answer_id: answer.id,
+        answer_id: `answer${answer.id}`,
         code: answer.qCode,
       });
       answer.options.forEach((option) => {
         answerCodes.push({
-          answer_id: answer.id,
+          answer_id: `answer${answer.id}`,
           answer_value: option.value !== null ? option.value : option.label,
           code: answer.qCode,
         });
       });
     } else if (answer.type === DATE_RANGE) {
       answerCodes.push({
-        answer_id: `${answer.id}from`,
+        answer_id: `answer${answer.id}from`,
         code: answer.qCode,
       });
       answerCodes.push({
-        answer_id: `${answer.id}to`,
+        answer_id: `answer${answer.id}to`,
         code: answer.secondaryQCode,
       });
     } else {
       answerCodes.push({
-        answer_id: answer.id,
+        answer_id: `answer${answer.id}`,
         code: answer.qCode,
       });
     }
