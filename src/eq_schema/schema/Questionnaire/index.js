@@ -9,6 +9,8 @@ const { buildContents } = require("../../../utils/builders");
 
 const validThemes = require("../../../constants/validThemes");
 
+const createAnswerCodes = require("../../../utils/createAnswerCodes");
+
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
@@ -45,6 +47,10 @@ class Questionnaire {
     if (contentMap[legalBasisCode]) {
       this.legal_basis = contentMap[legalBasisCode];
     }
+
+    this.answer_codes =
+      questionnaireJson.dataVersion === "3" &&
+      createAnswerCodes(questionnaireJson);
 
     const ctx = this.createContext(questionnaireJson);
 
