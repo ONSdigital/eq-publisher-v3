@@ -48,9 +48,9 @@ class Questionnaire {
       this.legal_basis = contentMap[legalBasisCode];
     }
 
-    this.answer_codes =
-      questionnaireJson.dataVersion === "3" &&
-      createAnswerCodes(questionnaireJson);
+    if (questionnaireJson.dataVersion === "3") {
+      this.answer_codes = createAnswerCodes(questionnaireJson);
+    }
 
     const ctx = this.createContext(questionnaireJson);
 

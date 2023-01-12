@@ -266,7 +266,6 @@ class Answer {
         mandatory: properties.required,
       };
 
-      // TODO: Check answer code structure for additional answers
       if (ctx.questionnaireJson.dataVersion !== "3") {
         if (additionalAnswer.qCode && type !== "Checkbox") {
           option.detail_answer.q_code = additionalAnswer.qCode;
