@@ -34,6 +34,7 @@ class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
     this.title = processPipe(ctx)(question.title);
+
     if (question.qCode) {
       this.q_code = question.qCode;
     }

@@ -38,6 +38,7 @@ class DrivingQuestion {
     this.id = `question-driving-${page.id}`
     this.type = "General"
     this.title = processPipe(ctx)(page.drivingQuestion)
+
     if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
       this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
     }
