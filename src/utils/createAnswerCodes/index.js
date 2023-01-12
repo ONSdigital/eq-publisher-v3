@@ -3,6 +3,7 @@ const {
   RADIO,
   SELECT,
   MUTUALLY_EXCLUSIVE,
+  DATE_RANGE,
 } = require("../../constants/answerTypes");
 
 const getAllAnswers = (questionnaireJson) => {
@@ -35,6 +36,15 @@ const createAnswerCodes = (questionnaireJson) => {
           answer_value: option.value !== null ? option.value : option.label,
           code: answer.qCode,
         });
+      });
+    } else if (answer.type === DATE_RANGE) {
+      answerCodes.push({
+        answer_id: `${answer.id}from`,
+        code: answer.qCode,
+      });
+      answerCodes.push({
+        answer_id: `${answer.id}to`,
+        code: answer.secondaryQCode,
       });
     } else {
       answerCodes.push({
