@@ -1,3 +1,10 @@
+const {
+  CHECKBOX,
+  RADIO,
+  SELECT,
+  MUTUALLY_EXCLUSIVE,
+} = require("../../constants/answerTypes");
+
 const getAllAnswers = (questionnaireJson) => {
   const allQuestionnaireAnswers = [];
   questionnaireJson.sections.forEach((section) => {
@@ -17,10 +24,24 @@ const createAnswerCodes = (questionnaireJson) => {
   const answerCodes = [];
   const answers = getAllAnswers(questionnaireJson);
   answers.forEach((answer) => {
-    answerCodes.push({
-      answer_id: answer.id,
-      code: answer.qCode,
-    });
+    if ([RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)) {
+      answerCodes.push({
+        answer_id: answer.id,
+        code: answer.qCode,
+      });
+      answer.options.forEach((option) => {
+        answerCodes.push({
+          answer_id: answer.id,
+          answer_value: option.value !== null ? option.value : option.label,
+          code: answer.qCode,
+        });
+      });
+    } else {
+      answerCodes.push({
+        answer_id: answer.id,
+        code: answer.qCode,
+      });
+    }
   });
   return answerCodes;
 };

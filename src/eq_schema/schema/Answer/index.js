@@ -266,6 +266,7 @@ class Answer {
         mandatory: properties.required,
       };
 
+      // TODO: Check answer code structure for additional answers
       if (additionalAnswer.qCode && type !== "Checkbox") {
         option.detail_answer.q_code = additionalAnswer.qCode;
       }
