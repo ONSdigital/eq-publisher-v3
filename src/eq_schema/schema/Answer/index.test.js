@@ -1044,6 +1044,17 @@ describe("Answer", () => {
 
   describe("Data version", () => {
     describe("Data version not 3", () => {
+      it("should contain a qCode if data version is not 3 and type is number", () => {
+        const answer = new Answer(
+          createAnswerJSON({
+            type: NUMBER,
+            qCode: "answer-1",
+          }),
+          createContextJSON()
+        );
+        expect(answer.q_code).toBe("answer-1");
+      });
+
       it("should contain a qCode if data version is not 3 and type is checkbox option", () => {
         const answer = new Answer(
           createAnswerJSON({
@@ -1107,6 +1118,47 @@ describe("Answer", () => {
         expect(answer.options[0].q_code).toBeUndefined();
         expect(answer.options[1].q_code).toBeUndefined();
         expect(answer.options[2].detail_answer.q_code).toBe("radio-other-code");
+      });
+
+      it("should add additional answer QCode to option if data version is not 3 and answer type is checkbox", () => {
+        const answer = new Answer(
+          createAnswerJSON({
+            type: CHECKBOX,
+            options: [
+              {
+                id: "1",
+                label: "Option 1",
+                description: null,
+                qCode: "option-1-code",
+              },
+              {
+                id: "2",
+                label: "Option 2",
+                description: null,
+                qCode: "option-2-code",
+              },
+              {
+                id: "additional-option-id",
+                label: "Other option",
+                description: null,
+                qCode: "checkbox-other-code-data-version-1",
+                additionalAnswer: {
+                  id: "additional-answer-textfield",
+                  type: TEXTFIELD,
+                  label: "Additional answer",
+                  qCode: "checkbox-other-code-data-version-3",
+                },
+              },
+            ],
+          }),
+          createContextJSON()
+        );
+        expect(answer.options[0].q_code).toBe("option-1-code");
+        expect(answer.options[1].q_code).toBe("option-2-code");
+        expect(answer.options[2].q_code).toBe(
+          "checkbox-other-code-data-version-1"
+        );
+        expect(answer.options[2].detail_answer.q_code).toBeUndefined();
       });
     });
 
