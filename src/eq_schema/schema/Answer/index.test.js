@@ -1163,6 +1163,17 @@ describe("Answer", () => {
     });
 
     describe("Data version 3", () => {
+      it("should not contain a qCode if data version is 3 and type is number answer", () => {
+        const answer = new Answer(
+          createAnswerJSON({
+            type: NUMBER,
+            qCode: "answer-1",
+          }),
+          createContextJSON({ dataVersion: "3" })
+        );
+        expect(answer.q_code).toBeUndefined();
+      });
+
       it("should not contain a qCode if data version is 3 and type is checkbox answer", () => {
         const answer = new Answer(
           createAnswerJSON({
