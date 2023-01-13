@@ -1157,7 +1157,8 @@ describe("Answer", () => {
       question = new Question(
         createAnswerJSON({
           answers: [checkboxWithAdditionalAnswers],
-        })
+        }),
+        createContextJSON()
       );
     });
 
