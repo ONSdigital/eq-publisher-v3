@@ -37,10 +37,16 @@ const createAnswerCodes = (questionnaireJson) => {
       });
       answer.options.forEach((option) => {
         // If the option is not an additional answer, output answer code for the option
-        if (option.additionalAnswer === null) {
+        if (
+          option.additionalAnswer === null ||
+          option.additionalAnswer === undefined
+        ) {
           answerCodes.push({
             answer_id: `answer${answer.id}`,
-            answer_value: option.value !== null ? option.value : option.label,
+            answer_value:
+              option.value !== null && option.value !== undefined
+                ? option.value
+                : option.label,
             code: answer.qCode,
           });
         }

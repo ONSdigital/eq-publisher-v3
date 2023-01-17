@@ -19,7 +19,7 @@ const {
 describe("Create answer codes", () => {
   const createQuestionnaireJSON = (answer) =>
     Object.assign({
-      id: "1",
+      id: "questionnaire-1",
       title: "Test questionnaire",
       description: "Questionnaire for tests",
       theme: "default",
@@ -27,7 +27,7 @@ describe("Create answer codes", () => {
       summary: true,
       hub: false,
       surveyId: "123",
-      dataVersion: 1,
+      dataVersion: "3",
       themeSettings: {
         id: "1",
         previewTheme: "default",
@@ -44,7 +44,7 @@ describe("Create answer codes", () => {
       },
       sections: [
         {
-          id: "1",
+          id: "section-1",
           title: "Section",
           folders: [
             {
@@ -107,6 +107,45 @@ describe("Create answer codes", () => {
     expect(answerCodes).toEqual([
       { answer_id: "answerdate-range-answer-1from", code: "answer-from-code" },
       { answer_id: "answerdate-range-answer-1to", code: "answer-to-code" },
+    ]);
+  });
+
+  it("should add answer codes for radio answer and options", () => {
+    const answer = {
+      id: "radio-answer-1",
+      type: RADIO,
+      qCode: "answer-radio-code",
+      options: [
+        {
+          id: "radio-option-1",
+          label: "Option 1",
+        },
+        {
+          id: "radio-option-2",
+          label: "Option 2",
+        },
+      ],
+    };
+
+    const questionnaire = createQuestionnaireJSON(answer);
+
+    const answerCodes = createAnswerCodes(questionnaire);
+
+    expect(answerCodes).toEqual([
+      {
+        answer_id: "answerradio-answer-1",
+        code: "answer-radio-code",
+      },
+      {
+        answer_id: "answerradio-answer-1",
+        answer_value: "Option 1",
+        code: "answer-radio-code",
+      },
+      {
+        answer_id: "answerradio-answer-1",
+        answer_value: "Option 2",
+        code: "answer-radio-code",
+      },
     ]);
   });
 });
