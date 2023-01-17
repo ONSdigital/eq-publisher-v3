@@ -7,7 +7,7 @@ const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents } = require("../../../utils/builders");
 
-const {validThemes, themeNames } = require("../../../constants/validThemes");
+const { validThemes, themeNames } = require("../../../constants/validThemes");
 
 const { Introduction } = require("../../block-types");
 
