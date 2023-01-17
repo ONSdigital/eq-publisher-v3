@@ -75,20 +75,151 @@ describe("Create answer codes", () => {
       },
     });
 
-  it("should add answer codes for number answer", () => {
-    const answer = {
-      id: "number-answer-1",
-      type: NUMBER,
-      qCode: "number-answer-code",
-    };
-    const questionnaire = createQuestionnaireJSON(answer);
+  describe("General answer types", () => {
+    it("should add answer codes for number answer", () => {
+      const answer = {
+        id: "number-answer-1",
+        type: NUMBER,
+        qCode: "number-answer-code",
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
 
-    const answerCodes = createAnswerCodes(questionnaire);
+      const answerCodes = createAnswerCodes(questionnaire);
 
-    // answernumber-answer-1 as `answer` is added to start for answer_id
-    expect(answerCodes).toEqual([
-      { answer_id: "answernumber-answer-1", code: "number-answer-code" },
-    ]);
+      // answernumber-answer-1 as `answer` is added to start for answer_id
+      expect(answerCodes).toEqual([
+        { answer_id: "answernumber-answer-1", code: "number-answer-code" },
+      ]);
+    });
+
+    it("should add answer codes for currency answer", () => {
+      const answer = {
+        id: "currency-answer-1",
+        type: CURRENCY,
+        qCode: "currency-answer-code",
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        { answer_id: "answercurrency-answer-1", code: "currency-answer-code" },
+      ]);
+    });
+
+    it("should add answer codes for unit answer", () => {
+      const answer = {
+        id: "unit-answer-1",
+        type: UNIT,
+        qCode: "unit-answer-code",
+        properties: {
+          unit: "Metres",
+        },
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        { answer_id: "answerunit-answer-1", code: "unit-answer-code" },
+      ]);
+    });
+
+    it("should add answer codes for percentage answer", () => {
+      const answer = {
+        id: "percentage-answer-1",
+        type: PERCENTAGE,
+        qCode: "percentage-answer-code",
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answerpercentage-answer-1",
+          code: "percentage-answer-code",
+        },
+      ]);
+    });
+
+    it("should add answer codes for duration answer", () => {
+      const answer = {
+        id: "duration-answer-1",
+        type: DURATION,
+        qCode: "duration-answer-code",
+        properties: {
+          unit: "YearsMonths",
+        },
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answerduration-answer-1",
+          code: "duration-answer-code",
+        },
+      ]);
+    });
+
+    it("should add answer codes for date answer", () => {
+      const answer = {
+        id: "date-answer-1",
+        type: DATE,
+        qCode: "date-answer-code",
+        properties: {
+          format: "dd/mm/yyyy",
+        },
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answerdate-answer-1",
+          code: "date-answer-code",
+        },
+      ]);
+    });
+
+    it("should add answer codes for text area answer", () => {
+      const answer = {
+        id: "textarea-answer-1",
+        type: TEXTAREA,
+        qCode: "textarea-answer-code",
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answertextarea-answer-1",
+          code: "textarea-answer-code",
+        },
+      ]);
+    });
+
+    it("should add answer codes for text field answer", () => {
+      const answer = {
+        id: "textfield-answer-1",
+        type: TEXTFIELD,
+        qCode: "textfield-answer-code",
+      };
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answertextfield-answer-1",
+          code: "textfield-answer-code",
+        },
+      ]);
+    });
   });
 
   it("should add answer codes for date range answer", () => {
