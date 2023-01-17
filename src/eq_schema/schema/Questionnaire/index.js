@@ -7,7 +7,7 @@ const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents } = require("../../../utils/builders");
 
-const validThemes = require("../../../constants/validThemes");
+const {validThemes, themeNames } = require("../../../constants/validThemes");
 
 const { Introduction } = require("../../block-types");
 
@@ -21,7 +21,7 @@ const getPreviewTheme = ({ previewTheme, themes }) =>
 
 const getTheme = (previewTheme) => {
   if (validThemes.includes(previewTheme)) {
-    return previewTheme;
+    return themeNames[previewTheme];
   } else {
     return "default";
   }
