@@ -17,7 +17,7 @@ describe("Questionnaire", () => {
         summary: true,
         hub: false,
         surveyId: "123",
-        dataVersion: 1,
+        dataVersion: "1",
         themeSettings: {
           id: "1",
           previewTheme: "default",
@@ -421,5 +421,19 @@ describe("Questionnaire", () => {
       "theme",
       "default"
     );
+  });
+
+  it("should not add answer codes if data version is not 3", () => {
+    const questionnaireJson = createQuestionnaireJSON();
+    const questionnaire = new Questionnaire(questionnaireJson);
+
+    expect(questionnaire.answer_codes).toBeUndefined();
+  });
+
+  it("should add answer codes if data version is 3", () => {
+    const questionnaireJson = createQuestionnaireJSON({ dataVersion: "3" });
+    const questionnaire = new Questionnaire(questionnaireJson);
+
+    expect(questionnaire.answer_codes).not.toBeUndefined();
   });
 });
