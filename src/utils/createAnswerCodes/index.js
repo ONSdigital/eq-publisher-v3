@@ -7,13 +7,13 @@ const {
 } = require("../../constants/answerTypes");
 
 // Get all answers in the questionnaire
-// TODO: When list collector answers include QCodes, change this to `getAllAnswers` from `utils/convertPipes`
+// TODO: When list collector answers include QCodes, update this to handle list collector answers
 const getAllAnswers = (questionnaireJson) => {
   const allQuestionnaireAnswers = [];
   questionnaireJson.sections.forEach((section) => {
     section.folders.forEach((folder) => {
       folder.pages.forEach((page) => {
-        if (page.pageType !== "ListCollectorPage") {
+        if (page.pageType === "QuestionPage") {
           page.answers.forEach((answer) => {
             allQuestionnaireAnswers.push(answer);
           });
