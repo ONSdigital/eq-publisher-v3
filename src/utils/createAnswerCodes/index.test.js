@@ -17,7 +17,7 @@ const {
 } = require("../../constants/answerTypes");
 
 describe("Create answer codes", () => {
-  const createQuestionnaireJSON = (answer) =>
+  const createQuestionnaireJSON = (answer, pageType = "QuestionPage") =>
     Object.assign({
       id: "questionnaire-1",
       title: "Test questionnaire",
@@ -35,7 +35,7 @@ describe("Create answer codes", () => {
                 {
                   id: "page-1",
                   title: "Question 1",
-                  pageType: "QuestionPage",
+                  pageType,
                   answers: [
                     {
                       ...answer,
@@ -449,6 +449,40 @@ describe("Create answer codes", () => {
           code: "additional-answer-code",
         },
       ]);
+    });
+  });
+
+  describe("Page types", () => {
+    it("should not add answer codes for list collector page type", () => {
+      const answer = {
+        id: "number-answer-1",
+        type: NUMBER,
+        qCode: "number-answer-code",
+      };
+
+      const questionnaire = createQuestionnaireJSON(
+        answer,
+        "ListCollectorPage"
+      );
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([]);
+    });
+
+    it("should not add answer codes for calculated summary page type", () => {
+      const answer = {
+        id: "number-answer-1",
+        type: NUMBER,
+        qCode: "number-answer-code",
+      };
+
+      const questionnaire = createQuestionnaireJSON(
+        answer,
+        "CalculatedSummaryPage"
+      );
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([]);
     });
   });
 });
