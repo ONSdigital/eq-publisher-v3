@@ -53,6 +53,7 @@ describe("Create answer codes", () => {
                 {
                   id: "page-1",
                   title: "Question 1",
+                  pageType: "QuestionPage",
                   answers: [
                     {
                       ...answer,
