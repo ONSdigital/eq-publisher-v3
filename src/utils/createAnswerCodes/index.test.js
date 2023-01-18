@@ -23,25 +23,7 @@ describe("Create answer codes", () => {
       title: "Test questionnaire",
       description: "Questionnaire for tests",
       theme: "default",
-      navigation: false,
-      summary: true,
-      hub: false,
-      surveyId: "123",
       dataVersion: "3",
-      themeSettings: {
-        id: "1",
-        previewTheme: "default",
-        themes: [
-          {
-            enabled: true,
-            shortName: "default",
-            legalBasisCode: "NOTICE_1",
-            eqId: "1",
-            formType: "2",
-            id: "default",
-          },
-        ],
-      },
       sections: [
         {
           id: "section-1",
@@ -65,15 +47,6 @@ describe("Create answer codes", () => {
           ],
         },
       ],
-      metadata: [],
-      publishDetails: [{ surveyId: "874" }],
-      submission: {
-        id: "123",
-        furtherContent: "<p>Test</p>",
-        viewPrintAnswers: true,
-        emailConfirmation: true,
-        feedback: true,
-      },
     });
 
   describe("General answer types", () => {
