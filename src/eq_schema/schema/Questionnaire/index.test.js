@@ -1,5 +1,4 @@
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
-// const { DEFAULT_METADATA } = require("../../../constants/metadata");
 
 const Questionnaire = require(".");
 const Section = require("../Section");
