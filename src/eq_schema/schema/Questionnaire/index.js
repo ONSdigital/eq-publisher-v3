@@ -1,8 +1,3 @@
-const {
-  DEFAULT_METADATA,
-  DEFAULT_METADATA_NAMES,
-} = require("../../../constants/metadata");
-
 const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents } = require("../../../utils/builders");
@@ -129,15 +124,13 @@ class Questionnaire {
   }
 
   buildMetadata(metadata) {
-    const userMetadata = metadata
-      .filter(({ key }) => !DEFAULT_METADATA_NAMES.includes(key))
-      .map(({ key, type }) => ({
-        name: key,
-        type: type === "Date" ? "date" : "string",
-        optional: type === "Text_Optional" || undefined,
-      }));
+    const userMetadata = metadata.map(({ key, type }) => ({
+      name: key,
+      type: type === "Date" ? "date" : "string",
+      optional: type === "Text_Optional" || undefined,
+    }));
 
-    return [...DEFAULT_METADATA, ...userMetadata];
+    return [...userMetadata];
   }
 
   buildSubmission(postSubmission) {
