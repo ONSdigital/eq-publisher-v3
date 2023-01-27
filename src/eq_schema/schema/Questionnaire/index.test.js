@@ -1,5 +1,4 @@
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
-const { DEFAULT_METADATA } = require("../../../constants/metadata");
 
 const Questionnaire = require(".");
 const Section = require("../Section");
@@ -74,7 +73,6 @@ describe("Questionnaire", () => {
       sections: [expect.any(Section)],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
-      metadata: expect.arrayContaining(DEFAULT_METADATA),
     });
   });
 
@@ -199,29 +197,6 @@ describe("Questionnaire", () => {
     });
   });
 
-  it("should build the default metadata", () => {
-    expect(questionnaire).toMatchObject({
-      metadata: [
-        {
-          name: "user_id",
-          type: "string",
-        },
-        {
-          name: "period_id",
-          type: "string",
-        },
-        {
-          name: "ru_name",
-          type: "string",
-        },
-        {
-          name: "ru_ref",
-          type: "string",
-        },
-      ],
-    });
-  });
-
   it("should add user defined metadata", () => {
     const questionnaireJson = createQuestionnaireJSON({
       metadata: [
@@ -245,22 +220,6 @@ describe("Questionnaire", () => {
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
-      {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
-        type: "string",
-      },
       {
         name: "example_date",
         type: "date",
@@ -304,22 +263,6 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
-        type: "string",
-      },
-      {
         name: "example_date",
         type: "date",
       },
@@ -334,36 +277,6 @@ describe("Questionnaire", () => {
       },
       {
         name: "example_language",
-        type: "string",
-      },
-    ]);
-  });
-
-  it("should not overwrite the default metadata", () => {
-    const questionnaireJson = createQuestionnaireJSON({
-      metadata: [
-        {
-          key: "ru_name",
-          type: "Date",
-        },
-      ],
-    });
-
-    expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
-      {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
         type: "string",
       },
     ]);
