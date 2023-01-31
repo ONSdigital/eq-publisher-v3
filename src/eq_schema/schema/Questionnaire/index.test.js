@@ -11,7 +11,7 @@ describe("Questionnaire", () => {
         title: "Quarterly Business Survey",
         description: "Quarterly Business Survey",
         type: BUSINESS,
-        theme: "default",
+        theme: "business",
         navigation: false,
         summary: true,
         hub: false,
@@ -19,11 +19,11 @@ describe("Questionnaire", () => {
         dataVersion: 1,
         themeSettings: {
           id: "1",
-          previewTheme: "default",
+          previewTheme: "business",
           themes: [
             {
               enabled: true,
-              shortName: "default",
+              shortName: "business",
               legalBasisCode: "NOTICE_1",
               eqId: "1",
               formType: "2",
@@ -69,7 +69,7 @@ describe("Questionnaire", () => {
       data_version: "0.0.1",
       survey_id: "123",
       title: "Quarterly Business Survey",
-      theme: "default",
+      theme: "business",
       sections: [expect.any(Section)],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
@@ -300,13 +300,13 @@ describe("Questionnaire", () => {
     );
   });
 
-  it("should allow setting default theme", () => {
+  it("should allow setting business theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
       themeSettings: {
-        previewTheme: "default",
+        previewTheme: "business",
         themes: [
           {
-            shortName: "default",
+            shortName: "business",
           },
         ],
       },
@@ -314,11 +314,11 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
       "theme",
-      "default"
+      "business"
     );
   });
 
-  it("should set default theme if theme is invalid", () => {
+  it("should set business theme if theme is invalid", () => {
     const questionnaireJson = createQuestionnaireJSON({
       themeSettings: {
         previewTheme: "invalidtheme",
@@ -332,7 +332,7 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
       "theme",
-      "default"
+      "business"
     );
   });
 });
