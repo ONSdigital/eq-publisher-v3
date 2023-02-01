@@ -18,7 +18,7 @@ const getTheme = (previewTheme) => {
   if (validThemes.includes(previewTheme)) {
     return themeNames[previewTheme];
   } else {
-    return "default";
+    return "business";
   }
 };
 

@@ -1,7 +1,7 @@
-const validThemes = ["default", "northernireland", "orr", "health", "social", "beis", "beis_ni"];
+const validThemes = ["business", "northernireland", "orr", "health", "social", "beis", "beis_ni"];
 
 const themeNames = {
-    default: "default", 
+    business: "business", 
     northernireland: "northernireland", 
     orr: "orr", 
     health: "health", 
