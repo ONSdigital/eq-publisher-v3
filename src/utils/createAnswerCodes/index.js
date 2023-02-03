@@ -22,6 +22,12 @@ const getAllAnswers = (questionnaireJson) => {
     });
   });
 
+  questionnaireJson.collectionLists.lists.forEach((list) => {
+    list.answers.forEach((answer) => {
+      allQuestionnaireAnswers.push(answer);
+    });
+  });
+
   return allQuestionnaireAnswers;
 };
 
