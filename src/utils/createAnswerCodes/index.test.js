@@ -47,6 +47,22 @@ describe("Create answer codes", () => {
           ],
         },
       ],
+      collectionLists: {
+        id: "collection-list-1",
+        lists:
+          pageType === "ListCollectorPage"
+            ? [
+                {
+                  id: "list-1",
+                  answers: [
+                    {
+                      ...answer,
+                    },
+                  ],
+                },
+              ]
+            : [],
+      },
     });
 
   describe("General answer types", () => {
@@ -453,11 +469,11 @@ describe("Create answer codes", () => {
   });
 
   describe("Page types", () => {
-    it("should not add answer codes for list collector page type", () => {
+    it("shoul add answer codes for list collector page type", () => {
       const answer = {
-        id: "number-answer-1",
-        type: NUMBER,
-        qCode: "number-answer-code",
+        id: "list-textfield-answer-1",
+        type: TEXTFIELD,
+        qCode: "list-textfield-answer-code",
       };
 
       const questionnaire = createQuestionnaireJSON(
@@ -466,7 +482,12 @@ describe("Create answer codes", () => {
       );
       const answerCodes = createAnswerCodes(questionnaire);
 
-      expect(answerCodes).toEqual([]);
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answerlist-textfield-answer-1",
+          code: "list-textfield-answer-code",
+        },
+      ]);
     });
 
     it("should not add answer codes for calculated summary page type", () => {

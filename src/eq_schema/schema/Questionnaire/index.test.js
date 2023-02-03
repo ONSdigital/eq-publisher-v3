@@ -46,6 +46,9 @@ describe("Questionnaire", () => {
         ],
         metadata: [],
         publishDetails: [{ surveyId: "874" }],
+        collectionLists: {
+          lists: [],
+        },
         submission: {
           id: "123",
           furtherContent: "<p>Test</p>",
