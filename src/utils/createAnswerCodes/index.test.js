@@ -466,6 +466,51 @@ describe("Create answer codes", () => {
         },
       ]);
     });
+
+    it("should not add answer codes to dynamic options", () => {
+      const answer = {
+        id: "radio-answer-1",
+        type: RADIO,
+        qCode: "answer-radio-code",
+        options: [
+          {
+            id: "radio-option-1",
+            label: "Option 1",
+            dynamicAnswer: true,
+          },
+          {
+            id: "radio-option-2",
+            label: "Option 2",
+          },
+          {
+            id: "radio-option-3",
+            label: "Option 3",
+            value: "Option 3 value",
+          },
+        ],
+      };
+
+      const questionnaire = createQuestionnaireJSON(answer);
+
+      const answerCodes = createAnswerCodes(questionnaire);
+
+      expect(answerCodes).toEqual([
+        {
+          answer_id: "answerradio-answer-1",
+          code: "answer-radio-code",
+        },
+        {
+          answer_id: "answerradio-answer-1",
+          answer_value: "Option 2",
+          code: "answer-radio-code",
+        },
+        {
+          answer_id: "answerradio-answer-1",
+          answer_value: "Option 3 value", // sets answer_value to option.value if option.value is not undefined or null
+          code: "answer-radio-code",
+        },
+      ]);
+    });
   });
 
   describe("Page types", () => {
