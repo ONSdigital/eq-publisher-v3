@@ -7,7 +7,6 @@ const {
 } = require("../../constants/answerTypes");
 
 // Get all answers in the questionnaire
-// TODO: When list collector answers include QCodes, update this to handle list collector answers
 const getAllAnswers = (questionnaireJson) => {
   const allQuestionnaireAnswers = [];
   questionnaireJson.sections.forEach((section) => {
