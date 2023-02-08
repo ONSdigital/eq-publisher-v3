@@ -129,9 +129,11 @@ class Answer {
           option.dynamicAnswer &&
           (this.dynamic_options = Answer.buildDynamicOption(option))
       );
-      this.options = [];
       answer.options.forEach((option) => {
         if (!option.dynamicAnswer) {
+          if (!this.options) {
+            this.options = [];
+          }
           this.options.push(Answer.buildOption(option, answer, ctx));
         }
       });
