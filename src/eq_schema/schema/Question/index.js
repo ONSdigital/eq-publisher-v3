@@ -62,7 +62,10 @@ class Question {
 
     if (dateRange) {
       this.type = DATE_RANGE;
-      this.answers = this.buildDateRangeAnswers(dateRange);
+      this.answers = this.buildDateRangeAnswers(
+        dateRange,
+        ctx.questionnaireJson.dataVersion
+      );
       const { earliestDate, latestDate, minDuration, maxDuration } =
         dateRange.validation;
       if (dateRange.advancedProperties) {
@@ -151,7 +154,7 @@ class Question {
     });
   }
 
-  buildDateRangeAnswers(answer) {
+  buildDateRangeAnswers(answer, dataVersion) {
     const commonAnswerDef = {
       id: `answer${answer.id}`,
       type: DATE,
@@ -162,16 +165,20 @@ class Question {
       id: `${commonAnswerDef.id}from`,
       label: answer.label,
     };
-    if (answer.qCode) {
-      dateFrom.q_code = answer.qCode;
+    if (dataVersion !== "3") {
+      if (answer.qCode) {
+        dateFrom.q_code = answer.qCode;
+      }
     }
     const dateTo = {
       ...commonAnswerDef,
       id: `${commonAnswerDef.id}to`,
       label: answer.secondaryLabel,
     };
-    if (answer.secondaryQCode) {
-      dateTo.q_code = answer.secondaryQCode;
+    if (dataVersion !== "3") {
+      if (answer.secondaryQCode) {
+        dateTo.q_code = answer.secondaryQCode;
+      }
     }
     return [dateFrom, dateTo];
   }
@@ -191,7 +198,7 @@ class Question {
         };
         tempAnswer.options[0].qCode = answer.qCode;
         delete tempAnswer.qCode;
-        mutuallyExclusiveAnswer = new Answer(tempAnswer);
+        mutuallyExclusiveAnswer = new Answer(tempAnswer, ctx);
       } else if (
         answer.type === MUTUALLY_EXCLUSIVE &&
         answer.options.length > 1
@@ -199,10 +206,13 @@ class Question {
         answers = answers.filter(
           (answer) => answer.type !== MUTUALLY_EXCLUSIVE
         );
-        mutuallyExclusiveAnswer = new Answer({
-          ...answer,
-          type: "Radio",
-        });
+        mutuallyExclusiveAnswer = new Answer(
+          {
+            ...answer,
+            type: "Radio",
+          },
+          ctx
+        );
       } else {
         return;
       }

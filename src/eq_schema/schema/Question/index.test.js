@@ -24,8 +24,10 @@ describe("Question", () => {
       },
       options
     );
+
   const ctx = {
     questionnaireJson: {
+      dataVersion: "1",
       sections: [
         {
           folders: [
@@ -47,6 +49,7 @@ describe("Question", () => {
       ],
     },
   };
+
   const createPipedFormat = (placeholder, identifier, source) => ({
     text: `{${placeholder}}`,
     placeholders: [
@@ -340,7 +343,7 @@ describe("Question", () => {
           validation,
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question).toMatchObject({
         type: DATE_RANGE,
@@ -375,7 +378,7 @@ describe("Question", () => {
         },
         { type: "TextField", id: "2" },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers).not.toContainEqual(
         expect.objectContaining({
@@ -408,7 +411,7 @@ describe("Question", () => {
           ],
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers[0].options).toHaveLength(2);
       expect(question.answers[0].options[1]).toMatchObject({
@@ -459,7 +462,7 @@ describe("Question", () => {
           ],
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers[0]).toEqual(
         expect.objectContaining({
@@ -514,7 +517,7 @@ describe("Question", () => {
       answers[0].validation.latestDate.enabled = false;
       answers[0].validation.minDuration.enabled = false;
       answers[0].validation.maxDuration.enabled = false;
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers[0]).toEqual(
         expect.not.objectContaining({
@@ -567,7 +570,7 @@ describe("Question", () => {
           ],
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers[0]).toEqual(
         expect.not.objectContaining({
@@ -579,6 +582,47 @@ describe("Question", () => {
           qCode: "456",
         })
       );
+    });
+
+    describe("Data version", () => {
+      it("should add QCode when data version is not 3", () => {
+        const answers = [
+          {
+            type: DATE_RANGE,
+            id: "1",
+            properties: { required: true },
+            validation,
+            label: "From",
+            secondaryLabel: "To",
+            qCode: "123",
+            secondaryQCode: "456",
+          },
+        ];
+        const question = new Question(createQuestionJSON({ answers }), ctx);
+
+        expect(question.answers[0].q_code).toBe("123");
+        expect(question.answers[1].q_code).toBe("456");
+      });
+
+      it("should not add QCode when data version is 3", () => {
+        const answers = [
+          {
+            type: DATE_RANGE,
+            id: "1",
+            properties: { required: true },
+            validation,
+            label: "From",
+            secondaryLabel: "To",
+            qCode: "123",
+            secondaryQCode: "456",
+          },
+        ];
+        ctx.questionnaireJson.dataVersion = "3";
+        const question = new Question(createQuestionJSON({ answers }), ctx);
+
+        expect(question.answers[0].q_code).toBeUndefined();
+        expect(question.answers[1].q_code).toBeUndefined();
+      });
     });
   });
 

@@ -4,6 +4,8 @@ const { buildContents } = require("../../../utils/builders");
 
 const { validThemes, themeNames } = require("../../../constants/validThemes");
 
+const createAnswerCodes = require("../../../utils/createAnswerCodes");
+
 const { Introduction } = require("../../block-types");
 
 const Section = require("../Section");
@@ -39,6 +41,10 @@ class Questionnaire {
     this.form_type = formType || "9999";
     if (contentMap[legalBasisCode]) {
       this.legal_basis = contentMap[legalBasisCode];
+    }
+
+    if (questionnaireJson.dataVersion === "3") {
+      this.answer_codes = createAnswerCodes(questionnaireJson);
     }
 
     const ctx = this.createContext(questionnaireJson);
