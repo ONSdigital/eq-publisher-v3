@@ -1,10 +1,4 @@
-const {
-  CHECKBOX,
-  RADIO,
-  SELECT,
-  MUTUALLY_EXCLUSIVE,
-  DATE_RANGE,
-} = require("../../constants/answerTypes");
+const { DATE_RANGE } = require("../../constants/answerTypes");
 
 // Get all answers in the questionnaire
 // TODO: When list collector answers include QCodes, update this to handle list collector answers
@@ -38,41 +32,8 @@ const createAnswerCodes = (questionnaireJson) => {
 
   // Loop through all answers in the questionnaire
   answers.forEach((answer) => {
-    // Multiple choice answers output a code for the answer, and a code with answer_value for each option
-    if ([RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)) {
-      answerCodes.push({
-        answer_id: `answer${answer.id}`,
-        code: answer.qCode,
-      });
-      answer.options.forEach((option) => {
-        // Dynamic options do not require the answer code to be added for the option level
-        if (!option.dynamicAnswer) {
-          // If the option is not an additional answer, output answer code for the option
-          if (
-            option.additionalAnswer === null ||
-            option.additionalAnswer === undefined
-          ) {
-            answerCodes.push({
-              answer_id: `answer${answer.id}`,
-              answer_value:
-                option.value !== null && option.value !== undefined
-                  ? option.value
-                  : option.label,
-              code: answer.qCode,
-            });
-          }
-          // If the option is an additional answer, output answer code for the additional answer
-          else {
-            answerCodes.push({
-              answer_id: `answer${option.additionalAnswer.id}`,
-              code: option.additionalAnswer.qCode,
-            });
-          }
-        }
-      });
-    }
     // Date range answers output an answer code for the from value, and an answer code for the to value
-    else if (answer.type === DATE_RANGE) {
+    if (answer.type === DATE_RANGE) {
       answerCodes.push({
         answer_id: `answer${answer.id}from`,
         code: answer.qCode,
