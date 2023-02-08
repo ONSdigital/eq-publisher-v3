@@ -124,13 +124,11 @@ class Answer {
     }
 
     if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
-      if (answer.type === RADIO) {
-        answer.options.map(
-          (option) =>
-            option.dynamicAnswer &&
-            (this.dynamic_options = Answer.buildDynamicOption(option))
-        );
-      }
+      answer.options.map(
+        (option) =>
+          option.dynamicAnswer &&
+          (this.dynamic_options = Answer.buildDynamicOption(option))
+      );
       this.options = [];
       answer.options.forEach((option) => {
         if (!option.dynamicAnswer) {

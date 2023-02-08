@@ -1,13 +1,8 @@
-const {
-  DEFAULT_METADATA,
-  DEFAULT_METADATA_NAMES,
-} = require("../../../constants/metadata");
-
 const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents } = require("../../../utils/builders");
 
-const validThemes = require("../../../constants/validThemes");
+const { validThemes, themeNames } = require("../../../constants/validThemes");
 
 const createAnswerCodes = require("../../../utils/createAnswerCodes");
 
@@ -23,9 +18,9 @@ const getPreviewTheme = ({ previewTheme, themes }) =>
 
 const getTheme = (previewTheme) => {
   if (validThemes.includes(previewTheme)) {
-    return previewTheme;
+    return themeNames[previewTheme];
   } else {
-    return "default";
+    return "business";
   }
 };
 
@@ -135,15 +130,13 @@ class Questionnaire {
   }
 
   buildMetadata(metadata) {
-    const userMetadata = metadata
-      .filter(({ key }) => !DEFAULT_METADATA_NAMES.includes(key))
-      .map(({ key, type }) => ({
-        name: key,
-        type: type === "Date" ? "date" : "string",
-        optional: type === "Text_Optional" || undefined,
-      }));
+    const userMetadata = metadata.map(({ key, type }) => ({
+      name: key,
+      type: type === "Date" ? "date" : "string",
+      optional: type === "Text_Optional" || undefined,
+    }));
 
-    return [...DEFAULT_METADATA, ...userMetadata];
+    return [...userMetadata];
   }
 
   buildSubmission(postSubmission) {

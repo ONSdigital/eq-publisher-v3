@@ -1,5 +1,4 @@
 const { BUSINESS } = require("../../../constants/questionnaireTypes");
-const { DEFAULT_METADATA } = require("../../../constants/metadata");
 
 const Questionnaire = require(".");
 const Section = require("../Section");
@@ -12,7 +11,7 @@ describe("Questionnaire", () => {
         title: "Quarterly Business Survey",
         description: "Quarterly Business Survey",
         type: BUSINESS,
-        theme: "default",
+        theme: "business",
         navigation: false,
         summary: true,
         hub: false,
@@ -20,11 +19,11 @@ describe("Questionnaire", () => {
         dataVersion: "1",
         themeSettings: {
           id: "1",
-          previewTheme: "default",
+          previewTheme: "business",
           themes: [
             {
               enabled: true,
-              shortName: "default",
+              shortName: "business",
               legalBasisCode: "NOTICE_1",
               eqId: "1",
               formType: "2",
@@ -73,11 +72,10 @@ describe("Questionnaire", () => {
       data_version: "0.0.1",
       survey_id: "123",
       title: "Quarterly Business Survey",
-      theme: "default",
+      theme: "business",
       sections: [expect.any(Section)],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
-      metadata: expect.arrayContaining(DEFAULT_METADATA),
     });
   });
 
@@ -202,29 +200,6 @@ describe("Questionnaire", () => {
     });
   });
 
-  it("should build the default metadata", () => {
-    expect(questionnaire).toMatchObject({
-      metadata: [
-        {
-          name: "user_id",
-          type: "string",
-        },
-        {
-          name: "period_id",
-          type: "string",
-        },
-        {
-          name: "ru_name",
-          type: "string",
-        },
-        {
-          name: "ru_ref",
-          type: "string",
-        },
-      ],
-    });
-  });
-
   it("should add user defined metadata", () => {
     const questionnaireJson = createQuestionnaireJSON({
       metadata: [
@@ -248,22 +223,6 @@ describe("Questionnaire", () => {
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
-      {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
-        type: "string",
-      },
       {
         name: "example_date",
         type: "date",
@@ -307,22 +266,6 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
       {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
-        type: "string",
-      },
-      {
         name: "example_date",
         type: "date",
       },
@@ -337,36 +280,6 @@ describe("Questionnaire", () => {
       },
       {
         name: "example_language",
-        type: "string",
-      },
-    ]);
-  });
-
-  it("should not overwrite the default metadata", () => {
-    const questionnaireJson = createQuestionnaireJSON({
-      metadata: [
-        {
-          key: "ru_name",
-          type: "Date",
-        },
-      ],
-    });
-
-    expect(new Questionnaire(questionnaireJson)).toHaveProperty("metadata", [
-      {
-        name: "user_id",
-        type: "string",
-      },
-      {
-        name: "period_id",
-        type: "string",
-      },
-      {
-        name: "ru_name",
-        type: "string",
-      },
-      {
-        name: "ru_ref",
         type: "string",
       },
     ]);
@@ -390,13 +303,13 @@ describe("Questionnaire", () => {
     );
   });
 
-  it("should allow setting default theme", () => {
+  it("should allow setting business theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
       themeSettings: {
-        previewTheme: "default",
+        previewTheme: "business",
         themes: [
           {
-            shortName: "default",
+            shortName: "business",
           },
         ],
       },
@@ -404,11 +317,11 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
       "theme",
-      "default"
+      "business"
     );
   });
 
-  it("should set default theme if theme is invalid", () => {
+  it("should set business theme if theme is invalid", () => {
     const questionnaireJson = createQuestionnaireJSON({
       themeSettings: {
         previewTheme: "invalidtheme",
@@ -422,7 +335,7 @@ describe("Questionnaire", () => {
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
       "theme",
-      "default"
+      "business"
     );
   });
 

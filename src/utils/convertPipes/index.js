@@ -113,7 +113,7 @@ const PIPE_TYPES = {
   metadata: {
     retrieve: ({ id }, ctx) => getMetadata(ctx, id.toString()),
     render: ({ key }) => `${key}`,
-    placeholder: ({ key }) => `${key}`,
+    placeholder: ({ key }) => `${key.toLowerCase()}`,
     getType: ({ type }) => type,
     getFallback: ({ fallbackKey }) =>
       fallbackKey ? { source: "metadata", identifier: fallbackKey } : null,
