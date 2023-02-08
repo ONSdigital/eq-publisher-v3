@@ -237,7 +237,7 @@ describe("Create answer codes", () => {
   });
 
   describe("Multiple choice answer types", () => {
-    it("should add answer codes for radio answer and options", () => {
+    it("should add answer codes for radio answer", () => {
       const answer = {
         id: "radio-answer-1",
         type: RADIO,
@@ -268,25 +268,10 @@ describe("Create answer codes", () => {
           answer_id: "answerradio-answer-1",
           code: "answer-radio-code",
         },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 1",
-          code: "answer-radio-code",
-        },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 2",
-          code: "answer-radio-code",
-        },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 3 value", // sets answer_value to option.value if option.value is not undefined or null
-          code: "answer-radio-code",
-        },
       ]);
     });
 
-    it("should add answer codes for checkbox answer and options", () => {
+    it("should add answer codes for checkbox answer", () => {
       const answer = {
         id: "checkbox-answer-1",
         type: CHECKBOX,
@@ -317,25 +302,10 @@ describe("Create answer codes", () => {
           answer_id: "answercheckbox-answer-1",
           code: "answer-checkbox-code",
         },
-        {
-          answer_id: "answercheckbox-answer-1",
-          answer_value: "Option 1",
-          code: "answer-checkbox-code",
-        },
-        {
-          answer_id: "answercheckbox-answer-1",
-          answer_value: "Option 2",
-          code: "answer-checkbox-code",
-        },
-        {
-          answer_id: "answercheckbox-answer-1",
-          answer_value: "Option 3 value", // sets answer_value to option.value if option.value is not undefined or null
-          code: "answer-checkbox-code",
-        },
       ]);
     });
 
-    it("should add answer codes for select answer and options", () => {
+    it("should add answer codes for select answer", () => {
       const answer = {
         id: "select-answer-1",
         type: SELECT,
@@ -361,20 +331,10 @@ describe("Create answer codes", () => {
           answer_id: "answerselect-answer-1",
           code: "answer-select-code",
         },
-        {
-          answer_id: "answerselect-answer-1",
-          answer_value: "Option 1",
-          code: "answer-select-code",
-        },
-        {
-          answer_id: "answerselect-answer-1",
-          answer_value: "Option 2",
-          code: "answer-select-code",
-        },
       ]);
     });
 
-    it("should add answer codes for mutually exclusive answer and options", () => {
+    it("should add answer codes for mutually exclusive answer", () => {
       const answer = {
         id: "exclusive-answer-1",
         type: MUTUALLY_EXCLUSIVE,
@@ -398,16 +358,6 @@ describe("Create answer codes", () => {
       expect(answerCodes).toEqual([
         {
           answer_id: "answerexclusive-answer-1",
-          code: "answer-exclusive-code",
-        },
-        {
-          answer_id: "answerexclusive-answer-1",
-          answer_value: "Option 1",
-          code: "answer-exclusive-code",
-        },
-        {
-          answer_id: "answerexclusive-answer-1",
-          answer_value: "Option 2",
           code: "answer-exclusive-code",
         },
       ]);
@@ -451,23 +401,13 @@ describe("Create answer codes", () => {
           code: "answer-radio-code",
         },
         {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 1",
-          code: "answer-radio-code",
-        },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 2",
-          code: "answer-radio-code",
-        },
-        {
           answer_id: "answerradio-additional-answer-1",
           code: "additional-answer-code",
         },
       ]);
     });
 
-    it("should not add answer codes to dynamic options", () => {
+    it("should add answer codes to dynamic options", () => {
       const answer = {
         id: "radio-answer-1",
         type: RADIO,
@@ -497,16 +437,6 @@ describe("Create answer codes", () => {
       expect(answerCodes).toEqual([
         {
           answer_id: "answerradio-answer-1",
-          code: "answer-radio-code",
-        },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 2",
-          code: "answer-radio-code",
-        },
-        {
-          answer_id: "answerradio-answer-1",
-          answer_value: "Option 3 value", // sets answer_value to option.value if option.value is not undefined or null
           code: "answer-radio-code",
         },
       ]);

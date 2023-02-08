@@ -1,4 +1,10 @@
-const { DATE_RANGE } = require("../../constants/answerTypes");
+const {
+  CHECKBOX,
+  RADIO,
+  SELECT,
+  MUTUALLY_EXCLUSIVE,
+  DATE_RANGE,
+} = require("../../constants/answerTypes");
 
 // Get all answers in the questionnaire
 // TODO: When list collector answers include QCodes, update this to handle list collector answers
@@ -49,6 +55,19 @@ const createAnswerCodes = (questionnaireJson) => {
         answer_id: `answer${answer.id}`,
         code: answer.qCode,
       });
+      if ([RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)) {
+        answer.options.forEach((option) => {
+          if (
+            option.additionalAnswer !== undefined &&
+            option.additionalAnswer !== null
+          ) {
+            answerCodes.push({
+              answer_id: `answer${option.additionalAnswer.id}`,
+              code: option.additionalAnswer.qCode,
+            });
+          }
+        });
+      }
     }
   });
 
