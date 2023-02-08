@@ -45,26 +45,29 @@ const createAnswerCodes = (questionnaireJson) => {
         code: answer.qCode,
       });
       answer.options.forEach((option) => {
-        // If the option is not an additional answer, output answer code for the option
-        if (
-          option.additionalAnswer === null ||
-          option.additionalAnswer === undefined
-        ) {
-          answerCodes.push({
-            answer_id: `answer${answer.id}`,
-            answer_value:
-              option.value !== null && option.value !== undefined
-                ? option.value
-                : option.label,
-            code: answer.qCode,
-          });
-        }
-        // If the option is an additional answer, output answer code for the additional answer
-        else {
-          answerCodes.push({
-            answer_id: `answer${option.additionalAnswer.id}`,
-            code: option.additionalAnswer.qCode,
-          });
+        // Dynamic options do not require the answer code to be added for the option level
+        if (!option.dynamicAnswer) {
+          // If the option is not an additional answer, output answer code for the option
+          if (
+            option.additionalAnswer === null ||
+            option.additionalAnswer === undefined
+          ) {
+            answerCodes.push({
+              answer_id: `answer${answer.id}`,
+              answer_value:
+                option.value !== null && option.value !== undefined
+                  ? option.value
+                  : option.label,
+              code: answer.qCode,
+            });
+          }
+          // If the option is an additional answer, output answer code for the additional answer
+          else {
+            answerCodes.push({
+              answer_id: `answer${option.additionalAnswer.id}`,
+              code: option.additionalAnswer.qCode,
+            });
+          }
         }
       });
     }
