@@ -7,10 +7,10 @@ class SummaryBlock {
     this.title = "Summary"
     const listAnswers = getList(ctx, page.listId).answers
     this.item_title = {
-      text: `{item-text-${page.id}}`,
+      text: `{listcollector_summary_placeholder}`,
       placeholders: [
         {
-          placeholder: `item-text-${page.id}`,
+          placeholder: `listcollector_summary_placeholder`,
           transforms: [
             {
               arguments: {

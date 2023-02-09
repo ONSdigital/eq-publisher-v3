@@ -1,6 +1,6 @@
 const { contentMap } = require("../../../constants/legalBases");
 
-const { buildContents } = require("../../../utils/builders");
+const { buildContents, formatListNames } = require("../../../utils/builders");
 
 const { validThemes, themeNames } = require("../../../constants/validThemes");
 
@@ -26,6 +26,7 @@ const getTheme = (previewTheme) => {
 
 class Questionnaire {
   constructor(questionnaireJson) {
+    formatListNames(questionnaireJson)
     const { surveyId } = questionnaireJson;
     const { formType, legalBasisCode } = getPreviewTheme(
       questionnaireJson.themeSettings
