@@ -40,10 +40,10 @@ class Section {
       };
 
       this.repeat.title = {
-        text: `{item-text-${section.id}}`,
+        text: `{repeat_title_placeholder}`,
         placeholders: [
           {
-            placeholder: `item-text-${section.id}`,
+            placeholder: `repeat_title_placeholder`,
             transforms: [
               {
                 arguments: {

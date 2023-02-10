@@ -79,7 +79,7 @@ SummaryBlock {
   "item_title": Object {
     "placeholders": Array [
       Object {
-        "placeholder": "item-text-listcollector-1",
+        "placeholder": "listcollector_summary_placeholder",
         "transforms": Array [
           Object {
             "arguments": Object {
@@ -91,7 +91,7 @@ SummaryBlock {
         ],
       },
     ],
-    "text": "{item-text-listcollector-1}",
+    "text": "{listcollector_summary_placeholder}",
   },
   "title": "Summary",
 }
