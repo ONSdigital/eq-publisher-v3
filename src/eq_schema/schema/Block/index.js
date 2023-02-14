@@ -10,6 +10,7 @@ const {
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
+const { getValueSource } = require("../../builders/valueSource");
 
 const Question = require("../Question");
 const {
@@ -38,7 +39,7 @@ const reversePipe = (ctx) =>
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
 
-const { getList } = require("../../../utils/functions/listGetters")
+const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -94,10 +95,7 @@ class Block {
       this.type = "CalculatedSummary";
       this.calculation = {
         operation: {
-          "+": page.summaryAnswers.map((o) => ({
-            source: "answers",
-            identifier: `answer${o}`,
-          })),
+          "+": page.summaryAnswers.map((o) => getValueSource(ctx, o)),
         },
         title: processPipe(ctx)(page.totalTitle),
       };
