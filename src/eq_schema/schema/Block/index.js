@@ -95,7 +95,9 @@ class Block {
       this.type = "CalculatedSummary";
       this.calculation = {
         operation: {
-          "+": page.summaryAnswers.map((o) => getValueSource(ctx, o)),
+          "+": page.summaryAnswers.map((answerId) =>
+            getValueSource(ctx, answerId)
+          ),
         },
         title: processPipe(ctx)(page.totalTitle),
       };
