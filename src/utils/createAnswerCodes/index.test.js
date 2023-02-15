@@ -36,20 +36,8 @@ describe("Create answer codes", () => {
                   id: "page-1",
                   title: "Question 1",
                   pageType,
-                  drivingId: pageType === "ListCollectorPage" && "driving-id",
-                  drivingQuestion:
-                    pageType === "ListCollectorPage" &&
-                    "Driving question title",
-                  drivingPositive: pageType === "ListCollectorPage" && "Yes",
-                  drivingNegative: pageType === "ListCollectorPage" && "No",
                   drivingQCode:
                     pageType === "ListCollectorPage" && "driving-code",
-                  anotherId: pageType === "ListCollectorPage" && "another-id",
-                  anotherTitle:
-                    pageType === "ListCollectorPage" &&
-                    "Another question title",
-                  anotherPositive: pageType === "ListCollectorPage" && "Yes",
-                  anotherNegative: pageType === "ListCollectorPage" && "No",
                   anotherQCode:
                     pageType === "ListCollectorPage" && "another-code",
                   answers: [
@@ -480,11 +468,11 @@ describe("Create answer codes", () => {
           code: "list-textfield-answer-code",
         },
         {
-          answer_id: "answerdriving-id",
+          answer_id: "answer-driving-page-1",
           code: "driving-code",
         },
         {
-          answer_id: "answeranother-id",
+          answer_id: "add-another-page-1",
           code: "another-code",
         },
       ]);

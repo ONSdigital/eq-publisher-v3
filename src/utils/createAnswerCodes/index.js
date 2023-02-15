@@ -91,11 +91,11 @@ const createAnswerCodes = (questionnaireJson) => {
   listCollectorPages.forEach((page) => {
     answerCodes.push(
       {
-        answer_id: `answer${page.drivingId}`,
+        answer_id: `answer-driving-${page.id}`,
         code: page.drivingQCode,
       },
       {
-        answer_id: `answer${page.anotherId}`,
+        answer_id: `add-another-${page.id}`,
         code: page.anotherQCode,
       }
     );
