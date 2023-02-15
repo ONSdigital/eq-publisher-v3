@@ -36,6 +36,22 @@ describe("Create answer codes", () => {
                   id: "page-1",
                   title: "Question 1",
                   pageType,
+                  drivingId: pageType === "ListCollectorPage" && "driving-id",
+                  drivingQuestion:
+                    pageType === "ListCollectorPage" &&
+                    "Driving question title",
+                  drivingPositive: pageType === "ListCollectorPage" && "Yes",
+                  drivingNegative: pageType === "ListCollectorPage" && "No",
+                  drivingQCode:
+                    pageType === "ListCollectorPage" && "driving-code",
+                  anotherId: pageType === "ListCollectorPage" && "another-id",
+                  anotherTitle:
+                    pageType === "ListCollectorPage" &&
+                    "Another question title",
+                  anotherPositive: pageType === "ListCollectorPage" && "Yes",
+                  anotherNegative: pageType === "ListCollectorPage" && "No",
+                  anotherQCode:
+                    pageType === "ListCollectorPage" && "another-code",
                   answers: [
                     {
                       ...answer,
@@ -444,7 +460,7 @@ describe("Create answer codes", () => {
   });
 
   describe("Page types", () => {
-    it("shoul add answer codes for list collector page type", () => {
+    it("should add answer codes for list collector page type", () => {
       const answer = {
         id: "list-textfield-answer-1",
         type: TEXTFIELD,
@@ -455,12 +471,21 @@ describe("Create answer codes", () => {
         answer,
         "ListCollectorPage"
       );
+
       const answerCodes = createAnswerCodes(questionnaire);
 
       expect(answerCodes).toEqual([
         {
           answer_id: "answerlist-textfield-answer-1",
           code: "list-textfield-answer-code",
+        },
+        {
+          answer_id: "answerdriving-id",
+          code: "driving-code",
+        },
+        {
+          answer_id: "answeranother-id",
+          code: "another-code",
         },
       ]);
     });

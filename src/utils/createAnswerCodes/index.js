@@ -30,10 +30,27 @@ const getAllAnswers = (questionnaireJson) => {
   return allQuestionnaireAnswers;
 };
 
+// Get all pages in the questionnaire
+const getAllListCollectorPages = (questionnaireJson) => {
+  const allQuestionnaireListPages = [];
+  questionnaireJson.sections.forEach((section) => {
+    section.folders.forEach((folder) => {
+      folder.pages.forEach((page) => {
+        if (page.pageType === "ListCollectorPage") {
+          allQuestionnaireListPages.push(page);
+        }
+      });
+    });
+  });
+
+  return allQuestionnaireListPages;
+};
+
 // Generates answer codes for all answers
 const createAnswerCodes = (questionnaireJson) => {
   const answerCodes = [];
   const answers = getAllAnswers(questionnaireJson);
+  const listCollectorPages = getAllListCollectorPages(questionnaireJson);
 
   // Loop through all answers in the questionnaire
   answers.forEach((answer) => {
@@ -68,6 +85,19 @@ const createAnswerCodes = (questionnaireJson) => {
         });
       }
     }
+  });
+
+  listCollectorPages.forEach((page) => {
+    answerCodes.push(
+      {
+        answer_id: `answer${page.drivingId}`,
+        code: page.drivingQCode,
+      },
+      {
+        answer_id: `answer${page.anotherId}`,
+        code: page.anotherQCode,
+      }
+    );
   });
 
   return answerCodes;
