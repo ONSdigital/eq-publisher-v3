@@ -30,7 +30,7 @@ const getAllAnswers = (questionnaireJson) => {
   return allQuestionnaireAnswers;
 };
 
-// Get all pages in the questionnaire
+// Get all list collector pages in the questionnaire
 const getAllListCollectorPages = (questionnaireJson) => {
   const allQuestionnaireListPages = [];
   questionnaireJson.sections.forEach((section) => {
@@ -87,6 +87,7 @@ const createAnswerCodes = (questionnaireJson) => {
     }
   });
 
+  // Add answer codes for list collector driving and repeating questions
   listCollectorPages.forEach((page) => {
     answerCodes.push(
       {
