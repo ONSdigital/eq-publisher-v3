@@ -36,6 +36,10 @@ describe("Create answer codes", () => {
                   id: "page-1",
                   title: "Question 1",
                   pageType,
+                  drivingQCode:
+                    pageType === "ListCollectorPage" && "driving-code",
+                  anotherQCode:
+                    pageType === "ListCollectorPage" && "another-code",
                   answers: [
                     {
                       ...answer,
@@ -444,7 +448,7 @@ describe("Create answer codes", () => {
   });
 
   describe("Page types", () => {
-    it("shoul add answer codes for list collector page type", () => {
+    it("should add answer codes for list collector page type", () => {
       const answer = {
         id: "list-textfield-answer-1",
         type: TEXTFIELD,
@@ -455,12 +459,21 @@ describe("Create answer codes", () => {
         answer,
         "ListCollectorPage"
       );
+
       const answerCodes = createAnswerCodes(questionnaire);
 
       expect(answerCodes).toEqual([
         {
           answer_id: "answerlist-textfield-answer-1",
           code: "list-textfield-answer-code",
+        },
+        {
+          answer_id: "answer-driving-page-1",
+          code: "driving-code",
+        },
+        {
+          answer_id: "add-another-page-1",
+          code: "another-code",
         },
       ]);
     });
