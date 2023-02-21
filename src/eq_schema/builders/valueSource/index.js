@@ -1,8 +1,12 @@
 const { flatMap, find, some } = require("lodash");
 
-const getPages = (ctx) => flatMap(ctx.questionnaireJson.sections, (section) =>
-  flatMap(section.folders, ({pages}) => pages)
-);
+const getPages = (ctx) => {
+  if (ctx) {
+    flatMap(ctx.questionnaireJson.sections, (section) =>
+      flatMap(section.folders, ({ pages }) => pages)
+    );
+  }
+};
 
 const getPageByAnswerId = (ctx, answerId) =>
   find(
@@ -12,20 +16,20 @@ const getPageByAnswerId = (ctx, answerId) =>
 
 const getValueSource = (ctx, sourceId) => {
   const page = getPageByAnswerId(ctx, sourceId);
-  if(page) {
-    if(page.pageType === "CalculatedSummaryPage") {
+  if (page) {
+    if (page.pageType === "CalculatedSummaryPage") {
       return {
         identifier: `block${page.id}`,
-        source: "calculated_summary"
-      }
+        source: "calculated_summary",
+      };
     }
   }
   return {
     identifier: `answer${sourceId}`,
-    source: "answers"
-  }
+    source: "answers",
+  };
 };
 
-module.exports = { 
-    getValueSource 
-}
+module.exports = {
+  getValueSource,
+};
