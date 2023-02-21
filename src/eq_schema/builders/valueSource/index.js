@@ -1,12 +1,9 @@
 const { flatMap, find, some } = require("lodash");
 
-const getPages = (ctx) => {
-  if (ctx) {
-    flatMap(ctx.questionnaireJson.sections, (section) =>
-      flatMap(section.folders, ({ pages }) => pages)
-    );
-  }
-};
+const getPages = (ctx) =>
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, ({ pages }) => pages)
+  );
 
 const getPageByAnswerId = (ctx, answerId) =>
   find(
