@@ -12,7 +12,7 @@ describe("schemaConverter", () => {
       title: "TEST",
       description: null,
       type: "Business",
-      theme: "default",
+      theme: "business",
       introduction: {
         id: "bee2bd7b-36ce-4690-8a65-cfefadfdd4be",
         title:

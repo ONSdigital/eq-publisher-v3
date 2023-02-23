@@ -45,12 +45,8 @@ class Answer {
       this.description = buildContents(answer.description, ctx);
     }
 
-    if (answer.qCode) {
-      if (
-        !ctx ||
-        ctx.questionnaireJson.dataVersion === "3" ||
-        (ctx.questionnaireJson.dataVersion !== "3" && answer.type !== CHECKBOX)
-      ) {
+    if (!ctx || (answer.qCode && ctx.questionnaireJson.dataVersion !== "3")) {
+      if (answer.type !== CHECKBOX) {
         this.q_code = answer.qCode;
       }
     }
@@ -128,16 +124,16 @@ class Answer {
     }
 
     if (!isNil(answer.options) && multipleChoiceAnswers.includes(answer.type)) {
-      if (answer.type === RADIO) {
-        answer.options.map(
-          (option) =>
-            option.dynamicAnswer &&
-            (this.dynamic_options = Answer.buildDynamicOption(option))
-        );
-      }
-      this.options = [];
+      answer.options.map(
+        (option) =>
+          option.dynamicAnswer &&
+          (this.dynamic_options = Answer.buildDynamicOption(option))
+      );
       answer.options.forEach((option) => {
         if (!option.dynamicAnswer) {
+          if (!this.options) {
+            this.options = [];
+          }
           this.options.push(Answer.buildOption(option, answer, ctx));
         }
       });
@@ -270,8 +266,10 @@ class Answer {
         mandatory: properties.required,
       };
 
-      if (additionalAnswer.qCode && type !== "Checkbox") {
-        option.detail_answer.q_code = additionalAnswer.qCode;
+      if (ctx.questionnaireJson.dataVersion !== "3") {
+        if (additionalAnswer.qCode && type !== "Checkbox") {
+          option.detail_answer.q_code = additionalAnswer.qCode;
+        }
       }
     }
     return option;

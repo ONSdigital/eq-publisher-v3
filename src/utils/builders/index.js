@@ -39,7 +39,18 @@ const buildIntroductionTitle = () => {
   };
 };
 
+const formatListNames = (questionnaire) => {
+  questionnaire.collectionLists.lists.forEach(
+    (list) => {
+      list.listName = list.listName.replace(/ /g,'_'); 
+      list.listName = list.listName.replace(/-/g,'_'); 
+      list.listName = list.listName.toLowerCase()
+    }
+  )
+}
+
 module.exports = {
   buildContents,
   buildIntroductionTitle,
+  formatListNames,
 };
