@@ -54,6 +54,7 @@ const getCalculatedSummary = (ctx, pageId) =>
 const formatter = (label) => {
   if (label) {
     var formattedLabel = label;
+    formattedLabel = formattedLabel.replace(/(<([^>]+)>)/gi, "");
     formattedLabel = formattedLabel.replace(/[^a-zA-Z0-9 ]/g, "");
     formattedLabel = formattedLabel.replace(/ /g, "_");
     return formattedLabel.toLowerCase();
