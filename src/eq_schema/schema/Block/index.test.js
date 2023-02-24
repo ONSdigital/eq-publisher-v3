@@ -1,7 +1,12 @@
 const Block = require(".");
 const { isLastPageInSection } = require(".");
 const Question = require("../Question");
-const ctx = {};
+const ctx = {
+  questionnaireJson: {
+    id: "1",
+    sections: [],
+  },
+};
 
 describe("Block", () => {
   const createBlockJSON = (block) =>
@@ -182,7 +187,7 @@ describe("Block", () => {
         totalTitle: "<p>Bye</p>",
         summaryAnswers: ["1", "2", "3"],
       };
-      const block = new Block(calculatedPageGraphql, ctx);
+      const block = new Block(calculatedPageGraphql, null, ctx);
       expect(block).toMatchObject({
         calculation: {
           operation: {
