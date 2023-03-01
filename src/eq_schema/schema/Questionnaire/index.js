@@ -2,8 +2,6 @@ const { contentMap } = require("../../../constants/legalBases");
 
 const { buildContents, formatListNames } = require("../../../utils/builders");
 
-const { validThemes, themeNames } = require("../../../constants/validThemes");
-
 const createAnswerCodes = require("../../../utils/createAnswerCodes");
 
 const { Introduction } = require("../../block-types");
@@ -13,24 +11,10 @@ const PostSubmission = require("../PostSubmission");
 const Submission = require("../Submission");
 const QuestionnaireFlow = require("../QuestionnaireFlow");
 
-const getPreviewTheme = ({ previewTheme, themes }) =>
-  themes && themes.find((theme) => theme && theme.shortName === previewTheme);
-
-const getTheme = (previewTheme) => {
-  if (validThemes.includes(previewTheme)) {
-    return themeNames[previewTheme];
-  } else {
-    return "business";
-  }
-};
-
 class Questionnaire {
   constructor(questionnaireJson) {
-    formatListNames(questionnaireJson)
-    const { surveyId } = questionnaireJson;
-    const { formType, legalBasisCode } = getPreviewTheme(
-      questionnaireJson.themeSettings
-    );
+    formatListNames(questionnaireJson);
+    const { surveyId, formType, legalBasis, theme } = questionnaireJson;
 
     this.language = "en";
     this.mime_type = "application/json/ons/eq";
@@ -40,9 +24,7 @@ class Questionnaire {
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
-    if (contentMap[legalBasisCode]) {
-      this.legal_basis = contentMap[legalBasisCode];
-    }
+    this.legal_basis = contentMap[legalBasis];
 
     if (questionnaireJson.dataVersion === "3") {
       this.answer_codes = createAnswerCodes(questionnaireJson);
@@ -65,7 +47,7 @@ class Questionnaire {
       );
     }
 
-    this.theme = getTheme(questionnaireJson.themeSettings.previewTheme);
+    this.theme = theme;
 
     this.navigation = {
       visible: questionnaireJson.navigation,
