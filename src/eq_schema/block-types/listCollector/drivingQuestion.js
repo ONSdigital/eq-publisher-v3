@@ -42,7 +42,7 @@ class DrivingQuestion {
     if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
       this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
     }
-    
+
     const list = getList(ctx, page.listId)
     this.answers = [{
       "id": `answer-driving-${page.id}`,
@@ -78,22 +78,23 @@ class DrivingQuestion {
     } else {
       routingDest.section = "End"
     }
-    routingDest.when = [
-      {
-        id: `answer-driving-${page.id}`,
-        condition: "equals",
-        value: page.drivingNegative
-      }
-    ]
+    routingDest.when =
+    {
+      "in": [
+        {
+          source: "answers",
+          identifier: `answer-driving-${page.id}`,
+        },
+        [
+          page.drivingNegative
+        ]
+      ]
+    }
 
     return [
+      routingDest,
       {
-        goto: routingDest
-      },
-      {
-        goto: {
-          block: `block${page.id}`
-        }
+        block: `block${page.id}`
       }
     ]
   }
