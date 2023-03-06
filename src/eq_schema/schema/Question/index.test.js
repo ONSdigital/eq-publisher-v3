@@ -12,6 +12,7 @@ describe("Question", () => {
         id: 1,
         title: "question title",
         description: "question description",
+        pageDescription: "Question page title",
         type: "General",
         answers: [
           {
@@ -27,6 +28,7 @@ describe("Question", () => {
 
   const ctx = {
     questionnaireJson: {
+      title: "Test Questionnaire",
       dataVersion: "1",
       sections: [
         {
@@ -64,7 +66,7 @@ describe("Question", () => {
   });
 
   it("should construct a valid eQ runner question from an author question", () => {
-    const question = new Question(createQuestionJSON());
+    const question = new Question(createQuestionJSON(), ctx);
 
     expect(question).toMatchObject({
       id: "question1",
@@ -78,7 +80,8 @@ describe("Question", () => {
     const question = new Question(
       createQuestionJSON({
         title: "<p>question title</p>",
-      })
+      }),
+      ctx
     );
 
     expect(question).toMatchObject({
@@ -93,7 +96,8 @@ describe("Question", () => {
           createQuestionJSON({
             description: "<h2>hello world</h2>",
             descriptionEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(question.description).toBeDefined();
       });
@@ -102,7 +106,8 @@ describe("Question", () => {
     describe("when it is disabled", () => {
       it("should be undefined", () => {
         const question = new Question(
-          createQuestionJSON({ descriptionEnabled: false })
+          createQuestionJSON({ descriptionEnabled: false }),
+          ctx
         );
         expect(question.description).toBeUndefined();
       });
@@ -110,7 +115,7 @@ describe("Question", () => {
 
     describe("when there is no content", () => {
       it("should be undefined", () => {
-        const question = new Question(createQuestionJSON());
+        const question = new Question(createQuestionJSON(), ctx);
         expect(question.description).toBeUndefined();
       });
     });
@@ -123,7 +128,8 @@ describe("Question", () => {
           createQuestionJSON({
             guidance: "<h2>hello world</h2>",
             guidanceEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(question.guidance).toBeDefined();
       });
@@ -132,7 +138,8 @@ describe("Question", () => {
     describe("when it is disabled", () => {
       it("should be undefined", () => {
         const question = new Question(
-          createQuestionJSON({ guidanceEnabled: false })
+          createQuestionJSON({ guidanceEnabled: false }),
+          ctx
         );
         expect(question.guidance).toBeUndefined();
       });
@@ -140,7 +147,7 @@ describe("Question", () => {
 
     describe("when there is no content", () => {
       it("should be undefined", () => {
-        const question = new Question(createQuestionJSON());
+        const question = new Question(createQuestionJSON(), ctx);
         expect(question.guidance).toBeUndefined();
       });
     });
@@ -154,7 +161,8 @@ describe("Question", () => {
             definitionLabel: "definition label",
             definitionContent: "<p>definition content</p>",
             definitionEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(question.definitions).toBeDefined();
       });
@@ -164,7 +172,8 @@ describe("Question", () => {
             definitionLabel: "definition label",
             definitionContent: "",
             definitionEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(question.definitions).toBeDefined();
       });
@@ -174,7 +183,8 @@ describe("Question", () => {
             definitionLabel: "",
             definitionContent: "<p>definition content</p>",
             definitionEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(question.definitions).toBeDefined();
       });
@@ -187,7 +197,8 @@ describe("Question", () => {
             definitionLabel: "",
             definitionContent: "",
             definitionEnabled: false,
-          })
+          }),
+          ctx
         );
         expect(question.definitions).toBeUndefined();
       });
@@ -199,7 +210,8 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "",
             definitionContent: "",
-          })
+          }),
+          ctx
         );
         expect(question.definitions).toBeUndefined();
       });
@@ -214,7 +226,8 @@ describe("Question", () => {
             additionalInfoLabel: "additionalInfo label",
             additionalInfoContent: "<p>additionalInfo content</p>",
             additionalInfoEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
@@ -227,7 +240,8 @@ describe("Question", () => {
             additionalInfoLabel: "additionalInfo label",
             additionalInfoContent: "",
             additionalInfoEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeDefined();
@@ -240,7 +254,8 @@ describe("Question", () => {
             additionalInfoLabel: "",
             additionalInfoContent: "<p>additionalInfo content</p>",
             additionalInfoEnabled: true,
-          })
+          }),
+          ctx
         );
         expect(last(question.answers).guidance).toBeDefined();
         expect(last(question.answers).guidance.show_guidance).toBeFalsy();
@@ -257,7 +272,8 @@ describe("Question", () => {
                 additionalInfoContent: "<p>Additional info content</p>",
                 additionalInfoEnabled: true,
                 answers: [],
-              })
+              }),
+              ctx
             )
         ).toThrow(/no answers/);
       });
@@ -270,7 +286,8 @@ describe("Question", () => {
             definitionLabel: "",
             definitionContent: "",
             additionalInfoEnabled: false,
-          })
+          }),
+          ctx
         );
         expect(last(question.answers).guidance).toBeUndefined();
       });
@@ -282,7 +299,8 @@ describe("Question", () => {
           createQuestionJSON({
             definitionLabel: "",
             definitionContent: "",
-          })
+          }),
+          ctx
         );
         expect(last(question.answers).guidance).toBeUndefined();
       });
@@ -439,7 +457,7 @@ describe("Question", () => {
           other: null,
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
 
       expect(question.answers).toEqual([
         expect.objectContaining({
@@ -634,6 +652,7 @@ describe("Question", () => {
       metadata = [{ id: "123", type: "Text", key: "my_metadata" }]
     ) => ({
       questionnaireJson: {
+        title: "Test Questionnaire",
         metadata,
         sections: [
           {
@@ -741,7 +760,7 @@ describe("Question", () => {
     });
 
     it("should have a question type of mutually exclusive", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(question).toMatchObject({
         type: "MutuallyExclusive",
       });
@@ -753,7 +772,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           answers: newAnswers,
-        })
+        }), 
+        ctx
       );
       expect(question).toMatchObject({
         type: "General",
@@ -761,7 +781,7 @@ describe("Question", () => {
     });
 
     it("should return 2 answers when no other option", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(question.answers).toHaveLength(2);
     });
 
@@ -773,7 +793,7 @@ describe("Question", () => {
           label: "Exclusive option 1",
         },
       ];
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       question.answers[1].options = [
         {
           id: "option-1",
@@ -786,32 +806,32 @@ describe("Question", () => {
     });
 
     it("should have radio answer as last answer if there is more than one mutually exclusive option", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(last(question.answers)).toMatchObject({
         type: "Radio",
       });
     });
 
     it("should have unique answer id for the last answer", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(last(question.answers)).toMatchObject({
         id: "answer2",
       });
     });
 
     it("should have a mandatory property", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(question).toHaveProperty("mandatory");
     });
 
     it("should not inherit the label property", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(question).not.toHaveProperty("label");
     });
 
     // TODO: This test can be edited after confirmation on mandatory and mutually exclusive requirements
     // it("should set mandatory on exclusive child answers to false", () => {
-    //   const question = new Question(createQuestionJSON({ answers }));
+    //   const question = new Question(createQuestionJSON({ answers }), ctx);
     //   expect(question).toMatchObject({
     //     mandatory: true,
     //   });
@@ -845,7 +865,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           answers: [convertedRadioAnswer, answers[1]],
-        })
+        }), 
+        ctx
       );
       expect(question.answers).toEqual([
         expect.objectContaining({
@@ -858,7 +879,7 @@ describe("Question", () => {
     });
 
     it("should have a multiple options in the mutually exclusive answer", () => {
-      const question = new Question(createQuestionJSON({ answers }));
+      const question = new Question(createQuestionJSON({ answers }), ctx);
       expect(last(question.answers).options).toEqual([
         {
           label: "Exclusive option 1",
@@ -892,7 +913,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
+        }), 
+        ctx
       );
 
       expect(question.type).toEqual("Calculated");
@@ -904,7 +926,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
+        }), 
+        ctx
       );
 
       expect(question.type).toEqual("General");
@@ -917,7 +940,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
+        }), 
+        ctx
       );
 
       expect(question.calculations).toHaveLength(2);
@@ -931,7 +955,8 @@ describe("Question", () => {
             { id: "1", type: NUMBER, properties: {} },
             { id: "2", type: NUMBER, properties: {} },
           ],
-        })
+        }), 
+        ctx
       );
 
       expect(question.answers.map((a) => a.id)).toEqual(["answer1", "answer2"]);
@@ -941,7 +966,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
+        }), 
+        ctx
       );
       expect(question.calculations[0].calculation_type).toEqual("sum");
     });
@@ -954,7 +980,8 @@ describe("Question", () => {
             { id: "1", type: NUMBER, properties: {} },
             { id: "2", type: NUMBER, properties: {} },
           ],
-        })
+        }), 
+        ctx
       );
 
       expect(question.calculations[0].answers_to_calculate).toEqual([
@@ -975,7 +1002,8 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             totalValidation: validation,
-          })
+          }), 
+          ctx
         );
         expect(question.calculations[0].conditions).toEqual(runner);
       });
@@ -988,7 +1016,8 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        })
+        }), 
+        ctx
       );
       expect(question.calculations[0].value).toEqual(10);
       expect(question.calculations[0].answer_id).not.toBeDefined();
