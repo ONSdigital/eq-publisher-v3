@@ -11,26 +11,15 @@ describe("Questionnaire", () => {
         title: "Quarterly Business Survey",
         description: "Quarterly Business Survey",
         type: BUSINESS,
-        theme: "business",
         navigation: false,
         summary: true,
         hub: false,
         surveyId: "123",
+        formType: "1234",
+        eqId: "eq-id-1",
+        theme: "business",
+        legalBasis: "NOTICE_1",
         dataVersion: "1",
-        themeSettings: {
-          id: "1",
-          previewTheme: "business",
-          themes: [
-            {
-              enabled: true,
-              shortName: "business",
-              legalBasisCode: "NOTICE_1",
-              eqId: "1",
-              formType: "2",
-              id: "default",
-            },
-          ],
-        },
         sections: [
           {
             id: "1",
@@ -102,7 +91,7 @@ describe("Questionnaire", () => {
 
   it("should include form_type", () => {
     expect(questionnaire).toMatchObject({
-      form_type: "2",
+      form_type: "1234",
     });
   });
 
@@ -287,14 +276,7 @@ describe("Questionnaire", () => {
 
   it("should allow setting northern ireland theme", () => {
     const questionnaireJson = createQuestionnaireJSON({
-      themeSettings: {
-        previewTheme: "northernireland",
-        themes: [
-          {
-            shortName: "northernireland",
-          },
-        ],
-      },
+      theme: "northernireland",
     });
 
     expect(new Questionnaire(questionnaireJson)).toHaveProperty(
