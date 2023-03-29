@@ -1,4 +1,14 @@
-const validThemes = ["business", "northernireland", "orr", "health", "social", "beis", "beis_ni"];
+const validThemes = [
+  "business",
+  "northernireland",
+  "orr",
+  "health",
+  "social",
+  "dbt",
+  "dbt-ni",
+  "dbt-dsit",
+  "dbt-dsit-ni"
+];
 
 const themeNames = {
     business: "business", 
@@ -6,8 +16,11 @@ const themeNames = {
     orr: "orr", 
     health: "health", 
     social: "social", 
-    beis: "beis", 
-    beis_ni: "beis-ni"
+    dbt: "dbt",
+    dbt_ni: "dbt-ni",
+    dbt_dsit: "dbt-dsit",
+    dbt_dsit_ni: "dbt-dsit-ni"
+
 }
 
 module.exports = { validThemes, themeNames };
