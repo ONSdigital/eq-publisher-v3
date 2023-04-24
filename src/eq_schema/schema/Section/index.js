@@ -102,6 +102,7 @@ class Section {
         buildIntroBlock(
           section.introductionTitle,
           section.introductionContent,
+          section.introductionPageDescription,
           section.id,
           ctx
         )
