@@ -18,7 +18,7 @@ describe("Section", () => {
             ],
           },
         ],
-        pageDescription: "Section 1 Page Title"
+        sectionSummaryPageDescription: "Section 1 Page Title",
       },
       options
     );
@@ -85,8 +85,10 @@ describe("Section", () => {
       const sectionJSON = createSectionJSON();
       const title = "Beware the Jabberwock!";
       const description = "The jaws that bite! The claws that snatch!";
+      const pageTitle = "Jabberwocky";
       sectionJSON.introductionTitle = title;
       sectionJSON.introductionContent = `<p>${description}</p>`;
+      sectionJSON.introductionPageDescription = pageTitle;
 
       const section = new Section(sectionJSON, createCtx());
       const introBlock = section.groups[0].blocks[0];
@@ -94,6 +96,7 @@ describe("Section", () => {
       expect(introBlock.type).toBe("Interstitial");
       expect(introBlock.content.title).toBe(title);
       expect(introBlock.content.contents[0].description).toBe(description);
+      expect(introBlock.page_title).toBe(pageTitle);
     });
 
     it("shouldn't add introduction block when there's no title / content", () => {
@@ -160,7 +163,7 @@ describe("Section", () => {
     const listCollectorSection = {
       id: "1",
       title: "Section 1",
-      pageDescription: "Section 1 Page Title",
+      sectionSummaryPageDescription: "Section 1 Page Title",
       folders: [
         {
           id: "folder-1",
@@ -207,7 +210,7 @@ describe("Section", () => {
             {
               id: "3",
               answers: [],
-              listName: "test3"
+              listName: "test3",
             },
           ],
         },
@@ -223,6 +226,7 @@ describe("Section", () => {
         id: "section1",
         summary: {
           show_on_completion: true,
+          page_title: "Section 1 Page Title",
           items: [
             {
               type: "List",
