@@ -89,6 +89,7 @@ describe("Section", () => {
       sectionJSON.introductionTitle = title;
       sectionJSON.introductionContent = `<p>${description}</p>`;
       sectionJSON.introductionPageDescription = pageTitle;
+      sectionJSON.introductionEnabled = true;
 
       const section = new Section(sectionJSON, createCtx());
       const introBlock = section.groups[0].blocks[0];
@@ -103,6 +104,24 @@ describe("Section", () => {
       const sectionJSON = createSectionJSON();
       const section = new Section(sectionJSON, createCtx());
       expect(section.groups[0].blocks[0].type).not.toBe("Interstitial");
+    });
+
+    it("shouldn't add introduction block when section introduction page is not enabled", () => {
+      const sectionJSON = createSectionJSON();
+      const title = "Beware the Jabberwock!";
+      const description = "The jaws that bite! The claws that snatch!";
+      const pageTitle = "Jabberwocky";
+      sectionJSON.introductionTitle = title;
+      sectionJSON.introductionContent = `<p>${description}</p>`;
+      sectionJSON.introductionPageDescription = pageTitle;
+      sectionJSON.introductionEnabled = false;
+
+      const section = new Section(sectionJSON, createCtx());
+      const firstBlock = section.groups[0].blocks[0];
+
+      expect(firstBlock.type).not.toBe("Interstitial");
+      expect(firstBlock.page_title).not.toBe(pageTitle);
+      expect(firstBlock.content).toBeUndefined();
     });
   });
 
