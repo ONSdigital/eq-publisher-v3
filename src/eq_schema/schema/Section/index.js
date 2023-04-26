@@ -96,7 +96,11 @@ class Section {
 
     this.groups = [new Group({ ...section, pages }, ctx)];
 
-    if (section.introductionTitle && section.introductionContent) {
+    if (
+      section.introductionEnabled &&
+      section.introductionTitle &&
+      section.introductionContent
+    ) {
       // Add introduction page if present
       this.groups[0].blocks.unshift(
         buildIntroBlock(
