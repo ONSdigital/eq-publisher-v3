@@ -3,10 +3,15 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
-const { getList } = require("../../../utils/functions/listGetters")
+const { getList } = require("../../../utils/functions/listGetters");
 const { buildIntroBlock } = require("../Block");
 const { flatMap, filter } = require("lodash");
-const { TEXTFIELD, RADIO, CHECKBOX, SELECT } = require("../../../constants/answerTypes");
+const {
+  TEXTFIELD,
+  RADIO,
+  CHECKBOX,
+  SELECT,
+} = require("../../../constants/answerTypes");
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
@@ -23,18 +28,18 @@ class Section {
       flatMap(folder.pages, (page) =>
         folder.skipConditions
           ? {
-            ...page,
-            skipConditions: [
-              ...folder.skipConditions,
-              ...(page.skipConditions || []),
-            ],
-          }
+              ...page,
+              skipConditions: [
+                ...folder.skipConditions,
+                ...(page.skipConditions || []),
+              ],
+            }
           : page
       )
     );
 
     if (section.repeatingSection) {
-      const list = getList(ctx, section.repeatingSectionListId)
+      const list = getList(ctx, section.repeatingSectionListId);
       this.repeat = {
         for_list: list.listName,
       };
@@ -48,19 +53,19 @@ class Section {
               {
                 arguments: {
                   delimiter: "&nbsp;",
-                  list_to_concatenate: this.buildList(list.answers)
+                  list_to_concatenate: this.buildList(list.answers),
                 },
-                transform: "concatenate_list"
-              }
-            ]
-          }
-        ]
-      }
-    };
+                transform: "concatenate_list",
+              },
+            ],
+          },
+        ],
+      };
+    }
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
-      page_title: section.pageDescription,
+      page_title: section.sectionSummaryPageDescription,
       collapsible: false,
     };
 
@@ -91,12 +96,18 @@ class Section {
 
     this.groups = [new Group({ ...section, pages }, ctx)];
 
-    if (section.introductionTitle && section.introductionContent) {
+    if (
+      section.introductionEnabled &&
+      section.introductionTitle &&
+      section.introductionContent &&
+      section.introductionPageDescription
+    ) {
       // Add introduction page if present
       this.groups[0].blocks.unshift(
         buildIntroBlock(
           section.introductionTitle,
           section.introductionContent,
+          section.introductionPageDescription,
           section.id,
           ctx
         )
@@ -117,11 +128,13 @@ class Section {
   }
 
   buildList(answers) {
-    return filter(answers, (answer) => [TEXTFIELD, RADIO, CHECKBOX, SELECT].includes(answer.type)).map((answer) => ({
+    return filter(answers, (answer) =>
+      [TEXTFIELD, RADIO, CHECKBOX, SELECT].includes(answer.type)
+    ).map((answer) => ({
       source: "answers",
-      identifier: `answer${answer.id}`
+      identifier: `answer${answer.id}`,
     }));
-  };
+  }
 
   static buildItem(itemId, listCollectorTitle, ctx) {
     const ListCollectorsSummmary = {

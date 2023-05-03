@@ -71,10 +71,17 @@ class Block {
     }
   }
 
-  static buildIntroBlock(introductionTitle, introductionContent, groupId, ctx) {
+  static buildIntroBlock(
+    introductionTitle,
+    introductionContent,
+    introductionPageDescription,
+    groupId,
+    ctx
+  ) {
     return {
       type: "Interstitial",
       id: `group${groupId}-introduction`,
+      page_title: introductionPageDescription,
       content: {
         title: processPipe(ctx)(introductionTitle) || "",
         contents: reversePipe(ctx)(introductionContent).contents,
@@ -90,10 +97,9 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "ListCollectorPage") {
-      this.page_title = page.anotherPageDescription
-    }
-    else {
-      this.page_title = page.pageDescription
+      this.page_title = page.anotherPageDescription;
+    } else {
+      this.page_title = page.pageDescription;
     }
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);

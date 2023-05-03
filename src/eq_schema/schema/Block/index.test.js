@@ -144,6 +144,7 @@ describe("Block", () => {
       const introBlock = Block.buildIntroBlock(
         createPipeInText(),
         "",
+        "",
         0,
         createContext()
       );
@@ -155,6 +156,7 @@ describe("Block", () => {
     it("should handle piped values in title while stripping html", () => {
       const introBlock = Block.buildIntroBlock(
         createPipeInHtml(),
+        "",
         "",
         0,
         createContext()
@@ -169,6 +171,7 @@ describe("Block", () => {
       const introBlock = Block.buildIntroBlock(
         "",
         `<ul>${createPipeInHtml({ element: "li" })}<li>Some Value</li</ul>`,
+        "",
         0,
         createContext()
       );
