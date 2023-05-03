@@ -99,7 +99,8 @@ class Section {
     if (
       section.introductionEnabled &&
       section.introductionTitle &&
-      section.introductionContent
+      section.introductionContent &&
+      section.introductionPageDescription
     ) {
       // Add introduction page if present
       this.groups[0].blocks.unshift(
