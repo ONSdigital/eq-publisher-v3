@@ -26,6 +26,10 @@ class Questionnaire {
     this.form_type = formType || "9999";
     this.legal_basis = contentMap[legalBasis];
 
+    if (this.legal_basis === null) {
+      delete this.legal_basis;
+    }
+
     if (questionnaireJson.dataVersion === "3") {
       this.answer_codes = createAnswerCodes(questionnaireJson);
     }
