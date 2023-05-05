@@ -102,7 +102,7 @@ describe("Questionnaire", () => {
     });
   });
 
-  it("should delete legal_basis key is the value is null", () => {
+  it("should delete the legal_basis key if the value is null", () => {
     const questionnaire = new Questionnaire(
       createQuestionnaireJSON({ legalBasis: "VOLUNTARY" })
     );
