@@ -24,10 +24,9 @@ class Questionnaire {
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
-    this.legal_basis = contentMap[legalBasis];
 
-    if (this.legal_basis === null) {
-      delete this.legal_basis;
+    if (contentMap[legalBasis]) {
+      this.legal_basis = contentMap[legalBasis];
     }
 
     if (questionnaireJson.dataVersion === "3") {
