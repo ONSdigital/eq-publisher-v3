@@ -102,6 +102,14 @@ describe("Questionnaire", () => {
     });
   });
 
+  it("should delete the legal_basis key if the value is null", () => {
+    const questionnaire = new Questionnaire(
+      createQuestionnaireJSON({ legalBasis: "VOLUNTARY" })
+    );
+
+    expect(questionnaire.legal_basis).toBeUndefined();
+  });
+
   it("should build navigation", () => {
     const questionnaire = new Questionnaire(
       createQuestionnaireJSON({
