@@ -3,6 +3,10 @@ const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
 const {
+  formatPageDescription,
+} = require("../../../utils/functions/formatPageDescription");
+
+const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
@@ -80,7 +84,9 @@ class Block {
   ) {
     return {
       type: "Interstitial",
-      id: `group${groupId}-introduction`,
+      id: `group${formatPageDescription(
+        introductionPageDescription
+      )}-introduction`,
       page_title: introductionPageDescription,
       content: {
         title: processPipe(ctx)(introductionTitle) || "",
