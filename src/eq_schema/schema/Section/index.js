@@ -19,7 +19,7 @@ const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class Section {
   constructor(section, ctx) {
-    this.id = `section${section.id}`;
+    this.id = section.id;
     if (section.title) {
       this.title = getText(section.title);
     }
