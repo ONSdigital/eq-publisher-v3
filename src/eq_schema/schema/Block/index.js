@@ -79,14 +79,11 @@ class Block {
     introductionTitle,
     introductionContent,
     introductionPageDescription,
-    groupId,
     ctx
   ) {
     return {
       type: "Interstitial",
-      id: `group${formatPageDescription(
-        introductionPageDescription
-      )}-introduction`,
+      id: `${formatPageDescription(introductionPageDescription)}`,
       page_title: introductionPageDescription,
       content: {
         title: processPipe(ctx)(introductionTitle) || "",

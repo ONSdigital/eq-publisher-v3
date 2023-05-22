@@ -145,7 +145,6 @@ describe("Block", () => {
         createPipeInText(),
         "",
         "",
-        0,
         createContext()
       );
       expect(introBlock.content.title).toEqual(
@@ -158,7 +157,6 @@ describe("Block", () => {
         createPipeInHtml(),
         "",
         "",
-        0,
         createContext()
       );
 
@@ -172,7 +170,6 @@ describe("Block", () => {
         "",
         `<ul>${createPipeInHtml({ element: "li" })}<li>Some Value</li</ul>`,
         "",
-        0,
         createContext()
       );
       expect(introBlock.content.contents[0].list).toEqual([

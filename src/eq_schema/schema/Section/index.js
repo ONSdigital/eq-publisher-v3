@@ -108,7 +108,6 @@ class Section {
           section.introductionTitle,
           section.introductionContent,
           section.introductionPageDescription,
-          section.id,
           ctx
         )
       );
