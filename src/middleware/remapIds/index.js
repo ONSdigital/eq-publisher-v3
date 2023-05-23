@@ -8,7 +8,9 @@ module.exports = (req, res, next) => {
 
   // Adds all IDs to lookup table with page descriptions, and remaps IDs to page descriptions
   res.locals.questionnaire.sections.forEach((section) => {
-    section.id = formatPageDescription(section.sectionSummaryPageDescription);
+    if (section.sectionSummary && section.sectionSummaryPageDescription) {
+      section.id = formatPageDescription(section.sectionSummaryPageDescription);
+    }
     section.folders.forEach((folder) => {
       folder.pages.forEach((page) => {
         if (page.pageDescription) {
