@@ -7,7 +7,7 @@ const getAbsoluteDestination = (destination, ctx) => {
     if (page.pageType === "ListCollectorPage") {
       return { block: `block-driving${destination.pageId}` };
     } else {
-      return { block: `block${destination.pageId}` };
+      return { block: destination.pageId };
     }
   }
 
@@ -53,7 +53,7 @@ const getNextPageDestination = (pageId, ctx) => {
     if (nextPage.pageType === "ListCollectorPage") {
       return { block: `block-driving${nextPage.id}` };
     } else {
-      return { block: `block${nextPage.id}` };
+      return { block: nextPage.id };
     }
   }
 };

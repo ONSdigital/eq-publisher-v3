@@ -47,7 +47,7 @@ const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
-    this.id = `block${page.id}`;
+    this.id = page.id;
     this.type = this.convertPageType(page.pageType);
     this.buildPages(page, ctx);
     let type;
