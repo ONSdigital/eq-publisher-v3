@@ -47,25 +47,27 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
     },
   };
 
-  const checkBoxTransform = [{
-    text: "{checkbox_answers}",
-    placeholders: [
-      {
-        placeholder: "checkbox_answers",
-        transforms: [
-          {
-            transform: "format_list",
-            arguments: {
-              list_to_format: {
-                source: "answers",
-                identifier: `answer${page.answers[0].id}`
-              }
-            }
-          }
-        ]
-      }
-    ]
-  }]
+  const checkBoxTransform = [
+    {
+      text: "{checkbox_answers}",
+      placeholders: [
+        {
+          placeholder: "checkbox_answers",
+          transforms: [
+            {
+              transform: "format_list",
+              arguments: {
+                list_to_format: {
+                  source: "answers",
+                  identifier: `answer${page.answers[0].id}`,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
   if (!routing) {
     routing = {
@@ -80,7 +82,7 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
   routing.rules.unshift(confirmationBackwardsRouting2Rule);
 
   const confirmationQuestionObject = {
-    id: `confirmation-page-for-${page.id}`,
+    id: page.confirmation.id,
     title: page.confirmation.title,
     pageDescription: page.confirmation.pageDescription,
     descriptionEnabled: true,
@@ -101,11 +103,15 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
     confirmationAnswerObject.qCode = page.confirmation.qCode;
   }
 
-  const confirmationQuestionBlock = new Block(confirmationQuestionObject, groupId, ctx);
-  if (page.answers[0].type === CHECKBOX ) {
+  const confirmationQuestionBlock = new Block(
+    confirmationQuestionObject,
+    groupId,
+    ctx
+  );
+  if (page.answers[0].type === CHECKBOX) {
     confirmationQuestionBlock.question.description = checkBoxTransform;
   }
-  
+
   return confirmationQuestionBlock;
 };
 

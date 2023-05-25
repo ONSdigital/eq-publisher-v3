@@ -27,6 +27,12 @@ module.exports = (req, res, next) => {
           }
           page.id = formatPageDescription(page.pageDescription);
         }
+
+        if (page.confirmation && page.confirmation.pageDescription) {
+          page.confirmation.id = formatPageDescription(
+            page.confirmation.pageDescription
+          );
+        }
       });
     });
   });

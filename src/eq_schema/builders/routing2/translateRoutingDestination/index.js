@@ -29,14 +29,19 @@ const getNextPageDestination = (pageId, ctx) => {
         folderId: folder.id,
         folderEnabled: folder.enabled,
         pageType: page.pageType,
+        confirmation: page.confirmation,
       }))
     )
   );
-  const confirmationRegex = /confirmation-page-for-(.+)/;
 
-  if (confirmationRegex.test(pageId)) {
-    pageId = pageId.match(confirmationRegex)[1];
+  const confirmationPage = pages.find(
+    (page) => page.confirmation && page.confirmation.id === pageId
+  );
+
+  if (confirmationPage) {
+    pageId = confirmationPage.id;
   }
+
   const currentPageIndex = findIndex(pages, { id: pageId });
   const currentPage = pages[currentPageIndex];
   const nextPage = pages[currentPageIndex + 1];
