@@ -32,7 +32,7 @@ describe("Section", () => {
     const section = new Section(createSectionJSON(), createCtx());
 
     expect(section).toMatchObject({
-      id: "section1",
+      id: "1",
       title: "Section 1",
       groups: [
         {
@@ -50,7 +50,7 @@ describe("Section", () => {
     );
 
     expect(section).toMatchObject({
-      id: "section1",
+      id: "1",
       groups: [
         {
           id: "group1",
@@ -242,7 +242,7 @@ describe("Section", () => {
         createListCollectorCtx()
       );
       expect(section).toMatchObject({
-        id: "section1",
+        id: "1",
         summary: {
           show_on_completion: true,
           page_title: "Section 1 Page Title",

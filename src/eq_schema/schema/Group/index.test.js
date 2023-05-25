@@ -76,9 +76,7 @@ describe("Group", () => {
         ],
       });
 
-      const runnerJson = groupsJson.map(
-        (group) => new Group(group, ctx)
-      );
+      const runnerJson = groupsJson.map((group) => new Group(group, ctx));
 
       const expectedrunnerJson = [
         { id: "group1", blocks: [] },
@@ -129,9 +127,7 @@ describe("Group", () => {
         ],
       });
 
-      const runnerJson = groupsJson.map(
-        (group) => new Group(group, ctx)
-      );
+      const runnerJson = groupsJson.map((group) => new Group(group, ctx));
 
       const expectedrunnerJson = [
         { id: "group1", blocks: [] },
@@ -184,7 +180,7 @@ describe("Group", () => {
                     routingRuleSet,
                     routing,
                     confirmation: {
-                      id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-2",
+                      id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
                       title: "<p>Are you sure?</p>",
                       page: {
                         id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
@@ -229,10 +225,10 @@ describe("Group", () => {
         ctx
       );
       const expectedRunnerBlock = {
-        id: "blockconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+        id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
         type: "ConfirmationQuestion",
         question: {
-          id: "questionconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          id: "questionuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
           title: "Are you sure?",
           type: "General",
           answers: [
@@ -257,7 +253,7 @@ describe("Group", () => {
         },
         routing_rules: [
           {
-            block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+            block: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
             when: {
               "==": [
                 {
@@ -287,10 +283,10 @@ describe("Group", () => {
         ctx
       );
       const expectedRunnerBlock = {
-        id: "blockconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+        id: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
         type: "ConfirmationQuestion",
         question: {
-          id: "questionconfirmation-page-for-uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          id: "questionuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
           title: "Are you sure?",
           type: "General",
           answers: [
@@ -316,7 +312,7 @@ describe("Group", () => {
         },
         routing_rules: [
           {
-            block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+            block: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
             when: {
               "==": [
                 {
@@ -381,7 +377,7 @@ describe("Group", () => {
 
       const expectedRunnerRouting = [
         {
-          block: "blockuu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
+          block: "uu1d-iuhiuwfew-fewfewfewdsf-dsf-1",
           when: {
             "==": [
               {
@@ -449,19 +445,23 @@ describe("Group", () => {
       expect(resultantJson.blocks[1].question.description).toEqual([
         {
           text: "{checkbox_answers}",
-          placeholders: [{
-            placeholder: "checkbox_answers",
-            transforms: [{
-              arguments: {
-                list_to_format: {
-                  identifier: "answer6",
-                  source: "answers",
+          placeholders: [
+            {
+              placeholder: "checkbox_answers",
+              transforms: [
+                {
+                  arguments: {
+                    list_to_format: {
+                      identifier: "answer6",
+                      source: "answers",
+                    },
+                  },
+                  transform: "format_list",
                 },
-              },
-              transform: "format_list",
-            }],
-          }]
-        }
+              ],
+            },
+          ],
+        },
       ]);
     });
   });

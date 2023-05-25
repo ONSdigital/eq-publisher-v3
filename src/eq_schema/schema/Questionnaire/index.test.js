@@ -145,10 +145,10 @@ describe("Questionnaire", () => {
       },
       sections: [
         {
-          id: "section2",
+          id: "2",
         },
         {
-          id: "section3",
+          id: "3",
         },
       ],
     });
@@ -186,11 +186,11 @@ describe("Questionnaire", () => {
     expect(questionnaire).toMatchObject({
       sections: [
         {
-          id: "section2",
+          id: "2",
           title: "Section number 2",
         },
         {
-          id: "section3",
+          id: "3",
           title: "Section number 3",
         },
       ],

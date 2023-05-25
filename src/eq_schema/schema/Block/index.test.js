@@ -199,7 +199,7 @@ describe("Block", () => {
           },
           title: "Bye",
         },
-        id: "block1",
+        id: "1",
         title: "Hi is your total %(total)s",
         type: "CalculatedSummary",
       });
