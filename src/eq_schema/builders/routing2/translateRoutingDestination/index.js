@@ -29,14 +29,12 @@ const getNextPageDestination = (pageId, ctx) => {
         folderId: folder.id,
         folderEnabled: folder.enabled,
         pageType: page.pageType,
-        confirmation: page.confirmation,
+        confirmationId: page.confirmation && page.confirmation.id,
       }))
     )
   );
 
-  const confirmationPage = pages.find(
-    (page) => page.confirmation && page.confirmation.id === pageId
-  );
+  const confirmationPage = pages.find((page) => page.confirmationId === pageId);
 
   if (confirmationPage) {
     pageId = confirmationPage.id;
