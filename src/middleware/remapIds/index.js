@@ -45,21 +45,21 @@ module.exports = (req, res, next) => {
           // Remaps routing rule destination pageIds to pageDescription if the destination uses a pageId and the destination page has a page description
           page.routing.rules.forEach((rule) => {
             if (
-              rule.destination.pageId &&
-              pageDescriptionLookupTable[rule.destination.pageId]
+              rule.destination.id &&
+              pageDescriptionLookupTable[rule.destination.id]
             ) {
-              rule.destination.pageId =
-                pageDescriptionLookupTable[rule.destination.pageId];
+              rule.destination.id =
+                pageDescriptionLookupTable[rule.destination.id];
             }
           });
 
           // Remaps routing `else` pageId to pageDescription if the `else` uses a pageId and the destination page has a page description
           if (
-            page.routing.else.pageId &&
-            pageDescriptionLookupTable[page.routing.else.pageId]
+            page.routing.else.id &&
+            pageDescriptionLookupTable[page.routing.else.id]
           ) {
-            page.routing.else.pageId =
-              pageDescriptionLookupTable[page.routing.else.pageId];
+            page.routing.else.id =
+              pageDescriptionLookupTable[page.routing.else.id];
           }
         }
       });
