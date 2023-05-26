@@ -287,7 +287,7 @@ describe("Remap Ids", () => {
     expect(res.locals.questionnaire).toEqual(questionnaire);
     expect(
       res.locals.questionnaire.sections[0].folders[0].pages[0].routing.rules[0]
-        .destination.id
+        .destination.pageId
     ).toEqual("question-page-3");
   });
 
@@ -298,7 +298,8 @@ describe("Remap Ids", () => {
 
     expect(res.locals.questionnaire).toEqual(questionnaire);
     expect(
-      res.locals.questionnaire.sections[0].folders[0].pages[0].routing.else.id
+      res.locals.questionnaire.sections[0].folders[0].pages[0].routing.else
+        .pageId
     ).toEqual("question-page-2");
   });
 });
