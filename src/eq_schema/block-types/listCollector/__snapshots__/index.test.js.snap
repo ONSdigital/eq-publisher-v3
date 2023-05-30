@@ -3,7 +3,7 @@
 exports[`Add Block should build the Add block 1`] = `
 AddBlock {
   "cancel_text": "Don’t need to add this item",
-  "id": "add-block-listcollector-1",
+  "id": "add-block-add-item-page-title",
   "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
@@ -13,7 +13,7 @@ AddBlock {
         "type": undefined,
       },
     ],
-    "id": "add-block-question-listcollector-1",
+    "id": "add-block-question-add-item-page-title",
     "title": "Enter details",
     "type": "General",
   },
@@ -24,7 +24,7 @@ AddBlock {
 exports[`Edit Block should build the Edit block 1`] = `
 EditBlock {
   "cancel_text": "Don’t need to edit this item",
-  "id": "edit-block-listcollector-1",
+  "id": "edit-block-add-item-page-title",
   "page_title": "Add item page title",
   "question": Object {
     "answers": Array [
@@ -34,7 +34,7 @@ EditBlock {
         "type": undefined,
       },
     ],
-    "id": "edit-block-question-listcollector-1",
+    "id": "edit-block-question-add-item-page-title",
     "title": "Enter details",
     "type": "General",
   },
@@ -45,7 +45,7 @@ EditBlock {
 exports[`Remove Block should build the remove block 1`] = `
 RemoveBlock {
   "cancel_text": "Don’t need to remove this item?",
-  "id": "remove-block-listcollector-1",
+  "id": "remove-block-add-item-page-title",
   "question": Object {
     "answers": Array [
       Object {
@@ -67,7 +67,7 @@ RemoveBlock {
         "type": "Radio",
       },
     ],
-    "id": "remove-block-question-listcollector-1",
+    "id": "remove-block-question-add-item-page-title",
     "title": "Are you sure you want to remove this item?",
     "type": "General",
     "warning": "All of the information about this item will be deleted",
