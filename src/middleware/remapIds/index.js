@@ -15,17 +15,32 @@ module.exports = (req, res, next) => {
       folder.pages.forEach((page) => {
         if (page.pageDescription) {
           // Adds page id with page description to lookup table if page id is not defined in lookup table
-          if (
-            !Object.prototype.hasOwnProperty.call(
-              pageDescriptionLookupTable,
-              page.id
-            )
-          ) {
-            pageDescriptionLookupTable[page.id] = formatPageDescription(
-              page.pageDescription
-            );
+
+          if (page.pageType === "ListCollectorPage") {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                pageDescriptionLookupTable,
+                page.id
+              )
+            ) {
+              pageDescriptionLookupTable[page.id] = formatPageDescription(
+                page.anotherPageDescription
+              );
+            }
+            page.id = formatPageDescription(page.anotherPageDescription);
+          } else {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                pageDescriptionLookupTable,
+                page.id
+              )
+            ) {
+              pageDescriptionLookupTable[page.id] = formatPageDescription(
+                page.pageDescription
+              );
+            }
+            page.id = formatPageDescription(page.pageDescription);
           }
-          page.id = formatPageDescription(page.pageDescription);
         }
 
         if (page.confirmation && page.confirmation.pageDescription) {

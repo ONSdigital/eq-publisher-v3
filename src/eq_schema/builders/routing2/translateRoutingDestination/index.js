@@ -1,11 +1,14 @@
 const { flatMap, get, findIndex, isNil } = require("lodash");
 const { getPageById } = require("../../../../utils/functions/pageGetters");
+const {
+  formatPageDescription,
+} = require("../../../../utils/functions/formatPageDescription");
 
 const getAbsoluteDestination = (destination, ctx) => {
   if (destination.pageId) {
     const page = getPageById(ctx, destination.pageId);
     if (page.pageType === "ListCollectorPage") {
-      return { block: `block-driving${destination.pageId}` };
+      return { block: formatPageDescription(page.pageDescription) };
     } else {
       return { block: destination.pageId };
     }
@@ -54,7 +57,7 @@ const getNextPageDestination = (pageId, ctx) => {
     return { group: `group${nextPage.sectionId}` };
   } else {
     if (nextPage.pageType === "ListCollectorPage") {
-      return { block: `block-driving${nextPage.id}` };
+      return { block: nextPage.pageDescription };
     } else {
       return { block: nextPage.id };
     }

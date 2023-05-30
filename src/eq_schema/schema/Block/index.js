@@ -126,7 +126,7 @@ class Block {
       this.summary = new SummaryBlock(page, ctx);
     }
     if (page.pageType === "DrivingQuestionPage") {
-      this.id = `block-driving${page.id}`;
+      this.id = formatPageDescription(page.pageDescription);
       this.for_list = getList(ctx, page.listId).listName;
       this.question = new DrivingQuestion(page, ctx);
       this.routing_rules = DrivingQuestion.routingRules(page, ctx);

@@ -3,6 +3,9 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { flatMap, find, findIndex } = require("lodash");
 const { getList } = require("../../../utils/functions/listGetters");
+const {
+  formatPageDescription,
+} = require("../../../utils/functions/formatPageDescription");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -60,7 +63,9 @@ class DrivingQuestion {
             action: {
               type: "RedirectToListAddBlock",
               params: {
-                block_id: `add-block-${page.id}`,
+                block_id: `add-block-${formatPageDescription(
+                  page.addItemPageDescription
+                )}`,
                 list_name: list.listName,
               },
             },
