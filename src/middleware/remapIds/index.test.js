@@ -194,6 +194,32 @@ describe("Remap Ids", () => {
                     },
                   ],
                 },
+                {
+                  id: "page-4",
+                  pageType: "ListCollectorPage",
+                  title: "Collect1",
+                  listId: "list1",
+                  drivingQuestion: "<p>Q1</p>",
+                  pageDescription: "List1 driving",
+                  additionalGuidancePanel: "",
+                  additionalGuidancePanelSwitch: false,
+                  drivingPositive: "Yes",
+                  drivingNegative: "No",
+                  drivingPositiveDescription: "",
+                  drivingNegativeDescription: "",
+                  anotherTitle: "<p>List1 repeat</p>",
+                  anotherPageDescription: "List1 repeat",
+                  anotherPositive: "Yes",
+                  anotherNegative: "No",
+                  anotherPositiveDescription: "",
+                  anotherNegativeDescription: "",
+                  addItemTitle: "<p>List1 collect</p>",
+                  addItemPageDescription: "List1 collect",
+                  routing: null,
+                  alias: "",
+                  drivingQCode: "q2",
+                  anotherQCode: "q3",
+                },
               ],
             },
           ],
@@ -272,5 +298,16 @@ describe("Remap Ids", () => {
       res.locals.questionnaire.sections[0].folders[0].pages[0].routing.else
         .pageId
     ).toEqual("question-page-2");
+  });
+
+  it("should remap list collector question page id", () => {
+    req.body = questionnaire;
+
+    middleware = remapIds(req, res, next);
+
+    expect(res.locals.questionnaire).toEqual(questionnaire);
+    expect(res.locals.questionnaire.sections[0].folders[0].pages[3].id).toEqual(
+      "list1-repeat"
+    );
   });
 });
