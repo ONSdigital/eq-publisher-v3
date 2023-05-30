@@ -33,6 +33,7 @@ const getNextPageDestination = (pageId, ctx) => {
         folderEnabled: folder.enabled,
         pageType: page.pageType,
         confirmationId: page.confirmation && page.confirmation.id,
+        pageDescription: page.pageDescription,
       }))
     )
   );
@@ -57,7 +58,7 @@ const getNextPageDestination = (pageId, ctx) => {
     return { group: `group${nextPage.sectionId}` };
   } else {
     if (nextPage.pageType === "ListCollectorPage") {
-      return { block: nextPage.pageDescription };
+      return { block: formatPageDescription(nextPage.pageDescription) };
     } else {
       return { block: nextPage.id };
     }

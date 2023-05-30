@@ -47,7 +47,11 @@ const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
-    this.id = page.id;
+    if (page.pageType === "ListCollectorPage") {
+      this.id = formatPageDescription(page.anotherPageDescription);
+    } else {
+      this.id = page.id;
+    }
     this.type = this.convertPageType(page.pageType);
     this.buildPages(page, ctx);
     let type;
