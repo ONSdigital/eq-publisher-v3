@@ -3,23 +3,30 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
-const { getList } = require("../../../utils/functions/listGetters")
+const { getList } = require("../../../utils/functions/listGetters");
+const {
+  formatPageDescription,
+} = require("../../../utils/functions/formatPageDescription");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class EditBlock {
   constructor(page, ctx) {
-    this.id = `edit-block-${page.id}`
-    this.type = "ListEditQuestion"
-    this.page_title = page.addItemPageDescription
-    this.cancel_text = "Don’t need to edit this item"
-    const listAnswers = getList(ctx, page.listId).answers
+    this.id = `edit-block-${formatPageDescription(
+      page.addItemPageDescription
+    )}`;
+    this.type = "ListEditQuestion";
+    this.page_title = page.addItemPageDescription;
+    this.cancel_text = "Don’t need to edit this item";
+    const listAnswers = getList(ctx, page.listId).answers;
     this.question = {
-      id: `edit-block-question-${page.id}`,
+      id: `edit-block-question-${formatPageDescription(
+        page.addItemPageDescription
+      )}`,
       type: "General",
       title: processPipe(ctx)(page.addItemTitle),
-      answers: this.buildAnswers(listAnswers, ctx)
-    }
+      answers: this.buildAnswers(listAnswers, ctx),
+    };
   }
 
   buildAnswers(answers, ctx) {
