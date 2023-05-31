@@ -14,7 +14,9 @@ module.exports = (req, res, next) => {
     section.folders.forEach((folder) => {
       folder.pages.forEach((page) => {
         if (page.pageDescription) {
-          // Adds page id with page description to lookup table if page id is not defined in lookup table
+          /* Adds page id with page description to lookup table if page id is not defined in lookup table
+             For list collector pages, use the anotherPageDescription field to set the page id  
+          */
 
           if (page.pageType === "ListCollectorPage") {
             if (
