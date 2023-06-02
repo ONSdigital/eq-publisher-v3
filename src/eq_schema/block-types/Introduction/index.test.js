@@ -69,7 +69,7 @@ describe("Introduction", () => {
   it("set the correct id and type", () => {
     const introduction = new Introduction(apiData, context);
     expect(introduction.type).toEqual("Introduction");
-    expect(introduction.id).toEqual("introduction-block");
+    expect(introduction.id).toEqual("introduction");
   });
 
   it("should define the primary_content", () => {

@@ -32,7 +32,7 @@ class Introduction {
     },
     ctx
   ) {
-    this.id = "introduction-block";
+    this.id = "introduction";
     this.type = "Introduction";
     this.primary_content = [];
     this.primary_content.push({
