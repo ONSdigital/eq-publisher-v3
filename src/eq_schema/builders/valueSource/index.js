@@ -16,7 +16,7 @@ const getValueSource = (ctx, sourceId) => {
   if (page) {
     if (page.pageType === "CalculatedSummaryPage") {
       return {
-        identifier: `block${page.id}`,
+        identifier: page.id,
         source: "calculated_summary",
       };
     }

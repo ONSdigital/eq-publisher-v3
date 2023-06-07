@@ -63,7 +63,7 @@ describe("Routing2", () => {
 
     expect(runnerRouting).toMatchObject([
       {
-        block: "block2",
+        block: "2",
         when: {
           and: [
             {
@@ -76,7 +76,7 @@ describe("Routing2", () => {
               ],
             },
             {
-              "in": [
+              in: [
                 {
                   identifier: "answer2",
                   source: "answers",
@@ -88,7 +88,7 @@ describe("Routing2", () => {
         },
       },
       {
-        block: "block3",
+        block: "3",
       },
     ]);
   });
@@ -142,11 +142,11 @@ describe("Routing2", () => {
     );
     expect(runnerRouting).toMatchObject([
       {
-        block: "block2",
+        block: "2",
         when: {
           or: [
             {
-              "in": [
+              in: [
                 {
                   identifier: "answer1",
                   source: "answers",
@@ -155,7 +155,7 @@ describe("Routing2", () => {
               ],
             },
             {
-              "in": [
+              in: [
                 {
                   identifier: "answer2",
                   source: "answers",
@@ -167,7 +167,7 @@ describe("Routing2", () => {
         },
       },
       {
-        block: "block3",
+        block: "3",
       },
     ]);
   });
@@ -660,7 +660,7 @@ describe("Testing Skip Condition Logic", () => {
       when: {
         or: [
           {
-            "in": [
+            in: [
               {
                 identifier: "answer27b51b6f-3ada-4b8c-88db-33e21e13172f",
                 source: "answers",

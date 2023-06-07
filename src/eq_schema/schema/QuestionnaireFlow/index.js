@@ -6,31 +6,33 @@ class QuestionnaireFlow {
   }
 
   buildOptions(questionnaireJson) {
-    const options = {}
-    if(questionnaireJson.hub) {
+    const options = {};
+    if (questionnaireJson.hub) {
       const requiredCompletedSections =
         this.buildRequiredSections(questionnaireJson);
       if (requiredCompletedSections.length) {
         options.required_completed_sections = requiredCompletedSections;
       }
       return options;
-    };
-    if(questionnaireJson.summary) {
-        options.summary = {
-          collapsible: false
+    }
+    if (questionnaireJson.summary) {
+      options.summary = {
+        collapsible: false,
       };
-    };
+    }
     return options;
   }
 
-  buildRequiredSections(questionnaireJson){
-    const sections = filter(questionnaireJson.sections, {"requiredCompleted": true});
-    const requiredSections = sections.map((section) => `section${section.id}`);
+  buildRequiredSections(questionnaireJson) {
+    const sections = filter(questionnaireJson.sections, {
+      requiredCompleted: true,
+    });
+    const requiredSections = sections.map((section) => section.id);
 
     if (questionnaireJson.introduction) {
-      requiredSections.push(`section${questionnaireJson.introduction.id}`)
+      requiredSections.push(`section${questionnaireJson.introduction.id}`);
     }
-    
+
     return requiredSections;
   }
 }

@@ -7,9 +7,10 @@ const pino = require("express-pino-logger");
 const {
   convertSchema,
   postQuestionnaire,
+  remapIds,
   respondWithData,
   validation,
-  status
+  status,
 } = require("./middleware");
 
 dotenv.config();
@@ -21,29 +22,37 @@ app.use(bodyParser.json({ limit: "10mb", extended: true }));
 app.use(
   helmet({
     referrerPolicy: {
-      policy: "no-referrer"
+      policy: "no-referrer",
     },
     frameguard: {
-      action: "deny"
+      action: "deny",
     },
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
         objectSrc: ["'none'"],
-        baseUri: ["'none'"]
-      }
-    }
+        baseUri: ["'none'"],
+      },
+    },
   })
 );
 
 app.get("/status", status);
 
-app.post("/publish", logger, postQuestionnaire, convertSchema, respondWithData);
+app.post(
+  "/publish",
+  logger,
+  postQuestionnaire,
+  remapIds,
+  convertSchema,
+  respondWithData
+);
 
 // keeping for development purposes
 app.post(
   "/publish/validate",
   postQuestionnaire,
+  remapIds,
   convertSchema,
   validation,
   respondWithData

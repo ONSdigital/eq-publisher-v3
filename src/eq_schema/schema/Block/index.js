@@ -3,6 +3,10 @@ const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
 const {
+  formatPageDescription,
+} = require("../../../utils/functions/formatPageDescription");
+
+const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
@@ -43,7 +47,11 @@ const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
-    this.id = `block${page.id}`;
+    if (page.pageType === "ListCollectorPage") {
+      this.id = formatPageDescription(page.anotherPageDescription);
+    } else {
+      this.id = page.id;
+    }
     this.type = this.convertPageType(page.pageType);
     this.buildPages(page, ctx);
     let type;
@@ -75,12 +83,11 @@ class Block {
     introductionTitle,
     introductionContent,
     introductionPageDescription,
-    groupId,
     ctx
   ) {
     return {
       type: "Interstitial",
-      id: `group${groupId}-introduction`,
+      id: `${formatPageDescription(introductionPageDescription)}`,
       page_title: introductionPageDescription,
       content: {
         title: processPipe(ctx)(introductionTitle) || "",
@@ -123,7 +130,7 @@ class Block {
       this.summary = new SummaryBlock(page, ctx);
     }
     if (page.pageType === "DrivingQuestionPage") {
-      this.id = `block-driving${page.id}`;
+      this.id = formatPageDescription(page.pageDescription);
       this.for_list = getList(ctx, page.listId).listName;
       this.question = new DrivingQuestion(page, ctx);
       this.routing_rules = DrivingQuestion.routingRules(page, ctx);

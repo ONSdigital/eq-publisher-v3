@@ -21,7 +21,7 @@ describe("Translation of a routing destination", () => {
         ctx
       )
     ).toMatchObject({
-      block: "block2",
+      block: "2",
     });
   });
   it("should translate an absolute destination to another Section", () => {
@@ -40,7 +40,7 @@ describe("Translation of a routing destination", () => {
     };
     expect(
       translateRoutingDestination(authorDestination, "1", { questionnaireJson })
-    ).toMatchObject({ block: "block2" });
+    ).toMatchObject({ block: "2" });
   });
 
   it("should translate a next page destination when last page in section", () => {
