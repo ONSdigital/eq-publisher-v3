@@ -21,6 +21,7 @@ class Questionnaire {
     this.schema_version = "0.0.1";
     this.data_version =
       questionnaireJson.dataVersion === "3" ? "0.0.3" : "0.0.1";
+    this.preview_questions = questionnaireJson.introduction.previewQuestions;
 
     this.survey_id = surveyId || "zzz";
     this.form_type = formType || "9999";
