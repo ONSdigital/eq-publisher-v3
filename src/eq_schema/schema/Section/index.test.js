@@ -231,7 +231,41 @@ describe("Section", () => {
           lists: [
             {
               id: "3",
-              answers: [],
+              answers: [
+                {
+                  id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
+                  type: "TextField",
+                  repeatingLabelAndInput: false,
+                  repeatingLabelAndInputListId: "",
+                  properties: {
+                    required: false,
+                  },
+                  validation: {},
+                  label: "<p>Text 1</p>",
+                },
+                {
+                  id: "57bdaf77-7f36-40f1-9994-e91862a95059",
+                  type: "TextField",
+                  repeatingLabelAndInput: false,
+                  repeatingLabelAndInputListId: "",
+                  properties: {
+                    required: false,
+                  },
+                  validation: {},
+                  label: "<p>Text 2</p>",
+                },
+                {
+                  id: "43ee1461-e363-493f-90cc-d515a205efeb",
+                  type: "TextField",
+                  repeatingLabelAndInput: false,
+                  repeatingLabelAndInputListId: "",
+                  properties: {
+                    required: false,
+                  },
+                  validation: {},
+                  label: "<p>Text 3</p>",
+                },
+              ],
               listName: "test3",
             },
           ],
@@ -254,6 +288,18 @@ describe("Section", () => {
               type: "List",
               for_list: "test3",
               title: "What is the name of this person",
+              item_anchor_answer_id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
+              item_label: "<p>Text 1</p>",
+              related_answers: [
+                {
+                  source: "answers",
+                  identifiers: "57bdaf77-7f36-40f1-9994-e91862a95059",
+                },
+                {
+                  source: "answers",
+                  identifiers: "43ee1461-e363-493f-90cc-d515a205efeb",
+                },
+              ],
               add_link_text: "Add item to this list",
               empty_list_text: "There are no items",
             },
