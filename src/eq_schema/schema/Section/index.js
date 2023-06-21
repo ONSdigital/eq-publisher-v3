@@ -66,6 +66,7 @@ class Section {
     this.summary = {
       show_on_completion: section.sectionSummary || false,
       page_title: section.sectionSummaryPageDescription,
+      show_non_item_answers: true,
       collapsible: false,
     };
 
@@ -141,7 +142,7 @@ class Section {
     const [anchorItem, ...relatedItems] = anchorListItems;
     const relatedAnswers = relatedItems.map((answer) => ({
       source: "answers",
-      identifiers: answer.id,
+      identifier: `answer${answer.id}`,
     }));
 
     const ListCollectorsSummary = {

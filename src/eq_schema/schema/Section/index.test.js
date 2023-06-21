@@ -293,11 +293,11 @@ describe("Section", () => {
               related_answers: [
                 {
                   source: "answers",
-                  identifiers: "57bdaf77-7f36-40f1-9994-e91862a95059",
+                  identifier: "answer57bdaf77-7f36-40f1-9994-e91862a95059",
                 },
                 {
                   source: "answers",
-                  identifiers: "43ee1461-e363-493f-90cc-d515a205efeb",
+                  identifier: "answer43ee1461-e363-493f-90cc-d515a205efeb",
                 },
               ],
               add_link_text: "Add item to this list",
