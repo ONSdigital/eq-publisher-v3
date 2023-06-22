@@ -66,6 +66,7 @@ class Section {
     this.summary = {
       show_on_completion: section.sectionSummary || false,
       page_title: section.sectionSummaryPageDescription,
+      show_non_item_answers: true,
       collapsible: false,
     };
 
@@ -136,14 +137,25 @@ class Section {
   }
 
   static buildItem(itemId, listCollectorTitle, ctx) {
-    const ListCollectorsSummmary = {
+    const list = getList(ctx, itemId);
+    const anchorListItems = list.answers;
+    const [anchorItem, ...relatedItems] = anchorListItems;
+    const relatedAnswers = relatedItems.map((answer) => ({
+      source: "answers",
+      identifier: `answer${answer.id}`,
+    }));
+
+    const ListCollectorsSummary = {
       type: "List",
-      for_list: getList(ctx, itemId).listName,
+      for_list: list.listName,
       title: processPipe(ctx)(listCollectorTitle),
+      item_anchor_answer_id: anchorItem.id,
+      item_label: anchorItem.label,
+      related_answers: relatedAnswers,
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
     };
-    return ListCollectorsSummmary;
+    return ListCollectorsSummary;
   }
 }
 
