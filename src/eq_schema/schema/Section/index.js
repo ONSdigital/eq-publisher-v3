@@ -13,6 +13,8 @@ const {
   SELECT,
 } = require("../../../constants/answerTypes");
 
+const { formatTitle } = require("../../../utils/functions/formatTitle");
+
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
@@ -65,7 +67,7 @@ class Section {
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
-      page_title: section.sectionSummaryPageDescription,
+      page_title: `${formatTitle(section.sectionSummaryPageDescription)}`,
       show_non_item_answers: true,
       collapsible: false,
     };
