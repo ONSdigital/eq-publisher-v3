@@ -106,14 +106,14 @@ class Block {
       this.question = new Question(page, ctx);
     }
     if (page.pageType === "ListCollectorPage") {
-      this.page_title = `${formatTitle(page.anotherPageDescription)}`;
+      this.page_title = formatTitle(page.anotherPageDescription);
     } else {
-      this.page_title = `${formatTitle(page.pageDescription)}`;
+      this.page_title = formatTitle(page.pageDescription);
     }
     if (page.pageType === "CalculatedSummaryPage") {
       this.title = processPipe(ctx)(page.title);
       this.page_title =
-        `${formatTitle(page.pageDescription)}` || processPipe(ctx)(page.title);
+        formatTitle(page.pageDescription) || processPipe(ctx)(page.title);
       this.type = "CalculatedSummary";
       this.calculation = {
         operation: {

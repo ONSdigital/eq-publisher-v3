@@ -1,6 +1,5 @@
 const formatTitle = (stringToFormat) => {
-  const formattedString = stringToFormat.replace(/'/g, "&#39;"); // Replace ' with &#39;
-  return formattedString;
+  return stringToFormat ? stringToFormat.replace(/'/g, "&#39;") : "";
 };
 
 module.exports = { formatTitle };
