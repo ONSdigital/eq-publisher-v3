@@ -71,20 +71,18 @@ class Section {
       collapsible: false,
     };
 
-    const listCollectorPages = [];
+    const listCollectorFolders = [];
     section.folders.forEach((folder) => {
-      folder.pages.forEach((page) => {
-        if (page.pageType === "ListCollectorPage") {
-          listCollectorPages.push(page);
-        }
-      });
+      if (folder.listId) {
+        listCollectorFolders.push(folder);
+      }
     });
 
-    if (listCollectorPages.length > 0) {
-      const items = listCollectorPages.map((listCollectorPage) => {
+    if (listCollectorFolders.length > 0) {
+      const items = listCollectorFolders.map((listCollectorFolder) => {
         return Section.buildItem(
-          listCollectorPage.listId,
-          listCollectorPage.addItemTitle,
+          listCollectorFolder.listId,
+          listCollectorFolder.pages[1].title,
           ctx
         );
       });
