@@ -42,7 +42,7 @@ const getNextBlockId = (page, ctx) => {
 };
 
 class DrivingQuestion {
-  constructor(page, ctx) {
+  constructor(page, pages, ctx) {
     this.id = `question-driving-${page.id}`;
     this.type = "General";
     this.title = processPipe(ctx)(page.title);
@@ -64,7 +64,7 @@ class DrivingQuestion {
               type: "RedirectToListAddBlock",
               params: {
                 block_id: `add-block-${formatPageDescription(
-                  page.pageDescription
+                  pages[1].pageDescription
                 )}`,
                 list_name: list.listName,
               },

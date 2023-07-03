@@ -18,7 +18,7 @@ const createListCollectorBlock = (pages, ctx) => {
   drivingQuestion.id = formatPageDescription(pages[0].pageDescription);
   drivingQuestion.type = "ListCollectorDrivingQuestion";
   drivingQuestion.for_list = getList(ctx, pages[0].listId).listName;
-  drivingQuestion.question = new DrivingQuestion(pages[0], ctx);
+  drivingQuestion.question = new DrivingQuestion(pages[0], pages, ctx);
   drivingQuestion.routing_rules = DrivingQuestion.routingRules(
     pages[0],
     pages,
