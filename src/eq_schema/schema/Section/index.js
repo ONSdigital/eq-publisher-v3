@@ -39,8 +39,6 @@ class Section {
       )
     );
 
-    console.log("pages :>> ", pages);
-
     if (section.repeatingSection) {
       const list = getList(ctx, section.repeatingSectionListId);
       this.repeat = {

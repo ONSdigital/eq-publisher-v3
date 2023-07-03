@@ -131,27 +131,6 @@ class Block {
     // if(this.isListCollectorPageType(page.pageType)) {
     //   this.for_list =
     // }
-    if (page.pageType === "ListCollectorPage") {
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new ListCollectorQuestion(page, ctx);
-      this.add_block = new AddBlock(page, ctx);
-      this.edit_block = new EditBlock(page, ctx);
-      this.remove_block = new RemoveBlock(page, ctx);
-      this.summary = new SummaryBlock(page, ctx);
-    }
-    if (page.pageType === "ListCollectorQualifierPage") {
-      this.id = formatPageDescription(page.pageDescription);
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new DrivingQuestion(page, ctx);
-      this.routing_rules = DrivingQuestion.routingRules(page, ctx);
-      console.log("this :>> ", this);
-    }
-  }
-
-  isListCollectorPageType(pageType) {
-    return listCollectorPageTypes.some(
-      (listCollectorPageType) => listCollectorPageType === pageType
-    );
   }
 
   convertPageType(type) {

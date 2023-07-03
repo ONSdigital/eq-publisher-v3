@@ -79,8 +79,8 @@ class DrivingQuestion {
     ];
   }
 
-  static routingRules(page, ctx) {
-    const nextBlockId = getNextBlockId(page, ctx);
+  static routingRules(page, pages, ctx) {
+    const nextBlockId = getNextBlockId(pages[pages.length - 1], ctx);
 
     let routingDest = {};
 
@@ -95,7 +95,7 @@ class DrivingQuestion {
           source: "answers",
           identifier: `answer-driving-${page.id}`,
         },
-        [page.drivingNegative],
+        [page.answers[0].options[1].label],
       ],
     };
 

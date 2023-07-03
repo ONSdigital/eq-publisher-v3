@@ -12,19 +12,15 @@ const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class EditBlock {
   constructor(page, ctx) {
-    this.id = `edit-block-${formatPageDescription(
-      page.addItemPageDescription
-    )}`;
+    this.id = `edit-block-${formatPageDescription(page.pageDescription)}`;
     this.type = "ListEditQuestion";
-    this.page_title = page.addItemPageDescription;
+    this.page_title = page.pageDescription;
     this.cancel_text = "Don’t need to edit this item";
     const listAnswers = getList(ctx, page.listId).answers;
     this.question = {
-      id: `edit-block-question-${formatPageDescription(
-        page.addItemPageDescription
-      )}`,
+      id: `edit-block-question-${formatPageDescription(page.pageDescription)}`,
       type: "General",
-      title: processPipe(ctx)(page.addItemTitle),
+      title: processPipe(ctx)(page.title),
       answers: this.buildAnswers(listAnswers, ctx),
     };
   }
