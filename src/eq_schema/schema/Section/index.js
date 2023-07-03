@@ -33,10 +33,13 @@ class Section {
                 ...folder.skipConditions,
                 ...(page.skipConditions || []),
               ],
+              listId: folder.listId,
             }
-          : page
+          : { ...page, listId: folder.listId }
       )
     );
+
+    console.log("pages :>> ", pages);
 
     if (section.repeatingSection) {
       const list = getList(ctx, section.repeatingSectionListId);

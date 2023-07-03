@@ -45,9 +45,9 @@ class DrivingQuestion {
   constructor(page, ctx) {
     this.id = `question-driving-${page.id}`;
     this.type = "General";
-    this.title = processPipe(ctx)(page.drivingQuestion);
-    if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
-      this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
+    this.title = processPipe(ctx)(page.title);
+    if (page.additionalGuidanceEnabled && page.additionalGuidanceContent) {
+      this.guidance = reversePipe(ctx)(page.additionalGuidanceContent);
     }
 
     const list = getList(ctx, page.listId);
@@ -58,21 +58,21 @@ class DrivingQuestion {
         type: "Radio",
         options: [
           {
-            label: page.drivingPositive,
-            value: page.drivingPositive,
+            label: page.answers[0].options[0].label,
+            value: page.answers[0].options[0].label,
             action: {
               type: "RedirectToListAddBlock",
               params: {
                 block_id: `add-block-${formatPageDescription(
-                  page.addItemPageDescription
+                  page.pageDescription
                 )}`,
                 list_name: list.listName,
               },
             },
           },
           {
-            label: page.drivingNegative,
-            value: page.drivingNegative,
+            label: page.answers[0].options[1].label,
+            value: page.answers[0].options[1].label,
           },
         ],
       },
