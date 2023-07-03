@@ -102,7 +102,7 @@ class DrivingQuestion {
     return [
       routingDest,
       {
-        block: page.id,
+        block: pages[1].id,
       },
     ];
   }

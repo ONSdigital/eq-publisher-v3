@@ -45,14 +45,15 @@ class Group {
       section.pages.reduce((blocks, page) => {
         if (page.pageType === "ListCollectorQualifierPage") {
           listCollectorPages.push(page);
+
           return blocks;
-          // return [new Block(drivingBlock, section.id, ctx), block];
         }
         if (
           listCollectorPages.length &&
           page.pageType !== "ListCollectorConfirmationPage"
         ) {
           listCollectorPages.push(page);
+
           return blocks;
         }
         if (page.pageType === "ListCollectorConfirmationPage") {
@@ -63,6 +64,8 @@ class Group {
           );
           listCollectorPages = [];
           blocks.push(listCollectorBlock);
+
+          return blocks;
         }
         const block = new Block(page, section.id, ctx);
         blocks.push(block);
