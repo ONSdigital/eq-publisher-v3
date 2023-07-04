@@ -17,14 +17,6 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { getValueSource } = require("../../builders/valueSource");
 
 const Question = require("../Question");
-const {
-  ListCollectorQuestion,
-  AddBlock,
-  EditBlock,
-  RemoveBlock,
-  SummaryBlock,
-  DrivingQuestion,
-} = require("../../block-types/listCollector");
 
 const pageTypeMappings = {
   QuestionPage: "Question",
@@ -33,12 +25,6 @@ const pageTypeMappings = {
   DrivingQuestionPage: "ListCollectorDrivingQuestion",
   ListCollectorQualifierPage: "ListCollectorDrivingQuestion",
 };
-
-const listCollectorPageTypes = [
-  "ListCollectorQualifierPage",
-  "ListCollectorAddItemPage",
-  "ListCollectorConfirmationPage",
-];
 
 const getLastPage = flow(getOr([], "pages"), last);
 
@@ -49,8 +35,6 @@ const reversePipe = (ctx) =>
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
-
-const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -128,9 +112,6 @@ class Block {
         title: processPipe(ctx)(page.totalTitle),
       };
     }
-    // if(this.isListCollectorPageType(page.pageType)) {
-    //   this.for_list =
-    // }
   }
 
   convertPageType(type) {

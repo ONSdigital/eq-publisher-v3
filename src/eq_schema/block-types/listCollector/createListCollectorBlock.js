@@ -13,7 +13,6 @@ const {
 const createListCollectorBlock = (pages, ctx) => {
   const listCollector = {};
   const drivingQuestion = {};
-  console.log("pages :>> ", pages);
 
   drivingQuestion.id = formatPageDescription(pages[0].pageDescription);
   drivingQuestion.type = "ListCollectorDrivingQuestion";
