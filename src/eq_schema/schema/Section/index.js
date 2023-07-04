@@ -13,8 +13,6 @@ const {
   SELECT,
 } = require("../../../constants/answerTypes");
 
-const { formatTitle } = require("../../../utils/functions/formatTitle");
-
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
@@ -23,7 +21,7 @@ class Section {
   constructor(section, ctx) {
     this.id = section.id;
     if (section.title) {
-      this.title = formatTitle(getText(section.title));
+      this.title = processPipe(ctx)(getText(section.title));
     }
 
     const pages = flatMap(section.folders, (folder) =>
@@ -67,7 +65,7 @@ class Section {
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
-      page_title: formatTitle(section.sectionSummaryPageDescription),
+      page_title: processPipe(ctx)(section.sectionSummaryPageDescription),
       show_non_item_answers: true,
       collapsible: false,
     };

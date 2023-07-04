@@ -8,8 +8,6 @@ const {
   formatPageDescription,
 } = require("../../../utils/functions/formatPageDescription");
 
-const { formatTitle } = require("../../../utils/functions/formatTitle");
-
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class EditBlock {
@@ -18,7 +16,7 @@ class EditBlock {
       page.addItemPageDescription
     )}`;
     this.type = "ListEditQuestion";
-    this.page_title = `${formatTitle(page.addItemPageDescription)}`;
+    this.page_title = processPipe(ctx)(page.addItemPageDescription);
     this.cancel_text = "Don’t need to edit this item";
     const listAnswers = getList(ctx, page.listId).answers;
     this.question = {
