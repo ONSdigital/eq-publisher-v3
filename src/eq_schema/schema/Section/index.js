@@ -21,7 +21,7 @@ class Section {
   constructor(section, ctx) {
     this.id = section.id;
     if (section.title) {
-      this.title = getText(section.title);
+      this.title = processPipe(ctx)(getText(section.title));
     }
 
     const pages = flatMap(section.folders, (folder) =>
@@ -65,7 +65,7 @@ class Section {
 
     this.summary = {
       show_on_completion: section.sectionSummary || false,
-      page_title: section.sectionSummaryPageDescription,
+      page_title: processPipe(ctx)(section.sectionSummaryPageDescription),
       show_non_item_answers: true,
       collapsible: false,
     };

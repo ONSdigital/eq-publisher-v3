@@ -16,7 +16,7 @@ class EditBlock {
       page.addItemPageDescription
     )}`;
     this.type = "ListEditQuestion";
-    this.page_title = page.addItemPageDescription;
+    this.page_title = processPipe(ctx)(page.addItemPageDescription);
     this.cancel_text = "Don’t need to edit this item";
     const listAnswers = getList(ctx, page.listId).answers;
     this.question = {
