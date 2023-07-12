@@ -7,7 +7,9 @@ const validThemes = [
   "dbt",
   "dbt_ni",
   "dbt_dsit",
-  "dbt_dsit_ni"
+  "dbt_dsit_ni",
+  "desnz",
+  "desnz_ni",
 ];
 
 const themeNames = {
@@ -19,7 +21,9 @@ const themeNames = {
   dbt: "dbt",
   dbt_ni: "dbt-ni",
   dbt_dsit: "dbt-dsit",
-  dbt_dsit_ni: "dbt-dsit-ni"
+  dbt_dsit_ni: "dbt-dsit-ni",
+  desnz: "desnz",
+  desnz_ni: "desnz-ni",
 };
 
 module.exports = { validThemes, themeNames };
