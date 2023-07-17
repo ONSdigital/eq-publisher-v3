@@ -241,7 +241,7 @@ class Answer {
   }
 
   static buildOption(
-    { label, description, additionalAnswer, qCode: q_code },
+    { label, description, additionalAnswer, qCode: q_code, optionValue },
     { properties, type },
     ctx
   ) {
@@ -271,6 +271,12 @@ class Answer {
           option.detail_answer.q_code = additionalAnswer.qCode;
         }
       }
+    }
+
+    if (optionValue) {
+      option.optionValue = buildContents(optionValue, ctx);
+    } else {
+      option.optionValue = buildContents(label, ctx);
     }
     return option;
   }
