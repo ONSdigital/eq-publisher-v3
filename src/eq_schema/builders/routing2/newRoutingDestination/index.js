@@ -2,6 +2,7 @@ const routingConditionConversion = require("../../../../utils/routingConditionCo
 const {
   getMetadataKey,
 } = require("../../../../utils/contentUtils/getMetadataKey");
+const { getValueSource } = require("../../valueSource")
 
 const { flatMap, filter } = require("lodash");
 
@@ -51,10 +52,7 @@ const buildAnswerObject = (
   ctx
 ) => {
   let returnVal = [
-    {
-      source: checkType(left.type),
-      identifier: `answer${left.answerId}`,
-    },
+    getValueSource(ctx, left.answerId)
   ];
 
   if (right.type === "DateValue") {
