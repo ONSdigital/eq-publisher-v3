@@ -35,7 +35,7 @@ const unitConversion = {
   [LITRES]: "volume-liter",
   [HECTOLITRES]: "volume-hectoliter",
   [MEGALITRES]: "volume-megaliter",
-  [TONNES]: "tonnes", //EAR-2156
+  [TONNES]: "tonnes",
   [KILOJOULES]: "energy-kilojoule",
   [KILOWATT_HOURS]: "energy-kilowatt-hour",
 };
