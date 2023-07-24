@@ -35,9 +35,9 @@ const unitConversion = {
   [LITRES]: "volume-liter",
   [HECTOLITRES]: "volume-hectoliter",
   [MEGALITRES]: "volume-megaliter",
-  [TONNES]: "tonnes",
+  [TONNES]: "mass-metric-ton",
   [KILOJOULES]: "energy-kilojoule",
-  [KILOWATT_HOURS]: "energy-kilowatt-hour",
+  [KILOWATT_HOURS]: "energy-kilowatt-hour"
 };
 
 module.exports = {
@@ -57,5 +57,5 @@ module.exports = {
   TONNES,
   KILOJOULES,
   KILOWATT_HOURS,
-  unitConversion,
+  unitConversion
 };
