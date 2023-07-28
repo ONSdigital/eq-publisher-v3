@@ -7,6 +7,7 @@ const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
+const { getList } = require("../../../utils/functions/listGetters");
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -59,7 +60,20 @@ class Question {
     const dateRange = findDateRange(question);
     const mutuallyExclusive = findMutuallyExclusive(question);
 
-    if (dateRange) {
+    if (question.answers.some((answer) => answer.repeatingLabelAndInput)) {
+      this.type = "General";
+      this.dynamic_answers = {
+        values: {
+          source: "list",
+          identifier: getList(
+            ctx,
+            question.answers[0].repeatingLabelAndInputListId
+          ).listName,
+        },
+
+        answers: this.buildAnswers(question.answers, ctx),
+      };
+    } else if (dateRange) {
       this.type = DATE_RANGE;
       this.answers = this.buildDateRangeAnswers(
         dateRange,
