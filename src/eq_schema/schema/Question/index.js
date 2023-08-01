@@ -73,7 +73,9 @@ class Question {
 
         answers: this.buildAnswers(question.answers, ctx),
       };
-    } else if (dateRange) {
+    }
+
+    if (dateRange) {
       this.type = DATE_RANGE;
       this.answers = this.buildDateRangeAnswers(
         dateRange,
