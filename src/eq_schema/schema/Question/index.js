@@ -73,9 +73,27 @@ class Question {
 
         answers: this.buildAnswers(question.answers, ctx),
       };
-    }
 
-    if (dateRange) {
+      if (question.totalValidation && question.totalValidation.enabled) {
+        this.type = "Calculated";
+        this.calculations = question.totalValidation.allowUnanswered
+          ? [
+              this.buildUnansweredCalculation(question.answers),
+              this.buildCalculation(
+                question.totalValidation,
+                question.answers,
+                ctx
+              ),
+            ]
+          : [
+              this.buildCalculation(
+                question.totalValidation,
+                question.answers,
+                ctx
+              ),
+            ];
+      }
+    } else if (dateRange) {
       this.type = DATE_RANGE;
       this.answers = this.buildDateRangeAnswers(
         dateRange,
