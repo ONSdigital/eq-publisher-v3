@@ -30,6 +30,9 @@ describe("Question", () => {
     questionnaireJson: {
       title: "Test Questionnaire",
       dataVersion: "1",
+      collectionLists: {
+        lists: [{ id: "list-1" }],
+      },
       sections: [
         {
           folders: [
@@ -772,7 +775,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           answers: newAnswers,
-        }), 
+        }),
         ctx
       );
       expect(question).toMatchObject({
@@ -865,7 +868,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           answers: [convertedRadioAnswer, answers[1]],
-        }), 
+        }),
         ctx
       );
       expect(question.answers).toEqual([
@@ -913,7 +916,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        }), 
+        }),
         ctx
       );
 
@@ -926,7 +929,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        }), 
+        }),
         ctx
       );
 
@@ -940,7 +943,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        }), 
+        }),
         ctx
       );
 
@@ -955,7 +958,7 @@ describe("Question", () => {
             { id: "1", type: NUMBER, properties: {} },
             { id: "2", type: NUMBER, properties: {} },
           ],
-        }), 
+        }),
         ctx
       );
 
@@ -966,7 +969,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        }), 
+        }),
         ctx
       );
       expect(question.calculations[0].calculation_type).toEqual("sum");
@@ -980,7 +983,7 @@ describe("Question", () => {
             { id: "1", type: NUMBER, properties: {} },
             { id: "2", type: NUMBER, properties: {} },
           ],
-        }), 
+        }),
         ctx
       );
 
@@ -1002,7 +1005,7 @@ describe("Question", () => {
         const question = new Question(
           createQuestionJSON({
             totalValidation: validation,
-          }), 
+          }),
           ctx
         );
         expect(question.calculations[0].conditions).toEqual(runner);
@@ -1016,7 +1019,7 @@ describe("Question", () => {
       const question = new Question(
         createQuestionJSON({
           totalValidation: validation,
-        }), 
+        }),
         ctx
       );
       expect(question.calculations[0].value).toEqual(10);
@@ -1035,6 +1038,48 @@ describe("Question", () => {
       );
       expect(question.calculations[0].value.identifier).toEqual("answer20");
       expect(question.calculations[0].value.source).toEqual("answers");
+    });
+
+    describe("repeat label and input", () => {
+      it("should create a dynamic answers array if this is enabled", () => {
+        const question = new Question(
+          createQuestionJSON({
+            answers: [
+              {
+                properties: {
+                  required: false,
+                },
+                repeatingLabelAndInput: true,
+                repeatingLabelAndInputListId: "list-1",
+              },
+            ],
+          }),
+          ctx
+        );
+
+        expect(question.dynamic_answers).toBeDefined();
+      });
+      it("should set calculations field and question type if total validation is enabled", () => {
+        const question = new Question(
+          createQuestionJSON({
+            totalValidation: validation,
+            answers: [
+              {
+                properties: {
+                  required: false,
+                },
+                repeatingLabelAndInput: true,
+                repeatingLabelAndInputListId: "list-1",
+              },
+            ],
+          }),
+          ctx
+        );
+
+        expect(question.dynamic_answers).toBeDefined();
+        expect(question.type).toEqual("Calculated");
+        expect(question.calculations).toHaveLength(1);
+      });
     });
   });
 });
