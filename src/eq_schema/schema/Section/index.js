@@ -66,7 +66,7 @@ class Section {
     this.summary = {
       show_on_completion: section.sectionSummary || false,
       page_title: processPipe(ctx)(section.sectionSummaryPageDescription),
-      show_non_item_answers: true,
+
       collapsible: false,
     };
 
