@@ -884,17 +884,14 @@ describe("Question", () => {
         {
           label: "Exclusive option 1",
           value: "Exclusive option 1",
-          optionValue: "Exclusive option 1",
         },
         {
           label: "Exclusive option 2",
           value: "Exclusive option 2",
-          optionValue: "Exclusive option 2",
         },
         {
           label: "Exclusive option 3",
           value: "Exclusive option 3",
-          optionValue: "Exclusive option 3",
         },
       ]);
     });

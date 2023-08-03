@@ -241,13 +241,13 @@ class Answer {
   }
 
   static buildOption(
-    { label, description, additionalAnswer, qCode: q_code, optionValue },
+    { label, description, additionalAnswer, qCode: q_code, value },
     { properties, type },
     ctx
   ) {
     const option = {
       label: buildContents(label, ctx, true),
-      value: buildContents(label, ctx, true),
+      value: buildContents(value ? value: label, ctx, true),
     };
 
     if (q_code) {
@@ -273,11 +273,11 @@ class Answer {
       }
     }
 
-    if (optionValue) {
-      option.optionValue = buildContents(optionValue, ctx);
-    } else {
-      option.optionValue = buildContents(label, ctx);
-    }
+    // if (optionValue) {
+    //   option.value = buildContents(optionValue, ctx);
+    // } else {
+    //   option.value = buildContents(label, ctx);
+    // }
     return option;
   }
 }

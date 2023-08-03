@@ -903,12 +903,10 @@ describe("Answer", () => {
         {
           label: "Option one",
           value: "Option one",
-          optionValue: "Option one",
         },
         {
           label: "Option three",
           value: "Option three",
-          optionValue: "Option three",
           description: "A short description",
         },
       ]);
@@ -944,13 +942,11 @@ describe("Answer", () => {
         {
           label: "Option one",
           value: "Option one",
-          optionValue: "Option one",
           description: "A short description",
         },
         {
           label: "Option two",
           value: "Option two",
-          optionValue: "Option two",
           description: "Another description",
         },
       ]);
@@ -1009,12 +1005,10 @@ describe("Answer", () => {
       {
         label: "Option one",
         value: "Option one",
-        optionValue: "Option one",
       },
       {
         label: "Option two",
         value: "Option two",
-        optionValue: "Option two",
       },
     ]);
   });
