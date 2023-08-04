@@ -245,9 +245,10 @@ class Answer {
     { properties, type },
     ctx
   ) {
+    const optionValue = value ? value : label;
     const option = {
       label: buildContents(label, ctx, true),
-      value: buildContents(value ? value: label, ctx, true),
+      value: buildContents(optionValue, ctx, true),
     };
 
     if (q_code) {
