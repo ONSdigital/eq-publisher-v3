@@ -274,11 +274,6 @@ class Answer {
       }
     }
 
-    // if (optionValue) {
-    //   option.value = buildContents(optionValue, ctx);
-    // } else {
-    //   option.value = buildContents(label, ctx);
-    // }
     return option;
   }
 }
