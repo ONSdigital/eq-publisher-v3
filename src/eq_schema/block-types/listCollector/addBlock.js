@@ -14,7 +14,7 @@ class AddBlock {
   constructor(page, ctx) {
     this.id = `add-block-${formatPageDescription(page.pageDescription)}`;
     this.type = "ListAddQuestion";
-    this.page_title = processPipe(ctx)(page.addItemPageDescription);
+    this.page_title = processPipe(ctx)(page.pageDescription);
 
     this.cancel_text = "Don’t need to add this item";
     const listAnswers = getList(ctx, page.listId).answers;
