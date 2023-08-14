@@ -43,7 +43,7 @@ const getNextBlockId = (page, ctx) => {
 
 class DrivingQuestion {
   constructor(page, pages, ctx) {
-    this.id = `question-driving-${page.id}`;
+    this.id = `question-driving-${pages[pages.length - 1].id}`;
     this.type = "General";
     this.title = processPipe(ctx)(page.title);
     if (page.additionalGuidanceEnabled && page.additionalGuidanceContent) {
@@ -53,7 +53,7 @@ class DrivingQuestion {
     const list = getList(ctx, page.listId);
     this.answers = [
       {
-        id: `answer-driving-${page.id}`,
+        id: `answer-driving-${pages[pages.length - 1].id}`,
         mandatory: true,
         type: "Radio",
         options: [
@@ -93,7 +93,7 @@ class DrivingQuestion {
       in: [
         {
           source: "answers",
-          identifier: `answer-driving-${page.id}`,
+          identifier: `answer-driving-${pages[pages.length - 1].id}`,
         },
         [page.answers[0].options[1].label],
       ],
@@ -102,7 +102,7 @@ class DrivingQuestion {
     return [
       routingDest,
       {
-        block: pages[1].id,
+        block: pages[pages.length - 1].id,
       },
     ];
   }

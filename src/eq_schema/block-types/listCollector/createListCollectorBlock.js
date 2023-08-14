@@ -25,9 +25,11 @@ const createListCollectorBlock = (pages, ctx) => {
   );
   drivingQuestion.page_title = pages[0].pageDescription;
 
-  listCollector.id = formatPageDescription(pages[1].pageDescription);
+  listCollector.id = formatPageDescription(
+    pages[pages.length - 1].pageDescription
+  );
   listCollector.type = "ListCollector";
-  listCollector.page_title = pages[1].pageDescription;
+  listCollector.page_title = pages[pages.length - 1].pageDescription;
   listCollector.for_list = getList(ctx, pages[1].listId).listName;
   listCollector.question = new ListCollectorQuestion(
     pages[pages.length - 1],
