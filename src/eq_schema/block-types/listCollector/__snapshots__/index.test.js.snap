@@ -49,7 +49,7 @@ RemoveBlock {
   "question": Object {
     "answers": Array [
       Object {
-        "id": "remove-confirmation-listcollector-1",
+        "id": "remove-confirmation-add-item-page",
         "mandatory": true,
         "options": Array [
           Object {
@@ -103,7 +103,7 @@ exports[`list collector question should build valid list collector question 1`] 
 ListCollectorQuestion {
   "answers": Array [
     Object {
-      "id": "add-another-listcollector-1",
+      "id": "add-another-confirmation-page",
       "mandatory": true,
       "options": Array [
         Object {
@@ -121,7 +121,7 @@ ListCollectorQuestion {
       "type": "Radio",
     },
   ],
-  "id": "list-collector-question-listcollector-1",
+  "id": "list-collector-question-confirmation-page",
   "title": "Add another",
   "type": "General",
 }
