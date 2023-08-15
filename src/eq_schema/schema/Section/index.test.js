@@ -14,6 +14,7 @@ describe("Section", () => {
               {
                 id: "2",
                 answers: [],
+                pageDescription: "First page",
               },
             ],
           },
@@ -175,6 +176,145 @@ describe("Section", () => {
       const section = new Section(sectionJSON, createCtx());
 
       expect(section.enabled).toBeFalsy();
+    });
+  });
+
+  describe("Section Folders", () => {
+    it("should apply folder skip conditions to pages", () => {
+      const sectionJSON = createSectionJSON();
+
+      sectionJSON.folders[0].skipConditions = [
+        {
+          id: "skip-condition-1",
+          operator: "And",
+          expressions: [
+            {
+              id: "expression-1",
+              condition: "Matches",
+              left: {
+                type: "Metadata",
+                metadataId: "metadata-1",
+              },
+              right: {
+                type: "Custom",
+                customValue: {
+                  text: "Test",
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      const section = new Section(
+        sectionJSON,
+        createCtx({
+          questionnaireJson: {
+            metadata: [
+              {
+                id: "metadata-1",
+                key: "test_metadata",
+                alias: "Test metadata",
+                type: "Text",
+                textValue: "123",
+              },
+            ],
+            sections: [sectionJSON],
+          },
+        })
+      );
+
+      expect(section.groups[0].blocks[0].skip_conditions).toMatchObject({
+        when: {
+          "==": [
+            {
+              source: "metadata",
+              identifier: "test_metadata",
+            },
+            "Test",
+          ],
+        },
+      });
+    });
+
+    it("should use listId to add for_list attribute to blocks", () => {
+      const sectionJSON = createSectionJSON();
+
+      sectionJSON.folders[0].listId = "list-1";
+      sectionJSON.folders[0].pages[0].answers = [
+        {
+          id: "qualifier-answer",
+          type: "Radio",
+          options: [
+            {
+              id: "qualifier-positive-option",
+              label: "Yes",
+            },
+            {
+              id: "qualifier-negative-option",
+              label: "No",
+            },
+          ],
+        },
+      ];
+      sectionJSON.folders[0].pages[0].pageType = "ListCollectorQualifierPage";
+
+      sectionJSON.folders[0].pages[1] = {
+        id: "add-item-page",
+        pageDescription: "Add item page description",
+        pageType: "ListCollectorAddItemPage",
+      };
+
+      sectionJSON.folders[0].pages[2] = {
+        id: "confirmation-page",
+        answers: [
+          {
+            id: "confirmation-answer",
+            options: [
+              {
+                id: "confirmation-positive-option",
+                label: "Yes",
+              },
+              {
+                id: "confirmation-negative-option",
+                label: "No",
+              },
+            ],
+          },
+        ],
+        pageDescription: "Confirmation page description",
+        pageType: "ListCollectorConfirmationPage",
+      };
+
+      const section = new Section(
+        sectionJSON,
+        createCtx({
+          questionnaireJson: {
+            collectionLists: {
+              lists: [
+                {
+                  id: "list-1",
+                  listName: "first-list",
+                  answers: [
+                    {
+                      id: "list-collector-answer-1",
+                      type: "TextField",
+                      properties: {
+                        required: false,
+                      },
+                      label: "Text field",
+                    },
+                  ],
+                },
+              ],
+            },
+            sections: [sectionJSON],
+          },
+        })
+      );
+
+      expect(section.groups[0].blocks[0].for_list).toEqual("first-list");
+      expect(section.groups[0].blocks[1].for_list).toEqual("first-list");
     });
   });
 
