@@ -178,59 +178,84 @@ describe("Section", () => {
     });
   });
 
-  describe("Section Summary ", () => {
+  describe("Section Summary", () => {
     const listCollectorSection = {
-      id: "1",
+      id: "section-1",
       title: "Section 1",
       sectionSummaryPageDescription: "Section 1 Page Title",
+      sectionSummary: true,
       folders: [
         {
           id: "folder-1",
+          listId: "employees",
           pages: [
             {
-              id: "2",
-              listId: "3",
-              pageType: "ListCollectorPage",
-              addItemTitle: "<p>What is the name of this person</p>",
-              pageDescription: "List1 driving",
-              addItemPageDescription: "List1 collect",
-              anotherPageDescription: "List1 repeat",
+              id: "qualifier-page",
+              pageType: "ListCollectorQualifierPage",
+              title: "Does your company employ anyone?",
+              pageDescription: "Qualifier page title",
+              position: 0,
+              answers: [
+                {
+                  id: "qualifier-answer",
+                  type: "Radio",
+                  options: [
+                    {
+                      id: "qualifier-positive-option",
+                      label: "Yes",
+                    },
+                    {
+                      id: "qualifier-negative-option",
+                      label: "No",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: "add-item-page",
+              pageType: "ListCollectorAddItemPage",
+              title: "What is the name of this person?",
+              pageDescription: "Add item page title",
+              position: 1,
+            },
+            {
+              id: "confirmation-page",
+              pageType: "ListCollectorConfirmationPage",
+              title: "Does your company employ another person?",
+              pageDescription: "Add another page title",
+              answers: [
+                {
+                  id: "confirmation-answer",
+                  type: "Radio",
+                  options: [
+                    {
+                      id: "confirmation-positive-option",
+                      label: "Yes",
+                    },
+                    {
+                      id: "confirmation-negative-option",
+                      label: "No",
+                    },
+                  ],
+                },
+              ],
+              position: 2,
             },
           ],
         },
       ],
-      sectionSummary: true,
     };
     const createListCollectorCtx = () => ({
       routingGotos: [],
       questionnaireJson: {
         navigation: true,
-        sections: [
-          {
-            id: "1",
-            title: "Section 1",
-            page_title: "Section 1 Page Title - Test Questionnaire",
-            folders: [
-              {
-                id: "folder-1",
-                pages: [
-                  {
-                    id: "2",
-                    listId: "3",
-                    pageType: "ListCollectorPage",
-                    addItemTitle: "<p>What is the name of this person</p>",
-                  },
-                ],
-              },
-            ],
-            sectionSummary: true,
-          },
-        ],
+        sections: [listCollectorSection],
         collectionLists: {
           id: "list1",
           lists: [
             {
-              id: "3",
+              id: "employees",
               answers: [
                 {
                   id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
@@ -279,7 +304,7 @@ describe("Section", () => {
         createListCollectorCtx()
       );
       expect(section).toMatchObject({
-        id: "1",
+        id: "section-1",
         summary: {
           show_on_completion: true,
           page_title: "Section 1 Page Title",
@@ -287,7 +312,7 @@ describe("Section", () => {
             {
               type: "List",
               for_list: "test3",
-              title: "What is the name of this person",
+              title: "What is the name of this person?",
               item_anchor_answer_id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
               item_label: "<p>Text 1</p>",
               related_answers: [
