@@ -1,6 +1,7 @@
 const {
   ListCollectorQuestion,
   AddBlock,
+  DrivingQuestion,
   EditBlock,
   RemoveBlock,
   SummaryBlock,
@@ -17,6 +18,8 @@ const listCollectorFolder = {
       title: "Qualifier question",
       pageDescription: "List collector page title",
       listId: "list1",
+      additionalGuidanceEnabled: true,
+      additionalGuidanceContent: "<p>Additional guidance</p>",
       answers: [
         {
           id: "qualifier-answer",
@@ -97,6 +100,17 @@ describe("list collector question", () => {
   it("should build valid list collector question", () => {
     const confirmation = new ListCollectorQuestion(
       listCollectorFolder.pages[2],
+      createCtx()
+    );
+    expect(confirmation).toMatchSnapshot();
+  });
+});
+
+describe("Driving Block", () => {
+  it("should build the driving block", () => {
+    const confirmation = new DrivingQuestion(
+      listCollectorFolder.pages[0],
+      listCollectorFolder.pages,
       createCtx()
     );
     expect(confirmation).toMatchSnapshot();

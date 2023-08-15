@@ -21,6 +21,45 @@ AddBlock {
 }
 `;
 
+exports[`Driving Block should build the driving block 1`] = `
+DrivingQuestion {
+  "answers": Array [
+    Object {
+      "id": "answer-driving-confirmation-page",
+      "mandatory": true,
+      "options": Array [
+        Object {
+          "action": Object {
+            "params": Object {
+              "block_id": "add-block-add-item-page-title",
+              "list_name": undefined,
+            },
+            "type": "RedirectToListAddBlock",
+          },
+          "label": "Yes",
+          "value": "Yes",
+        },
+        Object {
+          "label": "No",
+          "value": "No",
+        },
+      ],
+      "type": "Radio",
+    },
+  ],
+  "guidance": Object {
+    "contents": Array [
+      Object {
+        "description": "Additional guidance",
+      },
+    ],
+  },
+  "id": "question-driving-confirmation-page",
+  "title": "Qualifier question",
+  "type": "General",
+}
+`;
+
 exports[`Edit Block should build the Edit block 1`] = `
 EditBlock {
   "cancel_text": "Don’t need to edit this item",
