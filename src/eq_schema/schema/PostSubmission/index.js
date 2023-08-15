@@ -10,7 +10,6 @@ const reverseContent = (ctx) =>
 
 class PostSubmission {
   constructor(postSubmission, ctx) {
-    this.confirmation_email = postSubmission.emailConfirmation;
     this.feedback = postSubmission.feedback;
     this.view_response = postSubmission.viewPrintAnswers;
     this.guidance = {

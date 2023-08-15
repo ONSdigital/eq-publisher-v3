@@ -8,7 +8,6 @@ describe("Post Submission", () => {
       id: "1",
       furtherContent: "<p>Test</p>",
       viewPrintAnswers: true,
-      emailConfirmation: true,
       feedback: true,
     };
     context = apiData;
@@ -25,6 +24,5 @@ describe("Post Submission", () => {
     });
     expect(postSubmission.feedback).toBeTruthy();
     expect(postSubmission.view_response).toBeTruthy();
-    expect(postSubmission.confirmation_email).toBeTruthy();
   });
 });
