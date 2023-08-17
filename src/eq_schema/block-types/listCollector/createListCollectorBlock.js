@@ -1,4 +1,4 @@
-const ListCollectorQuestion = require("./ListCollectorQuestion");
+const ListCollectorQuestion = require("./listCollectorQuestion");
 const AddBlock = require("./addBlock");
 const EditBlock = require("./editBlock");
 const RemoveBlock = require("./removeBlock");
