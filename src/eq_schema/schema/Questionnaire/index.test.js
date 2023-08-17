@@ -41,7 +41,6 @@ describe("Questionnaire", () => {
           id: "123",
           furtherContent: "<p>Test</p>",
           viewPrintAnswers: true,
-          emailConfirmation: true,
           feedback: true,
         },
       },
