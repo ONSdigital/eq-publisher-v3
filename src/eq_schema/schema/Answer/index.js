@@ -241,13 +241,14 @@ class Answer {
   }
 
   static buildOption(
-    { label, description, additionalAnswer, qCode: q_code },
+    { label, description, additionalAnswer, qCode: q_code, value },
     { properties, type },
     ctx
   ) {
+    const optionValue = value ? value : label;
     const option = {
       label: buildContents(label, ctx, true),
-      value: buildContents(label, ctx, true),
+      value: buildContents(optionValue, ctx, true),
     };
 
     if (q_code) {
@@ -272,6 +273,7 @@ class Answer {
         }
       }
     }
+
     return option;
   }
 }
