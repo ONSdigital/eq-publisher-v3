@@ -6,6 +6,7 @@ const { getList } = require("../../../utils/functions/listGetters");
 const {
   formatPageDescription,
 } = require("../../../utils/functions/formatPageDescription");
+const { buildContents } = require("../../../utils/builders");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -77,6 +78,12 @@ class DrivingQuestion {
         ],
       },
     ];
+    if (page.answers[0].options[0].description) {
+      this.answers[0].options[0].description = buildContents(page.answers[0].options[0].description, ctx);
+    }
+    if (page.answers[0].options[1].description) {
+      this.answers[0].options[1].description = buildContents(page.answers[0].options[1].description, ctx);
+    }
   }
 
   static routingRules(page, pages, ctx) {

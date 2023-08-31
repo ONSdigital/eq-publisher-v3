@@ -1,6 +1,7 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
+const { buildContents } = require("../../../utils/builders");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -29,6 +30,12 @@ class ListCollectorQuestion {
         ],
       },
     ];
+    if (page.answers[0].options[0].description) {
+      this.answers[0].options[0].description = buildContents(page.answers[0].options[0].description, ctx);
+    }
+    if (page.answers[0].options[1].description) {
+      this.answers[0].options[1].description = buildContents(page.answers[0].options[1].description, ctx);
+    }
   }
 }
 
