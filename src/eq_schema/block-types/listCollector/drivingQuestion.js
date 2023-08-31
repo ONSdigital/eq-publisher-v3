@@ -6,6 +6,7 @@ const { getList } = require("../../../utils/functions/listGetters");
 const {
   formatPageDescription,
 } = require("../../../utils/functions/formatPageDescription");
+const { buildContents } = require("../../../utils/builders");
 
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
@@ -42,45 +43,51 @@ const getNextBlockId = (page, ctx) => {
 };
 
 class DrivingQuestion {
-  constructor(page, ctx) {
-    this.id = `question-driving-${page.id}`;
+  constructor(page, pages, ctx) {
+    this.id = `question-driving-${pages[pages.length - 1].id}`;
     this.type = "General";
-    this.title = processPipe(ctx)(page.drivingQuestion);
-    if (page.additionalGuidancePanelSwitch && page.additionalGuidancePanel) {
-      this.guidance = reversePipe(ctx)(page.additionalGuidancePanel);
+    this.title = processPipe(ctx)(page.title);
+    if (page.additionalGuidanceEnabled && page.additionalGuidanceContent) {
+      this.guidance = reversePipe(ctx)(page.additionalGuidanceContent);
     }
 
     const list = getList(ctx, page.listId);
     this.answers = [
       {
-        id: `answer-driving-${page.id}`,
+        id: `answer-driving-${pages[pages.length - 1].id}`,
         mandatory: true,
         type: "Radio",
         options: [
           {
-            label: page.drivingPositive,
-            value: page.drivingPositive,
+            label: page.answers[0].options[0].label,
+            value: page.answers[0].options[0].label,
             action: {
               type: "RedirectToListAddBlock",
               params: {
                 block_id: `add-block-${formatPageDescription(
-                  page.addItemPageDescription
+                  pages[1].pageDescription
                 )}`,
                 list_name: list.listName,
               },
             },
           },
           {
-            label: page.drivingNegative,
-            value: page.drivingNegative,
+            label: page.answers[0].options[1].label,
+            value: page.answers[0].options[1].label,
           },
         ],
       },
     ];
+    if (page.answers[0].options[0].description) {
+      this.answers[0].options[0].description = buildContents(page.answers[0].options[0].description, ctx);
+    }
+    if (page.answers[0].options[1].description) {
+      this.answers[0].options[1].description = buildContents(page.answers[0].options[1].description, ctx);
+    }
   }
 
-  static routingRules(page, ctx) {
-    const nextBlockId = getNextBlockId(page, ctx);
+  static routingRules(page, pages, ctx) {
+    const nextBlockId = getNextBlockId(pages[pages.length - 1], ctx);
 
     let routingDest = {};
 
@@ -93,16 +100,16 @@ class DrivingQuestion {
       in: [
         {
           source: "answers",
-          identifier: `answer-driving-${page.id}`,
+          identifier: `answer-driving-${pages[pages.length - 1].id}`,
         },
-        [page.drivingNegative],
+        [page.answers[0].options[1].label],
       ],
     };
 
     return [
       routingDest,
       {
-        block: page.id,
+        block: pages[pages.length - 1].id,
       },
     ];
   }

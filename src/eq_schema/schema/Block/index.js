@@ -17,20 +17,13 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { getValueSource } = require("../../builders/valueSource");
 
 const Question = require("../Question");
-const {
-  ListCollectorQuestion,
-  AddBlock,
-  EditBlock,
-  RemoveBlock,
-  SummaryBlock,
-  DrivingQuestion,
-} = require("../../block-types/listCollector");
 
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
   ListCollectorPage: "ListCollector",
   DrivingQuestionPage: "ListCollectorDrivingQuestion",
+  ListCollectorQualifierPage: "ListCollectorDrivingQuestion",
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
@@ -42,8 +35,6 @@ const reversePipe = (ctx) =>
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
-
-const { getList } = require("../../../utils/functions/listGetters");
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -121,20 +112,6 @@ class Block {
         },
         title: processPipe(ctx)(page.totalTitle),
       };
-    }
-    if (page.pageType === "ListCollectorPage") {
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new ListCollectorQuestion(page, ctx);
-      this.add_block = new AddBlock(page, ctx);
-      this.edit_block = new EditBlock(page, ctx);
-      this.remove_block = new RemoveBlock(page, ctx);
-      this.summary = new SummaryBlock(page, ctx);
-    }
-    if (page.pageType === "DrivingQuestionPage") {
-      this.id = formatPageDescription(page.pageDescription);
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new DrivingQuestion(page, ctx);
-      this.routing_rules = DrivingQuestion.routingRules(page, ctx);
     }
   }
 

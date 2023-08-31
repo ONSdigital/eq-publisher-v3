@@ -12,18 +12,16 @@ const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class AddBlock {
   constructor(page, ctx) {
-    this.id = `add-block-${formatPageDescription(page.addItemPageDescription)}`;
+    this.id = `add-block-${formatPageDescription(page.pageDescription)}`;
     this.type = "ListAddQuestion";
-    this.page_title = processPipe(ctx)(page.addItemPageDescription);
+    this.page_title = processPipe(ctx)(page.pageDescription);
 
     this.cancel_text = "Don’t need to add this item";
     const listAnswers = getList(ctx, page.listId).answers;
     this.question = {
-      id: `add-block-question-${formatPageDescription(
-        page.addItemPageDescription
-      )}`,
+      id: `add-block-question-${formatPageDescription(page.pageDescription)}`,
       type: "General",
-      title: processPipe(ctx)(page.addItemTitle),
+      title: processPipe(ctx)(page.title),
       answers: this.buildAnswers(listAnswers, ctx),
     };
   }

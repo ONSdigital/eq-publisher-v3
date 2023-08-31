@@ -1,15 +1,15 @@
-const ListCollectorQuestion = require("./listCollectorQuestion")
-const AddBlock = require("./addBlock")
-const EditBlock = require("./editBlock")
-const RemoveBlock = require("./removeBlock")
-const SummaryBlock = require("./summaryBlock")
-const DrivingQuestion = require("./drivingQuestion")
+const ListCollectorQuestion = require("./listCollectorQuestion");
+const AddBlock = require("./addBlock");
+const EditBlock = require("./editBlock");
+const RemoveBlock = require("./removeBlock");
+const SummaryBlock = require("./summaryBlock");
+const DrivingQuestion = require("./drivingQuestion");
 
-module.exports = { 
-    ListCollectorQuestion, 
-    AddBlock, 
-    EditBlock, 
-    RemoveBlock, 
-    SummaryBlock,
-    DrivingQuestion 
-}
+module.exports = {
+  ListCollectorQuestion,
+  AddBlock,
+  EditBlock,
+  RemoveBlock,
+  SummaryBlock,
+  DrivingQuestion,
+};
