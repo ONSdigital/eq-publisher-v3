@@ -19,6 +19,10 @@ const getAnswers = (questionnaire) =>
     )
   );
 
+const getSuplementaryField = (ctx, sourceId) => {
+  return find(flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"), { id: sourceId });
+}
+
 const getListAnswers = (questionnaire) =>
   flatMap(get(questionnaire, "collectionLists.lists", []), (list) =>
     compact(list.answers)
@@ -131,6 +135,14 @@ const PIPE_TYPES = {
         ? { source: "calculated_summary", identifier: fallbackKey }
         : null,
   },
+  supplementary: {
+    retrieve: ({ id }, ctx) => getSuplementaryField(ctx, id),
+    getType: ({ type }) => type,
+    render: ({ id }) => id,
+    placeholder: ({ identifier, selector }) =>
+      selector ? formatter(identifier) + "_" + formatter(selector) : formatter(identifier),
+    getFallback: () => null,
+  }
 };
 
 const parseHTML = (html) => {
