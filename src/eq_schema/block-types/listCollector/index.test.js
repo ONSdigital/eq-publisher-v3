@@ -1,3 +1,5 @@
+const { last } = require("lodash/fp");
+
 const {
   ListCollectorQuestion,
   AddBlock,
@@ -41,6 +43,10 @@ const listCollectorFolder = {
     {
       id: "add-item-page",
       pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: false,
+      definitionEnabled: false,
+      additionalInfoEnabled: false,
       title: "Enter details",
       pageDescription: "Add item page title",
       listId: "list1",
@@ -125,6 +131,104 @@ describe("Add Block", () => {
     );
     expect(confirmation).toMatchSnapshot();
   });
+
+  it("should be undefined when the additional content fields are disabled", () => {
+    const confirmation = new AddBlock(
+      listCollectorFolder.pages[1],
+      createCtx()
+    );
+
+    expect(confirmation.definitions).toBeUndefined();
+    expect(confirmation.guidance).toBeUndefined();
+    expect(confirmation.description).toBeUndefined();
+    expect(confirmation.additionalInfoContent).toBeUndefined();
+  });
+
+  it("should populate the description field when there is content and is enabled", () => {
+    const addBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: true,
+      description: "<h2>hello world</h2>",
+      guidanceEnabled: false,
+      definitionEnabled: false,
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new AddBlock(addBlockPage, createCtx());
+
+    expect(confirmation.question.description).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the guidance field when there is content and is enabled", () => {
+    const addBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: true,
+      guidance: "<h2>hello world</h2>",
+      definitionEnabled: false,
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new AddBlock(addBlockPage, createCtx());
+    expect(confirmation.question.guidance).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the definitons field when there is content and is enabled", () => {
+    const addBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: false,
+      definitionEnabled: true,
+      definitionLabel: "definition label",
+      definitionContent: "<h2>hello world</h2>",
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new AddBlock(addBlockPage, createCtx());
+    expect(confirmation.question.definitions).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the guidance field in the answers object when there is addtionalInfo content and is enabled", () => {
+    const addBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: false,
+      definitionEnabled: false,
+      additionalInfoEnabled: true,
+      additionalInfoLabel: "additionalInfo label",
+      additionalInfoContent: "<p>additionalInfo content</p>",
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new AddBlock(addBlockPage, createCtx());
+    expect(last(confirmation.question.answers).guidance).toBeDefined();
+    expect(
+      last(confirmation.question.answers).guidance.show_guidance
+    ).toBeDefined();
+    expect(
+      last(confirmation.question.answers).guidance.hide_guidance
+    ).toBeDefined();
+    expect(last(confirmation.question.answers).guidance.contents).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
 });
 
 describe("Edit Block", () => {
@@ -133,6 +237,92 @@ describe("Edit Block", () => {
       listCollectorFolder.pages[1],
       createCtx()
     );
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the description field when there is content and is enabled", () => {
+    const editBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: true,
+      description: "<h2>hello world</h2>",
+      guidanceEnabled: false,
+      definitionEnabled: false,
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new EditBlock(editBlockPage, createCtx());
+
+    expect(confirmation.question.description).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the guidance field when there is content and is enabled", () => {
+    const editBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: true,
+      guidance: "<h2>hello world</h2>",
+      definitionEnabled: false,
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new EditBlock(editBlockPage, createCtx());
+    expect(confirmation.question.guidance).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the definitons field when there is content and is enabled", () => {
+    const editBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: false,
+      definitionEnabled: true,
+      definitionLabel: "definition label",
+      definitionContent: "<h2>hello world</h2>",
+      additionalInfoEnabled: false,
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new EditBlock(editBlockPage, createCtx());
+    expect(confirmation.question.definitions).toBeDefined();
+    expect(confirmation).toMatchSnapshot();
+  });
+
+  it("should populate the guidance field in the answers object when there is addtionalInfo content and is enabled", () => {
+    const editBlockPage = {
+      id: "add-item-page",
+      pageType: "ListCollectorAddItemPage",
+      descriptionEnabled: false,
+      guidanceEnabled: false,
+      definitionEnabled: false,
+      additionalInfoEnabled: true,
+      additionalInfoLabel: "additionalInfo label",
+      additionalInfoContent: "<p>additionalInfo content</p>",
+      title: "Enter details",
+      pageDescription: "Add item page title",
+      listId: "list1",
+      position: 1,
+    };
+    const confirmation = new EditBlock(editBlockPage, createCtx());
+    expect(last(confirmation.question.answers).guidance).toBeDefined();
+    expect(
+      last(confirmation.question.answers).guidance.show_guidance
+    ).toBeDefined();
+    expect(
+      last(confirmation.question.answers).guidance.hide_guidance
+    ).toBeDefined();
+    expect(last(confirmation.question.answers).guidance.contents).toBeDefined();
     expect(confirmation).toMatchSnapshot();
   });
 });

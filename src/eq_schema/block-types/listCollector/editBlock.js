@@ -1,6 +1,6 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
-const { flow } = require("lodash/fp");
+const { flow, last } = require("lodash/fp");
 const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
 const { getList } = require("../../../utils/functions/listGetters");
@@ -52,6 +52,16 @@ class EditBlock {
     question.type = "General";
     question.title = processPipe(ctx)(page.title);
     question.answers = this.buildAnswers(listAnswers, ctx);
+    if (
+      page.additionalInfoEnabled &&
+      (page.additionalInfoLabel || page.additionalInfoContent)
+    ) {
+      last(question.answers).guidance = {
+        show_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        hide_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        ...reversePipe(ctx)(page.additionalInfoContent),
+      };
+    }
     return question;
   }
 

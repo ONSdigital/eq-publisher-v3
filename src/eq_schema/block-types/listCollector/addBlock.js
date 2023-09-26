@@ -1,6 +1,6 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
-const { flow } = require("lodash/fp");
+const { flow, last } = require("lodash/fp");
 const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
 const { getList } = require("../../../utils/functions/listGetters");
@@ -21,7 +21,7 @@ class AddBlock {
     this.type = "ListAddQuestion";
     this.page_title = processPipe(ctx)(page.pageDescription);
 
-    this.cancel_text = "Don’t nCDeed to add this item";
+    this.cancel_text = "Don’t need to add this item";
     this.question = this.buildQuestion(page, ctx);
   }
 
@@ -52,6 +52,16 @@ class AddBlock {
     question.type = "General";
     question.title = processPipe(ctx)(page.title);
     question.answers = this.buildAnswers(listAnswers, ctx);
+    if (
+      page.additionalInfoEnabled &&
+      (page.additionalInfoLabel || page.additionalInfoContent)
+    ) {
+      last(question.answers).guidance = {
+        show_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        hide_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        ...reversePipe(ctx)(page.additionalInfoContent),
+      };
+    }
     return question;
   }
 
