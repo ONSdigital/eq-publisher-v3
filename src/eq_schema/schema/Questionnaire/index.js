@@ -119,7 +119,9 @@ class Questionnaire {
   }
 
   buildMetadata(metadata) {
-    const userMetadata = metadata.map(({ key, type }) => ({
+    const userMetadata = metadata.filter(
+      ({ key }) => !["sds_dataset_id"].includes(key)
+    ).map(({ key, type }) => ({
       name: key,
       type: type === "Date" ? "date" : "string",
       optional: type === "Text_Optional" || undefined,
