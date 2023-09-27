@@ -3,7 +3,7 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
-const { getList } = require("../../../utils/functions/listGetters");
+const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
 const { buildIntroBlock } = require("../Block");
 const { flatMap, filter } = require("lodash");
 const {
@@ -40,27 +40,41 @@ class Section {
     );
 
     if (section.repeatingSection) {
-      const list = getList(ctx, section.repeatingSectionListId);
+      let placeholder;
+      let list = getList(ctx, section.repeatingSectionListId);
+
+      if(list) {
+        placeholder = {
+          placeholder: `repeat_title_placeholder`,
+          transforms: [
+            {
+              arguments: {
+                delimiter: "&nbsp;",
+                list_to_concatenate: this.buildList(list.answers),
+              },
+              transform: "concatenate_list",
+            },
+          ],
+        }
+      } else {
+        list = getSupplementaryList(ctx, section.repeatingSectionListId)
+        placeholder = {
+          placeholder: `repeat_title_placeholder`,
+          value: {
+            source: "supplementary_data",
+            identifier: list.schemaFields[0].identifier,
+            selectors: [list.schemaFields[0].selector]
+          }
+        }
+      }
+
       this.repeat = {
         for_list: list.listName,
       };
 
       this.repeat.title = {
         text: `{repeat_title_placeholder}`,
-        placeholders: [
-          {
-            placeholder: `repeat_title_placeholder`,
-            transforms: [
-              {
-                arguments: {
-                  delimiter: "&nbsp;",
-                  list_to_concatenate: this.buildList(list.answers),
-                },
-                transform: "concatenate_list",
-              },
-            ],
-          },
-        ],
+        placeholders: [ placeholder ],
       };
     }
 
