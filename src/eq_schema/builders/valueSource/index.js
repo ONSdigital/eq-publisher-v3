@@ -34,7 +34,7 @@ const getSupplementaryValueSource = (ctx, sourceId) => {
     identifier: suplementaryField.identifier
   }
   if (suplementaryField.selector) {
-    source.selector = [suplementaryField.selector]
+    source.selectors = [suplementaryField.selector]
   }
   
   return source;
