@@ -4,11 +4,30 @@ const EditBlock = require("./editBlock");
 const RemoveBlock = require("./removeBlock");
 const SummaryBlock = require("./summaryBlock");
 const DrivingQuestion = require("./drivingQuestion");
+const RepeatingBlock = require("./repeatingBlock");
 
 const { getList } = require("../../../utils/functions/listGetters");
 const {
   formatPageDescription,
 } = require("../../../utils/functions/formatPageDescription");
+
+const authorListCollectorPageTypes = [
+  "ListCollectorQualifierPage",
+  "ListCollectorAddItemPage",
+  "ListCollectorConfirmationPage",
+];
+
+const generateRepeatingBlocks = (pages, ctx) => {
+  const repeatingBlockPages = [];
+  pages.forEach((page) => {
+    if (!authorListCollectorPageTypes.includes(page.pageType)) {
+      const repeatingBlockPage = new RepeatingBlock(page, ctx);
+      repeatingBlockPages.push(repeatingBlockPage);
+    }
+  });
+
+  return repeatingBlockPages;
+};
 
 const createListCollectorBlock = (pages, ctx) => {
   const listCollector = {};
@@ -36,6 +55,7 @@ const createListCollectorBlock = (pages, ctx) => {
     ctx
   );
   listCollector.add_block = new AddBlock(pages[1], ctx);
+  listCollector.repeating_blocks = generateRepeatingBlocks(pages, ctx);
   listCollector.edit_block = new EditBlock(pages[1], ctx);
   listCollector.remove_block = new RemoveBlock(pages[1], ctx);
   listCollector.summary = new SummaryBlock(pages[pages.length - 1], ctx);
