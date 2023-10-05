@@ -17,6 +17,9 @@ const authorListCollectorPageTypes = [
   "ListCollectorConfirmationPage",
 ];
 
+const hasRepeatingQuestion = (pages) =>
+  pages.some((page) => !authorListCollectorPageTypes.includes(page.pageType));
+
 const generateRepeatingBlocks = (pages, ctx) => {
   const repeatingBlockPages = [];
   pages.forEach((page) => {
@@ -55,7 +58,9 @@ const createListCollectorBlock = (pages, ctx) => {
     ctx
   );
   listCollector.add_block = new AddBlock(pages[1], ctx);
-  listCollector.repeating_blocks = generateRepeatingBlocks(pages, ctx);
+  listCollector.repeating_blocks = hasRepeatingQuestion(pages)
+    ? generateRepeatingBlocks(pages, ctx)
+    : undefined;
   listCollector.edit_block = new EditBlock(pages[1], ctx);
   listCollector.remove_block = new RemoveBlock(pages[1], ctx);
   listCollector.summary = new SummaryBlock(pages[pages.length - 1], ctx);
