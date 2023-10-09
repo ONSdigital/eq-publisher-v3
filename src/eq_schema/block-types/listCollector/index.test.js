@@ -243,7 +243,7 @@ describe("Summary Block", () => {
           type: "ListRepeatingQuestion",
           page_title: "Follow up page title 1",
           question: {
-            id: "follow-up-question-1-question",
+            id: "questionfollow-up-question-1",
             type: "General",
             title: "Follow up question 1",
             answers: [
@@ -267,7 +267,7 @@ describe("Summary Block", () => {
           type: "ListRepeatingQuestion",
           page_title: "Follow up page title 2",
           question: {
-            id: "follow-up-question-2-question",
+            id: "questionfollow-up-question-2",
             type: "General",
             title: "Follow up question 2",
             answers: [

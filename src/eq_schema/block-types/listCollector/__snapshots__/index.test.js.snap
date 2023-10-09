@@ -119,7 +119,7 @@ exports[`Repeating Block should build the Repeating block 1`] = `
 RepeatingBlock {
   "id": "follow-up-question-1",
   "page_title": "Follow up page title 1",
-  "question": Object {
+  "question": Question {
     "answers": Array [
       Answer {
         "id": "answeranswer-1",
@@ -134,7 +134,7 @@ RepeatingBlock {
         "type": "TextField",
       },
     ],
-    "id": "follow-up-question-1-question",
+    "id": "questionfollow-up-question-1",
     "title": "Follow up question 1",
     "type": "General",
   },
@@ -146,7 +146,7 @@ exports[`Repeating Block should build the Repeating block 2`] = `
 RepeatingBlock {
   "id": "follow-up-question-2",
   "page_title": "Follow up page title 2",
-  "question": Object {
+  "question": Question {
     "answers": Array [
       Answer {
         "id": "answeranswer-3",
@@ -161,7 +161,7 @@ RepeatingBlock {
         "type": "TextField",
       },
     ],
-    "id": "follow-up-question-2-question",
+    "id": "questionfollow-up-question-2",
     "title": "Follow up question 2",
     "type": "General",
   },
