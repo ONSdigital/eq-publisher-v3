@@ -8,6 +8,8 @@ const {
   SummaryBlock,
 } = require(".");
 
+const createListCollectorBlock = require("./createListCollectorBlock");
+
 const listCollectorFolder = {
   id: "listcollector-1",
   listId: "list1",
@@ -62,7 +64,7 @@ const listCollectorFolder = {
           },
         },
         {
-          id: "answer-1",
+          id: "answer-2",
           type: "TextField",
           label: "Answer 2",
           properties: {
@@ -128,6 +130,12 @@ const createCtx = () => ({
   questionnaireJson: {
     id: "questionnaire-1",
     title: "Test Questionnaire",
+    sections: [
+      {
+        id: "section-1",
+        folders: [listCollectorFolder],
+      },
+    ],
     collectionLists: {
       lists: [
         {
@@ -220,5 +228,65 @@ describe("Summary Block", () => {
       createCtx()
     );
     expect(confirmation).toMatchSnapshot();
+  });
+
+  describe("Create List Collector Block", () => {
+    it("should create list collector repeating block when list folder has follow up question", () => {
+      const listCollectorBlock = createListCollectorBlock(
+        listCollectorFolder.pages,
+        createCtx()
+      );
+
+      expect(listCollectorBlock[1].repeating_blocks).toEqual([
+        {
+          id: "follow-up-question-1",
+          type: "ListRepeatingQuestion",
+          page_title: "Follow up page title 1",
+          question: {
+            id: "follow-up-question-1-question",
+            type: "General",
+            title: "Follow up question 1",
+            answers: [
+              {
+                id: "answeranswer-1",
+                mandatory: false,
+                type: "Number",
+                label: "Answer 1",
+              },
+              {
+                id: "answeranswer-2",
+                mandatory: false,
+                type: "TextField",
+                label: "Answer 2",
+              },
+            ],
+          },
+        },
+        {
+          id: "follow-up-question-2",
+          type: "ListRepeatingQuestion",
+          page_title: "Follow up page title 2",
+          question: {
+            id: "follow-up-question-2-question",
+            type: "General",
+            title: "Follow up question 2",
+            answers: [
+              {
+                id: "answeranswer-3",
+                mandatory: false,
+                type: "Number",
+                label: "Answer 3",
+              },
+              {
+                id: "answeranswer-4",
+                mandatory: false,
+                type: "TextField",
+                label: "Answer 4",
+              },
+            ],
+          },
+        },
+      ]);
+    });
   });
 });

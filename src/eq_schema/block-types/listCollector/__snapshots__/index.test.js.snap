@@ -128,7 +128,7 @@ RepeatingBlock {
         "type": "Number",
       },
       Answer {
-        "id": "answeranswer-1",
+        "id": "answeranswer-2",
         "label": "Answer 2",
         "mandatory": false,
         "type": "TextField",
