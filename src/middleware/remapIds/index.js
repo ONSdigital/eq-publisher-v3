@@ -1,3 +1,5 @@
+const cheerio = require("cheerio");
+
 const {
   formatPageDescription,
 } = require("../../utils/functions/formatPageDescription");
@@ -5,6 +7,19 @@ const {
 module.exports = (req, res, next) => {
   // Object storing IDs mapped to their page descriptions - used for referencing page descriptions
   const pageDescriptionLookupTable = {};
+
+  //function to remap page ids to page descriptions for variables piped in page titles 
+  const convertPiping = (html) => {
+    const htmldata = cheerio.load(html)("body");
+    htmldata.find("[data-piped]").each((index, element) => {
+      const elementData = cheerio(element);
+      if (elementData.data().piped === "variable" && elementData.data().id !== "total") {
+        const newId = pageDescriptionLookupTable[elementData.data().id];
+        elementData.attr("data-id", newId);
+      }
+    });
+    return htmldata.html();
+  };
 
   // Adds all IDs to lookup table with page descriptions, and remaps IDs to page descriptions
   res.locals.questionnaire.sections.forEach((section) => {
@@ -15,7 +30,7 @@ module.exports = (req, res, next) => {
       folder.pages.forEach((page) => {
         if (page.pageDescription) {
           /* Adds page id with page description to lookup table if page id is not defined in lookup table
-             For list collector pages, use the anotherPageDescription field to set the page id  
+            For list collector pages, use the anotherPageDescription field to set the page id  
           */
 
           if (page.pageType === "ListCollectorPage") {
@@ -78,6 +93,17 @@ module.exports = (req, res, next) => {
             page.routing.else.pageId =
               pageDescriptionLookupTable[page.routing.else.pageId];
           }
+        }
+      });
+    });
+  });
+
+  //remaps the IDs in page titles if a variable is piped in 
+  res.locals.questionnaire.sections.forEach((section) => {
+    section.folders.forEach((folder) => {
+      folder.pages.forEach((page) => {
+        if (page.title) {
+          page.title = convertPiping(page.title);
         }
       });
     });
