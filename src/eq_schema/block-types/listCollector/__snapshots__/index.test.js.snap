@@ -21,6 +21,119 @@ AddBlock {
 }
 `;
 
+exports[`Add Block should populate the definitons field when there is content and is enabled 1`] = `
+AddBlock {
+  "cancel_text": "Don’t need to add this item",
+  "id": "add-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "definitions": Array [
+      Object {
+        "contents": Array [
+          Object {
+            "title": "hello world",
+          },
+        ],
+        "title": "definition label",
+      },
+    ],
+    "id": "add-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListAddQuestion",
+}
+`;
+
+exports[`Add Block should populate the description field when there is content and is enabled 1`] = `
+AddBlock {
+  "cancel_text": "Don’t need to add this item",
+  "id": "add-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "description": Array [
+      "<h2>hello world</h2>",
+    ],
+    "id": "add-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListAddQuestion",
+}
+`;
+
+exports[`Add Block should populate the guidance field in the answers object when there is addtionalInfo content and is enabled 1`] = `
+AddBlock {
+  "cancel_text": "Don’t need to add this item",
+  "id": "add-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "guidance": Object {
+          "contents": Array [
+            Object {
+              "description": "additionalInfo content",
+            },
+          ],
+          "hide_guidance": "additionalInfo label",
+          "show_guidance": "additionalInfo label",
+        },
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "id": "add-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListAddQuestion",
+}
+`;
+
+exports[`Add Block should populate the guidance field when there is content and is enabled 1`] = `
+AddBlock {
+  "cancel_text": "Don’t need to add this item",
+  "id": "add-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "guidance": Object {
+      "contents": Array [
+        Object {
+          "title": "hello world",
+        },
+      ],
+    },
+    "id": "add-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListAddQuestion",
+}
+`;
+
 exports[`Driving Block should build the driving block 1`] = `
 DrivingQuestion {
   "answers": Array [
@@ -73,6 +186,119 @@ EditBlock {
         "type": undefined,
       },
     ],
+    "id": "edit-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListEditQuestion",
+}
+`;
+
+exports[`Edit Block should populate the definitons field when there is content and is enabled 1`] = `
+EditBlock {
+  "cancel_text": "Don’t need to edit this item",
+  "id": "edit-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "definitions": Array [
+      Object {
+        "contents": Array [
+          Object {
+            "title": "hello world",
+          },
+        ],
+        "title": "definition label",
+      },
+    ],
+    "id": "edit-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListEditQuestion",
+}
+`;
+
+exports[`Edit Block should populate the description field when there is content and is enabled 1`] = `
+EditBlock {
+  "cancel_text": "Don’t need to edit this item",
+  "id": "edit-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "description": Array [
+      "<h2>hello world</h2>",
+    ],
+    "id": "edit-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListEditQuestion",
+}
+`;
+
+exports[`Edit Block should populate the guidance field in the answers object when there is addtionalInfo content and is enabled 1`] = `
+EditBlock {
+  "cancel_text": "Don’t need to edit this item",
+  "id": "edit-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "guidance": Object {
+          "contents": Array [
+            Object {
+              "description": "additionalInfo content",
+            },
+          ],
+          "hide_guidance": "additionalInfo label",
+          "show_guidance": "additionalInfo label",
+        },
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "id": "edit-block-question-add-item-page-title",
+    "title": "Enter details",
+    "type": "General",
+  },
+  "type": "ListEditQuestion",
+}
+`;
+
+exports[`Edit Block should populate the guidance field when there is content and is enabled 1`] = `
+EditBlock {
+  "cancel_text": "Don’t need to edit this item",
+  "id": "edit-block-add-item-page-title",
+  "page_title": "Add item page title",
+  "question": Object {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "mandatory": false,
+        "type": undefined,
+      },
+    ],
+    "guidance": Object {
+      "contents": Array [
+        Object {
+          "title": "hello world",
+        },
+      ],
+    },
     "id": "edit-block-question-add-item-page-title",
     "title": "Enter details",
     "type": "General",
