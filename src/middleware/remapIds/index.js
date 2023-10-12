@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
   //function to remap page ids to page descriptions for variables piped in page titles
   const convertPiping = (html) => {
     const htmlData = cheerio.load(html)("body");
-    htmlData.find("[data-piped]").each((index, element) => {
+    htmlData.find("[data-piped]").each((_, element) => {
       const elementData = cheerio(element);
       if (
         elementData.data().piped === "variable" &&
