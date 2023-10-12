@@ -8,17 +8,20 @@ module.exports = (req, res, next) => {
   // Object storing IDs mapped to their page descriptions - used for referencing page descriptions
   const pageDescriptionLookupTable = {};
 
-  //function to remap page ids to page descriptions for variables piped in page titles 
+  //function to remap page ids to page descriptions for variables piped in page titles
   const convertPiping = (html) => {
-    const htmldata = cheerio.load(html)("body");
-    htmldata.find("[data-piped]").each((index, element) => {
+    const htmlData = cheerio.load(html)("body");
+    htmlData.find("[data-piped]").each((index, element) => {
       const elementData = cheerio(element);
-      if (elementData.data().piped === "variable" && elementData.data().id !== "total") {
+      if (
+        elementData.data().piped === "variable" &&
+        elementData.data().id !== "total"
+      ) {
         const newId = pageDescriptionLookupTable[elementData.data().id];
         elementData.attr("data-id", newId);
       }
     });
-    return htmldata.html();
+    return htmlData.html();
   };
 
   // Adds all IDs to lookup table with page descriptions, and remaps IDs to page descriptions
@@ -98,7 +101,7 @@ module.exports = (req, res, next) => {
     });
   });
 
-  //remaps the IDs in page titles if a variable is piped in 
+  //remaps the IDs in page titles if a variable is piped in
   res.locals.questionnaire.sections.forEach((section) => {
     section.folders.forEach((folder) => {
       folder.pages.forEach((page) => {
