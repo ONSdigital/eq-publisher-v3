@@ -220,6 +220,64 @@ describe("Remap Ids", () => {
                   drivingQCode: "q2",
                   anotherQCode: "q3",
                 },
+                {
+                  id: "page-5",
+                  title: "<p>calcsum</p>",
+                  pageType: "CalculatedSummaryPage",
+                  pageDescription: "Calculated Summary",
+                  type: "Number",
+                  totalTitle: "totalCalcSum",
+                  answers: [
+                    {
+                      id: "a18",
+                      type: "Number",
+                      label: "totalCalcSum",
+                      secondaryLabel: null,
+                      description: "",
+                      guidance: "",
+                      properties: {
+                        required: false,
+                      },
+                      qCode: "",
+                      secondaryQCode: null,
+                      validation: null,
+                    },
+                  ],
+                  summaryAnswers: [],
+                },
+
+                {
+                  id: "page-6",
+                  title:
+                    '<p>calc<span data-piped="variable" data-id="page-5">[totalCalcSum]</span></p>',
+                  pageType: "QuestionPage",
+                  pageDescription: "Question page 6",
+                  descriptionEnabled: false,
+                  guidance: null,
+                  guidanceEnabled: false,
+                  definitionLabel: null,
+                  definitionContent: null,
+                  definitionEnabled: false,
+                  additionalInfoLabel: null,
+                  additionalInfoContent: null,
+                  additionalInfoEnabled: false,
+                  answers: [
+                    {
+                      id: "a6",
+                      type: "TextField",
+                      label: "Label6",
+                      secondaryLabel: null,
+                      description: "",
+                      guidance: "",
+                      properties: {
+                        required: false,
+                      },
+                      qCode: "",
+                      secondaryQCode: null,
+                      validation: null,
+                    },
+                  ],
+                },
               ],
             },
           ],
@@ -308,6 +366,19 @@ describe("Remap Ids", () => {
     expect(res.locals.questionnaire).toEqual(questionnaire);
     expect(res.locals.questionnaire.sections[0].folders[0].pages[3].id).toEqual(
       "list1-repeat"
+    );
+  });
+
+  it("should remap the data id in the calculated summary variable piped into a page title ", () => {
+    req.body = questionnaire;
+
+    middleware = remapIds(req, res, next);
+
+    expect(res.locals.questionnaire).toEqual(questionnaire);
+    expect(
+      res.locals.questionnaire.sections[0].folders[0].pages[5].title
+    ).toEqual(
+      '<p>calc<span data-piped="variable" data-id="calculated-summary">[totalCalcSum]</span></p>'
     );
   });
 });
