@@ -13,7 +13,10 @@ const {
   // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
-const { getValueSource } = require("../../eq_schema/builders/valueSource");
+const {
+  getValueSource,
+  getSupplementaryValueSource,
+} = require("../../eq_schema/builders/valueSource");
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
@@ -62,9 +65,13 @@ const placeholderObjectBuilder = (
 
   if (source === "variable") {
     valueSource = {
-      source: "calculated_summary",
       identifier,
+      source: "calculated_summary",
     };
+  }
+
+  if (source === "supplementary") {
+    valueSource = getSupplementaryValueSource(ctx, identifier);
   }
 
   if (conditionalTradAs && placeholderName === "trad_as") {

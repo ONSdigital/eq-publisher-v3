@@ -112,6 +112,7 @@ const createContext = (metadata = []) => ({
                 id: "calc1",
                 pageType: "CalculatedSummaryPage",
                 type: "Number",
+                totalTitle:"blockcalc1"
               },
             ],
           },
@@ -385,7 +386,7 @@ describe("convertPipes", () => {
             "{blockcalc1}",
             createTransformation({
               placeholder: "blockcalc1",
-              identifier: "blockcalc1",
+              identifier: "calc1",
               source: "calculated_summary",
               argument: "number",
               transform: "format_number",

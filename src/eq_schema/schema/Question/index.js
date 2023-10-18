@@ -7,7 +7,7 @@ const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
-const { getList } = require("../../../utils/functions/listGetters");
+const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -62,13 +62,18 @@ class Question {
 
     if (question.answers.some((answer) => answer.repeatingLabelAndInput)) {
       this.type = "General";
+      const list = getList(
+        ctx,
+        question.answers[0].repeatingLabelAndInputListId
+      ) ||
+      getSupplementaryList(
+        ctx,
+        question.answers[0].repeatingLabelAndInputListId
+      );
       this.dynamic_answers = {
         values: {
           source: "list",
-          identifier: getList(
-            ctx,
-            question.answers[0].repeatingLabelAndInputListId
-          ).listName,
+          identifier: list.listName,
         },
 
         answers: this.buildAnswers(question.answers, ctx),

@@ -1,13 +1,19 @@
 const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
-const { flow } = require("lodash/fp");
+const { flow, last } = require("lodash/fp");
 const { remove, cloneDeep } = require("lodash");
 const Answer = require("../../schema/Answer");
 const { getList } = require("../../../utils/functions/listGetters");
 const {
   formatPageDescription,
 } = require("../../../utils/functions/formatPageDescription");
+const {
+  wrapContents,
+  reversePipeContent,
+} = require("../../../utils/compoundFunctions");
 
+const reversePipe = (ctx) =>
+  flow(wrapContents("contents"), reversePipeContent(ctx));
 const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
 
 class EditBlock {
@@ -16,13 +22,47 @@ class EditBlock {
     this.type = "ListEditQuestion";
     this.page_title = processPipe(ctx)(page.pageDescription);
     this.cancel_text = "Don’t need to edit this item";
+    this.question = this.buildQuestion(page, ctx);
+  }
+
+  buildQuestion(page, ctx) {
     const listAnswers = getList(ctx, page.listId).answers;
-    this.question = {
+    const question = {
       id: `edit-block-question-${formatPageDescription(page.pageDescription)}`,
-      type: "General",
-      title: processPipe(ctx)(page.title),
-      answers: this.buildAnswers(listAnswers, ctx),
     };
+    if (page.descriptionEnabled && page.description) {
+      question.description = [convertPipes(ctx)(page.description)];
+    }
+
+    if (page.guidanceEnabled && page.guidance) {
+      question.guidance = reversePipe(ctx)(page.guidance);
+    }
+
+    if (
+      page.definitionEnabled &&
+      (page.definitionLabel || page.definitionContent)
+    ) {
+      question.definitions = [
+        {
+          title: processPipe(ctx)(page.definitionLabel),
+          ...reversePipe(ctx)(page.definitionContent),
+        },
+      ];
+    }
+    question.type = "General";
+    question.title = processPipe(ctx)(page.title);
+    question.answers = this.buildAnswers(listAnswers, ctx);
+    if (
+      page.additionalInfoEnabled &&
+      (page.additionalInfoLabel || page.additionalInfoContent)
+    ) {
+      last(question.answers).guidance = {
+        show_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        hide_guidance: processPipe(ctx)(page.additionalInfoLabel),
+        ...reversePipe(ctx)(page.additionalInfoContent),
+      };
+    }
+    return question;
   }
 
   buildAnswers(answers, ctx) {
