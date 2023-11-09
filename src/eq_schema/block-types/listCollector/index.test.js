@@ -3,11 +3,14 @@ const { last } = require("lodash/fp");
 const {
   ListCollectorQuestion,
   AddBlock,
+  RepeatingBlock,
   DrivingQuestion,
   EditBlock,
   RemoveBlock,
   SummaryBlock,
 } = require(".");
+
+const createListCollectorBlock = require("./createListCollectorBlock");
 
 const listCollectorFolder = {
   id: "listcollector-1",
@@ -53,6 +56,56 @@ const listCollectorFolder = {
       position: 1,
     },
     {
+      id: "follow-up-question-1",
+      pageType: "QuestionPage",
+      title: "Follow up question 1",
+      pageDescription: "Follow up page title 1",
+      answers: [
+        {
+          id: "answer-1",
+          type: "Number",
+          label: "Answer 1",
+          properties: {
+            required: false,
+          },
+        },
+        {
+          id: "answer-2",
+          type: "TextField",
+          label: "Answer 2",
+          properties: {
+            required: false,
+          },
+        },
+      ],
+      position: 2,
+    },
+    {
+      id: "follow-up-question-2",
+      pageType: "QuestionPage",
+      title: "Follow up question 2",
+      pageDescription: "Follow up page title 2",
+      answers: [
+        {
+          id: "answer-3",
+          type: "Number",
+          label: "Answer 3",
+          properties: {
+            required: false,
+          },
+        },
+        {
+          id: "answer-4",
+          type: "TextField",
+          label: "Answer 4",
+          properties: {
+            required: false,
+          },
+        },
+      ],
+      position: 3,
+    },
+    {
       id: "confirmation-page",
       pageType: "ListCollectorConfirmationPage",
       title: "Add another",
@@ -74,7 +127,7 @@ const listCollectorFolder = {
           ],
         },
       ],
-      position: 2,
+      position: 4,
     },
   ],
 };
@@ -83,6 +136,12 @@ const createCtx = () => ({
   questionnaireJson: {
     id: "questionnaire-1",
     title: "Test Questionnaire",
+    sections: [
+      {
+        id: "section-1",
+        folders: [listCollectorFolder],
+      },
+    ],
     collectionLists: {
       lists: [
         {
@@ -105,7 +164,7 @@ const createCtx = () => ({
 describe("list collector question", () => {
   it("should build valid list collector question", () => {
     const confirmation = new ListCollectorQuestion(
-      listCollectorFolder.pages[2],
+      listCollectorFolder.pages[4],
       createCtx()
     );
     expect(confirmation).toMatchSnapshot();
@@ -231,6 +290,21 @@ describe("Add Block", () => {
   });
 });
 
+describe("Repeating Block", () => {
+  it("should build the Repeating block", () => {
+    const confirmation1 = new RepeatingBlock(
+      listCollectorFolder.pages[2],
+      createCtx()
+    );
+    const confirmation2 = new RepeatingBlock(
+      listCollectorFolder.pages[3],
+      createCtx()
+    );
+    expect(confirmation1).toMatchSnapshot();
+    expect(confirmation2).toMatchSnapshot();
+  });
+});
+
 describe("Edit Block", () => {
   it("should build the Edit block", () => {
     const confirmation = new EditBlock(
@@ -340,9 +414,69 @@ describe("Remove Block", () => {
 describe("Summary Block", () => {
   it("should build the Summary block", () => {
     const confirmation = new SummaryBlock(
-      listCollectorFolder.pages[2],
+      listCollectorFolder.pages[4],
       createCtx()
     );
     expect(confirmation).toMatchSnapshot();
+  });
+
+  describe("Create List Collector Block", () => {
+    it("should create list collector repeating block when list folder has follow up question", () => {
+      const listCollectorBlock = createListCollectorBlock(
+        listCollectorFolder.pages,
+        createCtx()
+      );
+
+      expect(listCollectorBlock[1].repeating_blocks).toEqual([
+        {
+          id: "follow-up-question-1",
+          type: "ListRepeatingQuestion",
+          page_title: "Follow up page title 1",
+          question: {
+            id: "questionfollow-up-question-1",
+            type: "General",
+            title: "Follow up question 1",
+            answers: [
+              {
+                id: "answeranswer-1",
+                mandatory: false,
+                type: "Number",
+                label: "Answer 1",
+              },
+              {
+                id: "answeranswer-2",
+                mandatory: false,
+                type: "TextField",
+                label: "Answer 2",
+              },
+            ],
+          },
+        },
+        {
+          id: "follow-up-question-2",
+          type: "ListRepeatingQuestion",
+          page_title: "Follow up page title 2",
+          question: {
+            id: "questionfollow-up-question-2",
+            type: "General",
+            title: "Follow up question 2",
+            answers: [
+              {
+                id: "answeranswer-3",
+                mandatory: false,
+                type: "Number",
+                label: "Answer 3",
+              },
+              {
+                id: "answeranswer-4",
+                mandatory: false,
+                type: "TextField",
+                label: "Answer 4",
+              },
+            ],
+          },
+        },
+      ]);
+    });
   });
 });

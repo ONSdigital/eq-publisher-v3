@@ -341,6 +341,60 @@ RemoveBlock {
 }
 `;
 
+exports[`Repeating Block should build the Repeating block 1`] = `
+RepeatingBlock {
+  "id": "follow-up-question-1",
+  "page_title": "Follow up page title 1",
+  "question": Question {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-1",
+        "label": "Answer 1",
+        "mandatory": false,
+        "type": "Number",
+      },
+      Answer {
+        "id": "answeranswer-2",
+        "label": "Answer 2",
+        "mandatory": false,
+        "type": "TextField",
+      },
+    ],
+    "id": "questionfollow-up-question-1",
+    "title": "Follow up question 1",
+    "type": "General",
+  },
+  "type": "ListRepeatingQuestion",
+}
+`;
+
+exports[`Repeating Block should build the Repeating block 2`] = `
+RepeatingBlock {
+  "id": "follow-up-question-2",
+  "page_title": "Follow up page title 2",
+  "question": Question {
+    "answers": Array [
+      Answer {
+        "id": "answeranswer-3",
+        "label": "Answer 3",
+        "mandatory": false,
+        "type": "Number",
+      },
+      Answer {
+        "id": "answeranswer-4",
+        "label": "Answer 4",
+        "mandatory": false,
+        "type": "TextField",
+      },
+    ],
+    "id": "questionfollow-up-question-2",
+    "title": "Follow up question 2",
+    "type": "General",
+  },
+  "type": "ListRepeatingQuestion",
+}
+`;
+
 exports[`Summary Block should build the Summary block 1`] = `
 SummaryBlock {
   "item_title": Object {
