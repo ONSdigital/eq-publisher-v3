@@ -82,29 +82,6 @@ describe("Block", () => {
     });
   });
 
-  describe("isNotLastPageInSection", () => {
-    const questionnaire = {
-      sections: [
-        {
-          pages: [{ id: "1" }, { id: "2" }],
-        },
-        {
-          pages: [{ id: "3" }, { id: "4" }],
-        },
-      ],
-    };
-
-    it("should return true if is a last page", () => {
-      expect(isLastPageInSection({ id: "2" }, questionnaire)).toBe(true);
-      expect(isLastPageInSection({ id: "4" }, questionnaire)).toBe(true);
-    });
-
-    it("should return false if not a last page in a section", () => {
-      expect(isLastPageInSection({ id: "1" }, questionnaire)).toBe(false);
-      expect(isLastPageInSection({ id: "3" }, questionnaire)).toBe(false);
-    });
-  });
-
   describe("piping", () => {
     const createPipeInText = ({
       id = 1,
