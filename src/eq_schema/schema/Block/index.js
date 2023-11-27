@@ -149,10 +149,12 @@ class Block {
       if (onlyListCollectorAnswers) {
         this.skip_conditions = {
           when: {
-            "==": [
+            in: [
               {
                 source: "answers",
-                identifier: `answer${sourceFolder.pages[0].answers[0].id}`,
+                identifier: `answer-driving-${
+                  sourceFolder.pages[sourceFolder.pages.length - 1].id
+                }`,
               },
               ["No"],
             ],
