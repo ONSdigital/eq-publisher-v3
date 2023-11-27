@@ -180,5 +180,271 @@ describe("Block", () => {
         type: "CalculatedSummary",
       });
     });
+
+    it("should build a calculated summary page with skip condition when there is only one list collector follow up answer", () => {
+      const calculatedPageGraphql = {
+        totalTitle: "<p>Summary title1</p>",
+        answers: [
+          {
+            label: "<p>Summary title1</p>",
+            type: "Number",
+            id: "9d2b3354-9751-4be4-9523-1f36345c3069",
+            validation: {},
+            properties: {},
+          },
+        ],
+        title: "<p>Summary1</p>",
+        type: "Number",
+        pageType: "CalculatedSummaryPage",
+        summaryAnswers: ["36e1779d-267f-4f69-85e3-a7335371bfb8"],
+        pageDescription: "Summary page1",
+        alias: null,
+        id: "summary-page1",
+        listId: undefined,
+      };
+
+      ctx.questionnaireJson = {
+        metadata: [{ id: "123", type: "Text", key: "my_metadata" }],
+        sections: [
+          {
+            folders: [
+              {
+                id: "folder-1",
+                pages: [
+                  { answers: [{ id: `1`, label: "Answer 1", type: "Text" }] },
+                ],
+              },
+              {
+                displayName: "",
+                title: "List1",
+                folderId: "792a1b8d-0492-4f5d-ae94-33c9ff8d8a0b",
+                listId: "cd9faacd-6d32-4fb1-86ae-7cbf13d633f9",
+                pages: [
+                  {
+                    answers: [
+                      {
+                        qCode: "q2",
+                        label: "",
+                        type: "Radio",
+                        options: [
+                          {
+                            qCode: "",
+                            label: "Yes",
+                            id: "1b947f24-7612-422e-802f-ee3560694266",
+                          },
+                          {
+                            qCode: "",
+                            label: "No",
+                            id: "0fb66dce-b27c-4db0-af9c-236a1a4a5ed0",
+                          },
+                        ],
+                        id: "4622b458-02b7-457d-90bb-34e2e4fc5861",
+                        properties: {
+                          required: false,
+                        },
+                        validation: {},
+                      },
+                    ],
+                    title: "<p>Qualifier1</p>",
+                    additionalGuidanceEnabled: false,
+                    additionalGuidanceContent: "",
+                    pageType: "ListCollectorQualifierPage",
+                    pageDescription: "Qualifier page1",
+                    alias: null,
+                    id: "f5020d43-1ecb-43f7-91f1-408d7aaf5982",
+                    position: 0,
+                  },
+                  {
+                    definitionEnabled: false,
+                    additionalInfoContent: null,
+                    description: null,
+                    title: "<p>Add1</p>",
+                    definitionLabel: null,
+                    additionalInfoLabel: null,
+                    pageType: "ListCollectorAddItemPage",
+                    descriptionEnabled: false,
+                    additionalInfoEnabled: false,
+                    definitionContent: null,
+                    guidance: null,
+                    pageDescription: "Add page1",
+                    alias: null,
+                    guidanceEnabled: false,
+                    id: "a42609e3-83eb-4469-8416-469218d3e779",
+                    position: 1,
+                  },
+                  {
+                    definitionEnabled: false,
+                    additionalInfoContent: null,
+                    answers: [
+                      {
+                        qCode: "",
+                        description: "",
+                        label: "<p>Follow1</p>",
+                        type: "Number",
+                        repeatingLabelAndInputListId: "",
+                        repeatingLabelAndInput: false,
+                        guidance: "",
+                        id: "36e1779d-267f-4f69-85e3-a7335371bfb8",
+                        questionPageId: "cf8b1c62-e827-4b48-b051-161ae363071c",
+                        properties: {
+                          required: false,
+                          decimals: 0,
+                        },
+                        validation: {
+                          maxValue: {
+                            inclusive: true,
+                            entityType: "Custom",
+                            validationType: "maxValue",
+                            enabled: false,
+                            id: "4262f139-c8f7-4567-a20d-f65cc6d4acfb",
+                          },
+                          minValue: {
+                            inclusive: true,
+                            entityType: "Custom",
+                            validationType: "minValue",
+                            enabled: false,
+                            id: "a97f2945-ebee-46d5-a263-c8683c483876",
+                          },
+                        },
+                      },
+                    ],
+                    description: "",
+                    title: "<p>Follow1</p>",
+                    definitionLabel: null,
+                    routing: null,
+                    additionalInfoLabel: null,
+                    pageType: "QuestionPage",
+                    descriptionEnabled: false,
+                    additionalInfoEnabled: false,
+                    definitionContent: null,
+                    guidance: null,
+                    pageDescription: "Follow page1",
+                    alias: null,
+                    guidanceEnabled: false,
+                    id: "cf8b1c62-e827-4b48-b051-161ae363071c",
+                  },
+                  {
+                    definitionEnabled: false,
+                    additionalInfoContent: null,
+                    answers: [
+                      {
+                        qCode: "",
+                        description: "",
+                        label: "<p>Copy of Follow1</p>",
+                        type: "Number",
+                        repeatingLabelAndInputListId: "",
+                        repeatingLabelAndInput: false,
+                        guidance: "",
+                        id: "4ce9825e-b48f-4e79-8007-2555a2496fd7",
+                        questionPageId: "cf8b1c62-e827-4b48-b051-161ae363071c",
+                        properties: {
+                          required: false,
+                          decimals: 0,
+                        },
+                        validation: {
+                          maxValue: {
+                            inclusive: true,
+                            entityType: "Custom",
+                            validationType: "maxValue",
+                            enabled: false,
+                            id: "095e5390-9727-4389-ac3b-87560258fa78",
+                          },
+                          minValue: {
+                            inclusive: true,
+                            entityType: "Custom",
+                            validationType: "minValue",
+                            enabled: false,
+                            id: "655b1551-33fd-4666-8195-32740530e23a",
+                          },
+                        },
+                      },
+                    ],
+                    description: "",
+                    title: "<p>Copy of Follow1</p>",
+                    definitionLabel: null,
+                    routing: null,
+                    additionalInfoLabel: null,
+                    pageType: "QuestionPage",
+                    descriptionEnabled: false,
+                    additionalInfoEnabled: false,
+                    definitionContent: null,
+                    guidance: null,
+                    pageDescription: "Copy of Follow page1",
+                    alias: "",
+                    guidanceEnabled: false,
+                    id: "ce9cfefe-2761-4a0b-b7c9-93b59b27f8e8",
+                  },
+                  {
+                    answers: [
+                      {
+                        qCode: "q3",
+                        label: "",
+                        type: "Radio",
+                        options: [
+                          {
+                            qCode: "",
+                            label: "Yes",
+                            id: "aa04e6a2-0449-40ce-a84e-301444a705df",
+                          },
+                          {
+                            qCode: "",
+                            label: "No",
+                            id: "eb4bb680-66c5-49e3-a440-d1028cceac59",
+                          },
+                        ],
+                        id: "a701b7d3-a0f3-4f31-99e3-69e5b8c0311f",
+                        properties: {
+                          required: false,
+                        },
+                        validation: {},
+                      },
+                    ],
+                    title: "<p>Confirm1</p>",
+                    pageType: "ListCollectorConfirmationPage",
+                    pageDescription: "Confirm page1",
+                    alias: null,
+                    id: "cda52f43-b655-4e89-b7c5-75f038a7369d",
+                    position: 2,
+                  },
+                ],
+                alias: "",
+                id: "792a1b8d-0492-4f5d-ae94-33c9ff8d8a0b",
+              },
+            ],
+          },
+        ],
+      };
+      const block = new Block(calculatedPageGraphql, null, ctx);
+
+      expect(block).toMatchObject({
+        id: "summary-page1",
+        type: "CalculatedSummary",
+        page_title: "Summary page1",
+        title: "Summary1",
+        calculation: {
+          operation: {
+            "+": [
+              {
+                identifier: "answer36e1779d-267f-4f69-85e3-a7335371bfb8",
+                source: "answers",
+              },
+            ],
+          },
+          title: "Summary title1",
+        },
+        skip_conditions: {
+          when: {
+            in: [
+              {
+                source: "answers",
+                identifier:
+                  "answer-driving-cda52f43-b655-4e89-b7c5-75f038a7369d",
+              },
+              ["No"],
+            ],
+          },
+        },
+      });
+    });
   });
 });
