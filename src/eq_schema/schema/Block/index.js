@@ -137,29 +137,34 @@ class Block {
       for (let index = 0; index < page.summaryAnswers.length; index++) {
         summaryAnswer = page.summaryAnswers[index];
         sourcePage = getPageByAnswerId(ctx, summaryAnswer);
-        sourceFolder = getFolderByPageId(ctx, sourcePage.id);
-        if (sourceFolder.listId) {
-          onlyListCollectorAnswers = true;
-        } else {
-          onlyListCollectorAnswers = false;
-          break;
-        }
-      }
+        if (sourcePage) {
+          sourceFolder = getFolderByPageId(ctx, sourcePage.id);
 
-      if (onlyListCollectorAnswers) {
-        this.skip_conditions = {
-          when: {
-            in: [
-              {
-                source: "answers",
-                identifier: `answer-driving-${
-                  sourceFolder.pages[sourceFolder.pages.length - 1].id
-                }`,
-              },
-              ["No"],
-            ],
-          },
-        };
+          if (sourceFolder) {
+            if (sourceFolder.listId) {
+              onlyListCollectorAnswers = true;
+            } else {
+              onlyListCollectorAnswers = false;
+              break;
+            }
+
+            if (onlyListCollectorAnswers) {
+              this.skip_conditions = {
+                when: {
+                  in: [
+                    {
+                      source: "answers",
+                      identifier: `answer-driving-${
+                        sourceFolder.pages[sourceFolder.pages.length - 1].id
+                      }`,
+                    },
+                    ["No"],
+                  ],
+                },
+              };
+            }
+          }
+        }
       }
     }
   }
