@@ -1,5 +1,5 @@
-const { get, isNil } = require("lodash");
-const { flow, getOr, last, map, some } = require("lodash/fp");
+const { get, isNil, find, flatMap, some } = require("lodash");
+const { flow, getOr, last, map } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
 const {
@@ -35,6 +35,23 @@ const reversePipe = (ctx) =>
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
+
+const getPages = (ctx) =>
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, ({ pages }) => pages)
+  );
+const getPageByAnswerId = (ctx, answerId) =>
+  find(
+    getPages(ctx),
+    (page) => page.answers && some(page.answers, { id: answerId })
+  );
+
+const getSections = (ctx) => ctx.questionnaireJson.sections;
+
+const getFolders = (ctx) => flatMap(getSections(ctx), ({ folders }) => folders);
+
+const getFolderByPageId = (ctx, id) =>
+  find(getFolders(ctx), ({ pages }) => pages && some(pages, { id }));
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -112,6 +129,36 @@ class Block {
         },
         title: processPipe(ctx)(page.totalTitle),
       };
+
+      let summaryAnswer, sourcePage, sourceFolder;
+
+      let onlyListCollectorAnswers = true;
+
+      for (let index = 0; index < page.summaryAnswers.length; index++) {
+        summaryAnswer = page.summaryAnswers[index];
+        sourcePage = getPageByAnswerId(ctx, summaryAnswer);
+        sourceFolder = getFolderByPageId(ctx, sourcePage.id);
+        if (sourceFolder.listId) {
+          onlyListCollectorAnswers = true;
+        } else {
+          onlyListCollectorAnswers = false;
+          break;
+        }
+      }
+
+      if (onlyListCollectorAnswers) {
+        this.skip_conditions = {
+          when: {
+            "==": [
+              {
+                source: "answers",
+                identifier: `answer${sourceFolder.pages[0].answers[0].id}`,
+              },
+              ["No"],
+            ],
+          },
+        };
+      }
     }
   }
 
