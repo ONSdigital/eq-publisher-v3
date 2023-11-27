@@ -1,5 +1,4 @@
 const Block = require(".");
-const { isLastPageInSection } = require(".");
 const Question = require("../Question");
 const ctx = {
   questionnaireJson: {
