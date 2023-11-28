@@ -1,5 +1,5 @@
-const { get, isNil, find, flatMap, some } = require("lodash");
-const { flow, getOr, last, map } = require("lodash/fp");
+const { get, isNil, find, flatMap } = require("lodash");
+const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
 const {
@@ -43,7 +43,7 @@ const getPages = (ctx) =>
 const getPageByAnswerId = (ctx, answerId) =>
   find(
     getPages(ctx),
-    (page) => page.answers && some(page.answers, { id: answerId })
+    (page) => page.answers && some({ id: answerId }, page.answers)
   );
 
 const getSections = (ctx) => ctx.questionnaireJson.sections;
@@ -51,7 +51,7 @@ const getSections = (ctx) => ctx.questionnaireJson.sections;
 const getFolders = (ctx) => flatMap(getSections(ctx), ({ folders }) => folders);
 
 const getFolderByPageId = (ctx, id) =>
-  find(getFolders(ctx), ({ pages }) => pages && some(pages, { id }));
+  find(getFolders(ctx), ({ pages }) => pages && some({ id }, pages));
 
 class Block {
   constructor(page, groupId, ctx) {
