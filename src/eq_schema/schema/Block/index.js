@@ -132,7 +132,7 @@ class Block {
 
       let summaryAnswer, sourcePage, sourceFolder;
 
-      let onlyListCollectorAnswers = true;
+      let onlyListCollectorAnswers = false;
 
       for (let index = 0; index < page.summaryAnswers.length; index++) {
         summaryAnswer = page.summaryAnswers[index];
@@ -147,24 +147,24 @@ class Block {
               onlyListCollectorAnswers = false;
               break;
             }
-
-            if (onlyListCollectorAnswers) {
-              this.skip_conditions = {
-                when: {
-                  in: [
-                    {
-                      source: "answers",
-                      identifier: `answer-driving-${
-                        sourceFolder.pages[sourceFolder.pages.length - 1].id
-                      }`,
-                    },
-                    ["No"],
-                  ],
-                },
-              };
-            }
           }
         }
+      }
+
+      if (onlyListCollectorAnswers) {
+        this.skip_conditions = {
+          when: {
+            in: [
+              {
+                source: "answers",
+                identifier: `answer-driving-${
+                  sourceFolder.pages[sourceFolder.pages.length - 1].id
+                }`,
+              },
+              ["No"],
+            ],
+          },
+        };
       }
     }
   }

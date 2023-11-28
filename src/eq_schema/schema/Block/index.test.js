@@ -205,28 +205,7 @@ describe("Block", () => {
       });
     });
 
-    it("should build a calculated summary page with skip condition when there is only one list collector follow up answer", () => {
-      const calculatedPageGraphql = {
-        totalTitle: "<p>Summary title1</p>",
-        answers: [
-          {
-            label: "<p>Summary title1</p>",
-            type: "Number",
-            id: "9d2b3354-9751-4be4-9523-1f36345c3069",
-            validation: {},
-            properties: {},
-          },
-        ],
-        title: "<p>Summary1</p>",
-        type: "Number",
-        pageType: "CalculatedSummaryPage",
-        summaryAnswers: ["36e1779d-267f-4f69-85e3-a7335371bfb8"],
-        pageDescription: "Summary page1",
-        alias: null,
-        id: "summary-page1",
-        listId: undefined,
-      };
-
+    describe("calculated summary page with and without skip condition", () => {
       ctx.questionnaireJson = {
         metadata: [{ id: "123", type: "Text", key: "my_metadata" }],
         sections: [
@@ -235,7 +214,12 @@ describe("Block", () => {
               {
                 id: "folder-1",
                 pages: [
-                  { answers: [{ id: `1`, label: "Answer 1", type: "Text" }] },
+                  {
+                    answers: [
+                      { id: "num-1", label: "Answer 1", type: "Number" },
+                    ],
+                    id: "page-1",
+                  },
                 ],
               },
               {
@@ -308,7 +292,7 @@ describe("Block", () => {
                         repeatingLabelAndInputListId: "",
                         repeatingLabelAndInput: false,
                         guidance: "",
-                        id: "36e1779d-267f-4f69-85e3-a7335371bfb8",
+                        id: "list-follow-1",
                         questionPageId: "cf8b1c62-e827-4b48-b051-161ae363071c",
                         properties: {
                           required: false,
@@ -438,36 +422,102 @@ describe("Block", () => {
           },
         ],
       };
-      const block = new Block(calculatedPageGraphql, null, ctx);
+      it("should build a calculated summary page with skip condition when it contains only one list collector follow up answer", () => {
+        const calculatedPageGraphql = {
+          totalTitle: "<p>Summary title1</p>",
+          answers: [
+            {
+              label: "<p>Summary title1</p>",
+              type: "Number",
+              id: "9d2b3354-9751-4be4-9523-1f36345c3069",
+              validation: {},
+              properties: {},
+            },
+          ],
+          title: "<p>Summary1</p>",
+          type: "Number",
+          pageType: "CalculatedSummaryPage",
+          summaryAnswers: ["list-follow-1"],
+          pageDescription: "Summary page1",
+          alias: null,
+          id: "summary-page1",
+          listId: undefined,
+        };
 
-      expect(block).toMatchObject({
-        id: "summary-page1",
-        type: "CalculatedSummary",
-        page_title: "Summary page1",
-        title: "Summary1",
-        calculation: {
-          operation: {
-            "+": [
-              {
-                identifier: "answer36e1779d-267f-4f69-85e3-a7335371bfb8",
-                source: "answers",
-              },
-            ],
+        const block = new Block(calculatedPageGraphql, null, ctx);
+
+        expect(block).toMatchObject({
+          id: "summary-page1",
+          type: "CalculatedSummary",
+          page_title: "Summary page1",
+          title: "Summary1",
+          calculation: {
+            operation: {
+              "+": [
+                {
+                  identifier: "answerlist-follow-1",
+                  source: "answers",
+                },
+              ],
+            },
+            title: "Summary title1",
           },
-          title: "Summary title1",
-        },
-        skip_conditions: {
-          when: {
-            in: [
-              {
-                source: "answers",
-                identifier:
-                  "answer-driving-cda52f43-b655-4e89-b7c5-75f038a7369d",
-              },
-              ["No"],
-            ],
+          skip_conditions: {
+            when: {
+              in: [
+                {
+                  source: "answers",
+                  identifier:
+                    "answer-driving-cda52f43-b655-4e89-b7c5-75f038a7369d",
+                },
+                ["No"],
+              ],
+            },
           },
-        },
+        });
+      });
+
+      it("should build a calculated summary page without skip condition when it contains a normal answer", () => {
+        const calculatedPageGraphql = {
+          totalTitle: "<p>Summary title1</p>",
+          answers: [
+            {
+              label: "<p>Summary title1</p>",
+              type: "Number",
+              id: "9d2b3354-9751-4be4-9523-1f36345c3069",
+              validation: {},
+              properties: {},
+            },
+          ],
+          title: "<p>Summary1</p>",
+          type: "Number",
+          pageType: "CalculatedSummaryPage",
+          summaryAnswers: ["num-1"],
+          pageDescription: "Summary page1",
+          alias: null,
+          id: "summary-page1",
+          listId: undefined,
+        };
+
+        const block = new Block(calculatedPageGraphql, null, ctx);
+
+        expect(block).toMatchObject({
+          id: "summary-page1",
+          type: "CalculatedSummary",
+          page_title: "Summary page1",
+          title: "Summary1",
+          calculation: {
+            operation: {
+              "+": [
+                {
+                  identifier: "answernum-1",
+                  source: "answers",
+                },
+              ],
+            },
+            title: "Summary title1",
+          },
+        });
       });
     });
   });
