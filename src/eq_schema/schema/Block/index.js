@@ -105,6 +105,8 @@ class Block {
   }
 
   buildPages(page, ctx) {
+    let sourceFolder;
+
     if (
       page.pageType === "QuestionPage" ||
       page.pageType === "ConfirmationQuestion"
@@ -130,26 +132,15 @@ class Block {
         title: processPipe(ctx)(page.totalTitle),
       };
 
-      let summaryAnswer, sourcePage, sourceFolder;
+      const onlyListCollectorAnswers = page.summaryAnswers.every(
+        (summaryAnswerId) => {
+          const sourcePage = getPageByAnswerId(ctx, summaryAnswerId);
 
-      let onlyListCollectorAnswers = false;
+          sourceFolder = sourcePage && getFolderByPageId(ctx, sourcePage.id);
 
-      for (let index = 0; index < page.summaryAnswers.length; index++) {
-        summaryAnswer = page.summaryAnswers[index];
-        sourcePage = getPageByAnswerId(ctx, summaryAnswer);
-        if (sourcePage) {
-          sourceFolder = getFolderByPageId(ctx, sourcePage.id);
-
-          if (sourceFolder) {
-            if (sourceFolder.listId) {
-              onlyListCollectorAnswers = true;
-            } else {
-              onlyListCollectorAnswers = false;
-              break;
-            }
-          }
+          return sourceFolder && sourceFolder.listId !== undefined;
         }
-      }
+      );
 
       if (onlyListCollectorAnswers) {
         this.skip_conditions = {
