@@ -1,4 +1,4 @@
-const { get, isNil } = require("lodash");
+const { get, isNil, find, flatMap } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
@@ -35,6 +35,16 @@ const reversePipe = (ctx) =>
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
+
+const getPages = (ctx) =>
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, ({ pages }) => pages)
+  );
+const getPageByAnswerId = (ctx, answerId) =>
+  find(
+    getPages(ctx),
+    (page) => page.answers && some({ id: answerId }, page.answers)
+  );
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -103,7 +113,15 @@ class Block {
       this.title = processPipe(ctx)(page.title);
       this.page_title =
         processPipe(ctx)(page.pageDescription) || processPipe(ctx)(page.title);
-      this.type = "CalculatedSummary";
+
+      const summaryPage = getPageByAnswerId(ctx, page.summaryAnswers[0]);
+
+      if (summaryPage.pageType === "CalculatedSummaryPage") {
+        this.type = "GrandCalculatedSummary";
+      } else {
+        this.type = "CalculatedSummary";
+      }
+
       this.calculation = {
         operation: {
           "+": page.summaryAnswers.map((answerId) =>
