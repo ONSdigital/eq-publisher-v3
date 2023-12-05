@@ -116,7 +116,7 @@ class Block {
 
       const summaryPage = getPageByAnswerId(ctx, page.summaryAnswers[0]);
 
-      if (summaryPage.pageType === "CalculatedSummaryPage") {
+      if (summaryPage && summaryPage.pageType === "CalculatedSummaryPage") {
         this.type = "GrandCalculatedSummary";
       } else {
         this.type = "CalculatedSummary";
