@@ -17,7 +17,11 @@ const {
 } = require("../../constants/answerTypes");
 
 describe("Create answer codes", () => {
-  const createQuestionnaireJSON = (answer, pageType = "QuestionPage") =>
+  const createQuestionnaireJSON = (
+    answer,
+    pageType = "QuestionPage",
+    withListCollector
+  ) =>
     Object.assign({
       id: "questionnaire-1",
       title: "Test questionnaire",
@@ -31,41 +35,88 @@ describe("Create answer codes", () => {
           folders: [
             {
               id: "folder-1",
-              pages: [
-                {
-                  id: "page-1",
-                  title: "Question 1",
-                  pageType,
-                  drivingQCode:
-                    pageType === "ListCollectorPage" && "driving-code",
-                  anotherQCode:
-                    pageType === "ListCollectorPage" && "another-code",
-                  answers: [
+              pages: withListCollector
+                ? [
                     {
-                      ...answer,
+                      id: "list-qualifier-page",
+                      title: "List qualifier title",
+                      pageType: "ListCollectorQualifierPage",
+                      answers: [
+                        {
+                          id: "qualifier-answer",
+                          type: "Radio",
+                          qCode: "qualifier-code",
+                          options: [
+                            {
+                              id: "qualifier-option-positive",
+                              label: "Yes",
+                            },
+                            {
+                              id: "qualifier-option-negative",
+                              label: "No",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      id: "list-add-item-page",
+                      title: "List add item title",
+                      pageType: "ListCollectorAddItemPage",
+                    },
+                    {
+                      id: "list-confirmation-page",
+                      title: "List confirmation title",
+                      pageType: "ListCollectorConfirmationPage",
+                      answers: [
+                        {
+                          qCode: "confirmation-code",
+                          id: "confirmation-answer",
+                          type: "Radio",
+                          options: [
+                            {
+                              id: "confirmation-option-positive",
+                              label: "Yes",
+                            },
+                            {
+                              id: "confirmation-option-negative",
+                              label: "No",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ]
+                : [
+                    {
+                      id: "page-1",
+                      title: "Question 1",
+                      pageType,
+                      answers: [
+                        {
+                          ...answer,
+                        },
+                      ],
                     },
                   ],
-                },
-              ],
             },
           ],
         },
       ],
       collectionLists: {
         id: "collection-list-1",
-        lists:
-          pageType === "ListCollectorPage"
-            ? [
-                {
-                  id: "list-1",
-                  answers: [
-                    {
-                      ...answer,
-                    },
-                  ],
-                },
-              ]
-            : [],
+        lists: withListCollector
+          ? [
+              {
+                id: "list-1",
+                answers: [
+                  {
+                    ...answer,
+                  },
+                ],
+              },
+            ]
+          : [],
       },
     });
 
@@ -450,30 +501,31 @@ describe("Create answer codes", () => {
   describe("Page types", () => {
     it("should add answer codes for list collector page type", () => {
       const answer = {
-        id: "list-textfield-answer-1",
+        id: "textfield-answer-1",
         type: TEXTFIELD,
         qCode: "list-textfield-answer-code",
       };
 
       const questionnaire = createQuestionnaireJSON(
         answer,
-        "ListCollectorPage"
+        "QuestionPage",
+        true
       );
 
       const answerCodes = createAnswerCodes(questionnaire);
 
       expect(answerCodes).toEqual([
         {
-          answer_id: "answerlist-textfield-answer-1",
+          answer_id: "answerqualifier-answer",
+          code: "qualifier-code",
+        },
+        {
+          answer_id: "answerconfirmation-answer",
+          code: "confirmation-code",
+        },
+        {
+          answer_id: "answertextfield-answer-1",
           code: "list-textfield-answer-code",
-        },
-        {
-          answer_id: "answer-driving-page-1",
-          code: "driving-code",
-        },
-        {
-          answer_id: "add-another-page-1",
-          code: "another-code",
         },
       ]);
     });
