@@ -19,8 +19,8 @@ const {
 describe("Create answer codes", () => {
   const createQuestionnaireJSON = (
     answer,
-    pageType = "QuestionPage",
-    withListCollector
+    withListCollector,
+    pageType = "QuestionPage"
   ) =>
     Object.assign({
       id: "questionnaire-1",
@@ -506,11 +506,7 @@ describe("Create answer codes", () => {
         qCode: "list-textfield-answer-code",
       };
 
-      const questionnaire = createQuestionnaireJSON(
-        answer,
-        "QuestionPage",
-        true
-      );
+      const questionnaire = createQuestionnaireJSON(answer, true);
 
       const answerCodes = createAnswerCodes(questionnaire);
 
@@ -539,6 +535,7 @@ describe("Create answer codes", () => {
 
       const questionnaire = createQuestionnaireJSON(
         answer,
+        false,
         "CalculatedSummaryPage"
       );
       const answerCodes = createAnswerCodes(questionnaire);
