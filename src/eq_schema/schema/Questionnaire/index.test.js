@@ -33,6 +33,20 @@ describe("Questionnaire", () => {
           },
         ],
         metadata: [],
+        supplementaryData: {
+          surveyId: "123",
+          data: [
+            {
+              listName: "",
+            },
+            {
+              listName: "supplementary-list-1",
+            },
+            {
+              listName: "supplementary-list-2",
+            },
+          ],
+        },
         publishDetails: [{ surveyId: "874" }],
         collectionLists: {
           lists: [],
@@ -62,6 +76,7 @@ describe("Questionnaire", () => {
       title: "Quarterly Business Survey",
       theme: "business",
       sections: [expect.any(Section)],
+      supplementary_data: ["supplementary-list-1", "supplementary-list-2"],
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
     });
