@@ -124,6 +124,14 @@ describe("Questionnaire", () => {
     expect(questionnaire.legal_basis).toBeUndefined();
   });
 
+  it("should not include supplementary_data if not defined in Author questionnaire", () => {
+    const questionnaire = new Questionnaire(
+      createQuestionnaireJSON({ supplementaryData: undefined })
+    );
+
+    expect(questionnaire.supplementary_data).toBeUndefined();
+  });
+
   it("should build navigation", () => {
     const questionnaire = new Questionnaire(
       createQuestionnaireJSON({

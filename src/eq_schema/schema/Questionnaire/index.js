@@ -61,9 +61,9 @@ class Questionnaire {
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
-    this.supplementary_data = buildSupplementaryData(
-      questionnaireJson.supplementaryData
-    );
+    this.supplementary_data =
+      questionnaireJson.supplementaryData &&
+      buildSupplementaryData(questionnaireJson.supplementaryData);
 
     this.post_submission = this.buildPostSubmission(
       questionnaireJson.submission,
