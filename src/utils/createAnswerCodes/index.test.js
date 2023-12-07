@@ -65,6 +65,16 @@ describe("Create answer codes", () => {
                       pageType: "ListCollectorAddItemPage",
                     },
                     {
+                      id: "additional-page",
+                      title: "Additional question",
+                      pageType,
+                      answers: [
+                        {
+                          ...answer,
+                        },
+                      ],
+                    },
+                    {
                       id: "list-confirmation-page",
                       title: "List confirmation title",
                       pageType: "ListCollectorConfirmationPage",
@@ -514,6 +524,10 @@ describe("Create answer codes", () => {
         {
           answer_id: "answerqualifier-answer",
           code: "qualifier-code",
+        },
+        {
+          answer_id: "answertextfield-answer-1",
+          code: "list-textfield-answer-code",
         },
         {
           answer_id: "answerconfirmation-answer",
