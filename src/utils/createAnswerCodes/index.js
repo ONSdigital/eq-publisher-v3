@@ -12,7 +12,11 @@ const getAllAnswers = (questionnaireJson) => {
   questionnaireJson.sections.forEach((section) => {
     section.folders.forEach((folder) => {
       folder.pages.forEach((page) => {
-        if (page.pageType === "QuestionPage") {
+        if (
+          page.pageType === "QuestionPage" ||
+          page.pageType === "ListCollectorQualifierPage" ||
+          page.pageType === "ListCollectorConfirmationPage"
+        ) {
           page.answers.forEach((answer) => {
             allQuestionnaireAnswers.push(answer);
           });
@@ -30,27 +34,10 @@ const getAllAnswers = (questionnaireJson) => {
   return allQuestionnaireAnswers;
 };
 
-// Get all list collector pages in the questionnaire
-const getAllListCollectorPages = (questionnaireJson) => {
-  const allQuestionnaireListPages = [];
-  questionnaireJson.sections.forEach((section) => {
-    section.folders.forEach((folder) => {
-      folder.pages.forEach((page) => {
-        if (page.pageType === "ListCollectorPage") {
-          allQuestionnaireListPages.push(page);
-        }
-      });
-    });
-  });
-
-  return allQuestionnaireListPages;
-};
-
 // Generates answer codes for all answers
 const createAnswerCodes = (questionnaireJson) => {
   const answerCodes = [];
   const answers = getAllAnswers(questionnaireJson);
-  const listCollectorPages = getAllListCollectorPages(questionnaireJson);
 
   // Loop through all answers in the questionnaire
   answers.forEach((answer) => {
@@ -85,20 +72,6 @@ const createAnswerCodes = (questionnaireJson) => {
         });
       }
     }
-  });
-
-  // Add answer codes for list collector driving and repeating questions
-  listCollectorPages.forEach((page) => {
-    answerCodes.push(
-      {
-        answer_id: `answer-driving-${page.id}`,
-        code: page.drivingQCode,
-      },
-      {
-        answer_id: `add-another-${page.id}`,
-        code: page.anotherQCode,
-      }
-    );
   });
 
   return answerCodes;
