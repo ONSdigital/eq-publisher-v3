@@ -34,6 +34,7 @@ const TRANSFORM_MAP = {
     format: FORMAT_PERCENTAGE,
     transformKey: PERCENTAGE_TRANSFORMATION,
   },
+  array: { format: FORMAT_CHECKBOX, transformKey: CHECKBOX_TRANSFORMATION },
   // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
@@ -102,6 +103,11 @@ const placeholderObjectBuilder = (
     if (["Checkbox"].includes(AnswerType)) {
       argumentList = {
         delimiter: ",&nbsp;",
+      };
+    }
+    if (["array"].includes(AnswerType)) {
+      argumentList = {
+        delimiter: ",",
       };
     }
     if (["Unit"].includes(AnswerType)) {
