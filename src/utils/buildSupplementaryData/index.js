@@ -1,16 +1,16 @@
 const buildSupplementaryData = (supplementaryData) => {
-  const allSupplementaryData = [];
+  const lists = [];
 
   supplementaryData.data.forEach((dataValue) => {
     if (
-      !allSupplementaryData.includes(dataValue.listName) &&
+      !lists.includes(dataValue.listName) &&
       dataValue.listName !== ""
     ) {
-      allSupplementaryData.push(dataValue.listName);
+      lists.push(dataValue.listName);
     }
   });
 
-  return allSupplementaryData;
+  return {lists};
 };
 
 module.exports = buildSupplementaryData;

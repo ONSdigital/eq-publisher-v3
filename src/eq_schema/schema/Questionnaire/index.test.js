@@ -76,7 +76,7 @@ describe("Questionnaire", () => {
       title: "Quarterly Business Survey",
       theme: "business",
       sections: [expect.any(Section)],
-      supplementary_data: ["supplementary-list-1", "supplementary-list-2"],
+      supplementary_data: {lists: ["supplementary-list-1", "supplementary-list-2"]},
       legal_basis:
         "Notice is given under section 1 of the Statistics of Trade Act 1947.",
     });
