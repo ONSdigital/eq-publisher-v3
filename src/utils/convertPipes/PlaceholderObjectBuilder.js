@@ -109,7 +109,7 @@ const placeholderObjectBuilder = (
     }
     if (["array"].includes(AnswerType)) {
       argumentList = {
-        delimiter: ", ",
+        delimiter: ",&nbsp;",
       };
       valueSource = [valueSource];
     }
