@@ -5,11 +5,13 @@ const {
   FORMAT_DATE,
   FORMAT_NUMBER,
   FORMAT_CHECKBOX,
+  FORMAT_LIST,
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
   CHECKBOX_TRANSFORMATION,
   FORMAT_PERCENTAGE,
   PERCENTAGE_TRANSFORMATION,
+  LIST_TRANSFORMATION,
   // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
@@ -34,7 +36,7 @@ const TRANSFORM_MAP = {
     format: FORMAT_PERCENTAGE,
     transformKey: PERCENTAGE_TRANSFORMATION,
   },
-  array: { format: FORMAT_CHECKBOX, transformKey: CHECKBOX_TRANSFORMATION },
+  array: { format: FORMAT_LIST, transformKey: LIST_TRANSFORMATION },
   // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
@@ -109,6 +111,7 @@ const placeholderObjectBuilder = (
       argumentList = {
         delimiter: ",",
       };
+      valueSource = [valueSource];
     }
     if (["Unit"].includes(AnswerType)) {
       argumentList = {
