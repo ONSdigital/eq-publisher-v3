@@ -28,10 +28,10 @@ describe("buildSupplementaryData", () => {
       questionnaire.supplementaryData
     );
 
-    expect(supplementaryData).toEqual([
+    expect(supplementaryData).toEqual({lists: [
       "supplementary-list-1",
       "supplementary-list-2",
-    ]);
+    ]});
   });
 
   it("should not add supplementary data list names for empty strings", () => {
@@ -60,10 +60,10 @@ describe("buildSupplementaryData", () => {
       questionnaire.supplementaryData
     );
 
-    expect(supplementaryData).toEqual([
+    expect(supplementaryData).toEqual({lists: [
       "supplementary-list-1",
       "supplementary-list-2",
-    ]);
+    ]});
   });
 
   it("should not add duplicated supplementary data list names", () => {
@@ -92,9 +92,9 @@ describe("buildSupplementaryData", () => {
       questionnaire.supplementaryData
     );
 
-    expect(supplementaryData).toEqual([
+    expect(supplementaryData).toEqual({ lists: [
       "supplementary-list-1",
       "supplementary-list-2",
-    ]);
+    ]});
   });
 });
