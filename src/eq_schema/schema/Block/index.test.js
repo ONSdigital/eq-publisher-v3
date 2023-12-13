@@ -799,7 +799,7 @@ describe("Block", () => {
       });
     });
 
-    describe("should build a grand calculated summary page", () => {
+    describe("grand calculated summary page", () => {
       it("should build a grand calculated summary page", () => {
         const calculatedPageGraphql = {
           totalTitle: "<p>Grand summary</p>",
