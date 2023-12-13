@@ -54,7 +54,7 @@ class DrivingQuestion {
     const list = getList(ctx, page.listId);
     this.answers = [
       {
-        id: `answer-driving-${page.answers[0].id}`,
+        id: `answer${page.answers[0].id}`,
         mandatory: true,
         type: "Radio",
         options: [
@@ -106,7 +106,7 @@ class DrivingQuestion {
       in: [
         {
           source: "answers",
-          identifier: `answer-driving-${page.answers[0].id}`,
+          identifier: `answer${page.answers[0].id}`,
         },
         [page.answers[0].options[1].label],
       ],

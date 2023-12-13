@@ -70,12 +70,12 @@ const createAnswerCodes = (questionnaireJson) => {
     else {
       if (page && page.pageType === "ListCollectorQualifierPage") {
         answerCodes.push({
-          answer_id: `answer-driving-${answer.id}`,
+          answer_id: `answer${answer.id}`,
           code: answer.qCode,
         });
       } else if (page && page.pageType === "ListCollectorConfirmationPage") {
         answerCodes.push({
-          answer_id: `add-another-${answer.id}`,
+          answer_id: `answer${answer.id}`,
           code: answer.qCode,
         });
       } else {

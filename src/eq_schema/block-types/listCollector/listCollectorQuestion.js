@@ -12,7 +12,7 @@ class ListCollectorQuestion {
     this.title = processPipe(ctx)(page.title);
     this.answers = [
       {
-        id: `add-another-${page.answers[0].id}`,
+        id: `answer${page.answers[0].id}`,
         mandatory: true,
         type: "Radio",
         options: [
