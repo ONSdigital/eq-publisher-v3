@@ -138,7 +138,7 @@ exports[`Driving Block should build the driving block 1`] = `
 DrivingQuestion {
   "answers": Array [
     Object {
-      "id": "answer-driving-qualifier-answer",
+      "id": "answerqualifier-answer",
       "mandatory": true,
       "options": Array [
         Object {
@@ -422,7 +422,7 @@ exports[`list collector question should build valid list collector question 1`] 
 ListCollectorQuestion {
   "answers": Array [
     Object {
-      "id": "add-another-confirmation-answer",
+      "id": "answerconfirmation-answer",
       "mandatory": true,
       "options": Array [
         Object {

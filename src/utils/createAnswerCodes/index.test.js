@@ -522,7 +522,7 @@ describe("Create answer codes", () => {
 
       expect(answerCodes).toEqual([
         {
-          answer_id: "answer-driving-qualifier-answer",
+          answer_id: "answerqualifier-answer",
           code: "qualifier-code",
         },
         {
@@ -530,7 +530,7 @@ describe("Create answer codes", () => {
           code: "list-textfield-answer-code",
         },
         {
-          answer_id: "add-another-confirmation-answer",
+          answer_id: "answerconfirmation-answer",
           code: "confirmation-code",
         },
         {
