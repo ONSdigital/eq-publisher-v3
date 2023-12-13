@@ -12,7 +12,7 @@ class ListCollectorQuestion {
     this.title = processPipe(ctx)(page.title);
     this.answers = [
       {
-        id: `add-another-${page.id}`,
+        id: `add-another-${page.answers[0].id}`,
         mandatory: true,
         type: "Radio",
         options: [
@@ -31,10 +31,16 @@ class ListCollectorQuestion {
       },
     ];
     if (page.answers[0].options[0].description) {
-      this.answers[0].options[0].description = buildContents(page.answers[0].options[0].description, ctx);
+      this.answers[0].options[0].description = buildContents(
+        page.answers[0].options[0].description,
+        ctx
+      );
     }
     if (page.answers[0].options[1].description) {
-      this.answers[0].options[1].description = buildContents(page.answers[0].options[1].description, ctx);
+      this.answers[0].options[1].description = buildContents(
+        page.answers[0].options[1].description,
+        ctx
+      );
     }
   }
 }

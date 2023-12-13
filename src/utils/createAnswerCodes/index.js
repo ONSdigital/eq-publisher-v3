@@ -6,6 +6,18 @@ const {
   DATE_RANGE,
 } = require("../../constants/answerTypes");
 
+const { find, flatMap, some } = require("lodash");
+
+const getPages = (ctx) =>
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, ({ pages }) => pages)
+  );
+
+const getPageByAnswerId = (ctx, answerId) =>
+  find(
+    getPages(ctx),
+    (page) => page.answers && some(page.answers, { id: answerId })
+  );
 // Get all answers in the questionnaire
 const getAllAnswers = (questionnaireJson) => {
   const allQuestionnaireAnswers = [];
@@ -41,6 +53,8 @@ const createAnswerCodes = (questionnaireJson) => {
 
   // Loop through all answers in the questionnaire
   answers.forEach((answer) => {
+    const page = getPageByAnswerId({ questionnaireJson }, answer.id);
+    // console.log("page :>> ", page);
     // Date range answers output an answer code for the from value, and an answer code for the to value
     if (answer.type === DATE_RANGE) {
       answerCodes.push({
@@ -54,22 +68,36 @@ const createAnswerCodes = (questionnaireJson) => {
     }
     // Other answer types output answer ID and answer QCode as their answer codes
     else {
-      answerCodes.push({
-        answer_id: `answer${answer.id}`,
-        code: answer.qCode,
-      });
-      if ([RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)) {
-        answer.options.forEach((option) => {
-          if (
-            option.additionalAnswer !== undefined &&
-            option.additionalAnswer !== null
-          ) {
-            answerCodes.push({
-              answer_id: `answer${option.additionalAnswer.id}`,
-              code: option.additionalAnswer.qCode,
-            });
-          }
+      if (page && page.pageType === "ListCollectorQualifierPage") {
+        answerCodes.push({
+          answer_id: `answer-driving-${answer.id}`,
+          code: answer.qCode,
         });
+      } else if (page && page.pageType === "ListCollectorConfirmationPage") {
+        answerCodes.push({
+          answer_id: `add-another-${answer.id}`,
+          code: answer.qCode,
+        });
+      } else {
+        answerCodes.push({
+          answer_id: `answer${answer.id}`,
+          code: answer.qCode,
+        });
+        if (
+          [RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)
+        ) {
+          answer.options.forEach((option) => {
+            if (
+              option.additionalAnswer !== undefined &&
+              option.additionalAnswer !== null
+            ) {
+              answerCodes.push({
+                answer_id: `answer${option.additionalAnswer.id}`,
+                code: option.additionalAnswer.qCode,
+              });
+            }
+          });
+        }
       }
     }
   });
