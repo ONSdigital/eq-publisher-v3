@@ -54,7 +54,7 @@ class DrivingQuestion {
     const list = getList(ctx, page.listId);
     this.answers = [
       {
-        id: `answer-driving-${pages[pages.length - 1].id}`,
+        id: `answer${page.answers[0].id}`,
         mandatory: true,
         type: "Radio",
         options: [
@@ -79,10 +79,16 @@ class DrivingQuestion {
       },
     ];
     if (page.answers[0].options[0].description) {
-      this.answers[0].options[0].description = buildContents(page.answers[0].options[0].description, ctx);
+      this.answers[0].options[0].description = buildContents(
+        page.answers[0].options[0].description,
+        ctx
+      );
     }
     if (page.answers[0].options[1].description) {
-      this.answers[0].options[1].description = buildContents(page.answers[0].options[1].description, ctx);
+      this.answers[0].options[1].description = buildContents(
+        page.answers[0].options[1].description,
+        ctx
+      );
     }
   }
 
@@ -100,7 +106,7 @@ class DrivingQuestion {
       in: [
         {
           source: "answers",
-          identifier: `answer-driving-${pages[pages.length - 1].id}`,
+          identifier: `answer${page.answers[0].id}`,
         },
         [page.answers[0].options[1].label],
       ],

@@ -745,8 +745,7 @@ describe("Block", () => {
               in: [
                 {
                   source: "answers",
-                  identifier:
-                    "answer-driving-cda52f43-b655-4e89-b7c5-75f038a7369d",
+                  identifier: "answer4622b458-02b7-457d-90bb-34e2e4fc5861",
                 },
                 ["No"],
               ],

@@ -156,9 +156,7 @@ class Block {
             in: [
               {
                 source: "answers",
-                identifier: `answer-driving-${
-                  sourceFolder.pages[sourceFolder.pages.length - 1].id
-                }`,
+                identifier: `answer${sourceFolder.pages[0].answers[0].id}`,
               },
               ["No"],
             ],
