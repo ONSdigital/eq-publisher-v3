@@ -102,6 +102,7 @@ class Section {
       });
 
       this.summary.items = items;
+      this.summary.show_non_item_answers = true;
     }
 
     if ("showOnHub" in section) {
@@ -151,20 +152,14 @@ class Section {
 
   static buildItem(itemId, listCollectorTitle, ctx) {
     const list = getList(ctx, itemId);
-    const anchorListItems = list.answers;
-    const [anchorItem, ...relatedItems] = anchorListItems;
-    const relatedAnswers = relatedItems.map((answer) => ({
-      source: "answers",
-      identifier: `answer${answer.id}`,
-    }));
+    let anchorItem = list.answers[0];
 
     const ListCollectorsSummary = {
       type: "List",
       for_list: list.listName,
       title: processPipe(ctx)(listCollectorTitle),
-      item_anchor_answer_id: anchorItem.id,
+      item_anchor_answer_id: `answer${anchorItem.id}`,
       item_label: anchorItem.label,
-      related_answers: relatedAnswers,
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
     };
