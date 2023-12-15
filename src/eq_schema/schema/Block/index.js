@@ -122,7 +122,15 @@ class Block {
       this.title = processPipe(ctx)(page.title);
       this.page_title =
         processPipe(ctx)(page.pageDescription) || processPipe(ctx)(page.title);
-      this.type = "CalculatedSummary";
+
+      const summaryPage = getPageByAnswerId(ctx, page.summaryAnswers[0]);
+
+      if (summaryPage && summaryPage.pageType === "CalculatedSummaryPage") {
+        this.type = "GrandCalculatedSummary";
+      } else {
+        this.type = "CalculatedSummary";
+      }
+
       this.calculation = {
         operation: {
           "+": page.summaryAnswers.map((answerId) =>
