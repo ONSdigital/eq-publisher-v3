@@ -14,7 +14,7 @@ class SummaryBlock {
           transforms: [
             {
               arguments: {
-                delimiter: "&nbsp;",
+                delimiter: " ",
                 list_to_concatenate: this.buildList(listAnswers)
               },
               transform: "concatenate_list"

@@ -104,12 +104,12 @@ const placeholderObjectBuilder = (
     }
     if (["Checkbox"].includes(AnswerType)) {
       argumentList = {
-        delimiter: ",&nbsp;",
+        delimiter: ", ",
       };
     }
     if (["array"].includes(AnswerType)) {
       argumentList = {
-        delimiter: ",&nbsp;",
+        delimiter: ", ",
       };
       valueSource = [valueSource];
     }

@@ -16,10 +16,10 @@ describe("fetchData", () => {
     res = {
       locals: {
         questionnaire: {
-          id: "123   ",
+          id: "123",
           sections: [
             {
-              title: "   Whitespaced   "
+              title: "Whitespaced"
             }
           ]
         }

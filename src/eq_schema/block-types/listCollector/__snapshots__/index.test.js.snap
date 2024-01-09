@@ -404,7 +404,7 @@ SummaryBlock {
         "transforms": Array [
           Object {
             "arguments": Object {
-              "delimiter": "&nbsp;",
+              "delimiter": " ",
               "list_to_concatenate": Array [],
             },
             "transform": "concatenate_list",

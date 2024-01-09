@@ -144,7 +144,7 @@ describe("Introduction", () => {
         contents: [
           {
             list: [
-              "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated. ",
+              "Data should relate to all sites in England, Scotland, Wales and Northern Ireland unless otherwise stated.",
               "You can provide info estimates if actual figures aren&#x2019;t available.",
               "We will treat your data securely and confidentially.",
               createPipedFormat("some_metadata", "metadata"),

@@ -49,7 +49,7 @@ class Section {
           transforms: [
             {
               arguments: {
-                delimiter: "&nbsp;",
+                delimiter: " ",
                 list_to_concatenate: this.buildList(list.answers),
               },
               transform: "concatenate_list",
