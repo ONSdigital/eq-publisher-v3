@@ -241,6 +241,8 @@ const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
   if (conditionalTradAs) {
     store.text = store.text.replace("({trad_as})", "{trad_as}");
   }
+  
+  store.text = store.text.replace(/\s+$/, '');
 
   if (!store.placeholders.length) {
     return store.text;

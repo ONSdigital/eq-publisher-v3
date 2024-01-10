@@ -303,7 +303,7 @@ describe("convertPipes", () => {
                 transform: "concatenate_list",
               },
               {
-                delimiter: ",&nbsp;",
+                delimiter: ", ",
                 list_to_concatenate: {
                   identifier: "answer7",
                   source: "answers",
