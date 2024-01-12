@@ -100,7 +100,7 @@ const buildAuthorConfirmationQuestion = (page, groupId, routing, ctx) => {
   }
 
   if (page.confirmation.qCode) {
-    confirmationAnswerObject.qCode = page.confirmation.qCode;
+    confirmationAnswerObject.qCode = page.confirmation.qCode.replace(/\s+$/, '');
   }
 
   const confirmationQuestionBlock = new Block(
