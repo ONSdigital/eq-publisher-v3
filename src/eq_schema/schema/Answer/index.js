@@ -47,7 +47,7 @@ class Answer {
 
     if (!ctx || (answer.qCode && ctx.questionnaireJson.dataVersion !== "3")) {
       if (answer.type !== CHECKBOX) {
-        this.q_code = answer.qCode;
+        this.q_code = answer.qCode.replace(/\s+$/, '');
       }
     }
 
@@ -268,7 +268,7 @@ class Answer {
 
       if (ctx.questionnaireJson.dataVersion !== "3") {
         if (additionalAnswer.qCode && type !== "Checkbox") {
-          option.detail_answer.q_code = additionalAnswer.qCode;
+          option.detail_answer.q_code = additionalAnswer.qCode.replace(/\s+$/, '');
         }
       }
     }
