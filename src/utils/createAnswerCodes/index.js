@@ -59,11 +59,11 @@ const createAnswerCodes = (questionnaireJson) => {
     if (answer.type === DATE_RANGE) {
       answerCodes.push({
         answer_id: `answer${answer.id}from`,
-        code: answer.qCode.replace(/\s+$/, ''),
+        code: answer.qCode && answer.qCode.replace(/\s+$/, ''),
       });
       answerCodes.push({
         answer_id: `answer${answer.id}to`,
-        code: answer.secondaryQCode.replace(/\s+$/, ''),
+        code: answer.secondaryQCode && answer.secondaryQCode.replace(/\s+$/, ''),
       });
     }
     // Other answer types output answer ID and answer QCode as their answer codes
@@ -71,17 +71,17 @@ const createAnswerCodes = (questionnaireJson) => {
       if (page && page.pageType === "ListCollectorQualifierPage") {
         answerCodes.push({
           answer_id: `answer${answer.id}`,
-          code: answer.qCode.replace(/\s+$/, ''),
+          code: answer.qCode && answer.qCode.replace(/\s+$/, ''),
         });
       } else if (page && page.pageType === "ListCollectorConfirmationPage") {
         answerCodes.push({
           answer_id: `answer${answer.id}`,
-          code: answer.qCode.replace(/\s+$/, ''),
+          code: answer.qCode && answer.qCode.replace(/\s+$/, ''),
         });
       } else {
         answerCodes.push({
           answer_id: `answer${answer.id}`,
-          code: answer.qCode.replace(/\s+$/, ''),
+          code: answer.qCode && answer.qCode.replace(/\s+$/, ''),
         });
         if (
           [RADIO, CHECKBOX, SELECT, MUTUALLY_EXCLUSIVE].includes(answer.type)
@@ -93,7 +93,7 @@ const createAnswerCodes = (questionnaireJson) => {
             ) {
               answerCodes.push({
                 answer_id: `answer${option.additionalAnswer.id}`,
-                code: option.additionalAnswer.qCode.replace(/\s+$/, ''),
+                code:  option.additionalAnswer.qCode && option.additionalAnswer.qCode.replace(/\s+$/, ''),
               });
             }
           });

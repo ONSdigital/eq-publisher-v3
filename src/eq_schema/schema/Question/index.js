@@ -234,7 +234,7 @@ class Question {
           ...answer,
           type: "Checkbox",
         };
-        tempAnswer.options[0].qCode = answer.qCode.replace(/\s+$/, '');
+        tempAnswer.options[0].qCode = answer.qCode && answer.qCode.replace(/\s+$/, '');
         delete tempAnswer.qCode;
         mutuallyExclusiveAnswer = new Answer(tempAnswer, ctx);
       } else if (
