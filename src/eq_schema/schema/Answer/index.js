@@ -265,7 +265,7 @@ class Answer {
         id: `answer${additionalAnswer.id}`,
         mandatory: properties.required,
       };
-
+      option.detail_answer.label = option.detail_answer.label.replace(/\s+$/, '');
       if (ctx.questionnaireJson.dataVersion !== "3") {
         if (additionalAnswer.qCode && type !== "Checkbox") {
           option.detail_answer.q_code = additionalAnswer.qCode.replace(/\s+$/, '');
