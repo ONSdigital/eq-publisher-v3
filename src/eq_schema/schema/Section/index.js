@@ -3,7 +3,10 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
-const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
+const {
+  getList,
+  getSupplementaryList,
+} = require("../../../utils/functions/listGetters");
 const { buildIntroBlock } = require("../Block");
 const { flatMap, filter } = require("lodash");
 const {
@@ -43,7 +46,7 @@ class Section {
       let placeholder;
       let list = getList(ctx, section.repeatingSectionListId);
 
-      if(list) {
+      if (list) {
         placeholder = {
           placeholder: `repeat_title_placeholder`,
           transforms: [
@@ -55,27 +58,29 @@ class Section {
               transform: "concatenate_list",
             },
           ],
-        }
+        };
       } else {
-        list = getSupplementaryList(ctx, section.repeatingSectionListId)
+        list = getSupplementaryList(ctx, section.repeatingSectionListId);
         placeholder = {
           placeholder: `repeat_title_placeholder`,
           value: {
             source: "supplementary_data",
             identifier: list.schemaFields[0].identifier,
-            selectors: [list.schemaFields[0].selector]
-          }
-        }
+            selectors: [list.schemaFields[0].selector],
+          },
+        };
       }
 
       this.repeat = {
         for_list: list.listName,
       };
 
-      this.repeat.title = {
-        text: `{repeat_title_placeholder}`,
-        placeholders: [ placeholder ],
-      };
+      this.repeat.title = this.containsPiping(section.title)
+        ? processPipe(ctx)(section.title)
+        : {
+            text: `{repeat_title_placeholder}`,
+            placeholders: [placeholder],
+          };
     }
 
     this.summary = {
@@ -148,6 +153,11 @@ class Section {
       source: "answers",
       identifier: `answer${answer.id}`,
     }));
+  }
+
+  containsPiping(text) {
+    const regex = /<span[^>]*>([^<]+)<\/span>/;
+    return regex.test(text);
   }
 
   static buildItem(itemId, listCollectorTitle, ctx) {
