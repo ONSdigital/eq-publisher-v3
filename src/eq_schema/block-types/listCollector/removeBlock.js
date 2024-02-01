@@ -4,14 +4,12 @@ const {
 
 class RemoveBlock {
   constructor(page) {
-    this.id = `remove-block-${formatPageDescription(
-      page.addItemPageDescription
-    )}`;
+    this.id = `remove-block-${formatPageDescription(page.pageDescription)}`;
     this.type = "ListRemoveQuestion";
     this.cancel_text = "Don’t need to remove this item?";
     this.question = {
       id: `remove-block-question-${formatPageDescription(
-        page.addItemPageDescription
+        page.pageDescription
       )}`,
       type: "General",
       title: "Are you sure you want to remove this item?",

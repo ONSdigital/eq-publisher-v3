@@ -426,6 +426,7 @@ describe("Question", () => {
               additionalAnswer: {
                 id: "3",
                 type: "TextField",
+                label: "please describe",
                 properties: { required: true },
               },
             },

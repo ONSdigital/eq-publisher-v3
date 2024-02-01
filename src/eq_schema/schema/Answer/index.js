@@ -13,6 +13,7 @@ const {
   SELECT,
   DROPDOWN,
   MUTUALLY_EXCLUSIVE,
+  TEXTFIELD,
 } = require("../../../constants/answerTypes");
 const { unitConversion } = require("../../../constants/units");
 const { getValueSource } = require("../../builders/valueSource");
@@ -47,7 +48,7 @@ class Answer {
 
     if (!ctx || (answer.qCode && ctx.questionnaireJson.dataVersion !== "3")) {
       if (answer.type !== CHECKBOX) {
-        this.q_code = answer.qCode;
+        this.q_code = answer.qCode.replace(/\s+$/, "");
       }
     }
 
@@ -74,6 +75,12 @@ class Answer {
 
     if (answer.type === TEXTAREA) {
       if (answer.properties.maxLength) {
+        this.max_length = parseInt(answer.properties.maxLength);
+      }
+    }
+
+    if (answer.type === TEXTFIELD) {
+      if (answer.properties.maxLength && answer.limitCharacter) {
         this.max_length = parseInt(answer.properties.maxLength);
       }
     }
@@ -266,10 +273,16 @@ class Answer {
         id: `answer${additionalAnswer.id}`,
         mandatory: properties.required,
       };
-
+      option.detail_answer.label = option.detail_answer.label.replace(
+        /\s+$/,
+        ""
+      );
       if (ctx.questionnaireJson.dataVersion !== "3") {
         if (additionalAnswer.qCode && type !== "Checkbox") {
-          option.detail_answer.q_code = additionalAnswer.qCode;
+          option.detail_answer.q_code = additionalAnswer.qCode.replace(
+            /\s+$/,
+            ""
+          );
         }
       }
     }

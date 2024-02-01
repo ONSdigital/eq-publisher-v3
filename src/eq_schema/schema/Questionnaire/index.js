@@ -3,6 +3,7 @@ const { contentMap } = require("../../../constants/legalBases");
 const { buildContents, formatListNames } = require("../../../utils/builders");
 
 const createAnswerCodes = require("../../../utils/createAnswerCodes");
+const buildSupplementaryData = require("../../../utils/buildSupplementaryData");
 
 const { Introduction } = require("../../block-types");
 
@@ -60,6 +61,10 @@ class Questionnaire {
     };
     this.metadata = this.buildMetadata(questionnaireJson.metadata);
 
+    this.supplementary_data =
+      questionnaireJson.supplementaryData &&
+      buildSupplementaryData(questionnaireJson.supplementaryData);
+
     this.post_submission = this.buildPostSubmission(
       questionnaireJson.submission,
       ctx
@@ -98,6 +103,11 @@ class Questionnaire {
       },
       ...this.sections,
     ];
+
+    if (ctx.questionnaireJson.sections[0].repeatingSection) {
+      newSections[0].repeat = newSections[1].repeat;
+    }
+    
     this.sections = newSections;
   }
 
@@ -119,11 +129,13 @@ class Questionnaire {
   }
 
   buildMetadata(metadata) {
-    const userMetadata = metadata.map(({ key, type }) => ({
-      name: key,
-      type: type === "Date" ? "date" : "string",
-      optional: type === "Text_Optional" || undefined,
-    }));
+    const userMetadata = metadata
+      .filter(({ key }) => !["sds_dataset_id"].includes(key))
+      .map(({ key, type }) => ({
+        name: key,
+        type: type === "Date" ? "date" : "string",
+        optional: type === "Text_Optional" || undefined,
+      }));
 
     return [...userMetadata];
   }

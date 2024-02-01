@@ -1,4 +1,4 @@
-const { get, isNil } = require("lodash");
+const { get, isNil, find, flatMap } = require("lodash");
 const { flow, getOr, last, map, some } = require("lodash/fp");
 
 const convertPipes = require("../../../utils/convertPipes");
@@ -17,20 +17,13 @@ const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { getValueSource } = require("../../builders/valueSource");
 
 const Question = require("../Question");
-const {
-  ListCollectorQuestion,
-  AddBlock,
-  EditBlock,
-  RemoveBlock,
-  SummaryBlock,
-  DrivingQuestion,
-} = require("../../block-types/listCollector");
 
 const pageTypeMappings = {
   QuestionPage: "Question",
   InterstitialPage: "Interstitial",
   ListCollectorPage: "ListCollector",
   DrivingQuestionPage: "ListCollectorDrivingQuestion",
+  ListCollectorQualifierPage: "ListCollectorDrivingQuestion",
 };
 
 const getLastPage = flow(getOr([], "pages"), last);
@@ -43,7 +36,22 @@ const reversePipe = (ctx) =>
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
 
-const { getList } = require("../../../utils/functions/listGetters");
+const getPages = (ctx) =>
+  flatMap(ctx.questionnaireJson.sections, (section) =>
+    flatMap(section.folders, ({ pages }) => pages)
+  );
+const getPageByAnswerId = (ctx, answerId) =>
+  find(
+    getPages(ctx),
+    (page) => page.answers && some({ id: answerId }, page.answers)
+  );
+
+const getSections = (ctx) => ctx.questionnaireJson.sections;
+
+const getFolders = (ctx) => flatMap(getSections(ctx), ({ folders }) => folders);
+
+const getFolderByPageId = (ctx, id) =>
+  find(getFolders(ctx), ({ pages }) => pages && some({ id }, pages));
 
 class Block {
   constructor(page, groupId, ctx) {
@@ -97,6 +105,8 @@ class Block {
   }
 
   buildPages(page, ctx) {
+    let sourceFolder;
+
     if (
       page.pageType === "QuestionPage" ||
       page.pageType === "ConfirmationQuestion"
@@ -112,7 +122,15 @@ class Block {
       this.title = processPipe(ctx)(page.title);
       this.page_title =
         processPipe(ctx)(page.pageDescription) || processPipe(ctx)(page.title);
-      this.type = "CalculatedSummary";
+
+      const summaryPage = getPageByAnswerId(ctx, page.summaryAnswers[0]);
+
+      if (summaryPage && summaryPage.pageType === "CalculatedSummaryPage") {
+        this.type = "GrandCalculatedSummary";
+      } else {
+        this.type = "CalculatedSummary";
+      }
+
       this.calculation = {
         operation: {
           "+": page.summaryAnswers.map((answerId) =>
@@ -121,20 +139,30 @@ class Block {
         },
         title: processPipe(ctx)(page.totalTitle),
       };
-    }
-    if (page.pageType === "ListCollectorPage") {
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new ListCollectorQuestion(page, ctx);
-      this.add_block = new AddBlock(page, ctx);
-      this.edit_block = new EditBlock(page, ctx);
-      this.remove_block = new RemoveBlock(page, ctx);
-      this.summary = new SummaryBlock(page, ctx);
-    }
-    if (page.pageType === "DrivingQuestionPage") {
-      this.id = formatPageDescription(page.pageDescription);
-      this.for_list = getList(ctx, page.listId).listName;
-      this.question = new DrivingQuestion(page, ctx);
-      this.routing_rules = DrivingQuestion.routingRules(page, ctx);
+
+      const onlyListCollectorAnswers = page.summaryAnswers.every(
+        (summaryAnswerId) => {
+          const sourcePage = getPageByAnswerId(ctx, summaryAnswerId);
+
+          sourceFolder = sourcePage && getFolderByPageId(ctx, sourcePage.id);
+
+          return sourceFolder && sourceFolder.listId !== undefined;
+        }
+      );
+
+      if (onlyListCollectorAnswers) {
+        this.skip_conditions = {
+          when: {
+            in: [
+              {
+                source: "answers",
+                identifier: `answer${sourceFolder.pages[0].answers[0].id}`,
+              },
+              ["No"],
+            ],
+          },
+        };
+      }
     }
   }
 

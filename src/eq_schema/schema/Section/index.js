@@ -3,7 +3,10 @@ const convertPipes = require("../../../utils/convertPipes");
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const { flow } = require("lodash/fp");
 const { getText } = require("../../../utils/HTMLUtils");
-const { getList } = require("../../../utils/functions/listGetters");
+const {
+  getList,
+  getSupplementaryList,
+} = require("../../../utils/functions/listGetters");
 const { buildIntroBlock } = require("../Block");
 const { flatMap, filter } = require("lodash");
 const {
@@ -33,34 +36,51 @@ class Section {
                 ...folder.skipConditions,
                 ...(page.skipConditions || []),
               ],
+              listId: folder.listId,
             }
-          : page
+          : { ...page, listId: folder.listId }
       )
     );
 
     if (section.repeatingSection) {
-      const list = getList(ctx, section.repeatingSectionListId);
+      let placeholder;
+      let list = getList(ctx, section.repeatingSectionListId);
+
+      if (list) {
+        placeholder = {
+          placeholder: `repeat_title_placeholder`,
+          transforms: [
+            {
+              arguments: {
+                delimiter: " ",
+                list_to_concatenate: this.buildList(list.answers),
+              },
+              transform: "concatenate_list",
+            },
+          ],
+        };
+      } else {
+        list = getSupplementaryList(ctx, section.repeatingSectionListId);
+        placeholder = {
+          placeholder: `repeat_title_placeholder`,
+          value: {
+            source: "supplementary_data",
+            identifier: list.schemaFields[0].identifier,
+            selectors: [list.schemaFields[0].selector],
+          },
+        };
+      }
+
       this.repeat = {
         for_list: list.listName,
       };
 
-      this.repeat.title = {
-        text: `{repeat_title_placeholder}`,
-        placeholders: [
-          {
-            placeholder: `repeat_title_placeholder`,
-            transforms: [
-              {
-                arguments: {
-                  delimiter: "&nbsp;",
-                  list_to_concatenate: this.buildList(list.answers),
-                },
-                transform: "concatenate_list",
-              },
-            ],
-          },
-        ],
-      };
+      this.repeat.title = this.containsPiping(section.title)
+        ? processPipe(ctx)(section.title)
+        : {
+            text: `{repeat_title_placeholder}`,
+            placeholders: [placeholder],
+          };
     }
 
     this.summary = {
@@ -70,25 +90,24 @@ class Section {
       collapsible: false,
     };
 
-    const listCollectorPages = [];
+    const listCollectorFolders = [];
     section.folders.forEach((folder) => {
-      folder.pages.forEach((page) => {
-        if (page.pageType === "ListCollectorPage") {
-          listCollectorPages.push(page);
-        }
-      });
+      if (folder.listId) {
+        listCollectorFolders.push(folder);
+      }
     });
 
-    if (listCollectorPages.length > 0) {
-      const items = listCollectorPages.map((listCollectorPage) => {
+    if (listCollectorFolders.length > 0) {
+      const items = listCollectorFolders.map((listCollectorFolder) => {
         return Section.buildItem(
-          listCollectorPage.listId,
-          listCollectorPage.addItemTitle,
+          listCollectorFolder.listId,
+          listCollectorFolder.pages[1].title,
           ctx
         );
       });
 
       this.summary.items = items;
+      this.summary.show_non_item_answers = true;
     }
 
     if ("showOnHub" in section) {
@@ -136,22 +155,21 @@ class Section {
     }));
   }
 
+  containsPiping(text) {
+    const regex = /<span[^>]*>([^<]+)<\/span>/;
+    return regex.test(text);
+  }
+
   static buildItem(itemId, listCollectorTitle, ctx) {
     const list = getList(ctx, itemId);
-    const anchorListItems = list.answers;
-    const [anchorItem, ...relatedItems] = anchorListItems;
-    const relatedAnswers = relatedItems.map((answer) => ({
-      source: "answers",
-      identifier: `answer${answer.id}`,
-    }));
+    let anchorItem = list.answers[0];
 
     const ListCollectorsSummary = {
       type: "List",
       for_list: list.listName,
       title: processPipe(ctx)(listCollectorTitle),
-      item_anchor_answer_id: anchorItem.id,
+      item_anchor_answer_id: `answer${anchorItem.id}`,
       item_label: anchorItem.label,
-      related_answers: relatedAnswers,
       add_link_text: "Add item to this list",
       empty_list_text: "There are no items",
     };

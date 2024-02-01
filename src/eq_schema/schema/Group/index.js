@@ -1,8 +1,11 @@
 const Block = require("../Block");
 const { isEmpty, reject, flatten, uniqWith, isEqual } = require("lodash");
+const createListCollectorBlock = require("../../block-types/listCollector/createListCollectorBlock");
+
 const {
   buildAuthorConfirmationQuestion,
 } = require("../../builders/confirmationPage/ConfirmationPage");
+
 class Group {
   constructor(section, ctx) {
     this.id = `group${section.id}`;
@@ -37,38 +40,43 @@ class Group {
   }
 
   buildBlocks(section, ctx) {
+    let listCollectorPages = [];
     return flatten(
-      section.pages.map((page) => {
+      section.pages.reduce((blocks, page) => {
+        if (page.pageType === "ListCollectorQualifierPage") {
+          listCollectorPages.push(page);
+
+          return blocks;
+        }
+        if (
+          listCollectorPages.length &&
+          page.pageType !== "ListCollectorConfirmationPage"
+        ) {
+          listCollectorPages.push(page);
+
+          return blocks;
+        }
+        if (page.pageType === "ListCollectorConfirmationPage") {
+          listCollectorPages.push(page);
+          const listCollectorBlock = createListCollectorBlock(
+            listCollectorPages,
+            ctx
+          );
+          listCollectorPages = [];
+          blocks.push(listCollectorBlock);
+
+          return blocks;
+        }
         const block = new Block(page, section.id, ctx);
+        blocks.push(block);
         if (page.confirmation) {
-          return [
-            block,
-            buildAuthorConfirmationQuestion(
-              page,
-              section.id,
-              page.routing,
-              ctx
-            ),
-          ];
+          blocks.push(
+            buildAuthorConfirmationQuestion(page, section.id, page.routing, ctx)
+          );
         }
-        if (page.pageType === "ListCollectorPage") {
-          const drivingBlock = {
-            ...page, 
-            pageType: "DrivingQuestionPage",
-          }
-          delete drivingBlock.routing
-          delete drivingBlock.skipConditions
-          return [
-            new Block(
-              drivingBlock, 
-              section.id, 
-              ctx
-            ),
-            block
-          ]
-        }
-        return block;
-      })
+
+        return blocks;
+      }, [])
     );
   }
 }

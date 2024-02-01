@@ -7,7 +7,7 @@ const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
-const { getList } = require("../../../utils/functions/listGetters");
+const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -36,7 +36,7 @@ class Question {
     this.id = `question${question.id}`;
     this.title = processPipe(ctx)(question.title);
     if (question.qCode) {
-      this.q_code = question.qCode;
+      this.q_code = question.qCode.replace(/\s+$/, '');
     }
     if (question.descriptionEnabled && question.description) {
       this.description = [convertPipes(ctx)(question.description)];
@@ -62,13 +62,18 @@ class Question {
 
     if (question.answers.some((answer) => answer.repeatingLabelAndInput)) {
       this.type = "General";
+      const list = getList(
+        ctx,
+        question.answers[0].repeatingLabelAndInputListId
+      ) ||
+      getSupplementaryList(
+        ctx,
+        question.answers[0].repeatingLabelAndInputListId
+      );
       this.dynamic_answers = {
         values: {
           source: "list",
-          identifier: getList(
-            ctx,
-            question.answers[0].repeatingLabelAndInputListId
-          ).listName,
+          identifier: list.listName,
         },
 
         answers: this.buildAnswers(question.answers, ctx),
@@ -200,7 +205,7 @@ class Question {
     };
     if (dataVersion !== "3") {
       if (answer.qCode) {
-        dateFrom.q_code = answer.qCode;
+        dateFrom.q_code = answer.qCode.replace(/\s+$/, '');
       }
     }
     const dateTo = {
@@ -210,7 +215,7 @@ class Question {
     };
     if (dataVersion !== "3") {
       if (answer.secondaryQCode) {
-        dateTo.q_code = answer.secondaryQCode;
+        dateTo.q_code = answer.secondaryQCode.replace(/\s+$/, '');
       }
     }
     return [dateFrom, dateTo];
@@ -229,7 +234,7 @@ class Question {
           ...answer,
           type: "Checkbox",
         };
-        tempAnswer.options[0].qCode = answer.qCode;
+        tempAnswer.options[0].qCode = answer.qCode && answer.qCode.replace(/\s+$/, '');
         delete tempAnswer.qCode;
         mutuallyExclusiveAnswer = new Answer(tempAnswer, ctx);
       } else if (

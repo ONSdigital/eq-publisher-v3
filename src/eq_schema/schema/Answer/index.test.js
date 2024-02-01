@@ -181,6 +181,32 @@ describe("Answer", () => {
     expect(answer.max_length).toBeUndefined();
   });
 
+  it("should set maxLength property for textfield types when limit character is true", () => {
+    const answer = new Answer(
+      createAnswerJSON({
+        type: TEXTFIELD,
+        properties: {
+          maxLength: "12",
+        },
+        limitCharacter: true,
+      })
+    );
+    expect(answer.max_length).toBe(12);
+  });
+
+  it("should not set the maxLength property for textfield when limit character is false", () => {
+    const answer = new Answer(
+      createAnswerJSON({
+        type: TEXTFIELD,
+        properties: {
+          maxLength: "12",
+        },
+        limitCharacter: false,
+      })
+    );
+    expect(answer.max_length).toBeUndefined();
+  });
+
   describe("validation", () => {
     it("should not add validation if undefined", () => {
       const answer = new Answer(

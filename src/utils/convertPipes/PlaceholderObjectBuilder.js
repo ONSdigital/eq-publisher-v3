@@ -5,15 +5,20 @@ const {
   FORMAT_DATE,
   FORMAT_NUMBER,
   FORMAT_CHECKBOX,
+  FORMAT_LIST,
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
   CHECKBOX_TRANSFORMATION,
   FORMAT_PERCENTAGE,
   PERCENTAGE_TRANSFORMATION,
+  LIST_TRANSFORMATION,
   // FORMAT_UNIT,
 } = require("../../constants/piping");
 const { removeDash } = require("../HTMLUtils");
-const { getValueSource } = require("../../eq_schema/builders/valueSource");
+const {
+  getValueSource,
+  getSupplementaryValueSource,
+} = require("../../eq_schema/builders/valueSource");
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
@@ -31,6 +36,7 @@ const TRANSFORM_MAP = {
     format: FORMAT_PERCENTAGE,
     transformKey: PERCENTAGE_TRANSFORMATION,
   },
+  array: { format: FORMAT_LIST, transformKey: LIST_TRANSFORMATION },
   // Unit: { format: FORMAT_UNIT, transformKey: NUMBER_TRANSFORMATION },
 };
 
@@ -62,9 +68,13 @@ const placeholderObjectBuilder = (
 
   if (source === "variable") {
     valueSource = {
-      source: "calculated_summary",
       identifier,
+      source: "calculated_summary",
     };
+  }
+
+  if (source === "supplementary") {
+    valueSource = getSupplementaryValueSource(ctx, identifier);
   }
 
   if (conditionalTradAs && placeholderName === "trad_as") {
@@ -94,8 +104,14 @@ const placeholderObjectBuilder = (
     }
     if (["Checkbox"].includes(AnswerType)) {
       argumentList = {
-        delimiter: ",&nbsp;",
+        delimiter: ", ",
       };
+    }
+    if (["array"].includes(AnswerType)) {
+      argumentList = {
+        delimiter: ", ",
+      };
+      valueSource = [valueSource];
     }
     if (["Unit"].includes(AnswerType)) {
       argumentList = {

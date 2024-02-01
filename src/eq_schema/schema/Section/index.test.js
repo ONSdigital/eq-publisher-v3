@@ -14,6 +14,7 @@ describe("Section", () => {
               {
                 id: "2",
                 answers: [],
+                pageDescription: "First page",
               },
             ],
           },
@@ -178,59 +179,223 @@ describe("Section", () => {
     });
   });
 
-  describe("Section Summary ", () => {
+  describe("Section Folders", () => {
+    it("should apply folder skip conditions to pages", () => {
+      const sectionJSON = createSectionJSON();
+
+      sectionJSON.folders[0].skipConditions = [
+        {
+          id: "skip-condition-1",
+          operator: "And",
+          expressions: [
+            {
+              id: "expression-1",
+              condition: "Matches",
+              left: {
+                type: "Metadata",
+                metadataId: "metadata-1",
+              },
+              right: {
+                type: "Custom",
+                customValue: {
+                  text: "Test",
+                },
+              },
+            },
+          ],
+        },
+      ];
+
+      const section = new Section(
+        sectionJSON,
+        createCtx({
+          questionnaireJson: {
+            metadata: [
+              {
+                id: "metadata-1",
+                key: "test_metadata",
+                alias: "Test metadata",
+                type: "Text",
+                textValue: "123",
+              },
+            ],
+            sections: [sectionJSON],
+          },
+        })
+      );
+
+      expect(section.groups[0].blocks[0].skip_conditions).toMatchObject({
+        when: {
+          "==": [
+            {
+              source: "metadata",
+              identifier: "test_metadata",
+            },
+            "Test",
+          ],
+        },
+      });
+    });
+
+    it("should use listId to add for_list attribute to blocks", () => {
+      const sectionJSON = createSectionJSON();
+
+      sectionJSON.folders[0].listId = "list-1";
+      sectionJSON.folders[0].pages[0].answers = [
+        {
+          id: "qualifier-answer",
+          type: "Radio",
+          options: [
+            {
+              id: "qualifier-positive-option",
+              label: "Yes",
+            },
+            {
+              id: "qualifier-negative-option",
+              label: "No",
+            },
+          ],
+        },
+      ];
+      sectionJSON.folders[0].pages[0].pageType = "ListCollectorQualifierPage";
+
+      sectionJSON.folders[0].pages[1] = {
+        id: "add-item-page",
+        pageDescription: "Add item page description",
+        pageType: "ListCollectorAddItemPage",
+      };
+
+      sectionJSON.folders[0].pages[2] = {
+        id: "confirmation-page",
+        answers: [
+          {
+            id: "confirmation-answer",
+            options: [
+              {
+                id: "confirmation-positive-option",
+                label: "Yes",
+              },
+              {
+                id: "confirmation-negative-option",
+                label: "No",
+              },
+            ],
+          },
+        ],
+        pageDescription: "Confirmation page description",
+        pageType: "ListCollectorConfirmationPage",
+      };
+
+      const section = new Section(
+        sectionJSON,
+        createCtx({
+          questionnaireJson: {
+            collectionLists: {
+              lists: [
+                {
+                  id: "list-1",
+                  listName: "first-list",
+                  answers: [
+                    {
+                      id: "list-collector-answer-1",
+                      type: "TextField",
+                      properties: {
+                        required: false,
+                      },
+                      label: "Text field",
+                    },
+                  ],
+                },
+              ],
+            },
+            sections: [sectionJSON],
+          },
+        })
+      );
+
+      expect(section.groups[0].blocks[0].for_list).toEqual("first-list");
+      expect(section.groups[0].blocks[1].for_list).toEqual("first-list");
+    });
+  });
+
+  describe("Section Summary", () => {
     const listCollectorSection = {
-      id: "1",
+      id: "section-1",
       title: "Section 1",
       sectionSummaryPageDescription: "Section 1 Page Title",
+      sectionSummary: true,
       folders: [
         {
           id: "folder-1",
+          listId: "employees",
           pages: [
             {
-              id: "2",
-              listId: "3",
-              pageType: "ListCollectorPage",
-              addItemTitle: "<p>What is the name of this person</p>",
-              pageDescription: "List1 driving",
-              addItemPageDescription: "List1 collect",
-              anotherPageDescription: "List1 repeat",
+              id: "qualifier-page",
+              pageType: "ListCollectorQualifierPage",
+              title: "Does your company employ anyone?",
+              pageDescription: "Qualifier page title",
+              position: 0,
+              answers: [
+                {
+                  id: "qualifier-answer",
+                  type: "Radio",
+                  options: [
+                    {
+                      id: "qualifier-positive-option",
+                      label: "Yes",
+                    },
+                    {
+                      id: "qualifier-negative-option",
+                      label: "No",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: "add-item-page",
+              pageType: "ListCollectorAddItemPage",
+              title: "What is the name of this person?",
+              pageDescription: "Add item page title",
+              position: 1,
+            },
+            {
+              id: "confirmation-page",
+              pageType: "ListCollectorConfirmationPage",
+              title: "Does your company employ another person?",
+              pageDescription: "Add another page title",
+              answers: [
+                {
+                  id: "confirmation-answer",
+                  type: "Radio",
+                  options: [
+                    {
+                      id: "confirmation-positive-option",
+                      label: "Yes",
+                    },
+                    {
+                      id: "confirmation-negative-option",
+                      label: "No",
+                    },
+                  ],
+                },
+              ],
+              position: 2,
             },
           ],
         },
       ],
-      sectionSummary: true,
     };
     const createListCollectorCtx = () => ({
       routingGotos: [],
       questionnaireJson: {
         navigation: true,
-        sections: [
-          {
-            id: "1",
-            title: "Section 1",
-            page_title: "Section 1 Page Title - Test Questionnaire",
-            folders: [
-              {
-                id: "folder-1",
-                pages: [
-                  {
-                    id: "2",
-                    listId: "3",
-                    pageType: "ListCollectorPage",
-                    addItemTitle: "<p>What is the name of this person</p>",
-                  },
-                ],
-              },
-            ],
-            sectionSummary: true,
-          },
-        ],
+        sections: [listCollectorSection],
         collectionLists: {
           id: "list1",
           lists: [
             {
-              id: "3",
+              id: "employees",
               answers: [
                 {
                   id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
@@ -279,7 +444,7 @@ describe("Section", () => {
         createListCollectorCtx()
       );
       expect(section).toMatchObject({
-        id: "1",
+        id: "section-1",
         summary: {
           show_on_completion: true,
           page_title: "Section 1 Page Title",
@@ -287,23 +452,14 @@ describe("Section", () => {
             {
               type: "List",
               for_list: "test3",
-              title: "What is the name of this person",
-              item_anchor_answer_id: "cdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
+              title: "What is the name of this person?",
+              item_anchor_answer_id: "answercdea9794-6f3c-40c1-9de4-8bbe6e7c54b5",
               item_label: "<p>Text 1</p>",
-              related_answers: [
-                {
-                  source: "answers",
-                  identifier: "answer57bdaf77-7f36-40f1-9994-e91862a95059",
-                },
-                {
-                  source: "answers",
-                  identifier: "answer43ee1461-e363-493f-90cc-d515a205efeb",
-                },
-              ],
               add_link_text: "Add item to this list",
               empty_list_text: "There are no items",
             },
           ],
+          show_non_item_answers: true,
         },
       });
     });
