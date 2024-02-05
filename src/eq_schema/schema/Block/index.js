@@ -119,7 +119,10 @@ class Block {
       this.page_title = processPipe(ctx)(page.pageDescription);
     }
     if (page.pageType === "CalculatedSummaryPage") {
-      this.title = `${processPipe(ctx)(page.title)} Is this correct?`;
+      this.title = processPipe(ctx)(page.title).endsWith(".")
+        ? `${processPipe(ctx)(page.title)} Is this correct?`
+        : `${processPipe(ctx)(page.title)}. Is this correct?`;
+
       this.page_title =
         processPipe(ctx)(page.pageDescription) || processPipe(ctx)(page.title);
 
