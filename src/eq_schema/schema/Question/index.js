@@ -79,6 +79,32 @@ class Question {
         answers: this.buildAnswers(question.answers, ctx),
       };
 
+      const newSkip = {
+        expressions: [
+          {
+            secondaryCondition: "Equal",
+            right: {
+              customValue: {
+                number: 0
+              },
+              type: "Custom",
+            },
+            condition: "CountOf",
+            left: {
+              listId: question.answers[0].repeatingLabelAndInputListId,
+              type: "List",
+            },
+          }
+        ],
+        operator: "And"
+      }
+
+      if(question.skipConditions) {
+        question.skipConditions = [newSkip, ...question.skipConditions]
+      } else {      
+        question.skipConditions = [newSkip]
+      }
+
       if (question.totalValidation && question.totalValidation.enabled) {
         this.type = "Calculated";
         this.calculations = question.totalValidation.allowUnanswered

@@ -3,6 +3,7 @@ const {
   getMetadataKey,
 } = require("../../../../utils/contentUtils/getMetadataKey");
 const { getValueSource } = require("../../valueSource")
+const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
 const { flatMap, filter } = require("lodash");
 
@@ -42,6 +43,10 @@ const checkType = (type) => {
 
   if (type === "Metadata") {
     return "metadata";
+  }
+
+  if (type === "List") {
+    return "list";
   }
 
   return null;
@@ -168,11 +173,39 @@ const buildMetadataObject = (expression, ctx) => {
   return { [routingConditionConversion(condition)]: returnValue };
 };
 
+const buildListObject = (expression, ctx) => {
+  const { condition, secondaryCondition, left, right } = expression;
+  // Error trap as currently countOf is the only condition for lists, this may be extended later on.
+  if (condition !== "CountOf") {
+    throw new Error(
+      `${condition} is not a valid routing condition for list type`
+    );
+  }
+
+  const list = getListFromAll(ctx, left.listId);
+
+  const countOfObject = [
+    {
+      count: [
+        {
+          source: checkType(left.type),
+          identifier: list.listName,
+        },
+      ],
+    },
+    right.customValue.number,
+  ];
+
+  return { [routingConditionConversion(secondaryCondition)]: countOfObject };
+};
+
 const checkValidRoutingType = (expression, ctx) => {
   if (expression.left.type === "Answer") {
     return buildAnswerObject(expression, ctx);
   } else if (expression.left.type === "Metadata") {
     return buildMetadataObject(expression, ctx);
+  } else if (expression.left.type === "List" ) {
+    return buildListObject(expression, ctx);
   } else {
     throw new Error(
       `${expression.left.type} is not a valid routing answer type`

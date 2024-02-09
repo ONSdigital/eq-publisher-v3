@@ -10,4 +10,6 @@ const getSupplementaryList = (ctx, listId) => find(
   { id: listId },
 )
 
-module.exports = { getList, getSupplementaryList }
+const getListFromAll = (ctx, listId) => getList(ctx, listId) || getSupplementaryList(ctx, listId)
+
+module.exports = { getList, getSupplementaryList, getListFromAll }
