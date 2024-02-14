@@ -1,5 +1,5 @@
 const { find, get, flow, concat, last } = require("lodash/fp");
-const { set, remove, cloneDeep } = require("lodash");
+const { set, remove, cloneDeep, filter } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -8,6 +8,7 @@ const {
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
+const { getPagesByListId } = require("../../../utils/functions/pageGetters")
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -79,30 +80,31 @@ class Question {
         answers: this.buildAnswers(question.answers, ctx),
       };
 
-      const newSkip = {
-        expressions: [
-          {
-            secondaryCondition: "Equal",
-            right: {
-              customValue: {
-                number: 0
-              },
-              type: "Custom",
-            },
-            condition: "CountOf",
-            left: {
-              listId: question.answers[0].repeatingLabelAndInputListId,
-              type: "List",
-            },
-          }
-        ],
-        operator: "And"
-      }
+      const ListCollectorPages = filter(getPagesByListId(ctx, question.answers[0].repeatingLabelAndInputListId), { pageType: "ListCollectorConfirmationPage" })
 
-      if(question.skipConditions) {
-        question.skipConditions = [newSkip, ...question.skipConditions]
-      } else {      
-        question.skipConditions = [newSkip]
+      if (ListCollectorPages.length) {
+        const expressions = ListCollectorPages.map((page) => ({
+            condition: "Unanswered",
+            left: {
+              answerId: page.answers[0].id,
+              type: "Answer"
+            },
+            right: {
+              optionIds: [
+              ]
+            }
+          })
+        )
+        const newSkip = {
+          expressions: expressions,
+          operator: "And"
+        }
+
+        if(question.skipConditions) {
+          question.skipConditions = [newSkip, ...question.skipConditions]
+        } else {      
+          question.skipConditions = [newSkip]
+        }
       }
 
       if (question.totalValidation && question.totalValidation.enabled) {
