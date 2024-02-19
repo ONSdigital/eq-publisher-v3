@@ -1,5 +1,5 @@
 const { find, get, flow, concat, last } = require("lodash/fp");
-const { set, remove, cloneDeep } = require("lodash");
+const { set, remove, cloneDeep, filter } = require("lodash");
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 const convertPipes = require("../../../utils/convertPipes");
@@ -8,6 +8,7 @@ const {
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
 const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
+const { getPagesByListId } = require("../../../utils/functions/pageGetters")
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -78,6 +79,33 @@ class Question {
 
         answers: this.buildAnswers(question.answers, ctx),
       };
+
+      const ListCollectorPages = filter(getPagesByListId(ctx, question.answers[0].repeatingLabelAndInputListId), { pageType: "ListCollectorConfirmationPage" })
+
+      if (ListCollectorPages.length) {
+        const expressions = ListCollectorPages.map((page) => ({
+            condition: "Unanswered",
+            left: {
+              answerId: page.answers[0].id,
+              type: "Answer"
+            },
+            right: {
+              optionIds: [
+              ]
+            }
+          })
+        )
+        const newSkip = {
+          expressions: expressions,
+          operator: "And"
+        }
+
+        if(question.skipConditions) {
+          question.skipConditions = [newSkip, ...question.skipConditions]
+        } else {      
+          question.skipConditions = [newSkip]
+        }
+      }
 
       if (question.totalValidation && question.totalValidation.enabled) {
         this.type = "Calculated";
