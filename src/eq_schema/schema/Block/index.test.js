@@ -200,7 +200,7 @@ describe("Block", () => {
           title: "Bye",
         },
         id: "1",
-        title: "Hi is your total %(total)s. Is this correct?",
+        title: "Hi is your total %(total)s",
         type: "CalculatedSummary",
       });
     });
@@ -728,7 +728,7 @@ describe("Block", () => {
           id: "summary-page1",
           type: "CalculatedSummary",
           page_title: "Summary page1",
-          title: "Summary1. Is this correct?",
+          title: "Summary1",
           calculation: {
             operation: {
               "+": [
@@ -750,49 +750,6 @@ describe("Block", () => {
                 ["No"],
               ],
             },
-          },
-        });
-      });
-
-      it("Should not add a full stop after the title if it has been added by the user", () => {
-        const calculatedPageGraphql = {
-          totalTitle: "<p>Summary title1</p>",
-          answers: [
-            {
-              label: "<p>Summary title1</p>",
-              type: "Number",
-              id: "9d2b3354-9751-4be4-9523-1f36345c3069",
-              validation: {},
-              properties: {},
-            },
-          ],
-          title: "<p>Summary1.</p>",
-          type: "Number",
-          pageType: "CalculatedSummaryPage",
-          summaryAnswers: ["num-1"],
-          pageDescription: "Summary page1",
-          alias: null,
-          id: "summary-page1",
-          listId: undefined,
-        };
-
-        const block = new Block(calculatedPageGraphql, null, ctx);
-
-        expect(block).toMatchObject({
-          id: "summary-page1",
-          type: "CalculatedSummary",
-          page_title: "Summary page1",
-          title: "Summary1. Is this correct?",
-          calculation: {
-            operation: {
-              "+": [
-                {
-                  identifier: "answernum-1",
-                  source: "answers",
-                },
-              ],
-            },
-            title: "Summary title1",
           },
         });
       });
@@ -825,7 +782,7 @@ describe("Block", () => {
           id: "summary-page1",
           type: "CalculatedSummary",
           page_title: "Summary page1",
-          title: "Summary1. Is this correct?",
+          title: "Summary1",
           calculation: {
             operation: {
               "+": [
@@ -872,7 +829,7 @@ describe("Block", () => {
           id: "grand-summary-1",
           type: "GrandCalculatedSummary",
           page_title: "Grand summary",
-          title: "Grand summary. Is this correct?",
+          title: "Grand summary",
           calculation: {
             operation: {
               "+": [
