@@ -7,8 +7,11 @@ const {
   wrapContents,
   reversePipeContent,
 } = require("../../../utils/compoundFunctions");
-const { getList, getSupplementaryList } = require("../../../utils/functions/listGetters");
-const { getPagesByListId } = require("../../../utils/functions/pageGetters")
+const {
+  getList,
+  getSupplementaryList,
+} = require("../../../utils/functions/listGetters");
+const { getPagesByListId } = require("../../../utils/functions/pageGetters");
 
 const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
@@ -37,7 +40,7 @@ class Question {
     this.id = `question${question.id}`;
     this.title = processPipe(ctx)(question.title);
     if (question.qCode) {
-      this.q_code = question.qCode.replace(/\s+$/, '');
+      this.q_code = question.qCode.trim();
     }
     if (question.descriptionEnabled && question.description) {
       this.description = [convertPipes(ctx)(question.description)];
@@ -63,14 +66,12 @@ class Question {
 
     if (question.answers.some((answer) => answer.repeatingLabelAndInput)) {
       this.type = "General";
-      const list = getList(
-        ctx,
-        question.answers[0].repeatingLabelAndInputListId
-      ) ||
-      getSupplementaryList(
-        ctx,
-        question.answers[0].repeatingLabelAndInputListId
-      );
+      const list =
+        getList(ctx, question.answers[0].repeatingLabelAndInputListId) ||
+        getSupplementaryList(
+          ctx,
+          question.answers[0].repeatingLabelAndInputListId
+        );
       this.dynamic_answers = {
         values: {
           source: "list",
@@ -80,30 +81,31 @@ class Question {
         answers: this.buildAnswers(question.answers, ctx),
       };
 
-      const ListCollectorPages = filter(getPagesByListId(ctx, question.answers[0].repeatingLabelAndInputListId), { pageType: "ListCollectorConfirmationPage" })
+      const ListCollectorPages = filter(
+        getPagesByListId(ctx, question.answers[0].repeatingLabelAndInputListId),
+        { pageType: "ListCollectorConfirmationPage" }
+      );
 
       if (ListCollectorPages.length) {
         const expressions = ListCollectorPages.map((page) => ({
-            condition: "Unanswered",
-            left: {
-              answerId: page.answers[0].id,
-              type: "Answer"
-            },
-            right: {
-              optionIds: [
-              ]
-            }
-          })
-        )
+          condition: "Unanswered",
+          left: {
+            answerId: page.answers[0].id,
+            type: "Answer",
+          },
+          right: {
+            optionIds: [],
+          },
+        }));
         const newSkip = {
           expressions: expressions,
-          operator: "And"
-        }
+          operator: "And",
+        };
 
-        if(question.skipConditions) {
-          question.skipConditions = [newSkip, ...question.skipConditions]
-        } else {      
-          question.skipConditions = [newSkip]
+        if (question.skipConditions) {
+          question.skipConditions = [newSkip, ...question.skipConditions];
+        } else {
+          question.skipConditions = [newSkip];
         }
       }
 
@@ -233,7 +235,7 @@ class Question {
     };
     if (dataVersion !== "3") {
       if (answer.qCode) {
-        dateFrom.q_code = answer.qCode.replace(/\s+$/, '');
+        dateFrom.q_code = answer.qCode.trim();
       }
     }
     const dateTo = {
@@ -243,7 +245,7 @@ class Question {
     };
     if (dataVersion !== "3") {
       if (answer.secondaryQCode) {
-        dateTo.q_code = answer.secondaryQCode.replace(/\s+$/, '');
+        dateTo.q_code = answer.secondaryQCode.trim();
       }
     }
     return [dateFrom, dateTo];
@@ -262,7 +264,7 @@ class Question {
           ...answer,
           type: "Checkbox",
         };
-        tempAnswer.options[0].qCode = answer.qCode && answer.qCode.replace(/\s+$/, '');
+        tempAnswer.options[0].qCode = answer.qCode && answer.qCode.trim();
         delete tempAnswer.qCode;
         mutuallyExclusiveAnswer = new Answer(tempAnswer, ctx);
       } else if (
