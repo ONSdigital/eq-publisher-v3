@@ -20,7 +20,7 @@ const unescapePiping = (value, isMultipleChoiceValue) => {
   } else {
     updatedValue = replace(/&apos;/g, `\u2019`, value);
   }
-  updatedValue = updatedValue.replace(/\s+$/, ''); //remove trailing spaces
+  updatedValue = updatedValue.trim(); //remove leading and trailing spaces
 
   return updatedValue;
 };
