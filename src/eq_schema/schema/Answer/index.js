@@ -48,7 +48,7 @@ class Answer {
 
     if (!ctx || (answer.qCode && ctx.questionnaireJson.dataVersion !== "3")) {
       if (answer.type !== CHECKBOX) {
-        this.q_code = answer.qCode.replace(/\s+$/, "");
+        this.q_code = answer.qCode.trim();
       }
     }
 
@@ -273,16 +273,10 @@ class Answer {
         id: `answer${additionalAnswer.id}`,
         mandatory: properties.required,
       };
-      option.detail_answer.label = option.detail_answer.label.replace(
-        /\s+$/,
-        ""
-      );
+      option.detail_answer.label = option.detail_answer.label.trim();
       if (ctx.questionnaireJson.dataVersion !== "3") {
         if (additionalAnswer.qCode && type !== "Checkbox") {
-          option.detail_answer.q_code = additionalAnswer.qCode.replace(
-            /\s+$/,
-            ""
-          );
+          option.detail_answer.q_code = additionalAnswer.qCode.trim();
         }
       }
     }

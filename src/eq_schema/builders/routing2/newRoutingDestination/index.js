@@ -2,7 +2,7 @@ const routingConditionConversion = require("../../../../utils/routingConditionCo
 const {
   getMetadataKey,
 } = require("../../../../utils/contentUtils/getMetadataKey");
-const { getValueSource } = require("../../valueSource")
+const { getValueSource } = require("../../valueSource");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
 const { flatMap, filter } = require("lodash");
@@ -23,7 +23,9 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
-  const optionResults = optionIds.map((id) => filter(options, { id })[0].label.replace(/\s+$/, ''));
+  const optionResults = optionIds.map((id) =>
+    filter(options, { id })[0].label.trim()
+  );
 
   if (optionResults === undefined || optionResults.length < 0) {
     return null;
@@ -56,9 +58,7 @@ const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
 ) => {
-  let returnVal = [
-    getValueSource(ctx, left.answerId)
-  ];
+  let returnVal = [getValueSource(ctx, left.answerId)];
 
   if (right.type === "DateValue") {
     returnVal = [
@@ -204,7 +204,7 @@ const checkValidRoutingType = (expression, ctx) => {
     return buildAnswerObject(expression, ctx);
   } else if (expression.left.type === "Metadata") {
     return buildMetadataObject(expression, ctx);
-  } else if (expression.left.type === "List" ) {
+  } else if (expression.left.type === "List") {
     return buildListObject(expression, ctx);
   } else {
     throw new Error(
