@@ -28,18 +28,24 @@ const getValueSource = (ctx, sourceId) => {
 };
 
 const getSupplementaryValueSource = (ctx, sourceId) => {
-  const suplementaryField = find(flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"), {id: sourceId});
+  const suplementaryField = find(
+    flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"),
+    { id: sourceId }
+  );
+
   const source = {
     source: "supplementary_data",
-    identifier: suplementaryField.identifier
-  }
+    identifier: suplementaryField.identifier,
+  };
+
   if (suplementaryField.selector) {
-    source.selectors = [suplementaryField.selector]
+    source.selectors = [suplementaryField.selector];
   }
-  
+
   return source;
-}
+};
 
 module.exports = {
-  getValueSource, getSupplementaryValueSource
+  getValueSource,
+  getSupplementaryValueSource,
 };
