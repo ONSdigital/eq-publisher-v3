@@ -27,19 +27,14 @@ const getValueSource = (ctx, sourceId) => {
   };
 };
 
-const getSupplementaryValueSource = (ctx, sourceId) => {
-  const suplementaryField = find(
-    flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"),
-    { id: sourceId }
-  );
-
+const getSupplementaryValueSource = (supplementaryField) => {
   const source = {
     source: "supplementary_data",
-    identifier: suplementaryField.identifier,
+    identifier: supplementaryField.identifier,
   };
 
-  if (suplementaryField.selector) {
-    source.selectors = [suplementaryField.selector];
+  if (supplementaryField.selector) {
+    source.selectors = [supplementaryField.selector];
   }
 
   return source;

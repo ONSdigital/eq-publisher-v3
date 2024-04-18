@@ -108,7 +108,7 @@ const placeholderObjectBuilder = (
         ],
       };
     } else {
-      valueSource = getSupplementaryValueSource(ctx, identifier);
+      valueSource = getSupplementaryValueSource(supplementaryField);
     }
   }
 
