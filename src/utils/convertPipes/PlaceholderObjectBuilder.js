@@ -79,7 +79,6 @@ const placeholderObjectBuilder = (
       flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"),
       { id: identifier }
     );
-    console.log("supplementaryField :>> ", supplementaryField);
 
     let isListSupplementaryData = false;
     ctx.questionnaireJson.supplementaryData.data.forEach((dataObj) => {
