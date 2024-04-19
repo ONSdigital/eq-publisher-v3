@@ -13,18 +13,18 @@ const getPageByAnswerId = (ctx, answerId) =>
 
 const getValueSource = (ctx, sourceId) => {
   const page = getPageByAnswerId(ctx, sourceId);
-  if (page && page.pageType === "CalculatedSummaryPage") { 
-      const calcSumAnswers = flatMap(page.summaryAnswers, (answerId) => getPageByAnswerId(ctx, answerId))
-      if (some(calcSumAnswers, {pageType: "CalculatedSummaryPage"})) {
-        return {
-          identifier: page.id,
-          source: "grand_calculated_summary",
-        };
-      }
+  if (page && page.pageType === "CalculatedSummaryPage") {
+    const calcSumAnswers = flatMap(page.summaryAnswers, (answerId) => getPageByAnswerId(ctx, answerId))
+    if (some(calcSumAnswers, { pageType: "CalculatedSummaryPage" })) {
       return {
         identifier: page.id,
-        source: "calculated_summary",
+        source: "grand_calculated_summary",
       };
+    }
+    return {
+      identifier: page.id,
+      source: "calculated_summary",
+    };
   }
   return {
     identifier: `answer${sourceId}`,
@@ -33,7 +33,7 @@ const getValueSource = (ctx, sourceId) => {
 };
 
 const getSupplementaryValueSource = (ctx, sourceId) => {
-  const suplementaryField = find(flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"), {id: sourceId});
+  const suplementaryField = find(flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"), { id: sourceId });
   const source = {
     source: "supplementary_data",
     identifier: suplementaryField.identifier
@@ -41,7 +41,7 @@ const getSupplementaryValueSource = (ctx, sourceId) => {
   if (suplementaryField.selector) {
     source.selectors = [suplementaryField.selector]
   }
-  
+
   return source;
 }
 
