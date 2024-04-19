@@ -14,7 +14,7 @@ const getPageByAnswerId = (ctx, answerId) =>
 const getValueSource = (ctx, sourceId) => {
   const page = getPageByAnswerId(ctx, sourceId);
   if (page && page.pageType === "CalculatedSummaryPage") {
-    const calcSumAnswers = flatMap(page.summaryAnswers, (answerId) => getPageByAnswerId(ctx, answerId))
+    const calcSumAnswers = flatMap(page.summaryAnswers, (answerId) => getPageByAnswerId(ctx, answerId));
     if (some(calcSumAnswers, { pageType: "CalculatedSummaryPage" })) {
       return {
         identifier: page.id,
@@ -37,10 +37,10 @@ const getSupplementaryValueSource = (ctx, sourceId) => {
   const source = {
     source: "supplementary_data",
     identifier: suplementaryField.identifier
-  }
+  };
   if (suplementaryField.selector) {
     source.selectors = [suplementaryField.selector]
-  }
+  };
 
   return source;
 }
