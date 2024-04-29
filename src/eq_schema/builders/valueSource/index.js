@@ -13,13 +13,20 @@ const getPageByAnswerId = (ctx, answerId) =>
 
 const getValueSource = (ctx, sourceId) => {
   const page = getPageByAnswerId(ctx, sourceId);
-  if (page) {
-    if (page.pageType === "CalculatedSummaryPage") {
+  if (page && page.pageType === "CalculatedSummaryPage") {
+    const calcSumAnswers = flatMap(page.summaryAnswers, (answerId) =>
+      getPageByAnswerId(ctx, answerId)
+    );
+    if (some(calcSumAnswers, { pageType: "CalculatedSummaryPage" })) {
       return {
         identifier: page.id,
-        source: "calculated_summary",
+        source: "grand_calculated_summary",
       };
     }
+    return {
+      identifier: page.id,
+      source: "calculated_summary",
+    };
   }
   return {
     identifier: `answer${sourceId}`,
