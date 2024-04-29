@@ -13,6 +13,20 @@ const createPlaceholders = ({ placeholder, identifier, source }, extra) => ({
   ...extra,
 });
 
+const createSupplementaryPlaceholders = ({
+  placeholder,
+  identifier,
+  source,
+  selectors,
+}) => ({
+  placeholder,
+  value: {
+    identifier: identifier,
+    source,
+    selectors: selectors,
+  },
+});
+
 const createTransformation = (
   { placeholder, identifier, source, argument, transform },
   extra
@@ -48,6 +62,53 @@ const createWrapper = (text, ...args) => ({
   text,
   placeholders: [...args],
 });
+
+const supplementaryData = {
+  surveyId: "221",
+  data: [
+    {
+      schemaFields: [
+        {
+          identifier: "employer_paye",
+          description:
+            "The tax office employer reference. This will be between 1 and 10 characters, which can be letters and numbers.",
+          type: "string",
+          example: "AB456",
+          selector: "reference",
+          id: "c5f64732-3bb2-40ba-8b0d-fc3b7e22c834",
+        },
+      ],
+      id: "f0d7091a-44be-4c88-9d78-a807aa7509ec",
+      listName: "",
+    },
+    {
+      schemaFields: [
+        {
+          identifier: "local-units",
+          description: "Name of the local unit",
+          type: "string",
+          example: "STUBBS BUILDING PRODUCTS LTD",
+          selector: "name",
+          id: "673a30af-5197-4d2a-be0c-e5795a998491",
+        },
+        {
+          identifier: "local-units",
+          description: "The “trading as” name for the local unit",
+          type: "string",
+          example: "STUBBS PRODUCTS",
+          selector: "trading_name",
+          id: "af2ff1a6-fc5d-419f-9538-0d052a5e6728",
+        },
+      ],
+      id: "6e901afa-473a-4704-8bbd-de054569379c",
+      listName: "local-units",
+    },
+  ],
+  sdsDateCreated: "2023-12-15T11:21:34Z",
+  sdsGuid: "621c954b-5523-4eda-a3eb-f18bebd20b8d",
+  sdsVersion: "1",
+  id: "b6c84aee-ea11-41e6-8be8-5715b066d297",
+};
 
 const createContext = (metadata = []) => ({
   questionnaireJson: {
@@ -112,13 +173,14 @@ const createContext = (metadata = []) => ({
                 id: "calc1",
                 pageType: "CalculatedSummaryPage",
                 type: "Number",
-                totalTitle:"blockcalc1"
+                totalTitle: "blockcalc1",
               },
             ],
           },
         ],
       },
     ],
+    supplementaryData: supplementaryData,
   },
 });
 
@@ -418,6 +480,68 @@ describe("convertPipes", () => {
                 transform: "format_date",
               },
               { date_format: "d MMMM yyyy" }
+            )
+          )
+        );
+      });
+    });
+
+    describe("format supplementary data piping", () => {
+      it("should format piping supplementary data of simple type", () => {
+        const html = createPipe({
+          id: "c5f64732-3bb2-40ba-8b0d-fc3b7e22c834",
+          pipeType: "supplementary",
+        });
+        const supplementaryData = [
+          {
+            id: "c5f64732-3bb2-40ba-8b0d-fc3b7e22c834",
+            key: "supplementary",
+            type: "string",
+          },
+        ];
+
+        expect(convertPipes(createContext(supplementaryData))(html)).toEqual(
+          createWrapper(
+            "{employerpaye_reference}",
+            createSupplementaryPlaceholders({
+              placeholder: "employerpaye_reference",
+              identifier: "employer_paye",
+              source: "supplementary_data",
+              selectors: ["reference"],
+            })
+          )
+        );
+      });
+
+      it("should format piping supplementary data of list type", () => {
+        const html = createPipe({
+          id: "673a30af-5197-4d2a-be0c-e5795a998491",
+          pipeType: "supplementary",
+        });
+        const supplementaryData = [
+          {
+            id: "673a30af-5197-4d2a-be0c-e5795a998491",
+            key: "supplementary",
+            type: "string",
+          },
+        ];
+
+        expect(convertPipes(createContext(supplementaryData))(html)).toEqual(
+          createWrapper(
+            "{localunits_name}",
+            createAlternateTransformation(
+              {
+                placeholder: "localunits_name",
+                transform: "concatenate_list",
+              },
+              {
+                list_to_concatenate: {
+                  identifier: "local-units",
+                  source: "supplementary_data",
+                  selectors: ["name"],
+                },
+                delimiter: ", ",
+              }
             )
           )
         );
