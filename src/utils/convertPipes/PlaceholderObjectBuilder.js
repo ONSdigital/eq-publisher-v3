@@ -19,6 +19,7 @@ const {
   getValueSource,
   getSupplementaryValueSource,
 } = require("../../eq_schema/builders/valueSource");
+const { flatMap, find } = require("lodash");
 
 const DATE_FORMAT_MAP = {
   "dd/mm/yyyy": "d MMMM yyyy",
@@ -74,7 +75,41 @@ const placeholderObjectBuilder = (
   }
 
   if (source === "supplementary") {
-    valueSource = getSupplementaryValueSource(ctx, identifier);
+    const supplementaryField = find(
+      flatMap(ctx.questionnaireJson.supplementaryData.data, "schemaFields"),
+      { id: identifier }
+    );
+
+    let isListSupplementaryData = false;
+    ctx.questionnaireJson.supplementaryData.data.forEach((dataObj) => {
+      if (
+        dataObj.listName !== "" &&
+        dataObj.listName === supplementaryField.identifier
+      ) {
+        isListSupplementaryData = true;
+      }
+    });
+
+    if (isListSupplementaryData) {
+      return {
+        placeholder: removeDash(placeholderName),
+        transforms: [
+          {
+            transform: "concatenate_list",
+            arguments: {
+              list_to_concatenate: {
+                identifier: supplementaryField.identifier,
+                source: "supplementary_data",
+                selectors: [supplementaryField.selector],
+              },
+              delimiter: ", ",
+            },
+          },
+        ],
+      };
+    } else {
+      valueSource = getSupplementaryValueSource(supplementaryField);
+    }
   }
 
   if (conditionalTradAs && placeholderName === "trad_as") {
