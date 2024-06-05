@@ -41,15 +41,17 @@ const reversePipe = (ctx) =>
 
 const getSectionByPageId = (ctx, pageId) => {
   let result;
-  ctx.questionnaireJson.sections.forEach((section) => {
-    section.folders.forEach((folder) => {
-      folder.pages.forEach((page) => {
-        if (page.id === pageId) {
-          result = section;
-        }
+  if (ctx && ctx.questionnaireJson && ctx.questionnaireJson.sections) {
+    ctx.questionnaireJson.sections.forEach((section) => {
+      section.folders.forEach((folder) => {
+        folder.pages.forEach((page) => {
+          if (page.id === pageId) {
+            result = section;
+          }
+        });
       });
     });
-  });
+  }
   return result;
 };
 
@@ -58,23 +60,16 @@ class Question {
     this.id = `question${question.id}`;
 
     const section = getSectionByPageId(ctx, question.id);
+    const isRepeatingSection = section && section.repeatingSection;
 
-    this.title = processPipe(
-      ctx,
-      false,
-      section.repeatingSection
-    )(question.title);
+    this.title = processPipe(ctx, false, isRepeatingSection)(question.title);
 
     if (question.qCode) {
       this.q_code = question.qCode.trim();
     }
     if (question.descriptionEnabled && question.description) {
       this.description = [
-        convertPipes(
-          ctx,
-          false,
-          section.repeatingSection
-        )(question.description),
+        convertPipes(ctx, false, isRepeatingSection)(question.description),
       ];
     }
 
