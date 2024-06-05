@@ -18,7 +18,11 @@ const {
 
 const translateRoutingAndSkipRules = require("../../builders/routing2");
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 
 class Section {
   constructor(section, ctx) {
@@ -76,7 +80,7 @@ class Section {
       };
 
       this.repeat.title = this.containsPiping(section.title)
-        ? processPipe(ctx)(section.title)
+        ? processPipe(ctx, false, section.repeatingSection)(section.title)
         : {
             text: `{repeat_title_placeholder}`,
             placeholders: [placeholder],
