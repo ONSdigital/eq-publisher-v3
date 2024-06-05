@@ -50,7 +50,8 @@ const placeholderObjectBuilder = (
   fallback,
   AnswerType,
   ctx,
-  conditionalTradAs
+  conditionalTradAs,
+  isRepeatingSection
 ) => {
   let valueSource;
   let argumentList;
@@ -90,7 +91,7 @@ const placeholderObjectBuilder = (
       }
     });
 
-    if (isListSupplementaryData) {
+    if (isListSupplementaryData && !isRepeatingSection) {
       return {
         placeholder: removeDash(placeholderName),
         transforms: [
