@@ -31,19 +31,51 @@ const findMutualOption = flow(
 
 const findMutuallyExclusive = flow(get("answers"), find(findMutualOption));
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
+
+const getSectionByPageId = (ctx, pageId) => {
+  let result;
+  ctx.questionnaireJson.sections.forEach((section) => {
+    section.folders.forEach((folder) => {
+      folder.pages.forEach((page) => {
+        if (page.id === pageId) {
+          result = section;
+        }
+      });
+    });
+  });
+  return result;
+};
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-    this.title = processPipe(ctx)(question.title);
+
+    const section = getSectionByPageId(ctx, question.id);
+
+    this.title = processPipe(
+      ctx,
+      false,
+      section.repeatingSection
+    )(question.title);
+
     if (question.qCode) {
       this.q_code = question.qCode.trim();
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = [convertPipes(ctx)(question.description)];
+      this.description = [
+        convertPipes(
+          ctx,
+          false,
+          section.repeatingSection
+        )(question.description),
+      ];
     }
 
     if (question.guidanceEnabled && question.guidance) {
