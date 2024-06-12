@@ -17,6 +17,10 @@ const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
 
 const {
+  getSectionByPageId,
+} = require("../../../utils/functions/sectionGetters");
+
+const {
   DATE,
   DATE_RANGE,
   MUTUALLY_EXCLUSIVE,
@@ -38,22 +42,6 @@ const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection) =>
   );
 const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
-
-const getSectionByPageId = (ctx, pageId) => {
-  let result;
-  if (ctx && ctx.questionnaireJson && ctx.questionnaireJson.sections) {
-    ctx.questionnaireJson.sections.forEach((section) => {
-      section.folders.forEach((folder) => {
-        folder.pages.forEach((page) => {
-          if (page.id === pageId) {
-            result = section;
-          }
-        });
-      });
-    });
-  }
-  return result;
-};
 
 class Question {
   constructor(question, ctx) {
