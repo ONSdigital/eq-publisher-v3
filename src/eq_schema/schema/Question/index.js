@@ -17,6 +17,10 @@ const Answer = require("../Answer");
 const { getValueSource } = require("../../builders/valueSource");
 
 const {
+  getSectionByPageId,
+} = require("../../../utils/functions/sectionGetters");
+
+const {
   DATE,
   DATE_RANGE,
   MUTUALLY_EXCLUSIVE,
@@ -31,19 +35,30 @@ const findMutualOption = flow(
 
 const findMutuallyExclusive = flow(get("answers"), find(findMutualOption));
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
 
 class Question {
   constructor(question, ctx) {
     this.id = `question${question.id}`;
-    this.title = processPipe(ctx)(question.title);
+
+    const section = getSectionByPageId(ctx, question.id);
+    const isRepeatingSection = section && section.repeatingSection;
+
+    this.title = processPipe(ctx, false, isRepeatingSection)(question.title);
+
     if (question.qCode) {
       this.q_code = question.qCode.trim();
     }
     if (question.descriptionEnabled && question.description) {
-      this.description = [convertPipes(ctx)(question.description)];
+      this.description = [
+        convertPipes(ctx, false, isRepeatingSection)(question.description),
+      ];
     }
 
     if (question.guidanceEnabled && question.guidance) {

@@ -3,11 +3,19 @@ const convertPipes = require("../convertPipes");
 
 const { getInnerHTMLWithPiping } = require("../HTMLUtils");
 
-const processPipe = (ctx, isMultipleChoiceValue) =>
-  flow(convertPipes(ctx, isMultipleChoiceValue), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue, isRepeatingSection = false) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 
-const buildContents = (title, ctx, isMultipleChoiceValue) => {
-  return processPipe(ctx, isMultipleChoiceValue)(title);
+const buildContents = (
+  title,
+  ctx,
+  isMultipleChoiceValue,
+  isRepeatingSection = false
+) => {
+  return processPipe(ctx, isMultipleChoiceValue, isRepeatingSection)(title);
 };
 
 const buildIntroductionTitle = () => {
@@ -40,14 +48,12 @@ const buildIntroductionTitle = () => {
 };
 
 const formatListNames = (questionnaire) => {
-  questionnaire.collectionLists.lists.forEach(
-    (list) => {
-      list.listName = list.listName.replace(/ /g,'_'); 
-      list.listName = list.listName.replace(/-/g,'_'); 
-      list.listName = list.listName.toLowerCase()
-    }
-  )
-}
+  questionnaire.collectionLists.lists.forEach((list) => {
+    list.listName = list.listName.replace(/ /g, "_");
+    list.listName = list.listName.replace(/-/g, "_");
+    list.listName = list.listName.toLowerCase();
+  });
+};
 
 module.exports = {
   buildContents,

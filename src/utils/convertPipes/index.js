@@ -154,102 +154,108 @@ const parseHTML = (html) => {
   return cheerio.load(html)("body");
 };
 
-const getPipedData = (store) => (element, ctx, conditionalTradAs) => {
-  const { piped, ...elementData } = element.data();
-  const pipeConfig = PIPE_TYPES[piped];
+const getPipedData =
+  (store) => (element, ctx, isRepeatingSection, conditionalTradAs) => {
+    const { piped, ...elementData } = element.data();
+    const pipeConfig = PIPE_TYPES[piped];
 
-  if (piped === "variable" && element.data().id === "total") {
-    return `%(total)s`;
-  }
+    if (piped === "variable" && element.data().id === "total") {
+      return `%(total)s`;
+    }
 
-  if (!pipeConfig) {
-    return "";
-  }
+    if (!pipeConfig) {
+      return "";
+    }
 
-  const entity = pipeConfig.retrieve(elementData, ctx);
+    const entity = pipeConfig.retrieve(elementData, ctx);
 
-  if (!entity) {
-    return "";
-  }
+    if (!entity) {
+      return "";
+    }
 
-  // Extract 'label' and 'secondaryLabel' values from 'entity'
-  const { label, secondaryLabel } = entity;
-  // Create a new element consisting of both 'label' and 'secondaryLabel' along with 'elementData' for 'DateRange' answer types
-  const dateRangeElement = { ...elementData, label, secondaryLabel };
+    // Extract 'label' and 'secondaryLabel' values from 'entity'
+    const { label, secondaryLabel } = entity;
+    // Create a new element consisting of both 'label' and 'secondaryLabel' along with 'elementData' for 'DateRange' answer types
+    const dateRangeElement = { ...elementData, label, secondaryLabel };
 
-  const placeholderName =
-    elementData.type === "DateRange"
-      ? pipeConfig.placeholder(dateRangeElement)
-      : pipeConfig.placeholder(entity);
+    const placeholderName =
+      elementData.type === "DateRange"
+        ? pipeConfig.placeholder(dateRangeElement)
+        : pipeConfig.placeholder(entity);
 
-  const identifier =
-    elementData.type === "DateRange"
-      ? pipeConfig.render(elementData)
-      : pipeConfig.render(entity);
+    const identifier =
+      elementData.type === "DateRange"
+        ? pipeConfig.render(elementData)
+        : pipeConfig.render(entity);
 
-  const answerType = pipeConfig.getType(entity);
+    const answerType = pipeConfig.getType(entity);
 
-  const fallback = pipeConfig.getFallback({ ...entity, ...elementData });
+    const fallback = pipeConfig.getFallback({ ...entity, ...elementData });
 
-  let placeholder;
+    let placeholder;
 
-  let dateFormat, unitType;
+    let dateFormat, unitType;
 
-  if (entity.properties) {
-    dateFormat = entity.properties.format;
-    unitType = entity.properties.unit;
-  }
+    if (entity.properties) {
+      dateFormat = entity.properties.format;
+      unitType = entity.properties.unit;
+    }
 
-  placeholder = placeholderObjectBuilder(
-    piped,
-    placeholderName,
-    identifier,
-    dateFormat,
-    unitType,
-    fallback,
-    answerType,
-    ctx,
-    conditionalTradAs
-  );
+    placeholder = placeholderObjectBuilder(
+      piped,
+      placeholderName,
+      identifier,
+      dateFormat,
+      unitType,
+      fallback,
+      answerType,
+      ctx,
+      conditionalTradAs,
+      isRepeatingSection
+    );
 
-  store.placeholders = [...store.placeholders, placeholder];
+    store.placeholders = [...store.placeholders, placeholder];
 
-  return `{${removeDash(placeholderName)}}`;
-};
-
-const convertPipes = (ctx, isMultipleChoiceValue) => (html) => {
-  if (!html) {
-    return html;
-  }
-
-  const store = {
-    text: "",
-    placeholders: [],
+    return `{${removeDash(placeholderName)}}`;
   };
 
-  const $ = parseHTML(html);
-  const conditionalTradAs =
-    $.text().includes("(trad_as)") || $.text().includes("([Trad As])");
+const convertPipes =
+  (ctx, isMultipleChoiceValue, isRepeatingSection = false) =>
+  (html) => {
+    if (!html) {
+      return html;
+    }
 
-  $.find("[data-piped]").each((index, element) => {
-    const $elem = cheerio(element);
-    $elem.replaceWith(getPipedData(store)($elem, ctx, conditionalTradAs));
-  });
+    const store = {
+      text: "",
+      placeholders: [],
+    };
 
-  store.text = unescapePiping($.html(), isMultipleChoiceValue);
+    const $ = parseHTML(html);
+    const conditionalTradAs =
+      $.text().includes("(trad_as)") || $.text().includes("([Trad As])");
 
-  if (conditionalTradAs) {
-    store.text = store.text.replace("({trad_as})", "{trad_as}");
-  }
-  
-  store.text = store.text.replace(/\s+$/, '');
+    $.find("[data-piped]").each((index, element) => {
+      const $elem = cheerio(element);
+      $elem.replaceWith(
+        getPipedData(store)($elem, ctx, isRepeatingSection, conditionalTradAs)
+      );
+    });
 
-  if (!store.placeholders.length) {
-    return store.text;
-  }
+    store.text = unescapePiping($.html(), isMultipleChoiceValue);
 
-  return store;
-};
+    if (conditionalTradAs) {
+      store.text = store.text.replace("({trad_as})", "{trad_as}");
+    }
+
+    store.text = store.text.replace(/\s+$/, "");
+
+    if (!store.placeholders.length) {
+      return store.text;
+    }
+
+    return store;
+  };
 
 module.exports = convertPipes;
 module.exports.getAllAnswers = getAllAnswers;
