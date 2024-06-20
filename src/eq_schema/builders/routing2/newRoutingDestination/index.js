@@ -23,9 +23,10 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
-  const optionResults = optionIds.map((id) =>
-    filter(options, { id })[0].label.trim()
-  );
+  const optionResults = optionIds.map((id) => {
+    const option = filter(options, { id })[0];
+    return option.value ? option.value.trim() : option.label.trim();
+  });
 
   if (optionResults === undefined || optionResults.length < 0) {
     return null;
