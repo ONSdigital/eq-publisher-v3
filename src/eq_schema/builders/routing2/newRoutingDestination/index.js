@@ -23,9 +23,14 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
-  const optionResults = optionIds.map((id) =>
-    filter(options, { id })[0].label.trim()
-  );
+  const optionResults = optionIds.map((id) => {
+    const option = filter(options, { id })[0];
+    let updatedLabel = option.label.replace(/&apos;/g, "&#39;");
+
+    updatedLabel = updatedLabel.replace(/'/g, "&#39;");
+
+    return updatedLabel.trim();
+  });
 
   if (optionResults === undefined || optionResults.length < 0) {
     return null;
