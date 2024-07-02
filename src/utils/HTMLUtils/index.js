@@ -15,11 +15,11 @@ const removeDash = (elem) => replace(/-/g, "_", elem);
 
 const unescapePiping = (value, isMultipleChoiceValue) => {
   let updatedValue;
-  if (!isMultipleChoiceValue) {
-    updatedValue = replace(/&apos;/g, `&#39;`, value);
-  } else {
-    updatedValue = replace(/&apos;/g, `\u2019`, value);
-  }
+  // if (!isMultipleChoiceValue) {
+  //   updatedValue = replace(/&apos;/g, `&#39;`, value);
+  // } else {
+  updatedValue = replace(/&apos;/g, `\u2019`, value);
+  // }
   updatedValue = updatedValue.trim(); //remove leading and trailing spaces
 
   return updatedValue;
