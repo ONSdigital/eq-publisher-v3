@@ -24,10 +24,10 @@ const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
   const optionResults = optionIds.map((id) => {
-    const option = filter(options, { id })[0];
-    let updatedLabel = option.label.replace(/&apos;/g, `\u2019`);
-
-    updatedLabel = updatedLabel.replace(/'/g, `\u2019`);
+    const option = find(options, { id });
+    const updatedLabel = option.label
+      .replace(/&apos;/g, `\u2019`)
+      .replace(/'/g, `\u2019`);
 
     return updatedLabel.trim();
   });
