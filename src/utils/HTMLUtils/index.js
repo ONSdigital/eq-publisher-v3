@@ -14,13 +14,7 @@ const getInnerHTML = (elem) =>
 const removeDash = (elem) => replace(/-/g, "_", elem);
 
 const unescapePiping = (value) => {
-  let updatedValue;
-
-  updatedValue = replace(/&apos;/g, `\u2019`, value);
-
-  updatedValue = updatedValue.trim(); //remove leading and trailing spaces
-
-  return updatedValue;
+  return replace(/&apos;/g, `\u2019`, value).trim();
 };
 
 const getInnerHTMLWithPiping = (elem) => {
