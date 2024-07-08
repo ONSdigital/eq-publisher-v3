@@ -5,7 +5,7 @@ const {
 const { getValueSource } = require("../../valueSource");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
-const { flatMap, filter } = require("lodash");
+const { flatMap, filter, find } = require("lodash");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
