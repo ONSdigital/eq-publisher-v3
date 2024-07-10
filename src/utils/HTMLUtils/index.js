@@ -19,6 +19,7 @@ const unescapePiping = (value) => {
     .replace(/'/g, `\u2019`)
     .replace(/‘/g, `\u2019`)
     .replace(/&#x2018;/g, `\u2019`)
+    .replace(/&#x2019;/g, `\u2019`)
     .trim();
 };
 
