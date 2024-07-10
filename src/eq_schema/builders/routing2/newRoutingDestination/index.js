@@ -25,9 +25,11 @@ const getOptionValues = (optionIds, questionnaire) => {
 
   const optionResults = optionIds.map((id) => {
     const option = find(options, { id });
+
     const updatedLabel = option.label
       .replace(/&apos;/g, `\u2019`)
-      .replace(/'/g, `\u2019`);
+      .replace(/'/g, `\u2019`)
+      .replace(/‘/g, `\u2019`);
 
     return updatedLabel.trim();
   });

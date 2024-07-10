@@ -14,7 +14,12 @@ const getInnerHTML = (elem) =>
 const removeDash = (elem) => replace(/-/g, "_", elem);
 
 const unescapePiping = (value) => {
-  return replace(/&apos;/g, `\u2019`, value).trim();
+  return value
+    .replace(/&apos;/g, `\u2019`)
+    .replace(/'/g, `\u2019`)
+    .replace(/‘/g, `\u2019`)
+    .replace(/&#x2018;/g, `\u2019`)
+    .trim();
 };
 
 const getInnerHTMLWithPiping = (elem) => {
