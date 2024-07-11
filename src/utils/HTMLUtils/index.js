@@ -13,16 +13,14 @@ const getInnerHTML = (elem) =>
 
 const removeDash = (elem) => replace(/-/g, "_", elem);
 
-const unescapePiping = (value, isMultipleChoiceValue) => {
-  let updatedValue;
-  if (!isMultipleChoiceValue) {
-    updatedValue = replace(/&apos;/g, `&#39;`, value);
-  } else {
-    updatedValue = replace(/&apos;/g, `\u2019`, value);
-  }
-  updatedValue = updatedValue.trim(); //remove leading and trailing spaces
-
-  return updatedValue;
+const unescapePiping = (value) => {
+  return value
+    .replace(/&apos;/g, `\u2019`)
+    .replace(/'/g, `\u2019`)
+    .replace(/‘/g, `\u2019`)
+    .replace(/&#x2018;/g, `\u2019`)
+    .replace(/&#x2019;/g, `\u2019`)
+    .trim();
 };
 
 const getInnerHTMLWithPiping = (elem) => {

@@ -5,7 +5,7 @@ const {
 const { getValueSource } = require("../../valueSource");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
-const { flatMap, filter } = require("lodash");
+const { flatMap, filter, find } = require("lodash");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
@@ -23,9 +23,16 @@ const getOptionsFromQuestionaire = (questionnaire) => {
 const getOptionValues = (optionIds, questionnaire) => {
   const options = getOptionsFromQuestionaire(questionnaire);
 
-  const optionResults = optionIds.map((id) =>
-    filter(options, { id })[0].label.trim()
-  );
+  const optionResults = optionIds.map((id) => {
+    const option = find(options, { id });
+
+    const updatedLabel = option.label
+      .replace(/&apos;/g, `\u2019`)
+      .replace(/'/g, `\u2019`)
+      .replace(/‘/g, `\u2019`);
+
+    return updatedLabel.trim();
+  });
 
   if (optionResults === undefined || optionResults.length < 0) {
     return null;
