@@ -61,6 +61,24 @@ const checkType = (type) => {
   return null;
 };
 
+function containsMutuallyExclusive(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.some(containsMutuallyExclusive);
+  }
+
+  if (obj.type === "MutuallyExclusive") {
+    return true;
+  }
+
+  // console.log(Object.values(obj).some(containsMutuallyExclusive));
+
+  return Object.values(obj).some(containsMutuallyExclusive);
+}
+
 const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
@@ -122,7 +140,17 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
-    if (condition === "OneOf") {
+    if (
+      condition === "OneOf" &&
+      containsMutuallyExclusive(ctx.questionnaireJson)
+    ) {
+      const SelectedOptions = {
+        [routingConditionConversion("AllOf")]: optionValues,
+      };
+      console.log("Hello", SelectedOptions);
+
+      return SelectedOptions;
+    } else if (condition === "OneOf") {
       const swapOptionValues = ([optionValues[0], optionValues[1]] = [
         optionValues[1],
         optionValues[0],
@@ -131,8 +159,23 @@ const buildAnswerObject = (
         [routingConditionConversion(condition)]: swapOptionValues,
       };
 
+      // let a = containsMutuallyExclusive(ctx.questionnaireJson);
+      // console.log(a);
+
       return SelectedOptions;
     }
+
+    // if (
+    //   condition === "OneOf" &&
+    //   containsMutuallyExclusive(ctx.questionnaireJson) === true
+    // ) {
+    //   const SelectedOptions = {
+    //     [routingConditionConversion("AllOf")]: optionValues,
+    //   };
+    //   console.log("Hello", SelectedOptions);
+
+    //   return SelectedOptions;
+    // }
 
     const SelectedOptions = {
       [routingConditionConversion(condition)]: optionValues,
