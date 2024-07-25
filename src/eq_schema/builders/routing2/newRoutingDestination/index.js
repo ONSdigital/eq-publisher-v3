@@ -61,7 +61,7 @@ const checkType = (type) => {
   return null;
 };
 
-function containsMutuallyExclusive(obj) {
+const containsMutuallyExclusive = (obj) => {
   if (typeof obj !== "object" || obj === null) {
     return false;
   }
@@ -74,10 +74,10 @@ function containsMutuallyExclusive(obj) {
     return true;
   }
 
-  // console.log(Object.values(obj).some(containsMutuallyExclusive));
+  console.log(Object.values(obj).some(containsMutuallyExclusive));
 
   return Object.values(obj).some(containsMutuallyExclusive);
-}
+};
 
 const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
