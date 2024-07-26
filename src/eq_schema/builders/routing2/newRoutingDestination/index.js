@@ -141,7 +141,7 @@ const buildAnswerObject = (
     if (
       condition === "OneOf" &&
       containsMutuallyExclusive(ctx.questionnaireJson) &&
-      optionValues[0].length < 2
+      optionValues[0].length === 1
     ) {
       const SelectedOptions = {
         [routingConditionConversion("AllOf")]: optionValues,
