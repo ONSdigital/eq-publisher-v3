@@ -61,20 +61,36 @@ const checkType = (type) => {
   return null;
 };
 
-const containsMutuallyExclusive = (obj) => {
-  if (typeof obj !== "object" || obj === null) {
-    return false;
-  }
+// const containsMutuallyExclusive = (obj, answerId) => {
+//   for (const section of obj.sections) {
+//     for (const folder of section.folders) {
+//       for (const page of folder.pages) {
+//         for (const answer of page.answers) {
+//           if (answer.id === answerId && answer.type === "MutuallyExclusive") {
+//             console.log(answer);
+//             return answer;
+//           }
+//         }
+//       }
+//     }
+//   }
+//   return null;
+// };
 
-  if (Array.isArray(obj)) {
-    return obj.some(containsMutuallyExclusive);
-  }
+const containsMutuallyExclusive = (obj, answerId) => {
+  // Flatten the nested arrays of sections, folders, pages, and answers
+  const answers = flatMap(obj.sections, (section) =>
+    flatMap(section.folders, (folder) =>
+      flatMap(folder.pages, (page) => page.answers)
+    )
+  );
 
-  if (obj.type === "MutuallyExclusive") {
-    return true;
-  }
-
-  return Object.values(obj).some(containsMutuallyExclusive);
+  // Find the mutually exclusive answer
+  return (
+    answers.find(
+      (answer) => answer.id === answerId && answer.type === "MutuallyExclusive"
+    ) || null
+  );
 };
 
 const buildAnswerObject = (
@@ -138,17 +154,19 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
-    if (
-      condition === "OneOf" &&
-      containsMutuallyExclusive(ctx.questionnaireJson) &&
-      optionValues[0].length === 1
-    ) {
-      const SelectedOptions = {
-        [routingConditionConversion("AllOf")]: optionValues,
-      };
-
-      return SelectedOptions;
-    } else if (condition === "OneOf") {
+    if (condition === "OneOf") {
+      // console.log(
+      //   containsMutuallyExclusive(ctx.questionnaireJson, left.answerId)
+      // );
+      if (
+        containsMutuallyExclusive(ctx.questionnaireJson, left.answerId) &&
+        optionValues[0].length === 1
+      ) {
+        const SelectedOptions = {
+          [routingConditionConversion("AllOf")]: optionValues,
+        };
+        return SelectedOptions;
+      }
       const swapOptionValues = ([optionValues[0], optionValues[1]] = [
         optionValues[1],
         optionValues[0],
