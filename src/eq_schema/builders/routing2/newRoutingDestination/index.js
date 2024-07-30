@@ -61,22 +61,6 @@ const checkType = (type) => {
   return null;
 };
 
-// const containsMutuallyExclusive = (obj, answerId) => {
-//   for (const section of obj.sections) {
-//     for (const folder of section.folders) {
-//       for (const page of folder.pages) {
-//         for (const answer of page.answers) {
-//           if (answer.id === answerId && answer.type === "MutuallyExclusive") {
-//             console.log(answer);
-//             return answer;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   return null;
-// };
-
 const containsMutuallyExclusive = (obj, answerId) => {
   // Flatten the nested arrays of sections, folders, pages, and answers
   const answers = flatMap(obj.sections, (section) =>
@@ -155,9 +139,6 @@ const buildAnswerObject = (
     }
 
     if (condition === "OneOf") {
-      // console.log(
-      //   containsMutuallyExclusive(ctx.questionnaireJson, left.answerId)
-      // );
       if (
         containsMutuallyExclusive(ctx.questionnaireJson, left.answerId) &&
         optionValues[0].length === 1
