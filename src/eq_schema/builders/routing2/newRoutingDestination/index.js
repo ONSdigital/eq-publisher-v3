@@ -6,6 +6,7 @@ const { getValueSource } = require("../../valueSource");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
 const { flatMap, filter, find } = require("lodash");
+const { getAnswerByID } = require("../../../../utils/functions/answerGetters");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
@@ -90,6 +91,7 @@ const buildAnswerObject = (
       },
     ];
   }
+  // console.log(getAnswerByID(ctx, "ccde1be3-ba11-4481-9c4c-5a7a9cae6ce8"));
 
   if (right === null) {
     returnVal.push(null);
@@ -138,10 +140,14 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
+    const leftSideAnswer = getAnswerByID(ctx, left.answerId);
+    // console.log("Hello1", leftSideAnswer.type);
+    // console.log("Hello2", leftSideAnswer.options.length);
+
     if (condition === "OneOf") {
       if (
-        containsMutuallyExclusive(ctx.questionnaireJson, left.answerId) &&
-        optionValues[0].length === 1
+        leftSideAnswer.type === "MutuallyExclusive" &&
+        leftSideAnswer.options.length === 1
       ) {
         const SelectedOptions = {
           [routingConditionConversion("AllOf")]: optionValues,
