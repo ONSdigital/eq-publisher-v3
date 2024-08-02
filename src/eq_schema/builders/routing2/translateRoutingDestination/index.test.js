@@ -57,7 +57,7 @@ describe("Translation of a routing destination", () => {
       logical: "NextPage",
     };
     expect(
-      translateRoutingDestination(authorDestination, "3", { questionnaireJson })
+      translateRoutingDestination(authorDestination, "4", { questionnaireJson })
     ).toMatchObject({ group: "confirmation-group" });
   });
 
@@ -66,7 +66,7 @@ describe("Translation of a routing destination", () => {
       logical: "NextPage",
     };
     expect(
-      translateRoutingDestination(authorDestination, "3", {
+      translateRoutingDestination(authorDestination, "4", {
         questionnaireJson: questionnaireJsonWithSummary,
       })
     ).toMatchObject({ group: "summary-group" });

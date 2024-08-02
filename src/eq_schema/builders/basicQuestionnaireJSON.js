@@ -92,7 +92,6 @@ const questionnaireJson = {
         },
       ],
     },
-
     {
       id: "3",
       title: "<p>Section 3</p>",
