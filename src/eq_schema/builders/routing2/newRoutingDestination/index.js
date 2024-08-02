@@ -62,22 +62,6 @@ const checkType = (type) => {
   return null;
 };
 
-// const containsMutuallyExclusive = (obj, answerId) => {
-//   // Flatten the nested arrays of sections, folders, pages, and answers
-//   const answers = flatMap(obj.sections, (section) =>
-//     flatMap(section.folders, (folder) =>
-//       flatMap(folder.pages, (page) => page.answers)
-//     )
-//   );
-
-//   // Find the mutually exclusive answer
-//   return (
-//     answers.find(
-//       (answer) => answer.id === answerId && answer.type === "MutuallyExclusive"
-//     ) || null
-//   );
-// };
-
 const buildAnswerObject = (
   { left, condition, secondaryCondition, right },
   ctx
