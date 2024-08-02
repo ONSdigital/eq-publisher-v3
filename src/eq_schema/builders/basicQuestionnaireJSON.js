@@ -92,6 +92,43 @@ const questionnaireJson = {
         },
       ],
     },
+
+    {
+      id: "3",
+      title: "<p>Section 3</p>",
+      folders: [
+        {
+          id: "folder-3",
+          enabled: false,
+          pages: [
+            {
+              id: "4",
+              title: "<p>Page 4</p>",
+              pageType: "QuestionPage",
+              routingRuleSet: null,
+              confirmation: null,
+              answers: [
+                {
+                  id: "5",
+                  type: "Number",
+                  label: "Answer 5",
+                },
+                {
+                  id: "6",
+                  type: "MutuallyExclusive",
+                  options: [
+                    {
+                      id: "exclusive-option-1",
+                      label: "Not known",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 };
 
