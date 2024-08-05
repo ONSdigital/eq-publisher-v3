@@ -3,6 +3,7 @@ const {
   getMetadataKey,
 } = require("../../../../utils/contentUtils/getMetadataKey");
 const { getValueSource } = require("../../valueSource");
+const { getAnswerById } = require("../../../../utils/functions/answersGetters");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
 const { flatMap, filter, find } = require("lodash");
@@ -59,22 +60,6 @@ const checkType = (type) => {
   }
 
   return null;
-};
-
-const containsMutuallyExclusive = (obj, answerId) => {
-  // Flatten the nested arrays of sections, folders, pages, and answers
-  const answers = flatMap(obj.sections, (section) =>
-    flatMap(section.folders, (folder) =>
-      flatMap(folder.pages, (page) => page.answers)
-    )
-  );
-
-  // Find the mutually exclusive answer
-  return (
-    answers.find(
-      (answer) => answer.id === answerId && answer.type === "MutuallyExclusive"
-    ) || null
-  );
 };
 
 const buildAnswerObject = (
@@ -138,9 +123,11 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
+    // need to call const leftSideAnswer = getAnswerById (ctx, left.answerId) (for testing replace left.answerID with  id string in the export schema, should only print that one answer object.)
+    // the nested if statments need updating
     if (condition === "OneOf") {
       if (
-        containsMutuallyExclusive(ctx.questionnaireJson, left.answerId) &&
+        getAnswerById(ctx.questionnaireJson, left.answerId) &&
         optionValues[0].length === 1
       ) {
         const SelectedOptions = {
@@ -246,3 +233,7 @@ const checkValidRoutingType = (expression, ctx) => {
 };
 
 module.exports = checkValidRoutingType;
+// create a new file called answersGetters.js > import getPages function from pageGetters.js > import flatmap from loadash
+// create a new function called getAnswerID() which take in ctx and answerId > this function will utilise getPages function from pageGetters so we retrieve all the pages from the survey.
+// then retrieve all the answers from the pages > hint: use flatmap to do this, and can be done in one line.
+// finally , use .find() method to iterate all the answers to find the right answers object using the answer id parameter
