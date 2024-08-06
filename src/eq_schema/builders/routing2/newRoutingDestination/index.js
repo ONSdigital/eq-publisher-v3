@@ -6,6 +6,7 @@ const { getValueSource } = require("../../valueSource");
 const { getListFromAll } = require("../../../../utils/functions/listGetters");
 
 const { flatMap, filter, find } = require("lodash");
+const { getAnswerById } = require("../../../../utils/functions/answerGetters");
 
 const authorConditions = {
   UNANSWERED: "Unanswered",
@@ -122,16 +123,30 @@ const buildAnswerObject = (
       return SelectedOptions;
     }
 
-    if (condition === "OneOf") {
-      const swapOptionValues = ([optionValues[0], optionValues[1]] = [
-        optionValues[1],
-        optionValues[0],
-      ]);
-      const SelectedOptions = {
-        [routingConditionConversion(condition)]: swapOptionValues,
-      };
+    const leftSideAnswer = getAnswerById(ctx, left.answerId);
 
-      return SelectedOptions;
+    if (condition === "OneOf") {
+      if (
+        leftSideAnswer &&
+        leftSideAnswer.type === "MutuallyExclusive" &&
+        leftSideAnswer.options.length === 1
+      ) {
+        const SelectedOptions = {
+          [routingConditionConversion("AllOf")]: optionValues,
+        };
+
+        return SelectedOptions;
+      } else {
+        const swapOptionValues = ([optionValues[0], optionValues[1]] = [
+          optionValues[1],
+          optionValues[0],
+        ]);
+        const SelectedOptions = {
+          [routingConditionConversion(condition)]: swapOptionValues,
+        };
+
+        return SelectedOptions;
+      }
     }
 
     const SelectedOptions = {

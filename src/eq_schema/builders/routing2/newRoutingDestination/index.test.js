@@ -181,6 +181,36 @@ describe("Should build a runner representation of a binary expression", () => {
     });
   });
 
+  describe("With mutually exclusive answers", () => {
+    it("should return all of condition for mutually exclusive answers with one option", () => {
+      const expression = {
+        left: {
+          answerId: "6",
+          type: "Answer",
+        },
+        condition: "OneOf",
+        right: {
+          type: "SelectedOptions",
+          optionIds: ["exclusive-option-1"],
+        },
+      };
+
+      const runnerExpression = checkValidRoutingType(expression, {
+        questionnaireJson,
+      });
+
+      expect(runnerExpression).toMatchObject({
+        "all-in": [
+          ["Not known"],
+          {
+            identifier: "answer6",
+            source: "answers",
+          },
+        ],
+      });
+    });
+  });
+
   describe("With metadata", () => {
     describe("Text metadata", () => {
       it("should return correct metadata object for text metadata", () => {
