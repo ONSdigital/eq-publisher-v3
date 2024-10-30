@@ -27,9 +27,10 @@ const getOptionValues = (optionIds, questionnaire) => {
   const optionResults = optionIds.map((id) => {
     const option = find(options, { id });
 
-    const optionContent = option.value
-      ? option.value.trim()
-      : option.label.trim();
+    const optionContent =
+      questionnaire.dataVersion === "3" && option.value
+        ? option.value.trim()
+        : option.label.trim();
 
     const updatedContent = optionContent
       .replace(/&apos;/g, `\u2019`)
