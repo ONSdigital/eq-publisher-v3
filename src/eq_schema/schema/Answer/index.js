@@ -252,7 +252,8 @@ class Answer {
     { properties, type },
     ctx
   ) {
-    const optionValue = value ? value : label;
+    const optionValue =
+      ctx && ctx.questionnaireJson.dataVersion === "3" && value ? value : label;
     const option = {
       label: buildContents(label, ctx, true),
       value: buildContents(optionValue, ctx, true),
