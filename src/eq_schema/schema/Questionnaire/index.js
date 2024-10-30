@@ -104,10 +104,6 @@ class Questionnaire {
       ...this.sections,
     ];
 
-    if (ctx.questionnaireJson.sections[0].repeatingSection) {
-      newSections[0].repeat = newSections[1].repeat;
-    }
-    
     this.sections = newSections;
   }
 
