@@ -30,6 +30,7 @@ const getOptionValues = (optionIds, questionnaire) => {
     const optionContent = option.value
       ? option.value.trim()
       : option.label.trim();
+
     const updatedContent = optionContent
       .replace(/&apos;/g, `\u2019`)
       .replace(/'/g, `\u2019`)
