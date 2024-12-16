@@ -2,48 +2,48 @@ steps:
   - name: docker
     id: build_and_push
     entrypoint: sh
-    args: 
-      - '-c'
+    args:
+      - "-c"
       - |
         if [ $_ENV = "staging" ]; then
-          docker build -t "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA" .
-          docker push "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA"
+          docker build -t "$_EQ_PUBLISHER_IMAGE_REPO:$SHORT_SHA" .
+          docker push "$_EQ_PUBLISHER_IMAGE_REPO:$SHORT_SHA"
         else
           echo "*************************************************************"
           echo "* Build not required                                        *"
           echo "*************************************************************"
         fi
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:alpine"
     id: tag release
     entrypoint: /bin/bash
     args:
-      - '-c'
+      - "-c"
       - |
         if [ $_ENV = "preprod" ]; then
           gcloud container images add-tag \
-          eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA \
-          eu.gcr.io/ons-eqbs-images/eq-publisher:$TAG_NAME
+          $_EQ_PUBLISHER_IMAGE_REPO:$SHORT_SHA \
+          $_EQ_PUBLISHER_IMAGE_REPO:$TAG_NAME
         else
           echo "*************************************************************"
           echo "* Tagging not required                                      *"
           echo "*************************************************************"
         fi
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:alpine"
     id: deploy
     entrypoint: sh
     args:
-      - '-c'
+      - "-c"
       - |
         if [ $_ENV = "staging" ]; then
           gcloud run deploy eq-publisher \
-          --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$SHORT_SHA" \
+          --image "$_EQ_PUBLISHER_IMAGE_REPO:$SHORT_SHA" \
           --region europe-west2 \
           --platform managed
         else
           gcloud run deploy eq-publisher \
-          --image "eu.gcr.io/ons-eqbs-images/eq-publisher:$TAG_NAME" \
+          --image "$_EQ_PUBLISHER_IMAGE_REPO:$TAG_NAME" \
           --region europe-west2 \
           --platform managed
         fi
