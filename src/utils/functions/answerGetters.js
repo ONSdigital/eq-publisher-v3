@@ -5,7 +5,7 @@ const getAnswerById = (ctx, answerId) => {
   const pages = getPages(ctx);
   const answers = flatMap(pages, (page) => page.answers);
 
-  return answers.find((answer) => answer.id === answerId);
+  return answers.find((answer) => answer && answer.id === answerId);
 };
 
 module.exports = { getAnswerById };
