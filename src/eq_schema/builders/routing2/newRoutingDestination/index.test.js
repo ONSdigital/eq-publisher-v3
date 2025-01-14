@@ -51,6 +51,83 @@ describe("Should build a runner representation of a binary expression", () => {
         });
       });
 
+      it("should build logic rule in questionnaires containing a page without answers", () => {
+        const expression = buildBinaryExpression(["123"], "OneOf");
+        const runnerExpression = checkValidRoutingType(expression, {
+          questionnaireJson: {
+            sections: [
+              {
+                id: "section-1",
+                title: "Section 1",
+                folders: [
+                  {
+                    id: "list-collector-folder-1",
+                    listId: "list-1",
+                    pages: [
+                      {
+                        id: "list-collector-qualifier-page-1",
+                        title: "Qualifier page 1",
+                        answers: [
+                          {
+                            id: "qualifier-answer-1",
+                            type: "Radio",
+                            options: [
+                              {
+                                id: "qualifier-option-1",
+                                label: "Yes",
+                              },
+                              {
+                                id: "qualifier-option-2",
+                                label: "No",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        id: "list-collector-add-item-page-1",
+                        title: "Add item page 1",
+                      },
+                      {
+                        id: "list-collector-confirmation-page-1",
+                        title: "Confirmation page 1",
+                        answers: [
+                          {
+                            id: "confirmation-answer-1",
+                            type: "Radio",
+                            options: [
+                              {
+                                id: "confirmation-option-1",
+                                label: "Yes",
+                              },
+                              {
+                                id: "confirmation-option-2",
+                                label: "No",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              ...questionnaireJson.sections,
+            ],
+          },
+        });
+
+        expect(runnerExpression).toMatchObject({
+          in: [
+            {
+              identifier: "answer1",
+              source: "answers",
+            },
+            ["red"],
+          ],
+        });
+      });
+
       it("With a radio answer and no selected options", () => {
         const expression = buildBinaryExpression(["123", "456"], "Unanswered");
         const runnerExpression = checkValidRoutingType(expression, {
