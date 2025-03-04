@@ -2,7 +2,11 @@ const { flow } = require("lodash/fp");
 const { parseContent, getInnerHTMLWithPiping } = require("../HTMLUtils");
 const convertPipes = require("../convertPipes");
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 
 const wrapContents = (propName) => (content) => {
   if (!propName || propName === "" || !content) {
@@ -17,7 +21,7 @@ const wrapContents = (propName) => (content) => {
   return { [propName]: result };
 };
 
-const reversePipeContent = (ctx) => (data) => {
+const reversePipeContent = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) => (data) => {
   if (!data) {
     return "";
   }
@@ -29,7 +33,7 @@ const reversePipeContent = (ctx) => (data) => {
       items.list = items.list.map((item) => processPipe(ctx)(item));
     }
     if (items.description) {
-      items.description = processPipe(ctx)(items.description);
+      items.description = processPipe(ctx, isMultipleChoiceValue, isRepeatingSection)(items.description);
     }
     return items;
   });

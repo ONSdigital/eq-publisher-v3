@@ -34,8 +34,8 @@ const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = fa
     getInnerHTMLWithPiping
   );
 
-const reversePipe = (ctx) =>
-  flow(wrapContents("contents"), reversePipeContent(ctx));
+const reversePipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) =>
+  flow(wrapContents("contents"), reversePipeContent(ctx, isMultipleChoiceValue, isRepeatingSection));
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
@@ -104,7 +104,7 @@ class Block {
       page_title: processPipe(ctx, false, isRepeatingSection)(introductionPageDescription),
       content: {
         title: processPipe(ctx, false, isRepeatingSection)(introductionTitle) || "",
-        contents: reversePipe(ctx)(introductionContent).contents,
+        contents: reversePipe(ctx, false, isRepeatingSection)(introductionContent).contents,
       },
     };
   }
