@@ -28,7 +28,11 @@ const pageTypeMappings = {
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 
 const reversePipe = (ctx) =>
   flow(wrapContents("contents"), reversePipeContent(ctx));
@@ -91,14 +95,15 @@ class Block {
     introductionTitle,
     introductionContent,
     introductionPageDescription,
+    isRepeatingSection,
     ctx
   ) {
     return {
       type: "Interstitial",
       id: `${formatPageDescription(introductionPageDescription)}`,
-      page_title: processPipe(ctx)(introductionPageDescription),
+      page_title: processPipe(ctx, false, isRepeatingSection)(introductionPageDescription),
       content: {
-        title: processPipe(ctx)(introductionTitle) || "",
+        title: processPipe(ctx, false, isRepeatingSection)(introductionTitle) || "",
         contents: reversePipe(ctx)(introductionContent).contents,
       },
     };
