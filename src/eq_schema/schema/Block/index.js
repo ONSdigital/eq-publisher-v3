@@ -28,10 +28,14 @@ const pageTypeMappings = {
 
 const getLastPage = flow(getOr([], "pages"), last);
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) =>
+  flow(
+    convertPipes(ctx, isMultipleChoiceValue, isRepeatingSection),
+    getInnerHTMLWithPiping
+  );
 
-const reversePipe = (ctx) =>
-  flow(wrapContents("contents"), reversePipeContent(ctx));
+const reversePipe = (ctx, isMultipleChoiceValue = false, isRepeatingSection = false) =>
+  flow(wrapContents("contents"), reversePipeContent(ctx, isMultipleChoiceValue, isRepeatingSection));
 
 const isLastPageInSection = (page, ctx) =>
   flow(getOr([], "sections"), map(getLastPage), some({ id: page.id }))(ctx);
@@ -91,15 +95,16 @@ class Block {
     introductionTitle,
     introductionContent,
     introductionPageDescription,
+    isRepeatingSection,
     ctx
   ) {
     return {
       type: "Interstitial",
       id: `${formatPageDescription(introductionPageDescription)}`,
-      page_title: processPipe(ctx)(introductionPageDescription),
+      page_title: processPipe(ctx, false, isRepeatingSection)(introductionPageDescription),
       content: {
-        title: processPipe(ctx)(introductionTitle) || "",
-        contents: reversePipe(ctx)(introductionContent).contents,
+        title: processPipe(ctx, false, isRepeatingSection)(introductionTitle) || "",
+        contents: reversePipe(ctx, false, isRepeatingSection)(introductionContent).contents,
       },
     };
   }
