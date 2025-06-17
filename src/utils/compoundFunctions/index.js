@@ -30,7 +30,7 @@ const reversePipeContent = (ctx, isMultipleChoiceValue = false, isRepeatingSecti
 
   content.map((items) => {
     if (items.list) {
-      items.list = items.list.map((item) => processPipe(ctx)(item));
+      items.list = items.list.map((item) => processPipe(ctx, isMultipleChoiceValue, isRepeatingSection)(item));
     }
     if (items.description) {
       items.description = processPipe(ctx, isMultipleChoiceValue, isRepeatingSection)(items.description);
