@@ -43,7 +43,7 @@ class Answer {
     if (answer.label) {
       this.label = buildContents(answer.label, ctx, false, section.repeatingSection);
     }
-    
+
     if (answer.description) {
       this.description = buildContents(answer.description, ctx);
     }
