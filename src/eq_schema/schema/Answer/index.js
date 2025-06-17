@@ -19,6 +19,7 @@ const { unitConversion } = require("../../../constants/units");
 const { getValueSource } = require("../../builders/valueSource");
 
 const { buildContents } = require("../../../utils/builders");
+const { getSectionByAnswerId } = require("../../../utils/functions/sectionGetters")
 
 const multipleChoiceAnswers = [CHECKBOX, RADIO, SELECT, MUTUALLY_EXCLUSIVE];
 
@@ -37,11 +38,12 @@ class Answer {
     this.id = `answer${answer.id}`;
     this.mandatory = answer.properties.required;
     this.type = getAnswerType(answer.type);
+    const section = getSectionByAnswerId(ctx, answer.id) || {}
 
     if (answer.label) {
-      this.label = buildContents(answer.label, ctx);
+      this.label = buildContents(answer.label, ctx, false, section.repeatingSection);
     }
-
+    
     if (answer.description) {
       this.description = buildContents(answer.description, ctx);
     }
