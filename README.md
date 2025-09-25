@@ -26,7 +26,7 @@ Testing whether a converted schema is returned relies on passing author json to 
 
 It may be easier to set up an endpoint collection in Postman to view the converted schema.
 
-If validating a schema during development envrionment variable `EQ_VALIDATOR_URL` is needed.
+If validating a schema during development environment variable `EQ_VALIDATOR_URL` is needed.
 
 When the validator URL is set, it is possible to hit the `/publish/validate` endpoint for more detailed error messages.
 
