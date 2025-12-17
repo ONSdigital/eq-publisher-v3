@@ -378,23 +378,32 @@ describe("convertPipes", () => {
 
       it("should pipe dynamic radio answers", () => {
         const html = createPipe({ id: "8" });
-        expect(convertPipes(createContext())(html)).toEqual(
-          createWrapper(
-            "{q8_radio_options}",
-            createAlternateTransformation(
-              {
-                placeholder: "q8_radio_options",
-                transform: "first_non_empty_item",
-              },
-              {
-                items: [
-                  { source: "answers", identifier: "answer8" },
-                  { source: "answers", identifier: "answer7" },
-                ],
-              }
-            )
-          )
-        );
+        expect(convertPipes(createContext())(html)).toEqual({
+          text: "{q8_radio_options}",
+          placeholders: [
+            {
+              placeholder: "q8_radio_options",
+              transforms: [
+                {
+                  transform: "first_non_empty_item",
+                  arguments: {
+                    items: [
+                      { identifier: "answer8", source: "answers" },
+                      { source: "answers", identifier: "answer7" },
+                    ],
+                  },
+                },
+                {
+                  transform: "option_label_from_value",
+                  arguments: {
+                    value: { source: "previous_transform" },
+                    answer_id: "answer8",
+                  },
+                },
+              ],
+            },
+          ],
+        });
       });
 
       // Put in when Unit in runner
