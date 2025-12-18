@@ -4,10 +4,12 @@ const {
   FORMAT_CURRENCY,
   FORMAT_DATE,
   FORMAT_NUMBER,
+  FORMAT_RADIO,
   FORMAT_CHECKBOX,
   FORMAT_LIST,
   NUMBER_TRANSFORMATION,
   DATE_TRANSFORMATION,
+  RADIO_TRANSFORMATION,
   CHECKBOX_TRANSFORMATION,
   FORMAT_PERCENTAGE,
   PERCENTAGE_TRANSFORMATION,
@@ -32,6 +34,7 @@ const TRANSFORM_MAP = {
   Number: { format: FORMAT_NUMBER, transformKey: NUMBER_TRANSFORMATION },
   Date: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
   DateRange: { format: FORMAT_DATE, transformKey: DATE_TRANSFORMATION },
+  Radio: { format: FORMAT_RADIO, transformKey: RADIO_TRANSFORMATION },
   Checkbox: { format: FORMAT_CHECKBOX, transformKey: CHECKBOX_TRANSFORMATION },
   Percentage: {
     format: FORMAT_PERCENTAGE,
@@ -141,6 +144,11 @@ const placeholderObjectBuilder = (
     if (["Checkbox"].includes(AnswerType)) {
       argumentList = {
         delimiter: ", ",
+      };
+    }
+    if (["Radio"].includes(AnswerType)) {
+      argumentList = {
+        answer_id: `answer${identifier}`,
       };
     }
     if (["array"].includes(AnswerType)) {
