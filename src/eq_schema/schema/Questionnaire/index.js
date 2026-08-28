@@ -148,7 +148,7 @@ class Questionnaire {
   
   buildRepeatingSection(ctx, newIntro) {
       const supplementaryData = ctx.questionnaireJson.supplementaryData.data;
-      const listname = supplementaryData.map(item => item.listName).filter(listName => listName != null && listName !== '');
+      const listname = supplementaryData.map(item => item.listName).filter(listName => listName !== null && listName !== '');
       newIntro.repeat = {
         for_list: listname[0],
         title: "Introduction"
