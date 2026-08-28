@@ -101,11 +101,11 @@ const placeholderObjectBuilder = (
           {
             transform: "concatenate_list",
             arguments: {
-              list_to_concatenate: {
+              list_to_concatenate: [{
                 identifier: supplementaryField.identifier,
                 source: "supplementary_data",
                 selectors: [supplementaryField.selector],
-              },
+              }],
               delimiter: ", ",
             },
           },
