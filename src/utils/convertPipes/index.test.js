@@ -544,11 +544,11 @@ describe("convertPipes", () => {
                 transform: "concatenate_list",
               },
               {
-                list_to_concatenate: {
+                list_to_concatenate: [{
                   identifier: "local-units",
                   source: "supplementary_data",
                   selectors: ["name"],
-                },
+                }],
                 delimiter: ", ",
               }
             )

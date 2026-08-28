@@ -87,9 +87,8 @@ class Questionnaire {
     if (!introduction) {
       return;
     }
-
-    const newSections = [
-      {
+    const isRepeatingSection = ["066", "076"].includes(ctx.questionnaireJson.surveyId);
+    const newIntro = {
         id: `section${introduction.id}`,
         title: "Introduction",
         show_on_hub: introduction.showOnHub,
@@ -100,11 +99,14 @@ class Questionnaire {
             blocks: [new Introduction(introduction, ctx)],
           },
         ],
-      },
-      ...this.sections,
-    ];
+      }
+    //add repeating section part to intro if intro contains list address
+    if (isRepeatingSection) {
+      this.buildRepeatingSection(ctx, newIntro);
+    }
+    this.sections = [newIntro, ...this.sections];
 
-    this.sections = newSections;
+
   }
 
   buildIntroductionInsideFirstSection(introduction, ctx) {
@@ -142,6 +144,15 @@ class Questionnaire {
 
   buildPostSubmission(postSubmission, ctx) {
     return new PostSubmission(postSubmission, ctx);
+  }
+  
+  buildRepeatingSection(ctx, newIntro) {
+      const supplementaryData = ctx.questionnaireJson.supplementaryData.data;
+      const listname = supplementaryData.map(item => item.listName).filter(listName => listName !== null && listName !== '');
+      newIntro.repeat = {
+        for_list: listname[0],
+        title: "Introduction"
+      };
   }
 }
 

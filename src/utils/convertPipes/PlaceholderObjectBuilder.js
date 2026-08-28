@@ -94,18 +94,18 @@ const placeholderObjectBuilder = (
       }
     });
 
-    if (isListSupplementaryData && !isRepeatingSection) {
+    if ((isListSupplementaryData && !isRepeatingSection) || (supplementaryField.type === "array")) {
       return {
         placeholder: removeDash(placeholderName),
         transforms: [
           {
             transform: "concatenate_list",
             arguments: {
-              list_to_concatenate: {
+              list_to_concatenate: [{
                 identifier: supplementaryField.identifier,
                 source: "supplementary_data",
                 selectors: [supplementaryField.selector],
-              },
+              }],
               delimiter: ", ",
             },
           },
