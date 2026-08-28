@@ -94,7 +94,7 @@ const placeholderObjectBuilder = (
       }
     });
 
-    if (isListSupplementaryData && !isRepeatingSection) {
+    if ((isListSupplementaryData && !isRepeatingSection) || (supplementaryField.type === "array")) {
       return {
         placeholder: removeDash(placeholderName),
         transforms: [

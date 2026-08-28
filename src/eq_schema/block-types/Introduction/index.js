@@ -7,10 +7,10 @@ const {
 
 const { getInnerHTMLWithPiping } = require("../../../utils/HTMLUtils");
 
-const processPipe = (ctx) => flow(convertPipes(ctx), getInnerHTMLWithPiping);
+const processPipe = (ctx, isRepeatingSection) => flow(convertPipes(ctx, false, isRepeatingSection), getInnerHTMLWithPiping);
 
-const reverseContent = (ctx) =>
-  flow(wrapContents("content"), reversePipeContent(ctx));
+const reverseContent = (ctx, isRepeatingSection) =>
+  flow(wrapContents("content"), reversePipeContent(ctx, false, isRepeatingSection));
 
 const buildContactDetails = require("../../builders/contactDetails");
 
@@ -32,12 +32,13 @@ class Introduction {
     },
     ctx
   ) {
+    const isRepeatingSection = ["066", "076"].includes(ctx.questionnaireJson.surveyId);
     this.id = "introduction";
     this.type = "Introduction";
     this.primary_content = [];
     this.primary_content.push({
       id: "primary",
-      title: processPipe(ctx)(title),
+      title: processPipe(ctx, isRepeatingSection)(title),
       contents: buildContactDetails(
         contactDetailsPhoneNumber,
         contactDetailsEmailAddress,
@@ -51,7 +52,7 @@ class Introduction {
         contents: [
           {
             guidance: {
-              contents: this.buildContents(additionalGuidancePanel, ctx),
+              contents: this.buildContents(additionalGuidancePanel, ctx, isRepeatingSection),
             },
           },
         ],
@@ -59,17 +60,17 @@ class Introduction {
     }
     this.primary_content.push({
       id: "description",
-      contents: this.buildContents(description, ctx),
+      contents: this.buildContents(description, ctx, isRepeatingSection),
     });
     this.preview_content = {
       id: "preview",
-      title: this.buildTitle(secondaryTitle, ctx),
-      contents: this.buildContents(secondaryDescription, ctx),
+      title: this.buildTitle(secondaryTitle, ctx, isRepeatingSection),
+      contents: this.buildContents(secondaryDescription, ctx, isRepeatingSection),
       questions: collapsibles
         .filter((collapsible) => collapsible.title && collapsible.description)
         .map(({ title, description }) => ({
-          question: this.buildTitle(title, ctx),
-          contents: this.buildContents(description, ctx),
+          question: this.buildTitle(title, ctx, isRepeatingSection),
+          contents: this.buildContents(description, ctx, isRepeatingSection),
         })),
     };
     if (tertiaryTitle || tertiaryDescription) {
@@ -78,7 +79,7 @@ class Introduction {
           id: "secondary-content",
           contents: [
             {
-              title: this.buildTitle(tertiaryTitle, ctx) || "",
+              title: this.buildTitle(tertiaryTitle, ctx, isRepeatingSection) || "",
             },
           ],
         },
@@ -86,18 +87,18 @@ class Introduction {
       if (tertiaryDescription) {
         const mergeContents = [
           ...this.secondary_content[0].contents,
-          ...this.buildContents(tertiaryDescription, ctx),
+          ...this.buildContents(tertiaryDescription, ctx, isRepeatingSection),
         ];
         this.secondary_content[0].contents = mergeContents;
       }
     }
   }
 
-  buildContents(description, ctx) {
-    return reverseContent(ctx)(description).content;
+  buildContents(description, ctx, isRepeatingSection) {
+    return reverseContent(ctx, isRepeatingSection)(description).content;
   }
-  buildTitle(title, ctx) {
-    return processPipe(ctx)(title);
+  buildTitle(title, ctx, isRepeatingSection) {
+    return processPipe(ctx, isRepeatingSection)(title);
   }
 }
 
