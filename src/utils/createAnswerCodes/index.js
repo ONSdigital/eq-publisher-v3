@@ -100,6 +100,16 @@ const createAnswerCodes = (questionnaireJson) => {
             }
           });
         }
+        // Add answer code for confirmation page if present, only add once as there may be multiple answers on the page
+        if (page.confirmation) {
+          const answerId = `answerconfirmation-answer-for-${page.id}`;
+          if (!answerCodes.some(item => item.answer_id === answerId)) {
+            answerCodes.push({
+              answer_id: answerId,
+              code: `D-${answer.qCode && answer.qCode.trim()}`
+            })
+          }
+        }
       }
     }
   });
